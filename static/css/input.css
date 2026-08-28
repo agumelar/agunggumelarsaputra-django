@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background-color: #090d16;
+    color: #f3f4f6;
+    font-family: 'Inter', system-ui, sans-serif;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #090d16;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Material Design 3 Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #090d16;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1c293e;
+    border-radius: 4px;
+    border: 2px solid #090d16;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #23324d;
+  }
+}
+
+@layer components {
+  /* M3 Surface Card with Border-Defined Depth */
+  .m3-surface {
+    @apply bg-surface-low border border-outline-variant rounded-xl transition-all duration-200;
+  }
+  .m3-surface-hover {
+    @apply hover:bg-surface-base hover:border-outline;
+  }
+  
+  /* M3 Solid Action Button */
+  .m3-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm bg-primary text-primary-on-primary hover:bg-sky-400 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-surface;
+  }
+
+  .m3-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm bg-secondary text-secondary-on-secondary hover:bg-teal-300 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:ring-offset-2 focus:ring-offset-surface;
+  }
+
+  .m3-btn-outlined {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm bg-transparent border border-outline-variant text-foreground hover:bg-surface-high hover:border-outline active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-surface;
+  }
+
+  /* M3 Form Input */
+  .m3-input {
+    @apply w-full px-3.5 py-2.5 bg-surface-lowest border border-outline-variant rounded-lg text-sm text-foreground placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-150;
+  }
+}

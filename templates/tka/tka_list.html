@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Simulator CBT TKA PPLG | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="space-y-8 py-6">
+    <div class="space-y-2">
+        <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Simulator CBT TKA PPLG</h1>
+        <p class="text-xs sm:text-sm text-gray-400 font-sans">
+            Uji kompetensi akademik dan kejuruan Rekayasa Perangkat Lunak secara terstandar.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for paket in paket_list %}
+        <div class="m3-surface m3-surface-hover p-6 flex flex-col justify-between">
+            <div class="space-y-3">
+                <span class="px-2.5 py-1 rounded bg-teal-500/10 border border-teal-500/20 text-secondary text-xs font-mono font-semibold">
+                    Durasi: {{ paket.durasi_menit }} Menit
+                </span>
+                <h2 class="text-base font-bold font-display text-white">{{ paket.judul }}</h2>
+                <p class="text-xs text-gray-400 leading-relaxed">{{ paket.deskripsi|truncatewords:20 }}</p>
+            </div>
+            <div class="pt-4 mt-4 border-t border-outline-variant">
+                <a href="{% url 'tka:tka_detail' paket.slug %}" class="m3-btn-secondary w-full text-xs">
+                    Mulai Ujian
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full m3-surface p-12 text-center text-gray-400">
+            <p>Belum ada paket ujian CBT yang aktif.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

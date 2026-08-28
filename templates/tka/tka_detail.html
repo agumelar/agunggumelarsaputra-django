@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ paket.judul }} | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6 py-6">
+    <div class="m3-surface p-8 space-y-6">
+        <div class="space-y-2">
+            <span class="px-3 py-1 rounded bg-teal-500/10 border border-teal-500/20 text-secondary text-xs font-mono font-semibold">
+                Simulasi CBT PPLG
+            </span>
+            <h1 class="text-2xl font-bold font-display text-white">{{ paket.judul }}</h1>
+            <p class="text-xs text-gray-400 font-mono">Durasi: {{ paket.durasi_menit }} Menit &bull; KKM: {{ paket.kkm }}</p>
+        </div>
+
+        <div class="border-t border-b border-outline-variant py-4 space-y-2 text-xs text-gray-300">
+            <h3 class="font-bold text-white uppercase font-mono">Petunjuk Pengerjaan:</h3>
+            <p>{{ paket.deskripsi|default:"Pilihlah salah satu opsi jawaban yang paling tepat dari pilihan A, B, C, D, atau E." }}</p>
+        </div>
+
+        <button class="m3-btn-secondary w-full">
+            Mulai Ujian Sekarang
+        </button>
+    </div>
+</div>
+{% endblock %}

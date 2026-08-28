@@ -1,0 +1,14 @@
+{
+  "name": "agunggumelarsaputra-django",
+  "version": "1.0.0",
+  "description": "Personal Website & Vocational Learning Hub RPL (DATH Stack with Material Design 3)",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --minify",
+    "watch:css": "npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/typography": "^0.5.15",
+    "tailwindcss": "^3.4.17"
+  }
+}

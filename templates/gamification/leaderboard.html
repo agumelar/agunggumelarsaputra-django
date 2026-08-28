@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Leaderboard XP Siswa | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8 py-6">
+    <div class="space-y-2">
+        <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Leaderboard Kejuruan RPL</h1>
+        <p class="text-xs sm:text-sm text-gray-400 font-sans">
+            Peringkat akumulasi XP siswa berdasarkan keaktifan modul, CBT TKA, LKPD, dan literasi.
+        </p>
+    </div>
+
+    <div class="m3-surface overflow-hidden">
+        <table class="w-full text-left text-xs">
+            <thead class="bg-surface-lowest border-b border-outline-variant text-gray-400 font-mono">
+                <tr>
+                    <th class="px-6 py-4">#</th>
+                    <th class="px-6 py-4">Siswa</th>
+                    <th class="px-6 py-4">Kelas</th>
+                    <th class="px-6 py-4">Streak</th>
+                    <th class="px-6 py-4 text-right">Total XP</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant">
+                {% for student in top_students %}
+                <tr class="hover:bg-surface-high/50 transition-colors">
+                    <td class="px-6 py-4 font-mono font-bold {% if forloop.counter == 1 %}text-amber-400{% elif forloop.counter == 2 %}text-slate-300{% elif forloop.counter == 3 %}text-amber-600{% else %}text-gray-500{% endif %}">
+                        {{ forloop.counter }}
+                    </td>
+                    <td class="px-6 py-4 font-medium text-white">
+                        {{ student.display_name }}
+                    </td>
+                    <td class="px-6 py-4 font-mono text-gray-400">
+                        {{ student.kelas|default:"-" }}
+                    </td>
+                    <td class="px-6 py-4 font-mono text-amber-400">
+                        🔥 {{ student.streak_count }} Hari
+                    </td>
+                    <td class="px-6 py-4 font-mono font-bold text-right text-primary">
+                        {{ student.xp }} XP
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-6 py-12 text-center text-gray-400">
+                        Belum ada data siswa di leaderboard.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

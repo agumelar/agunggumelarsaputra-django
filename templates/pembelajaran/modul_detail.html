@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ modul.judul }} | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6 py-6" x-data="{ currentTab: 'materi' }">
+    <!-- Header -->
+    <div class="m3-surface p-6 space-y-3">
+        <div class="flex items-center gap-2 text-xs font-mono">
+            <span class="text-primary font-bold">{{ modul.kode }}</span>
+            <span class="text-gray-500">&bull;</span>
+            <span class="text-amber-400">+{{ modul.xp_reward }} XP</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">{{ modul.judul }}</h1>
+        <p class="text-xs sm:text-sm text-gray-300">{{ modul.deskripsi }}</p>
+    </div>
+
+    <!-- 4-Tab Reader Navigation -->
+    <div class="flex items-center gap-2 border-b border-outline-variant pb-2 overflow-x-auto">
+        <button @click="currentTab = 'materi'" :class="currentTab === 'materi' ? 'bg-surface-high text-primary border-outline' : 'text-gray-400 hover:text-white border-transparent'" class="px-4 py-2 rounded-lg border text-xs font-semibold transition-all">
+            1. Materi & Konsep
+        </button>
+        <button @click="currentTab = 'praktik'" :class="currentTab === 'praktik' ? 'bg-surface-high text-primary border-outline' : 'text-gray-400 hover:text-white border-transparent'" class="px-4 py-2 rounded-lg border text-xs font-semibold transition-all">
+            2. Praktik & Koding
+        </button>
+        <button @click="currentTab = 'lkpd'" :class="currentTab === 'lkpd' ? 'bg-surface-high text-primary border-outline' : 'text-gray-400 hover:text-white border-transparent'" class="px-4 py-2 rounded-lg border text-xs font-semibold transition-all">
+            3. Lembar Kerja (LKPD)
+        </button>
+        <button @click="currentTab = 'kktp'" :class="currentTab === 'kktp' ? 'bg-surface-high text-primary border-outline' : 'text-gray-400 hover:text-white border-transparent'" class="px-4 py-2 rounded-lg border text-xs font-semibold transition-all">
+            4. KKTP & Rubrik
+        </button>
+    </div>
+
+    <!-- Tab Contents -->
+    <div class="m3-surface p-6 min-h-[300px]">
+        <div x-show="currentTab === 'materi'" class="space-y-4">
+            <h3 class="text-lg font-bold text-white">Materi Pembelajaran</h3>
+            <p class="text-sm text-gray-300 leading-relaxed">
+                Konten materi interaktif untuk modul {{ modul.judul }} akan disajikan secara komprehensif.
+            </p>
+        </div>
+        <div x-show="currentTab === 'praktik'" x-cloak class="space-y-4">
+            <h3 class="text-lg font-bold text-white">Panduan Praktik & Hands-on Lab</h3>
+            <p class="text-sm text-gray-300 leading-relaxed">
+                Langkah-langkah instruksi kerja koding dan proyek implementasi.
+            </p>
+        </div>
+        <div x-show="currentTab === 'lkpd'" x-cloak class="space-y-4">
+            <h3 class="text-lg font-bold text-white">Lembar Kerja Peserta Didik (LKPD)</h3>
+            <p class="text-sm text-gray-300 leading-relaxed">
+                Tugas dan instruksi pengumpulan portofolio praktikum siswa.
+            </p>
+        </div>
+        <div x-show="currentTab === 'kktp'" x-cloak class="space-y-4">
+            <h3 class="text-lg font-bold text-white">Kriteria Ketercapaian Tujuan Pembelajaran (KKTP)</h3>
+            <p class="text-sm text-gray-300 leading-relaxed">
+                Indikator penilaian dan rubrik ketercapaian kompetensi kejuruan.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

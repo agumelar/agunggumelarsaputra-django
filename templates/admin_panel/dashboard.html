@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel Guru Pengampu | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="space-y-8 py-6">
+    <div class="space-y-2">
+        <span class="px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-mono font-semibold">
+            Area Khusus Guru Pengampu
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Teacher Hub & Monitoring RPL</h1>
+        <p class="text-xs sm:text-sm text-gray-400 font-sans">
+            Manajemen token pendaftaran rombel, grading LKPD, validasi literasi, dan rekap nilai CBT TKA.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="m3-surface p-6 space-y-3">
+            <h2 class="text-base font-bold font-display text-white">Generator Token Rombel</h2>
+            <p class="text-xs text-gray-400">Buat token pendaftaran siswa per kelas secara mandiri.</p>
+        </div>
+        <div class="m3-surface p-6 space-y-3">
+            <h2 class="text-base font-bold font-display text-white">Penilaian LKPD & KKTP</h2>
+            <p class="text-xs text-gray-400">Review submisi dan input nilai rubrik praktikum.</p>
+        </div>
+        <div class="m3-surface p-6 space-y-3">
+            <h2 class="text-base font-bold font-display text-white">Validasi Rabu Literasi</h2>
+            <p class="text-xs text-gray-400">Verifikasi rangkuman bacaan mingguan siswa.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

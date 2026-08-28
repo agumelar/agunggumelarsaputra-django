@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}16 Modul Pembelajaran RPL | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="space-y-8 py-6">
+    <div class="space-y-2">
+        <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">16 Modul Pembelajaran RPL</h1>
+        <p class="text-xs sm:text-sm text-gray-400 font-sans">
+            Kurikulum dan modul kejuruan Rekayasa Perangkat Lunak SMKN 1 Rongga.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for modul in modul_list %}
+        <div class="m3-surface m3-surface-hover p-6 flex flex-col justify-between">
+            <div class="space-y-3">
+                <div class="flex items-center justify-between text-xs font-mono">
+                    <span class="text-primary font-bold">{{ modul.kode }}</span>
+                    <span class="text-amber-400">+{{ modul.xp_reward }} XP</span>
+                </div>
+                <h2 class="text-base font-bold font-display text-white">{{ modul.judul }}</h2>
+                <p class="text-xs text-gray-400 leading-relaxed">{{ modul.deskripsi|truncatewords:20 }}</p>
+            </div>
+            <div class="pt-4 mt-4 border-t border-outline-variant">
+                <a href="{% url 'pembelajaran:modul_detail' modul.slug %}" class="m3-btn-primary w-full text-xs">
+                    Pelajari Modul
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full m3-surface p-12 text-center text-gray-400">
+            <p>Belum ada modul yang dipublikasikan.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

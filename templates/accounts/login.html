@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Masuk Siswa / Guru | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto py-12">
+    <div class="m3-surface p-8 space-y-6">
+        <div class="space-y-2 text-center">
+            <h1 class="text-2xl font-bold font-display text-white">Masuk Akun</h1>
+            <p class="text-xs text-gray-400">Gunakan NISN atau username akun pembelajaran Anda</p>
+        </div>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1.5 font-mono">NISN / USERNAME</label>
+                <input type="text" name="username" required class="m3-input" placeholder="Masukkan NISN atau username...">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1.5 font-mono">PASSWORD</label>
+                <input type="password" name="password" required class="m3-input" placeholder="Masukkan password...">
+            </div>
+
+            <button type="submit" class="w-full m3-btn-primary">
+                Masuk Sekarang
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

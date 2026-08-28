@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil Saya | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-8 space-y-6">
+    <div class="m3-surface p-8">
+        <div class="flex items-center gap-6">
+            <div class="w-20 h-20 rounded-2xl bg-surface-high border border-outline flex items-center justify-center font-display font-bold text-2xl text-primary">
+                {{ user.username|slice:":1"|upper }}
+            </div>
+            <div class="space-y-1">
+                <h1 class="text-2xl font-bold font-display text-white">{{ user.display_name }}</h1>
+                <p class="text-xs text-primary font-mono font-medium">{{ user.get_role_display }} {% if user.kelas %}&bull; {{ user.kelas }}{% endif %}</p>
+                <p class="text-xs text-gray-400 font-mono">NISN/NIP: {{ user.nisn|default:user.nip|default:"-" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
