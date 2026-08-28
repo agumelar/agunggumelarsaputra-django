@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Monitoring Hasil CBT TKA Siswa | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6 py-6">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+            <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-primary-container border border-primary/20 text-primary text-xs font-mono font-semibold">
+                    Monitoring Evaluasi CBT
+                </span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Hasil Simulasi CBT TKA PPLG Siswa</h1>
+            <p class="text-xs sm:text-sm text-gray-400 font-sans">
+                Pantau perolehan skor, tingkat kelulusan KKM (75%), dan riwayat pengerjaan paket drilling kejuruan siswa.
+            </p>
+        </div>
+
+        <!-- Filter Package Selector -->
+        <form method="get" class="flex items-center gap-2 text-xs font-mono">
+            <select name="package" onchange="this.form.submit()" class="m3-input">
+                <option value="">-- Semua Paket Soal --</option>
+                {% for pkg in packages %}
+                <option value="{{ pkg.slug }}" {% if filter_package == pkg.slug %}selected{% endif %}>
+                    [{{ pkg.kode }}] {{ pkg.judul|truncatechars:35 }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <!-- Results Table -->
+    <div class="m3-surface overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead class="bg-surface-lowest border-b border-outline-variant text-gray-400 font-mono">
+                    <tr>
+                        <th class="px-5 py-3.5">Siswa</th>
+                        <th class="px-5 py-3.5">Paket Soal</th>
+                        <th class="px-5 py-3.5">Percobaan</th>
+                        <th class="px-5 py-3.5">Skor Akhir</th>
+                        <th class="px-5 py-3.5">Benar / Total</th>
+                        <th class="px-5 py-3.5">Status</th>
+                        <th class="px-5 py-3.5">XP Didapat</th>
+                        <th class="px-5 py-3.5">Waktu Selesai</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-outline-variant">
+                    {% for att in attempts %}
+                    <tr class="hover:bg-surface-high/30 transition-colors">
+                        <td class="px-5 py-4">
+                            <p class="font-bold text-white">{{ att.user.display_name }}</p>
+                            <p class="text-[11px] text-gray-400 font-mono">{{ att.user.kelas|default:"Umum" }} &bull; {{ att.user.email }}</p>
+                        </td>
+                        <td class="px-5 py-4 font-mono">
+                            <span class="font-bold text-primary">{{ att.package.kode }}</span>
+                            <p class="text-[11px] text-gray-400 line-clamp-1 font-sans">{{ att.package.judul }}</p>
+                        </td>
+                        <td class="px-5 py-4 font-mono text-gray-300">
+                            #{{ att.attempt_number }}
+                        </td>
+                        <td class="px-5 py-4 font-mono">
+                            <span class="text-base font-bold {% if att.is_passed %}text-emerald-400{% else %}text-amber-400{% endif %}">
+                                {{ att.score }}%
+                            </span>
+                        </td>
+                        <td class="px-5 py-4 font-mono text-gray-300">
+                            {{ att.correct_answers }} / {{ att.total_questions }}
+                        </td>
+                        <td class="px-5 py-4">
+                            {% if att.is_passed %}
+                            <span class="inline-flex items-center px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold font-mono">
+                                ✓ LULUS
+                            </span>
+                            {% else %}
+                            <span class="inline-flex items-center px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[11px] font-mono">
+                                REMEDIAL
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-5 py-4 font-mono text-amber-400 font-bold">
+                            +{{ att.xp_earned }} XP
+                        </td>
+                        <td class="px-5 py-4 font-mono text-gray-400 text-[11px]">
+                            {{ att.completed_at|date:"d M Y, H:i" }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="px-5 py-12 text-center text-gray-400">
+                            Belum ada riwayat pengerjaan simulasi CBT TKA.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

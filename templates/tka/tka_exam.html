@@ -1,0 +1,375 @@
+{% extends 'base.html' %}
+
+{% block title %}CBT Ujian [{{ package.kode }}] {{ package.judul }} | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div 
+    class="max-w-7xl mx-auto py-4 space-y-6"
+    x-data="cbtSimulator({{ questions_json }}, {{ duration_seconds }})"
+    x-init="startTimer()"
+    @keydown.window="handleKeyboard($event)"
+>
+
+    <!-- Top CBT Status Bar -->
+    <div class="m3-surface p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-lg border-primary/20 backdrop-blur-md">
+        
+        <!-- Left: Package Info & Current Question -->
+        <div class="flex items-center gap-3">
+            <span class="px-2.5 py-1 rounded bg-surface-lowest border border-outline-variant text-primary font-mono font-bold text-xs">
+                {{ package.kode }}
+            </span>
+            <div>
+                <h1 class="text-sm font-bold text-white font-display line-clamp-1">{{ package.judul }}</h1>
+                <p class="text-[11px] text-gray-400 font-mono">
+                    Nomor Soal: <span class="text-primary font-bold" x-text="currentIndex + 1"></span> dari <span x-text="questions.length"></span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Right: Timer & Submit Button -->
+        <div class="flex items-center gap-3">
+            
+            <!-- Countdown Timer -->
+            <div 
+                class="px-4 py-2 rounded-xl border font-mono font-bold text-sm flex items-center gap-2 transition-colors"
+                :class="timeLeft <= 300 ? 'bg-rose-500/20 border-rose-500/40 text-rose-400 animate-pulse' : 'bg-surface-lowest border-outline-variant text-gray-200'"
+            >
+                <svg class="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span x-text="formattedTime"></span>
+            </div>
+
+            <button 
+                type="button" 
+                @click="showConfirmModal = true" 
+                class="m3-btn-primary text-xs py-2 px-4 whitespace-nowrap font-bold"
+            >
+                Selesaikan Ujian ✓
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Main CBT Body: 2 Columns (Question Workspace & Navigator Grid) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left Column: Active Question & Choices (2 Cols on LG) -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <div class="m3-surface p-6 sm:p-8 space-y-6 min-h-[420px] flex flex-col justify-between">
+                
+                <div class="space-y-4">
+                    
+                    <!-- Question Top Header -->
+                    <div class="flex items-center justify-between text-xs font-mono border-b border-outline-variant pb-3">
+                        <span class="px-2.5 py-0.5 rounded bg-surface-lowest text-primary font-bold">
+                            Soal No. <span x-text="currentQuestion.number"></span>
+                        </span>
+                        <span class="text-gray-400" x-text="currentQuestion.category"></span>
+                    </div>
+
+                    <!-- Question Text -->
+                    <div class="text-sm sm:text-base font-sans text-gray-100 leading-relaxed space-y-2">
+                        <p x-text="currentQuestion.text"></p>
+                    </div>
+
+                    <!-- Options Choices (A - E) -->
+                    <div class="space-y-3 pt-2">
+                        <template x-for="opt in currentQuestion.options" :key="opt.key">
+                            <div 
+                                @click="selectAnswer(currentQuestion.id, opt.key)"
+                                class="p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 group select-none"
+                                :class="answers[currentQuestion.id] === opt.key 
+                                    ? 'bg-primary/10 border-primary text-white shadow-sm' 
+                                    : 'bg-surface-lowest hover:bg-surface-high border-outline-variant text-gray-300'"
+                            >
+                                <div 
+                                    class="w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs shrink-0 transition-colors"
+                                    :class="answers[currentQuestion.id] === opt.key 
+                                        ? 'bg-primary text-primary-on-primary' 
+                                        : 'bg-surface-high text-gray-400 group-hover:text-white'"
+                                    x-text="opt.key"
+                                ></div>
+                                <div class="text-xs sm:text-sm font-sans pt-1 leading-normal" x-text="opt.text"></div>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+
+                <!-- Bottom Question Navigation Buttons -->
+                <div class="pt-6 border-t border-outline-variant flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+                    
+                    <button 
+                        type="button" 
+                        @click="prevQuestion()" 
+                        :disabled="currentIndex === 0"
+                        class="px-4 py-2 rounded-lg border border-outline-variant bg-surface-low hover:bg-surface-high disabled:opacity-30 disabled:pointer-events-none text-gray-300"
+                    >
+                        ← Sebelumnya
+                    </button>
+
+                    <!-- Doubtful (Ragu-ragu) Toggle Button -->
+                    <button 
+                        type="button" 
+                        @click="toggleDoubtful(currentQuestion.id)"
+                        class="px-4 py-2 rounded-lg border transition-colors flex items-center gap-1.5"
+                        :class="doubtful[currentQuestion.id] 
+                            ? 'bg-amber-400 text-amber-950 font-bold border-amber-400' 
+                            : 'bg-surface-lowest text-amber-400 border-amber-500/30 hover:border-amber-500'"
+                    >
+                        <span x-text="doubtful[currentQuestion.id] ? '★ Ragu-ragu (Aktif)' : '☆ Tandai Ragu-ragu (R)'"></span>
+                    </button>
+
+                    <button 
+                        type="button" 
+                        @click="nextQuestion()" 
+                        :disabled="currentIndex === questions.length - 1"
+                        class="px-4 py-2 rounded-lg border border-outline-variant bg-surface-low hover:bg-surface-high disabled:opacity-30 disabled:pointer-events-none text-gray-300"
+                    >
+                        Selanjutnya →
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Keyboard Shortcut Helper Bar -->
+            <div class="p-3 rounded-xl bg-surface-lowest border border-outline-variant text-[11px] font-mono text-gray-400 flex flex-wrap items-center justify-between gap-2">
+                <span>⚡ Shortcut Keyboard:</span>
+                <div class="flex items-center gap-3">
+                    <span><kbd class="px-1.5 py-0.5 rounded bg-surface-high border border-outline-variant text-gray-300 font-bold">A-E</kbd> Pilih Opsi</span>
+                    <span><kbd class="px-1.5 py-0.5 rounded bg-surface-high border border-outline-variant text-gray-300 font-bold">← / →</kbd> Pindah Soal</span>
+                    <span><kbd class="px-1.5 py-0.5 rounded bg-surface-high border border-outline-variant text-gray-300 font-bold">R</kbd> Ragu-ragu</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Question Navigator Grid & Stats -->
+        <div class="space-y-6">
+            
+            <div class="m3-surface p-6 space-y-4">
+                
+                <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+                    <h3 class="text-xs font-mono font-bold text-gray-200 uppercase">Lembar Jawaban Siswa</h3>
+                    <span class="text-xs font-mono text-primary font-bold">
+                        <span x-text="answeredCount"></span>/<span x-text="questions.length"></span> Terjawab
+                    </span>
+                </div>
+
+                <!-- Legend Indicators -->
+                <div class="grid grid-cols-3 gap-2 text-[11px] font-mono">
+                    <div class="flex items-center gap-1.5 text-emerald-400">
+                        <span class="w-3 h-3 rounded bg-emerald-500"></span>
+                        <span>Terjawab (<span x-text="answeredCount"></span>)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-amber-400">
+                        <span class="w-3 h-3 rounded bg-amber-400"></span>
+                        <span>Ragu (<span x-text="doubtfulCount"></span>)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-gray-400">
+                        <span class="w-3 h-3 rounded bg-surface-lowest border border-outline-variant"></span>
+                        <span>Kosong</span>
+                    </div>
+                </div>
+
+                <!-- 60 Question Navigator Grid -->
+                <div class="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-5 gap-2 max-h-[380px] overflow-y-auto pr-1 pt-2">
+                    <template x-for="(q, idx) in questions" :key="q.id">
+                        <button 
+                            type="button"
+                            @click="goToQuestion(idx)"
+                            class="h-10 rounded-lg font-mono font-bold text-xs flex flex-col items-center justify-center relative transition-all border"
+                            :class="{
+                                'ring-2 ring-primary ring-offset-2 ring-offset-surface-low': currentIndex === idx,
+                                'bg-amber-400 text-amber-950 border-amber-400': doubtful[q.id],
+                                'bg-emerald-500 text-black border-emerald-500': !doubtful[q.id] && answers[q.id],
+                                'bg-surface-lowest text-gray-300 border-outline-variant hover:border-outline': !doubtful[q.id] && !answers[q.id]
+                            }"
+                        >
+                            <span x-text="idx + 1"></span>
+                            <span 
+                                class="text-[9px] leading-none" 
+                                x-text="answers[q.id] || ''"
+                            ></span>
+                        </button>
+                    </template>
+                </div>
+
+                <!-- Big Finish CTA Button -->
+                <div class="pt-4 border-t border-outline-variant">
+                    <button 
+                        type="button" 
+                        @click="showConfirmModal = true" 
+                        class="m3-btn-primary w-full py-3 text-xs font-bold font-sans"
+                    >
+                        Kumpulkan Seluruh Jawaban ➔
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Submit Confirmation Modal -->
+    <div 
+        x-show="showConfirmModal" 
+        x-cloak 
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
+    >
+        <div 
+            @click.away="showConfirmModal = false"
+            class="m3-surface max-w-md w-full p-6 sm:p-8 space-y-5 border-2 border-primary/40"
+        >
+            <div class="space-y-1 text-center">
+                <h3 class="text-lg font-bold font-display text-white">Konfirmasi Pengumpulan Ujian</h3>
+                <p class="text-xs text-gray-300">Pastikan seluruh jawaban Anda telah diperiksa sebelum mengakhiri simulasi CBT.</p>
+            </div>
+
+            <!-- Summary Box -->
+            <div class="grid grid-cols-3 gap-2 p-3 bg-surface-lowest rounded-xl border border-outline-variant text-center text-xs font-mono">
+                <div>
+                    <p class="text-gray-400 text-[10px]">Terjawab</p>
+                    <p class="text-base font-bold text-emerald-400" x-text="answeredCount"></p>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-[10px]">Ragu-ragu</p>
+                    <p class="text-base font-bold text-amber-400" x-text="doubtfulCount"></p>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-[10px]">Kosong</p>
+                    <p class="text-base font-bold text-rose-400" x-text="questions.length - answeredCount"></p>
+                </div>
+            </div>
+
+            <!-- Form Submission POST -->
+            <form method="post" action="{% url 'tka:tka_submit' package.slug %}" class="space-y-3">
+                {% csrf_token %}
+                <input type="hidden" name="answers_payload" :value="JSON.stringify(answers)">
+                <input type="hidden" name="time_spent_seconds" :value="timeSpent">
+
+                <div class="flex items-center gap-3">
+                    <button 
+                        type="button" 
+                        @click="showConfirmModal = false" 
+                        class="m3-btn-outlined flex-1 text-xs py-2.5"
+                    >
+                        Batal / Cek Lagi
+                    </button>
+                    <button 
+                        type="submit" 
+                        class="m3-btn-primary flex-1 text-xs py-2.5 font-bold"
+                    >
+                        Ya, Kumpulkan Sekarang
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Alpine.js CBT Engine Script -->
+<script>
+function cbtSimulator(questionsData, initialSeconds) {
+    return {
+        questions: questionsData || [],
+        currentIndex: 0,
+        answers: {},
+        doubtful: {},
+        timeLeft: initialSeconds || 3600,
+        timeSpent: 0,
+        timerInterval: null,
+        showConfirmModal: false,
+
+        get currentQuestion() {
+            return this.questions[this.currentIndex] || { options: [] };
+        },
+
+        get answeredCount() {
+            return Object.keys(this.answers).length;
+        },
+
+        get doubtfulCount() {
+            return Object.values(this.doubtful).filter(Boolean).length;
+        },
+
+        get formattedTime() {
+            const m = Math.floor(this.timeLeft / 60);
+            const s = this.timeLeft % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        },
+
+        startTimer() {
+            this.timerInterval = setInterval(() => {
+                if (this.timeLeft > 0) {
+                    this.timeLeft--;
+                    this.timeSpent++;
+                } else {
+                    clearInterval(this.timerInterval);
+                    this.autoSubmit();
+                }
+            }, 1000);
+        },
+
+        selectAnswer(qId, key) {
+            this.answers[qId] = key;
+            // Jika memilih jawaban, hilangkan ragu-ragu
+            if (this.doubtful[qId]) {
+                delete this.doubtful[qId];
+            }
+        },
+
+        toggleDoubtful(qId) {
+            this.doubtful[qId] = !this.doubtful[qId];
+        },
+
+        goToQuestion(index) {
+            if (index >= 0 && index < this.questions.length) {
+                this.currentIndex = index;
+            }
+        },
+
+        nextQuestion() {
+            if (this.currentIndex < this.questions.length - 1) {
+                this.currentIndex++;
+            }
+        },
+
+        prevQuestion() {
+            if (this.currentIndex > 0) {
+                this.currentIndex--;
+            }
+        },
+
+        handleKeyboard(e) {
+            if (this.showConfirmModal) return;
+            const targetTag = e.target.tagName.toLowerCase();
+            if (targetTag === 'input' || targetTag === 'textarea') return;
+
+            const key = e.key.toUpperCase();
+            if (['A', 'B', 'C', 'D', 'E'].includes(key)) {
+                this.selectAnswer(this.currentQuestion.id, key);
+            } else if (e.key === 'ArrowRight') {
+                this.nextQuestion();
+            } else if (e.key === 'ArrowLeft') {
+                this.prevQuestion();
+            } else if (key === 'R') {
+                this.toggleDoubtful(this.currentQuestion.id);
+            }
+        },
+
+        autoSubmit() {
+            const form = document.querySelector('form');
+            if (form) form.submit();
+        }
+    };
+}
+</script>
+{% endblock %}

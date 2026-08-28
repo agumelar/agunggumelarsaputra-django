@@ -11,4 +11,5 @@ urlpatterns = [
     path('tokens/<int:token_id>/', views.token_detail_view, name='token_detail'),
     path('submissions/', views.submission_list_view, name='submission_list'),
     path('submissions/<int:submission_id>/grade/', views.grade_submission_view, name='grade_submission'),
+    path('tka-results/', views.tka_results_view, name='tka_results'),
 ]

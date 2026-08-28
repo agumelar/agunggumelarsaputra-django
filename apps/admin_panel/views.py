@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from .models import EnrollmentToken, UserEnrollment
 from .forms import EnrollmentTokenForm, TeacherGradeForm
 from apps.pembelajaran.models import Modul, UserSubmission
+from apps.tka.models import TkaPackage, TkaAttempt
 from apps.gamification.models import XPHistory
 from django.contrib.auth import get_user_model
 
@@ -28,9 +29,11 @@ def dashboard_view(request):
     total_students = User.objects.filter(role=User.ROLE_SISWA).count()
     total_enrollments = UserEnrollment.objects.count()
     pending_submissions = UserSubmission.objects.filter(status='submitted', submission_type='lkpd').count()
+    total_tka_attempts = TkaAttempt.objects.count()
 
     recent_tokens = EnrollmentToken.objects.prefetch_related('user_enrollments').order_by('-created_at')[:5]
-    recent_submissions = UserSubmission.objects.select_related('user', 'modul').order_by('-submitted_at')[:8]
+    recent_submissions = UserSubmission.objects.select_related('user', 'modul').order_by('-submitted_at')[:6]
+    recent_attempts = TkaAttempt.objects.select_related('user', 'package').order_by('-completed_at')[:6]
 
     context = {
         'total_tokens': total_tokens,
@@ -38,8 +41,10 @@ def dashboard_view(request):
         'total_students': total_students,
         'total_enrollments': total_enrollments,
         'pending_submissions': pending_submissions,
+        'total_tka_attempts': total_tka_attempts,
         'recent_tokens': recent_tokens,
         'recent_submissions': recent_submissions,
+        'recent_attempts': recent_attempts,
         'active_nav': 'admin_dashboard',
     }
     return render(request, 'admin_panel/dashboard.html', context)
@@ -173,3 +178,25 @@ def grade_submission_view(request, submission_id):
         'active_nav': 'admin_submissions',
     }
     return render(request, 'admin_panel/grade_submission.html', context)
+
+
+@user_passes_test(teacher_check, login_url='accounts:login')
+def tka_results_view(request):
+    """
+    Monitoring Hasil Tryout CBT TKA Siswa: Rekap skor, passing status, dan riwayat attempt.
+    """
+    filter_package = request.GET.get('package', '')
+    attempts = TkaAttempt.objects.select_related('user', 'package').order_by('-completed_at')
+
+    if filter_package:
+        attempts = attempts.filter(package__slug=filter_package)
+
+    packages = TkaPackage.objects.filter(is_published=True).order_by('urutan')
+
+    context = {
+        'attempts': attempts,
+        'packages': packages,
+        'filter_package': filter_package,
+        'active_nav': 'admin_tka_results',
+    }
+    return render(request, 'admin_panel/tka_results.html', context)

@@ -1,26 +1,149 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ paket.judul }} | {{ SITE_TITLE }}{% endblock %}
+{% block title %}[{{ package.kode }}] {{ package.judul }} | {{ SITE_TITLE }}{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto space-y-6 py-6">
-    <div class="m3-surface p-8 space-y-6">
-        <div class="space-y-2">
-            <span class="px-3 py-1 rounded bg-teal-500/10 border border-teal-500/20 text-secondary text-xs font-mono font-semibold">
-                Simulasi CBT PPLG
-            </span>
-            <h1 class="text-2xl font-bold font-display text-white">{{ paket.judul }}</h1>
-            <p class="text-xs text-gray-400 font-mono">Durasi: {{ paket.durasi_menit }} Menit &bull; KKM: {{ paket.kkm }}</p>
-        </div>
+<div class="max-w-5xl mx-auto space-y-6 py-6">
 
-        <div class="border-t border-b border-outline-variant py-4 space-y-2 text-xs text-gray-300">
-            <h3 class="font-bold text-white uppercase font-mono">Petunjuk Pengerjaan:</h3>
-            <p>{{ paket.deskripsi|default:"Pilihlah salah satu opsi jawaban yang paling tepat dari pilihan A, B, C, D, atau E." }}</p>
+    <!-- Top Breadcrumb & Next/Prev Controls -->
+    <div class="flex items-center justify-between text-xs font-mono">
+        <a href="{% url 'tka:tka_list' %}" class="inline-flex items-center gap-1.5 text-primary hover:underline">
+            ← Kembali ke 10 Paket TKA
+        </a>
+        <div class="flex items-center gap-2">
+            <span class="text-gray-400 font-mono">{{ package.kategori }}</span>
         </div>
-
-        <button class="m3-btn-secondary w-full">
-            Mulai Ujian Sekarang
-        </button>
     </div>
+
+    <!-- Package Header Card -->
+    <div class="m3-surface p-6 sm:p-8 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <span class="px-3 py-1 bg-surface-lowest border border-outline-variant rounded-lg font-mono font-bold text-sm text-primary">
+                    {{ package.kode }}
+                </span>
+                <span class="text-xs text-gray-400 font-mono">{{ package.durasi_menit }} Menit &bull; {{ package.total_questions_count }} Butir Soal</span>
+            </div>
+
+            <!-- Passing Grade & Base XP Badges -->
+            <div class="flex items-center gap-2 text-xs font-mono">
+                <span class="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold">Passing Grade: {{ package.passing_grade }}%</span>
+                <span class="px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400 font-semibold">+{{ package.xp_base }} XP Base</span>
+            </div>
+        </div>
+
+        <div class="space-y-1">
+            <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+                {{ package.judul }}
+            </h1>
+            <p class="text-xs sm:text-sm text-gray-300 font-sans leading-relaxed">
+                {{ package.deskripsi|default:"Simulasi ujian CBT interaktif untuk menguji kesiapan dan kompetensi software engineering siswa." }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Teacher Message / Bedah Konsep Tips -->
+    {% if package.teacher_tip %}
+    <div class="p-5 rounded-2xl bg-surface-lowest border border-amber-500/30 space-y-2">
+        <div class="flex items-center gap-2 text-xs font-mono font-bold text-amber-400">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+            <span>TIPS & CATATAN PAK AGUNG (GURU PENGAMPU RPL):</span>
+        </div>
+        <p class="text-xs text-gray-300 leading-relaxed font-sans">{{ package.teacher_tip }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Bedah Materi Content Body -->
+    {% if package.content_materi %}
+    <div class="m3-surface p-6 sm:p-10 space-y-6">
+        <div class="flex items-center gap-2 border-b border-outline-variant pb-3">
+            <h2 class="text-base font-bold font-display text-white">💡 Bedah Materi & Konsep Inti</h2>
+        </div>
+        <article class="prose prose-invert max-w-none text-gray-200 text-sm leading-relaxed font-sans">
+            {{ package.content_materi|linebreaks }}
+        </article>
+    </div>
+    {% endif %}
+
+    <!-- Exam Launch Banner & CTA -->
+    <div class="m3-surface p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-primary/30">
+        <div class="space-y-1 text-center md:text-left">
+            <h3 class="text-lg font-bold font-display text-white">Siap Memulai Simulasi CBT?</h3>
+            <p class="text-xs text-gray-300 font-sans">
+                Ujian terdiri dari <strong class="text-white">{{ package.total_questions_count }} butir soal</strong> pilihan ganda dengan durasi <strong class="text-white">{{ package.durasi_menit }} menit</strong>.
+            </p>
+            <p class="text-[11px] text-gray-400 font-mono">
+                KKM: {{ package.passing_grade }}% &bull; Auto-Scoring &bull; Reward bonus hingga +50 XP
+            </p>
+        </div>
+
+        {% if user.is_authenticated %}
+        <a href="{% url 'tka:tka_exam' package.slug %}" class="m3-btn-primary text-sm py-3.5 px-8 whitespace-nowrap shadow-lg shadow-primary/20 shrink-0 font-bold">
+            <span>Mulai Simulasi CBT Sekarang ➔</span>
+        </a>
+        {% else %}
+        <a href="{% url 'accounts:login' %}" class="m3-btn-primary text-xs py-3 px-6 whitespace-nowrap">
+            Masuk untuk Mulai Ujian
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Riwayat Percobaan Siswa -->
+    {% if user.is_authenticated and attempts %}
+    <div class="m3-surface p-6 sm:p-8 space-y-4">
+        <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+            <h3 class="text-base font-bold font-display text-white">Riwayat Percobaan Anda ({{ attempts|length }} Kali)</h3>
+            {% if best_attempt %}
+            <span class="text-xs font-mono text-gray-400">
+                Skor Tertinggi: <strong class="{% if best_attempt.is_passed %}text-emerald-400{% else %}text-amber-400{% endif %}">{{ best_attempt.score }}%</strong>
+            </span>
+            {% endif %}
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead class="bg-surface-lowest text-gray-400 font-mono">
+                    <tr>
+                        <th class="px-4 py-2.5">Percobaan</th>
+                        <th class="px-4 py-2.5">Skor Akhir</th>
+                        <th class="px-4 py-2.5">Benar / Total</th>
+                        <th class="px-4 py-2.5">Status</th>
+                        <th class="px-4 py-2.5">XP Didapat</th>
+                        <th class="px-4 py-2.5">Waktu</th>
+                        <th class="px-4 py-2.5 text-right">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-outline-variant font-mono">
+                    {% for att in attempts %}
+                    <tr class="hover:bg-surface-high/30 transition-colors">
+                        <td class="px-4 py-3 font-bold text-white">#{{ att.attempt_number }}</td>
+                        <td class="px-4 py-3 font-bold text-base {% if att.is_passed %}text-emerald-400{% else %}text-amber-400{% endif %}">
+                            {{ att.score }}%
+                        </td>
+                        <td class="px-4 py-3 text-gray-300">{{ att.correct_answers }} / {{ att.total_questions }}</td>
+                        <td class="px-4 py-3">
+                            {% if att.is_passed %}
+                            <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold">LULUS</span>
+                            {% else %}
+                            <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[11px]">REMEDIAL</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3 text-amber-400 font-bold">+{{ att.xp_earned }} XP</td>
+                        <td class="px-4 py-3 text-gray-400 text-[11px]">{{ att.completed_at|date:"d M Y, H:i" }}</td>
+                        <td class="px-4 py-3 text-right">
+                            <a href="{% url 'tka:tka_result' package.slug att.id %}" class="m3-btn-outlined text-xs py-1 px-3">
+                                Pembahasan ➔
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
 </div>
 {% endblock %}
