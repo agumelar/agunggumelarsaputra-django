@@ -1,0 +1,16 @@
+<div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium flex items-center justify-between gap-3 animate-fadeIn">
+    <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <div>
+            <p class="font-bold">Materi Modul Telah Selesai Dibaca!</p>
+            <p class="text-[11px] text-emerald-300/80 font-mono">
+                {% if just_claimed %}+{{ modul.xp_materi }} XP telah ditambahkan ke akun Anda.{% else %}Progres materi ini telah tercatat di sistem.{% endif %}
+            </p>
+        </div>
+    </div>
+    <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold text-xs">
+        ✓ Selesai
+    </span>
+</div>

@@ -2,10 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.views.decorators.http import require_POST
+from django.utils import timezone
 from django.http import HttpResponse
 
 from .models import EnrollmentToken, UserEnrollment
-from .forms import EnrollmentTokenForm
+from .forms import EnrollmentTokenForm, TeacherGradeForm
+from apps.pembelajaran.models import Modul, UserSubmission
+from apps.gamification.models import XPHistory
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -24,17 +27,19 @@ def dashboard_view(request):
     active_tokens = EnrollmentToken.objects.filter(is_active=True).count()
     total_students = User.objects.filter(role=User.ROLE_SISWA).count()
     total_enrollments = UserEnrollment.objects.count()
+    pending_submissions = UserSubmission.objects.filter(status='submitted', submission_type='lkpd').count()
 
     recent_tokens = EnrollmentToken.objects.prefetch_related('user_enrollments').order_by('-created_at')[:5]
-    recent_students = User.objects.filter(role=User.ROLE_SISWA).order_by('-date_joined')[:5]
+    recent_submissions = UserSubmission.objects.select_related('user', 'modul').order_by('-submitted_at')[:8]
 
     context = {
         'total_tokens': total_tokens,
         'active_tokens': active_tokens,
         'total_students': total_students,
         'total_enrollments': total_enrollments,
+        'pending_submissions': pending_submissions,
         'recent_tokens': recent_tokens,
-        'recent_students': recent_students,
+        'recent_submissions': recent_submissions,
         'active_nav': 'admin_dashboard',
     }
     return render(request, 'admin_panel/dashboard.html', context)
@@ -112,3 +117,59 @@ def token_detail_view(request, token_id):
         'active_nav': 'admin_tokens',
     }
     return render(request, 'admin_panel/token_detail.html', context)
+
+
+@user_passes_test(teacher_check, login_url='accounts:login')
+def submission_list_view(request):
+    """
+    Hub Penilaian Guru: Memeriksa dan menilai seluruh submisi LKPD & Refleksi siswa.
+    """
+    filter_status = request.GET.get('status', 'all')
+    filter_modul = request.GET.get('modul', '')
+
+    submissions = UserSubmission.objects.select_related('user', 'modul').order_by('-submitted_at')
+
+    if filter_status == 'pending':
+        submissions = submissions.filter(status='submitted')
+    elif filter_status == 'graded':
+        submissions = submissions.filter(status='graded')
+
+    if filter_modul:
+        submissions = submissions.filter(modul__slug=filter_modul)
+
+    all_modules = Modul.objects.filter(is_published=True).order_by('urutan')
+
+    context = {
+        'submissions': submissions,
+        'all_modules': all_modules,
+        'filter_status': filter_status,
+        'filter_modul': filter_modul,
+        'active_nav': 'admin_submissions',
+    }
+    return render(request, 'admin_panel/submissions.html', context)
+
+
+@user_passes_test(teacher_check, login_url='accounts:login')
+def grade_submission_view(request, submission_id):
+    """
+    Form Penilaian Detail Submisi LKPD oleh Guru Pengampu.
+    """
+    submission = get_object_or_404(UserSubmission.objects.select_related('user', 'modul'), id=submission_id)
+    form = TeacherGradeForm(request.POST or None, instance=submission)
+
+    if request.method == 'POST' and form.is_valid():
+        sub = form.save(commit=False)
+        sub.status = 'graded'
+        sub.graded_by = request.user
+        sub.graded_at = timezone.now()
+        sub.save()
+
+        messages.success(request, f"Penilaian untuk {submission.user.display_name} pada modul {submission.modul.kode} berhasil disimpan!")
+        return redirect('admin_panel:submission_list')
+
+    context = {
+        'submission': submission,
+        'form': form,
+        'active_nav': 'admin_submissions',
+    }
+    return render(request, 'admin_panel/grade_submission.html', context)

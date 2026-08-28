@@ -1,5 +1,6 @@
 from django import forms
 from .models import EnrollmentToken, generate_random_token
+from apps.pembelajaran.models import UserSubmission
 
 
 class EnrollmentTokenForm(forms.ModelForm):
@@ -60,3 +61,26 @@ class EnrollmentTokenForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class TeacherGradeForm(forms.ModelForm):
+    """
+    Form Penilaian & Rubrik KKTP oleh Guru Pengampu.
+    """
+    class Meta:
+        model = UserSubmission
+        fields = ['teacher_score', 'teacher_level', 'teacher_feedback']
+        widgets = {
+            'teacher_score': forms.NumberInput(attrs={
+                'class': 'm3-input font-mono font-bold text-base',
+                'min': 0,
+                'max': 100,
+                'placeholder': '0 - 100'
+            }),
+            'teacher_level': forms.Select(attrs={'class': 'm3-input'}),
+            'teacher_feedback': forms.Textarea(attrs={
+                'class': 'm3-input text-xs',
+                'rows': 4,
+                'placeholder': 'Catatan feedback, evaluasi, dan apresiasi untuk siswa...'
+            }),
+        }

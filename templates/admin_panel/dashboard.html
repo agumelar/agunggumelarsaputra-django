@@ -19,15 +19,21 @@
             </p>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center gap-3">
+            <a href="{% url 'admin_panel:submission_list' %}" class="m3-btn-secondary text-xs">
+                <span>Penilaian LKPD & KKTP</span>
+                {% if pending_submissions > 0 %}
+                <span class="px-1.5 py-0.2 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-[10px]">{{ pending_submissions }}</span>
+                {% endif %}
+            </a>
             <a href="{% url 'admin_panel:token_create' %}" class="m3-btn-primary text-xs">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
-                <span>Buat Token Sesi Baru</span>
+                <span>+ Buat Token Sesi</span>
             </a>
             <a href="{% url 'admin_panel:token_list' %}" class="m3-btn-outlined text-xs">
-                <span>Kelola Semua Token</span>
+                <span>Kelola Token</span>
             </a>
         </div>
     </div>
