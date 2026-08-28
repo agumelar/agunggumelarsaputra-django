@@ -1,0 +1,123 @@
+<!-- Projector Table Partial -->
+<div class="space-y-6">
+    
+    <!-- Top 3 Projector Cards -->
+    {% if top3 %}
+    <div class="grid grid-cols-3 gap-6">
+        <!-- Rank 2 -->
+        {% if top3|length >= 2 %}
+        {% with s=top3.1 %}
+        <div class="p-6 rounded-3xl bg-[#111827] border-2 border-slate-400/50 flex flex-col items-center justify-between text-center relative shadow-2xl">
+            <div class="absolute -top-3.5 px-3 py-1 rounded-full bg-slate-400 text-slate-950 font-mono font-black text-xs">
+                🥈 RANK #2
+            </div>
+            <div class="mt-2 space-y-2">
+                <div class="w-16 h-16 rounded-full bg-[#090d16] border-2 border-slate-400 flex items-center justify-center font-bold text-2xl text-slate-300 mx-auto">
+                    {{ s.first_name|first|default:"S" }}
+                </div>
+                <h3 class="font-extrabold text-white text-lg font-display truncate max-w-[200px]">{{ s.display_name }}</h3>
+                <p class="text-xs text-slate-400 font-mono">{{ s.kelas|default:"10 RPL" }}</p>
+                <div class="text-amber-400 font-mono font-black text-xl">{{ s.xp }} XP</div>
+            </div>
+        </div>
+        {% endwith %}
+        {% endif %}
+
+        <!-- Rank 1 -->
+        {% with s=top3.0 %}
+        <div class="p-7 rounded-3xl bg-[#1e1b4b]/60 border-2 border-amber-400 flex flex-col items-center justify-between text-center relative shadow-2xl scale-105">
+            <div class="absolute -top-4 px-4 py-1 rounded-full bg-amber-400 text-amber-950 font-mono font-black text-sm shadow-xl flex items-center gap-1.5">
+                <span>👑</span>
+                <span>JUARA 1</span>
+            </div>
+            <div class="mt-2 space-y-2">
+                <div class="w-20 h-20 rounded-full bg-[#090d16] border-3 border-amber-400 flex items-center justify-center font-black text-3xl text-amber-400 mx-auto shadow-inner">
+                    {{ s.first_name|first|default:"S" }}
+                </div>
+                <h3 class="font-black text-white text-2xl font-display truncate max-w-[240px]">{{ s.display_name }}</h3>
+                <p class="text-xs text-amber-300 font-mono font-bold">{{ s.kelas|default:"10 RPL" }}</p>
+                <div class="text-amber-400 font-mono font-black text-3xl">{{ s.xp }} XP</div>
+            </div>
+        </div>
+        {% endwith %}
+
+        <!-- Rank 3 -->
+        {% if top3|length >= 3 %}
+        {% with s=top3.2 %}
+        <div class="p-6 rounded-3xl bg-[#111827] border-2 border-amber-700/60 flex flex-col items-center justify-between text-center relative shadow-2xl">
+            <div class="absolute -top-3.5 px-3 py-1 rounded-full bg-amber-700 text-amber-100 font-mono font-black text-xs">
+                🥉 RANK #3
+            </div>
+            <div class="mt-2 space-y-2">
+                <div class="w-16 h-16 rounded-full bg-[#090d16] border-2 border-amber-700 flex items-center justify-center font-bold text-2xl text-amber-500 mx-auto">
+                    {{ s.first_name|first|default:"S" }}
+                </div>
+                <h3 class="font-extrabold text-white text-lg font-display truncate max-w-[200px]">{{ s.display_name }}</h3>
+                <p class="text-xs text-slate-400 font-mono">{{ s.kelas|default:"10 RPL" }}</p>
+                <div class="text-amber-400 font-mono font-black text-xl">{{ s.xp }} XP</div>
+            </div>
+        </div>
+        {% endwith %}
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Ranking Table for Projector -->
+    <div class="rounded-3xl bg-[#111827] border border-white/10 overflow-hidden shadow-2xl">
+        <table class="w-full text-left text-sm">
+            <thead class="bg-[#090d16] border-b border-white/10 text-slate-400 font-mono">
+                <tr>
+                    <th class="px-6 py-4 text-center w-20">Rank</th>
+                    <th class="px-6 py-4">Nama Siswa</th>
+                    <th class="px-6 py-4">Rombel</th>
+                    <th class="px-6 py-4 text-center">Level</th>
+                    <th class="px-6 py-4 text-center">Modul</th>
+                    <th class="px-6 py-4 text-center">Top TKA</th>
+                    <th class="px-6 py-4 text-right">Poin XP</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 font-sans">
+                {% for s in leaderboard %}
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="px-6 py-3.5 text-center font-mono font-black text-base">
+                        {% if s.rank == 1 %}
+                        <span class="text-amber-400">#1</span>
+                        {% elif s.rank == 2 %}
+                        <span class="text-slate-300">#2</span>
+                        {% elif s.rank == 3 %}
+                        <span class="text-amber-600">#3</span>
+                        {% else %}
+                        <span class="text-slate-400">#{{ s.rank }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-3.5 font-bold text-white text-base">
+                        {{ s.display_name }}
+                    </td>
+                    <td class="px-6 py-3.5 font-mono text-slate-300">
+                        {{ s.kelas|default:"10 RPL" }}
+                    </td>
+                    <td class="px-6 py-3.5 text-center font-mono text-slate-300">
+                        Level {{ s.level }}
+                    </td>
+                    <td class="px-6 py-3.5 text-center font-mono text-slate-300">
+                        {{ s.modules_count }}
+                    </td>
+                    <td class="px-6 py-3.5 text-center font-mono text-emerald-400 font-bold">
+                        {% if s.tka_top_score > 0 %}{{ s.tka_top_score }}%{% else %}-{% endif %}
+                    </td>
+                    <td class="px-6 py-3.5 text-right font-mono font-black text-amber-400 text-lg">
+                        {{ s.xp }} XP
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-12 text-center text-slate-400">
+                        Belum ada data skor siswa untuk ditampilkan.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Scoreboard Kelas — Layar Proyektor | {{ SITE_TITLE }}</title>
+    
+    <!-- Meta -->
+    <meta name="theme-color" content="#090d16">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- CSS & JS -->
+    <link rel="stylesheet" href="/static/css/output.css">
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.14.8/dist/cdn.min.js"></script>
+</head>
+<body 
+    class="bg-[#090d16] text-gray-100 min-h-screen p-4 sm:p-8 flex flex-col justify-between font-sans selection:bg-primary/30"
+    x-data="{
+        subject: '{{ selected_subject }}',
+        targetClass: '{{ selected_class }}',
+        tokenId: '{{ selected_token }}'
+    }"
+>
+
+    <!-- Top Header Bar -->
+    <header class="max-w-7xl mx-auto w-full mb-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 p-5 rounded-3xl bg-[#111827]/90 border border-white/10 shadow-2xl backdrop-blur-md">
+            
+            <!-- Identity -->
+            <div class="flex items-center gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-2xl shadow-inner">
+                    🏆
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl md:text-2xl font-black text-white tracking-tight flex items-center gap-2 font-display">
+                            LIVE SCOREBOARD KELAS RPL
+                        </h1>
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-400 font-mono">
+                        Pengembangan Perangkat Lunak dan Gim (PPLG) &bull; SMKN 1 Rongga &bull; Guru: <strong class="text-white">Agung Gumelar Saputra, S.Tr.T.</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex flex-wrap items-center gap-3 text-xs font-mono">
+                
+                <!-- Category Tabs -->
+                <div class="flex items-center gap-1 bg-[#1e293b] p-1 rounded-xl border border-white/10">
+                    <button 
+                        type="button" 
+                        hx-get="{% url 'gamification:projector_leaderboard' %}?subject=all" 
+                        hx-target="#projector-table-container"
+                        hx-include="[name='class'], [name='tokenId']"
+                        @click="subject = 'all'"
+                        :class="subject === 'all' ? 'bg-primary text-primary-on-primary font-bold' : 'text-gray-300 hover:text-white'"
+                        class="px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                        Semua
+                    </button>
+                    <button 
+                        type="button" 
+                        hx-get="{% url 'gamification:projector_leaderboard' %}?subject=orientasi-pplg" 
+                        hx-target="#projector-table-container"
+                        hx-include="[name='class'], [name='tokenId']"
+                        @click="subject = 'orientasi-pplg'"
+                        :class="subject === 'orientasi-pplg' ? 'bg-primary text-primary-on-primary font-bold' : 'text-gray-300 hover:text-white'"
+                        class="px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                        Modul RPL
+                    </button>
+                    <button 
+                        type="button" 
+                        hx-get="{% url 'gamification:projector_leaderboard' %}?subject=tka" 
+                        hx-target="#projector-table-container"
+                        hx-include="[name='class'], [name='tokenId']"
+                        @click="subject = 'tka'"
+                        :class="subject === 'tka' ? 'bg-primary text-primary-on-primary font-bold' : 'text-gray-300 hover:text-white'"
+                        class="px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                        CBT TKA
+                    </button>
+                    <button 
+                        type="button" 
+                        hx-get="{% url 'gamification:projector_leaderboard' %}?subject=literasi" 
+                        hx-target="#projector-table-container"
+                        hx-include="[name='class'], [name='tokenId']"
+                        @click="subject = 'literasi'"
+                        :class="subject === 'literasi' ? 'bg-primary text-primary-on-primary font-bold' : 'text-gray-300 hover:text-white'"
+                        class="px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                        Literasi RESIK
+                    </button>
+                </div>
+
+                <!-- Class Filter -->
+                <select 
+                    name="class" 
+                    x-model="targetClass"
+                    hx-get="{% url 'gamification:projector_leaderboard' %}" 
+                    hx-target="#projector-table-container"
+                    hx-include="[name='tokenId']"
+                    hx-trigger="change"
+                    class="bg-[#1e293b] border border-white/10 text-white rounded-xl px-3 py-1.5 text-xs font-mono focus:outline-none"
+                >
+                    <option value="all">Semua Kelas</option>
+                    <option value="10 RPL 1">10 RPL 1</option>
+                    <option value="10 RPL 2">10 RPL 2</option>
+                    <option value="11 RPL 1">11 RPL 1</option>
+                    <option value="11 RPL 2">11 RPL 2</option>
+                    <option value="12 RPL 1">12 RPL 1</option>
+                    <option value="12 RPL 2">12 RPL 2</option>
+                </select>
+
+                <!-- Token Sesi Filter -->
+                {% if tokens_list %}
+                <select 
+                    name="tokenId" 
+                    x-model="tokenId"
+                    hx-get="{% url 'gamification:projector_leaderboard' %}" 
+                    hx-target="#projector-table-container"
+                    hx-include="[name='class']"
+                    hx-trigger="change"
+                    class="bg-[#1e293b] border border-white/10 text-white rounded-xl px-3 py-1.5 text-xs font-mono focus:outline-none"
+                >
+                    <option value="">Semua Token</option>
+                    {% for t in tokens_list %}
+                    <option value="{{ t.id }}">{{ t.token }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+
+                <!-- Exit to Admin Panel -->
+                <a href="{% url 'admin_panel:dashboard' %}" class="px-3 py-1.5 rounded-xl bg-surface-low border border-white/10 text-gray-400 hover:text-white">
+                    ✕ Tutup
+                </a>
+
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Container with Auto-Refresh Polling every 10s -->
+    <main 
+        id="projector-table-container" 
+        class="max-w-7xl mx-auto w-full flex-1"
+        hx-get="{% url 'gamification:projector_leaderboard' %}"
+        hx-include="[name='class'], [name='tokenId']"
+        hx-trigger="every 10s"
+    >
+        {% include 'gamification/partials/projector_table.html' %}
+    </main>
+
+    <!-- Footer Status -->
+    <footer class="max-w-7xl mx-auto w-full mt-8 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-gray-500">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>Real-time Sync Active (Auto-refresh 10s)</span>
+        </div>
+        <span>SMK Negeri 1 Rongga &bull; Rekayasa Perangkat Lunak</span>
+    </footer>
+
+</body>
+</html>

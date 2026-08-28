@@ -1,55 +1,180 @@
 {% extends 'base.html' %}
 
-{% block title %}Leaderboard XP Siswa | {{ SITE_TITLE }}{% endblock %}
+{% block title %}Leaderboard & Papan Peringkat Siswa RPL | {{ SITE_TITLE }}{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto space-y-8 py-6">
-    <div class="space-y-2">
-        <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Leaderboard Kejuruan RPL</h1>
-        <p class="text-xs sm:text-sm text-gray-400 font-sans">
-            Peringkat akumulasi XP siswa berdasarkan keaktifan modul, CBT TKA, LKPD, dan literasi.
+<div 
+    class="space-y-8 py-6 max-w-5xl mx-auto"
+    x-data="{
+        subject: '{{ selected_subject }}',
+        targetClass: '{{ selected_class }}',
+        tokenId: '{{ selected_token }}'
+    }"
+>
+
+    <!-- Header Banner -->
+    <div class="text-center space-y-3 py-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono font-bold">
+            <span>🏆 Papan Peringkat Prestasi Belajar RPL</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
+            Live Leaderboard Siswa RPL
+        </h1>
+        <p class="text-xs sm:text-sm text-gray-400 max-w-lg mx-auto leading-relaxed">
+            Kumpulkan Experience Points (XP) dengan menyelesaikan modul praktikum, tantangan LKPD, drilling CBT TKA, dan setoran Rabu Literasi.
         </p>
+
+        <!-- Current User Rank Floating Pill (if logged in) -->
+        {% if user.is_authenticated and current_user_rank %}
+        <div class="inline-flex flex-wrap items-center justify-center gap-4 p-3.5 rounded-2xl bg-surface-high border border-primary/40 shadow-lg text-xs font-mono mt-2">
+            <div class="flex items-center gap-2">
+                <span class="text-gray-400">Peringkat Anda:</span>
+                <span class="px-2.5 py-0.5 rounded-lg bg-primary text-primary-on-primary font-bold text-sm">
+                    #{{ current_user_rank.rank }}
+                </span>
+            </div>
+            <span class="text-gray-600 hidden sm:inline">&bull;</span>
+            <div class="flex items-center gap-1.5">
+                <span class="text-gray-400">Total Poin:</span>
+                <span class="text-amber-400 font-bold text-sm">{{ current_user_rank.xp }} XP</span>
+            </div>
+            <span class="text-gray-600 hidden sm:inline">&bull;</span>
+            <div class="flex items-center gap-1.5">
+                <span class="text-gray-400">Level:</span>
+                <span class="text-white font-semibold">Tier {{ current_user_rank.level }}</span>
+            </div>
+            {% if points_to_next > 0 %}
+            <span class="text-gray-600 hidden sm:inline">&bull;</span>
+            <span class="text-emerald-400 text-[11px]">
+                Butuh +{{ points_to_next }} XP lagi untuk naik peringkat!
+            </span>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 
-    <div class="m3-surface overflow-hidden">
-        <table class="w-full text-left text-xs">
-            <thead class="bg-surface-lowest border-b border-outline-variant text-gray-400 font-mono">
-                <tr>
-                    <th class="px-6 py-4">#</th>
-                    <th class="px-6 py-4">Siswa</th>
-                    <th class="px-6 py-4">Kelas</th>
-                    <th class="px-6 py-4">Streak</th>
-                    <th class="px-6 py-4 text-right">Total XP</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-outline-variant">
-                {% for student in top_students %}
-                <tr class="hover:bg-surface-high/50 transition-colors">
-                    <td class="px-6 py-4 font-mono font-bold {% if forloop.counter == 1 %}text-amber-400{% elif forloop.counter == 2 %}text-slate-300{% elif forloop.counter == 3 %}text-amber-600{% else %}text-gray-500{% endif %}">
-                        {{ forloop.counter }}
-                    </td>
-                    <td class="px-6 py-4 font-medium text-white">
-                        {{ student.display_name }}
-                    </td>
-                    <td class="px-6 py-4 font-mono text-gray-400">
-                        {{ student.kelas|default:"-" }}
-                    </td>
-                    <td class="px-6 py-4 font-mono text-amber-400">
-                        🔥 {{ student.streak_count }} Hari
-                    </td>
-                    <td class="px-6 py-4 font-mono font-bold text-right text-primary">
-                        {{ student.xp }} XP
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="px-6 py-12 text-center text-gray-400">
-                        Belum ada data siswa di leaderboard.
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <!-- Filter & Subject Tabs Bar -->
+    <div class="m3-surface p-4 space-y-4">
+        
+        <!-- Row 1: Subject Filter Tabs -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-outline-variant text-xs font-mono">
+            <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-gray-500 mr-1 text-[11px]">Kategori:</span>
+                <button 
+                    type="button" 
+                    hx-get="{% url 'gamification:leaderboard' %}?subject=all" 
+                    hx-target="#leaderboard-table-container"
+                    hx-include="[name='class'], [name='tokenId']"
+                    @click="subject = 'all'"
+                    :class="subject === 'all' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border border-outline-variant'"
+                    class="px-3 py-1.5 rounded-lg transition-colors"
+                >
+                    Semua Aktivitas
+                </button>
+                <button 
+                    type="button" 
+                    hx-get="{% url 'gamification:leaderboard' %}?subject=orientasi-pplg" 
+                    hx-target="#leaderboard-table-container"
+                    hx-include="[name='class'], [name='tokenId']"
+                    @click="subject = 'orientasi-pplg'"
+                    :class="subject === 'orientasi-pplg' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border border-outline-variant'"
+                    class="px-3 py-1.5 rounded-lg transition-colors"
+                >
+                    16 Modul RPL
+                </button>
+                <button 
+                    type="button" 
+                    hx-get="{% url 'gamification:leaderboard' %}?subject=tka" 
+                    hx-target="#leaderboard-table-container"
+                    hx-include="[name='class'], [name='tokenId']"
+                    @click="subject = 'tka'"
+                    :class="subject === 'tka' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border border-outline-variant'"
+                    class="px-3 py-1.5 rounded-lg transition-colors"
+                >
+                    Drilling CBT TKA
+                </button>
+                <button 
+                    type="button" 
+                    hx-get="{% url 'gamification:leaderboard' %}?subject=literasi" 
+                    hx-target="#leaderboard-table-container"
+                    hx-include="[name='class'], [name='tokenId']"
+                    @click="subject = 'literasi'"
+                    :class="subject === 'literasi' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border border-outline-variant'"
+                    class="px-3 py-1.5 rounded-lg transition-colors"
+                >
+                    Rabu Literasi RESIK
+                </button>
+            </div>
+
+            <!-- Total Students Counter -->
+            <div class="text-gray-400 font-mono text-[11px]">
+                Total: <strong class="text-white">{{ total_students }}</strong> Siswa
+            </div>
+        </div>
+
+        <!-- Row 2: Class & Token Selectors -->
+        <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                
+                <!-- Class Filter -->
+                <div class="flex items-center gap-2">
+                    <label class="text-gray-400 font-mono text-[11px]">Rombel:</label>
+                    <select 
+                        name="class" 
+                        x-model="targetClass"
+                        hx-get="{% url 'gamification:leaderboard' %}" 
+                        hx-target="#leaderboard-table-container"
+                        hx-include="[name='tokenId']"
+                        hx-trigger="change"
+                        class="m3-input py-1.5 text-xs font-mono"
+                    >
+                        <option value="all">Semua Siswa & Rombel (Global)</option>
+                        <option value="10 RPL 1">10 RPL 1 (Fase E)</option>
+                        <option value="10 RPL 2">10 RPL 2 (Fase E)</option>
+                        <option value="11 RPL 1">11 RPL 1 (Fase F)</option>
+                        <option value="11 RPL 2">11 RPL 2 (Fase F)</option>
+                        <option value="12 RPL 1">12 RPL 1 (Fase F Lanjut)</option>
+                        <option value="12 RPL 2">12 RPL 2 (Fase F Lanjut)</option>
+                    </select>
+                </div>
+
+                <!-- Token Sesi Filter -->
+                {% if tokens_list %}
+                <div class="flex items-center gap-2">
+                    <label class="text-gray-400 font-mono text-[11px]">Sesi Token:</label>
+                    <select 
+                        name="tokenId" 
+                        x-model="tokenId"
+                        hx-get="{% url 'gamification:leaderboard' %}" 
+                        hx-target="#leaderboard-table-container"
+                        hx-include="[name='class']"
+                        hx-trigger="change"
+                        class="m3-input py-1.5 text-xs font-mono"
+                    >
+                        <option value="">Semua Token Sesi</option>
+                        {% for t in tokens_list %}
+                        <option value="{{ t.id }}">{{ t.token }} - {{ t.title|truncatechars:25 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- XP History Shortcut Link -->
+            {% if user.is_authenticated %}
+            <a href="{% url 'gamification:xp_history' %}" class="inline-flex items-center gap-1.5 text-primary hover:underline font-mono text-xs">
+                <span>Riwayat XP & Level Saya ➔</span>
+            </a>
+            {% endif %}
+        </div>
+
     </div>
+
+    <!-- Leaderboard Table Container (Target for HTMX Swaps) -->
+    <div id="leaderboard-table-container">
+        {% include 'gamification/partials/leaderboard_table.html' %}
+    </div>
+
 </div>
 {% endblock %}

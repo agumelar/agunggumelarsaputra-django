@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Riwayat XP & Level Progression | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-6 space-y-8">
+
+    <!-- Top Breadcrumb -->
+    <div class="space-y-1">
+        <a href="{% url 'gamification:leaderboard' %}" class="inline-flex items-center gap-1.5 text-xs text-primary font-mono hover:underline mb-1">
+            ← Kembali ke Leaderboard
+        </a>
+        <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-white">Profil Gamifikasi & Riwayat XP</h1>
+    </div>
+
+    <!-- Student Level Progression Card -->
+    <div class="m3-surface p-6 sm:p-8 space-y-6 border-2 border-primary/30">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-outline-variant">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 rounded-2xl bg-surface-lowest border-2 border-primary flex items-center justify-center text-3xl shadow-inner">
+                    {{ current_tier.badge }}
+                </div>
+                <div class="space-y-0.5">
+                    <span class="px-2.5 py-0.5 rounded bg-primary/20 text-primary font-mono font-bold text-xs">
+                        LEVEL {{ user.level }}
+                    </span>
+                    <h2 class="text-xl font-bold font-display text-white">{{ current_tier.title }}</h2>
+                    <p class="text-xs text-gray-400 font-mono">{{ user.display_name }} &bull; {{ user.kelas|default:"10 RPL" }}</p>
+                </div>
+            </div>
+
+            <!-- XP Big Stat -->
+            <div class="text-left sm:text-right font-mono">
+                <p class="text-xs text-gray-400 uppercase">Saldo XP Saat Ini</p>
+                <p class="text-3xl font-extrabold text-amber-400 font-display">{{ user.xp }} XP</p>
+                <p class="text-[11px] text-gray-500">Streak: 🔥 {{ user.streak_days }} Hari</p>
+            </div>
+        </div>
+
+        <!-- Level Progress Bar -->
+        <div class="space-y-2 font-mono text-xs">
+            <div class="flex items-center justify-between">
+                <span class="text-gray-300">Progres Menuju Level {{ user.level|add:1 }}{% if next_tier %} ({{ next_tier.title }}){% endif %}:</span>
+                <span class="text-primary font-bold">{{ tier_progress_percent }}%</span>
+            </div>
+            <div class="w-full h-3 rounded-full bg-surface-lowest border border-outline-variant overflow-hidden p-0.5">
+                <div class="h-full rounded-full bg-gradient-to-r from-primary to-amber-400 transition-all duration-500" style="width: {{ tier_progress_percent }}%;"></div>
+            </div>
+            {% if next_tier %}
+            <p class="text-[11px] text-gray-400 text-right">
+                Target Level Berikutnya: <strong class="text-white">{{ next_tier.min_xp }} XP</strong> (Kurang {{ next_tier.min_xp|add:"-"|add:user.xp }} XP)
+            </p>
+            {% else %}
+            <p class="text-[11px] text-emerald-400 text-right font-bold">
+                ⭐ Anda telah mencapai Level Maksimal (Principal Architect)!
+            </p>
+            {% endif %}
+        </div>
+
+        <!-- 4-Category Breakdown Stats -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-center text-xs font-mono">
+            <div class="p-3 rounded-xl bg-surface-lowest border border-outline-variant">
+                <p class="text-gray-500 text-[11px]">Modul & LKPD</p>
+                <p class="font-bold text-white text-base">{{ breakdown.modul_lkpd }} XP</p>
+            </div>
+            <div class="p-3 rounded-xl bg-surface-lowest border border-outline-variant">
+                <p class="text-gray-500 text-[11px]">CBT TKA</p>
+                <p class="font-bold text-emerald-400 text-base">{{ breakdown.tka }} XP</p>
+            </div>
+            <div class="p-3 rounded-xl bg-surface-lowest border border-outline-variant">
+                <p class="text-gray-500 text-[11px]">Rabu Literasi</p>
+                <p class="font-bold text-white text-base">{{ breakdown.literasi }} XP</p>
+            </div>
+            <div class="p-3 rounded-xl bg-surface-lowest border border-outline-variant">
+                <p class="text-gray-500 text-[11px]">Peer Review</p>
+                <p class="font-bold text-amber-400 text-base">{{ breakdown.peer_review }} XP</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 10 Level Progression Tiers Roadmap -->
+    <div class="m3-surface p-6 sm:p-8 space-y-4">
+        <div class="space-y-1 border-b border-outline-variant pb-3">
+            <h3 class="text-base font-bold font-display text-white">Hierarki 10 Level Keahlian Software Engineering</h3>
+            <p class="text-xs text-gray-400">Tingkatkan terus keaktifan belajar Anda untuk membuka gelar keahlian tertinggi.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+            {% for t in level_tiers %}
+            <div class="p-3.5 rounded-xl border flex items-center justify-between {% if user.level == t.level %}bg-primary/10 border-primary shadow-sm{% elif user.level > t.level %}bg-surface-lowest border-outline-variant opacity-75{% else %}bg-surface-lowest border-outline-variant/50 opacity-40{% endif %}">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">{{ t.badge }}</span>
+                    <div>
+                        <p class="font-bold text-white font-sans">{{ t.title }}</p>
+                        <p class="text-[11px] text-gray-400">Level {{ t.level }} &bull; {{ t.min_xp }} - {% if t.max_xp > 10000 %}∞{% else %}{{ t.max_xp }}{% endif %} XP</p>
+                    </div>
+                </div>
+                {% if user.level == t.level %}
+                <span class="px-2 py-0.5 rounded bg-primary text-primary-on-primary font-bold text-[10px]">Aktif</span>
+                {% elif user.level > t.level %}
+                <span class="text-emerald-400 font-bold text-xs">✓</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- XP History Log Audit Table -->
+    <div class="m3-surface p-6 sm:p-8 space-y-4">
+        <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+            <h3 class="text-base font-bold font-display text-white">Riwayat Mutasi & Perolehan XP</h3>
+            <span class="text-xs font-mono text-gray-400">{{ history_logs|length }} Transaksi</span>
+        </div>
+
+        <div class="divide-y divide-outline-variant">
+            {% for log in history_logs %}
+            <div class="py-3 flex items-center justify-between gap-4 text-xs font-mono">
+                <div class="space-y-0.5">
+                    <p class="font-bold text-white font-sans">{{ log.description }}</p>
+                    <p class="text-[11px] text-gray-500">{{ log.created_at|date:"d M Y, H:i" }} &bull; Kategori: {{ log.get_category_display }}</p>
+                </div>
+                <div class="px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
+                    +{{ log.amount }} XP
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-xs text-gray-400 text-center py-6">Belum ada riwayat perolehan XP.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
