@@ -1,32 +1,118 @@
 {% extends 'base.html' %}
 
-{% block title %}Panel Guru Pengampu | {{ SITE_TITLE }}{% endblock %}
+{% block title %}Teacher Hub & Monitoring | {{ SITE_TITLE }}{% endblock %}
 
 {% block content %}
 <div class="space-y-8 py-6">
-    <div class="space-y-2">
-        <span class="px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-mono font-semibold">
-            Area Khusus Guru Pengampu
-        </span>
-        <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Teacher Hub & Monitoring RPL</h1>
-        <p class="text-xs sm:text-sm text-gray-400 font-sans">
-            Manajemen token pendaftaran rombel, grading LKPD, validasi literasi, dan rekap nilai CBT TKA.
-        </p>
+    
+    <!-- Top Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+            <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-mono font-semibold">
+                    Area Khusus Guru Pengampu RPL
+                </span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Teacher Hub & Monitoring KBM</h1>
+            <p class="text-xs sm:text-sm text-gray-400 font-sans">
+                Kelola token pendaftaran rombel, evaluasi LKPD, dan pantau aktivitas belajar siswa SMKN 1 Rongga.
+            </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a href="{% url 'admin_panel:token_create' %}" class="m3-btn-primary text-xs">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                <span>Buat Token Sesi Baru</span>
+            </a>
+            <a href="{% url 'admin_panel:token_list' %}" class="m3-btn-outlined text-xs">
+                <span>Kelola Semua Token</span>
+            </a>
+        </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="m3-surface p-6 space-y-3">
-            <h2 class="text-base font-bold font-display text-white">Generator Token Rombel</h2>
-            <p class="text-xs text-gray-400">Buat token pendaftaran siswa per kelas secara mandiri.</p>
+    <!-- Quick Stat Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="m3-surface p-5 space-y-1">
+            <p class="text-xs font-mono text-gray-400">Total Siswa Terdaftar</p>
+            <p class="text-2xl font-bold font-display text-white">{{ total_students }} <span class="text-xs font-normal text-gray-500">Siswa</span></p>
         </div>
-        <div class="m3-surface p-6 space-y-3">
-            <h2 class="text-base font-bold font-display text-white">Penilaian LKPD & KKTP</h2>
-            <p class="text-xs text-gray-400">Review submisi dan input nilai rubrik praktikum.</p>
+        <div class="m3-surface p-5 space-y-1">
+            <p class="text-xs font-mono text-gray-400">Total Sesi Token</p>
+            <p class="text-2xl font-bold font-display text-primary">{{ total_tokens }} <span class="text-xs font-normal text-gray-500">Token</span></p>
         </div>
-        <div class="m3-surface p-6 space-y-3">
-            <h2 class="text-base font-bold font-display text-white">Validasi Rabu Literasi</h2>
-            <p class="text-xs text-gray-400">Verifikasi rangkuman bacaan mingguan siswa.</p>
+        <div class="m3-surface p-5 space-y-1">
+            <p class="text-xs font-mono text-gray-400">Sesi KBM Aktif</p>
+            <p class="text-2xl font-bold font-display text-emerald-400">{{ active_tokens }} <span class="text-xs font-normal text-gray-500">Sesi</span></p>
+        </div>
+        <div class="m3-surface p-5 space-y-1">
+            <p class="text-xs font-mono text-gray-400">Total Enrollment</p>
+            <p class="text-2xl font-bold font-display text-amber-400">{{ total_enrollments }} <span class="text-xs font-normal text-gray-500">Klaim</span></p>
         </div>
     </div>
+
+    <!-- 2 Column Section: Recent Tokens & Recent Students -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Recent Tokens -->
+        <div class="m3-surface p-6 space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-bold font-display text-white">Token Sesi Terbaru</h2>
+                <a href="{% url 'admin_panel:token_list' %}" class="text-xs text-primary font-mono hover:underline">Lihat Semua ➔</a>
+            </div>
+
+            <div class="divide-y divide-outline-variant">
+                {% for token in recent_tokens %}
+                <div class="py-3 flex items-center justify-between first:pt-0 last:pb-0">
+                    <div class="space-y-0.5">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 bg-surface-lowest border border-outline-variant rounded font-mono font-bold text-xs text-primary">
+                                {{ token.token }}
+                            </span>
+                            <span class="text-xs font-bold text-white">{{ token.title }}</span>
+                        </div>
+                        <p class="text-[11px] text-gray-400 font-mono">Kelas: {{ token.target_class }} &bull; Peserta: {{ token.used_count }}/{{ token.max_uses }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="{% url 'admin_panel:token_detail' token.id %}" class="text-xs text-gray-300 hover:text-white font-mono px-2 py-1 bg-surface-high rounded">
+                            Detail
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-xs text-gray-400 py-4 text-center">Belum ada token sesi yang dibuat.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Recent Registered Students -->
+        <div class="m3-surface p-6 space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-bold font-display text-white">Siswa Baru Mendaftar</h2>
+                <span class="text-xs text-gray-400 font-mono">5 Terakhir</span>
+            </div>
+
+            <div class="divide-y divide-outline-variant">
+                {% for student in recent_students %}
+                <div class="py-3 flex items-center justify-between first:pt-0 last:pb-0">
+                    <div class="space-y-0.5">
+                        <p class="text-xs font-bold text-white">{{ student.display_name }}</p>
+                        <p class="text-[11px] text-gray-400 font-mono">
+                            {{ student.kelas|default:"Umum" }} &bull; {{ student.email }} &bull; Terdaftar: {{ student.date_joined|date:"d M, H:i" }}
+                        </p>
+                    </div>
+                    <div class="text-right font-mono text-xs text-amber-400 font-bold">
+                        {{ student.xp }} XP
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-xs text-gray-400 py-4 text-center">Belum ada siswa yang mendaftar.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
 </div>
 {% endblock %}

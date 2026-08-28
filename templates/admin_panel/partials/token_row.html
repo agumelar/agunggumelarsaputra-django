@@ -1,0 +1,47 @@
+<tr id="token-row-{{ token.id }}" class="hover:bg-surface-high/40 transition-colors">
+    <td class="px-5 py-4 font-mono font-bold text-primary">
+        <span class="px-2 py-1 bg-surface-lowest border border-outline-variant rounded">
+            {{ token.token }}
+        </span>
+    </td>
+    <td class="px-5 py-4">
+        <div class="font-bold text-white">{{ token.title }}</div>
+        <div class="text-[11px] text-gray-400 font-mono">{{ token.get_target_type_display }}</div>
+    </td>
+    <td class="px-5 py-4 font-mono text-gray-300">
+        {{ token.target_class }}
+    </td>
+    <td class="px-5 py-4 font-mono text-xs">
+        <span class="{% if token.is_full %}text-rose-400{% else %}text-emerald-400{% endif %} font-bold">
+            {{ token.used_count }}
+        </span> / {{ token.max_uses }} Siswa
+    </td>
+    <td class="px-5 py-4">
+        {% if token.is_active %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                Aktif
+            </span>
+        {% else %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                Ditutup
+            </span>
+        {% endif %}
+    </td>
+    <td class="px-5 py-4 text-right">
+        <div class="flex items-center justify-end gap-2">
+            <a href="{% url 'admin_panel:token_detail' token.id %}" class="px-2.5 py-1 rounded bg-surface-high border border-outline-variant hover:border-outline text-gray-200 text-xs font-mono">
+                Peserta ({{ token.used_count }})
+            </a>
+            <button 
+                hx-post="{% url 'admin_panel:token_toggle' token.id %}" 
+                hx-target="#token-row-{{ token.id }}" 
+                hx-swap="outerHTML" 
+                class="px-2.5 py-1 rounded border text-xs font-mono transition-colors {% if token.is_active %}bg-rose-500/10 border-rose-500/20 text-rose-400 hover:bg-rose-500/20{% else %}bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20{% endif %}"
+            >
+                {% if token.is_active %}Tutup Sesi{% else %}Buka Sesi{% endif %}
+            </button>
+        </div>
+    </td>
+</tr>

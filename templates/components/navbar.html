@@ -86,9 +86,14 @@
                         </div>
                     </div>
                 {% else %}
-                    <a href="{% url 'accounts:login' %}" class="m3-btn-outlined text-xs py-2 px-3.5">
-                        Masuk Siswa
-                    </a>
+                    <div class="flex items-center gap-2">
+                        <a href="{% url 'accounts:login' %}" class="m3-btn-outlined text-xs py-2 px-3.5">
+                            Masuk
+                        </a>
+                        <a href="{% url 'accounts:register' %}" class="m3-btn-primary text-xs py-2 px-3.5">
+                            Daftar Siswa
+                        </a>
+                    </div>
                 {% endif %}
             </div>
 

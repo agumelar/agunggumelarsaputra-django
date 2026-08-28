@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Buat Token Sesi Baru | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto py-8">
+    <div class="m3-surface p-6 sm:p-8 space-y-6">
+        
+        <!-- Header -->
+        <div class="space-y-1">
+            <a href="{% url 'admin_panel:token_list' %}" class="inline-flex items-center gap-1.5 text-xs text-primary font-mono hover:underline mb-2">
+                ← Kembali ke Daftar Token
+            </a>
+            <h1 class="text-2xl font-bold font-display text-white">Buat Token Sesi KBM Baru</h1>
+            <p class="text-xs text-gray-400">Atur parameter token pendaftaran untuk materi, ujian, atau rombel kelas</p>
+        </div>
+
+        <form method="post" class="space-y-4 text-xs">
+            {% csrf_token %}
+
+            <div class="space-y-1.5">
+                <label class="block font-semibold text-gray-200 font-mono">JUDUL SESI / KBM</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <p class="text-rose-400 text-[11px]">{{ form.title.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="block font-semibold text-gray-200 font-mono">ROMBEL / KELAS SASARAN</label>
+                    {{ form.target_class }}
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block font-semibold text-gray-200 font-mono">TIPE TARGET AKSES</label>
+                    {{ form.target_type }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="block font-semibold text-gray-200 font-mono">KODE TOKEN KUSTOM (OPSIONAL)</label>
+                    {{ form.custom_token }}
+                    <p class="text-[11px] text-gray-400">{{ form.custom_token.help_text }}</p>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block font-semibold text-gray-200 font-mono">KAPASITAS MAKSIMAL (SISWA)</label>
+                    {{ form.max_uses }}
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="block font-semibold text-gray-200 font-mono">SLUG TARGET MODUL / TKA (OPSIONAL)</label>
+                {{ form.target_slug }}
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="block font-semibold text-gray-200 font-mono">BATAS WAKTU KADALUARSA (OPSIONAL)</label>
+                {{ form.expires_at }}
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="block font-semibold text-gray-200 font-mono">DESKRIPSI / CATATAN GURU</label>
+                {{ form.description }}
+            </div>
+
+            <div class="pt-3">
+                <button type="submit" class="m3-btn-primary w-full py-3 text-xs sm:text-sm font-bold">
+                    Terbitkan Token Sesi ➔
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

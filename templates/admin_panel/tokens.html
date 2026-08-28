@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Manajemen Token Sesi | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6 py-6">
+
+    <!-- Top Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+            <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Manajemen Token Sesi KBM</h1>
+            <p class="text-xs sm:text-sm text-gray-400 font-sans">
+                Buat dan pantau kode token pendaftaran kelas untuk mengakses materi dan asesmen.
+            </p>
+        </div>
+
+        <a href="{% url 'admin_panel:token_create' %}" class="m3-btn-primary text-xs">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            <span>+ Buat Token Sesi Baru</span>
+        </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-mono">
+        <a href="{% url 'admin_panel:token_list' %}" class="px-3 py-1.5 rounded-lg border transition-colors {% if not selected_class or selected_class == 'Semua' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+            Semua Rombel
+        </a>
+        <a href="{% url 'admin_panel:token_list' %}?class=10 RPL 1" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '10 RPL 1' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+            10 RPL 1
+        </a>
+        <a href="{% url 'admin_panel:token_list' %}?class=10 RPL 2" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '10 RPL 2' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+            10 RPL 2
+        </a>
+        <a href="{% url 'admin_panel:token_list' %}?class=11 RPL 1" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '11 RPL 1' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+            11 RPL 1
+        </a>
+        <a href="{% url 'admin_panel:token_list' %}?class=11 RPL 2" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '11 RPL 2' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+            11 RPL 2
+        </a>
+        <a href="{% url 'admin_panel:token_list' %}?class=12 RPL 1" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '12 RPL 1' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+            12 RPL 1
+        </a>
+    </div>
+
+    <!-- Token Table -->
+    <div class="m3-surface overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead class="bg-surface-lowest border-b border-outline-variant text-gray-400 font-mono">
+                    <tr>
+                        <th class="px-5 py-3.5">Kode Token</th>
+                        <th class="px-5 py-3.5">Judul Sesi / KBM</th>
+                        <th class="px-5 py-3.5">Rombel Sasaran</th>
+                        <th class="px-5 py-3.5">Kapasitas Peserta</th>
+                        <th class="px-5 py-3.5">Status</th>
+                        <th class="px-5 py-3.5 text-right">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-outline-variant">
+                    {% for token in tokens %}
+                        {% include 'admin_panel/partials/token_row.html' with token=token %}
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-5 py-12 text-center text-gray-400">
+                            Belum ada token sesi yang sesuai filter.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

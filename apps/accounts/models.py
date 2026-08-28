@@ -15,6 +15,13 @@ class User(AbstractUser):
         (ROLE_SISWA, 'Siswa RPL'),
     ]
 
+    # Email dibuat unik untuk kompatibilitas autentikasi & legacy Neon DB
+    email = models.EmailField(
+        blank=True,
+        null=True,
+        unique=True,
+        verbose_name='Alamat Email'
+    )
     role = models.CharField(
         max_length=20,
         choices=ROLE_CHOICES,
@@ -64,6 +71,10 @@ class User(AbstractUser):
         default=0,
         verbose_name='Total XP Gamifikasi'
     )
+    level = models.PositiveIntegerField(
+        default=1,
+        verbose_name='Tingkat / Level'
+    )
     streak_count = models.PositiveIntegerField(
         default=0,
         verbose_name='Daily Streak Hari'
@@ -91,6 +102,32 @@ class User(AbstractUser):
         if self.first_name or self.last_name:
             return f"{self.first_name} {self.last_name}".strip()
         return self.username
+
+    @property
+    def level_title(self):
+        """Menghitung gelar keahlian gamifikasi berdasarkan XP / Level."""
+        if self.xp >= 1000:
+            return "Code Master"
+        elif self.xp >= 600:
+            return "PPLG Specialist"
+        elif self.xp >= 300:
+            return "Logic Architect"
+        elif self.xp >= 100:
+            return "Junior Developer"
+        return "Apprentice Coder"
+
+    def recalculate_level(self):
+        """Update level berdasarkan perolehan XP."""
+        if self.xp >= 1000:
+            self.level = 5
+        elif self.xp >= 600:
+            self.level = 4
+        elif self.xp >= 300:
+            self.level = 3
+        elif self.xp >= 100:
+            self.level = 2
+        else:
+            self.level = 1
 
     def __str__(self):
         return f"{self.display_name} ({self.get_role_display()})"
