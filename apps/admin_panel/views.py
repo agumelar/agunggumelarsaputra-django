@@ -6,9 +6,10 @@ from django.utils import timezone
 from django.http import HttpResponse
 
 from .models import EnrollmentToken, UserEnrollment
-from .forms import EnrollmentTokenForm, TeacherGradeForm
+from .forms import EnrollmentTokenForm, TeacherGradeForm, TeacherGradeLiterasiForm
 from apps.pembelajaran.models import Modul, UserSubmission
 from apps.tka.models import TkaPackage, TkaAttempt
+from apps.literasi.models import LiterasiReport
 from apps.gamification.models import XPHistory
 from django.contrib.auth import get_user_model
 
@@ -30,6 +31,7 @@ def dashboard_view(request):
     total_enrollments = UserEnrollment.objects.count()
     pending_submissions = UserSubmission.objects.filter(status='submitted', submission_type='lkpd').count()
     total_tka_attempts = TkaAttempt.objects.count()
+    pending_literasi = LiterasiReport.objects.filter(status='submitted').count()
 
     recent_tokens = EnrollmentToken.objects.prefetch_related('user_enrollments').order_by('-created_at')[:5]
     recent_submissions = UserSubmission.objects.select_related('user', 'modul').order_by('-submitted_at')[:6]
@@ -42,6 +44,7 @@ def dashboard_view(request):
         'total_enrollments': total_enrollments,
         'pending_submissions': pending_submissions,
         'total_tka_attempts': total_tka_attempts,
+        'pending_literasi': pending_literasi,
         'recent_tokens': recent_tokens,
         'recent_submissions': recent_submissions,
         'recent_attempts': recent_attempts,
@@ -200,3 +203,59 @@ def tka_results_view(request):
         'active_nav': 'admin_tka_results',
     }
     return render(request, 'admin_panel/tka_results.html', context)
+
+
+@user_passes_test(teacher_check, login_url='accounts:login')
+def literasi_list_view(request):
+    """
+    Hub Penilaian Laporan Rabu Literasi (RESIK) Siswa.
+    """
+    filter_status = request.GET.get('status', 'all')
+    filter_week = request.GET.get('week', '')
+
+    reports = LiterasiReport.objects.select_related('user').prefetch_related('peer_reviews').order_by('-report_date', '-created_at')
+
+    if filter_status == 'pending':
+        reports = reports.filter(status='submitted')
+    elif filter_status == 'graded':
+        reports = reports.filter(status='graded')
+
+    if filter_week:
+        reports = reports.filter(week_number=int(filter_week))
+
+    context = {
+        'reports': reports,
+        'filter_status': filter_status,
+        'filter_week': filter_week,
+        'active_nav': 'admin_literasi',
+    }
+    return render(request, 'admin_panel/literasi_list.html', context)
+
+
+@user_passes_test(teacher_check, login_url='accounts:login')
+def literasi_grade_view(request, report_id):
+    """
+    Form Penilaian Laporan Literasi Siswa oleh Guru Pengampu.
+    """
+    report = get_object_or_404(LiterasiReport.objects.select_related('user').prefetch_related('peer_reviews', 'peer_reviews__reviewer'), id=report_id)
+    form = TeacherGradeLiterasiForm(request.POST or None, instance=report)
+
+    if request.method == 'POST' and form.is_valid():
+        rep = form.save(commit=False)
+        w_score = rep.writing_score or 0
+        p_score = rep.presentation_score or 0
+        rep.final_score = round((w_score + p_score) / 2, 1)
+        rep.status = 'graded'
+        rep.graded_by = request.user
+        rep.graded_at = timezone.now()
+        rep.save()
+
+        messages.success(request, f"Penilaian Laporan Literasi {report.user.display_name} (Nilai: {rep.final_score}) berhasil disimpan!")
+        return redirect('admin_panel:literasi_list')
+
+    context = {
+        'report': report,
+        'form': form,
+        'active_nav': 'admin_literasi',
+    }
+    return render(request, 'admin_panel/literasi_grade.html', context)

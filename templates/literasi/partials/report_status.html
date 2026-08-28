@@ -1,0 +1,25 @@
+{% if success %}
+<div class="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium space-y-2 animate-fadeIn">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span class="font-bold font-sans text-sm">{{ message }}</span>
+        </div>
+        <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold text-xs">
+            +{{ xp_reward }} XP
+        </span>
+    </div>
+    <p class="text-[11px] text-gray-300 font-mono">
+        Laporan telah masuk ke antrean penilaian Guru dan kini dapat dilihat di Tab "Riwayat Saya" serta feed kelas.
+    </p>
+</div>
+{% else %}
+<div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-medium flex items-center gap-2 animate-fadeIn">
+    <svg class="w-5 h-5 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+    <span class="font-sans font-semibold">{{ message }}</span>
+</div>
+{% endif %}

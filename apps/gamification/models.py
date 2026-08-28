@@ -4,13 +4,14 @@ from django.conf import settings
 
 class XPHistory(models.Model):
     """
-    Riwayat perolehan XP siswa (Modul, LKPD, Literasi, Quiz TKA).
+    Riwayat perolehan XP siswa (Modul, LKPD, Literasi, Quiz TKA, Peer Review).
     """
     CATEGORY_CHOICES = [
         ('modul', 'Penyelesaian Modul'),
         ('lkpd', 'Pengumpulan LKPD'),
         ('tka', 'Simulasi CBT TKA'),
         ('literasi', 'Rabu Literasi RESIK'),
+        ('peer_review', 'Peer Review Literasi'),
         ('streak', 'Daily Streak Bonus'),
         ('teacher', 'Apresiasi Guru'),
     ]

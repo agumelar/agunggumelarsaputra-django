@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ report.book_title }} - {{ report.user.display_name }} | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-6 space-y-6">
+
+    <!-- Top Breadcrumb -->
+    <div class="space-y-1">
+        <a href="{% url 'literasi:literasi_hub' %}" class="inline-flex items-center gap-1.5 text-xs text-primary font-mono hover:underline mb-1">
+            ← Kembali ke Rabu Literasi
+        </a>
+    </div>
+
+    <!-- Main Report Card -->
+    <div class="m3-surface p-6 sm:p-10 space-y-6">
+        
+        <!-- Header: Student info & Report metadata -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-outline-variant">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-primary/20 text-primary flex items-center justify-center font-display font-bold text-lg">
+                    {{ report.user.first_name|first|default:"S" }}
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-white font-display">{{ report.user.display_name }}</h1>
+                    <p class="text-xs text-gray-400 font-mono">{{ report.user.kelas|default:"10 RPL" }} &bull; Minggu Ke-{{ report.week_number }}</p>
+                </div>
+            </div>
+
+            <!-- Grade status -->
+            <div class="text-left sm:text-right font-mono">
+                {% if report.status == 'graded' %}
+                <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+                    ✓ Nilai Guru: {{ report.final_score }}/100
+                </span>
+                {% else %}
+                <span class="px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs">
+                    Menunggu Penilaian Guru
+                </span>
+                {% endif %}
+                <p class="text-[11px] text-gray-500 mt-1">{{ report.report_date|date:"d F Y" }}</p>
+            </div>
+        </div>
+
+        <!-- Book Meta Table Card -->
+        <div class="p-5 rounded-2xl bg-surface-lowest border border-outline-variant space-y-3">
+            <h2 class="text-xs font-mono font-bold text-primary uppercase">Identitas Sumber Bacaan:</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                <div>
+                    <p class="text-gray-500 text-[11px]">Judul Buku / Sumber</p>
+                    <p class="font-bold text-white">{{ report.book_title }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-[11px]">Penulis</p>
+                    <p class="font-semibold text-gray-200">{{ report.author }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-[11px]">Jenis Sumber</p>
+                    <p class="font-semibold text-gray-200">{{ report.source_type }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-[11px]">Penerbit / Kota</p>
+                    <p class="text-gray-300">{{ report.publisher|default:"-" }} / {{ report.city|default:"-" }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-[11px]">Tahun / Edisi</p>
+                    <p class="text-gray-300">{{ report.year|default:"-" }} / {{ report.edition|default:"-" }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-[11px]">Jumlah Halaman</p>
+                    <p class="text-gray-300">{{ report.page_count|default:"-" }} ({{ report.word_count }} Kata Rangkuman)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full Summary Content -->
+        <div class="space-y-3">
+            <h3 class="text-xs font-mono font-bold text-gray-300 uppercase">I. Rangkuman & Poin-Poin Penting:</h3>
+            <div class="p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs text-gray-200 leading-relaxed font-sans space-y-2">
+                {{ report.summary|linebreaks }}
+            </div>
+        </div>
+
+        <!-- Moral Message Content -->
+        <div class="space-y-3">
+            <h3 class="text-xs font-mono font-bold text-gray-300 uppercase">II. Pesan Moral / Relevansi Software Engineering:</h3>
+            <div class="p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs text-gray-200 leading-relaxed font-sans space-y-2">
+                {{ report.moral_message|linebreaks }}
+            </div>
+        </div>
+
+        <!-- Teacher Feedback Card (If graded) -->
+        {% if report.teacher_feedback %}
+        <div class="p-5 rounded-2xl bg-surface-lowest border border-amber-500/40 space-y-2">
+            <div class="flex items-center justify-between text-xs font-mono">
+                <span class="font-bold text-amber-400">💡 Catatan Evaluasi Pak Agung:</span>
+                <span class="text-gray-400">{{ report.graded_at|date:"d M Y, H:i" }}</span>
+            </div>
+            <p class="text-xs text-gray-200 italic font-sans leading-relaxed">
+                "{{ report.teacher_feedback }}"
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Peer Reviews Section -->
+    <div class="m3-surface p-6 sm:p-10 space-y-6">
+        
+        <div class="flex items-center justify-between border-b border-outline-variant pb-4">
+            <div class="space-y-1">
+                <h3 class="text-base font-bold font-display text-white">Peer Review & Apresiasi Teman Sekelas</h3>
+                <p class="text-xs text-gray-400 font-mono">
+                    Rata-rata Rating: <strong class="text-amber-400">★ {{ report.average_rating|default:"Belum ada rating" }}</strong> ({{ report.reviews_count }} Ulasan)
+                </p>
+            </div>
+        </div>
+
+        <!-- Form Submit Peer Review if user is authenticated and not own report -->
+        {% if user.is_authenticated and user != report.user %}
+        <div id="peer-review-response-container" class="space-y-4">
+            <div class="p-5 rounded-2xl bg-surface-lowest border border-secondary/30 space-y-4">
+                <h4 class="text-xs font-mono font-bold text-secondary uppercase">Beri Bintang & Ulasan untuk {{ report.user.display_name }} (+5 XP)</h4>
+                
+                <form hx-post="{% url 'literasi:submit_peer_review' report.id %}" hx-target="#peer-review-response-container" class="space-y-3 text-xs">
+                    {% csrf_token %}
+
+                    <div class="space-y-1.5">
+                        <label class="block font-semibold text-gray-200 font-mono">RATING BINTANG</label>
+                        {{ peer_form.rating }}
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block font-semibold text-gray-200 font-mono">KOMENTAR / APRESIASI ANDA</label>
+                        {{ peer_form.comment }}
+                    </div>
+
+                    <button type="submit" class="m3-btn-secondary w-full py-2.5 text-xs font-bold">
+                        Kirim Peer Review (+5 XP) ➔
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Existing Peer Reviews List -->
+        <div class="space-y-3 pt-2">
+            {% for rev in report.peer_reviews.all %}
+            <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant space-y-2">
+                <div class="flex items-center justify-between text-xs font-mono">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-white">{{ rev.reviewer.display_name }}</span>
+                        <span class="text-amber-400 font-bold">★ {{ rev.rating }}/5</span>
+                    </div>
+                    <span class="text-gray-500 text-[11px]">{{ rev.created_at|date:"d M Y, H:i" }}</span>
+                </div>
+                <p class="text-xs text-gray-300 font-sans leading-relaxed">
+                    "{{ rev.comment }}"
+                </p>
+            </div>
+            {% empty %}
+            <p class="text-xs text-gray-500 italic text-center py-4">Belum ada peer review untuk laporan ini. Jadilah yang pertama memberikan review!</p>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

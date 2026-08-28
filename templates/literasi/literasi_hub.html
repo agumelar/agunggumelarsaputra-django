@@ -1,0 +1,347 @@
+{% extends 'base.html' %}
+
+{% block title %}Rabu Literasi RESIK | {{ SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<div 
+    class="space-y-8 py-6"
+    x-data="{
+        currentTab: 'write',
+        summaryText: '',
+        get wordCount() {
+            const clean = this.summaryText.trim();
+            if (!clean) return 0;
+            return clean.split(/\s+/).length;
+        },
+        get isWordCountValid() {
+            return this.wordCount >= 100;
+        }
+    }"
+>
+
+    <!-- Top Banner -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1">
+            <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-primary-container border border-primary/20 text-primary text-xs font-mono font-semibold">
+                    Gerakan Literasi Sekolah &bull; RESIK
+                </span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+                Rabu Literasi (RESIK) RPL SMKN 1 Rongga
+            </h1>
+            <p class="text-xs sm:text-sm text-gray-400 font-sans">
+                <strong class="text-gray-200">R</strong>eflektif, <strong class="text-gray-200">E</strong>dukatif, <strong class="text-gray-200">S</strong>istematis, <strong class="text-gray-200">I</strong>nspiratif, dan <strong class="text-gray-200">K</strong>ritis dalam mengeksplorasi wawasan kejuruan software engineering.
+            </p>
+        </div>
+
+        <div class="m3-surface p-3.5 flex items-center gap-4 text-xs font-mono shrink-0">
+            <div>
+                <p class="text-gray-400 text-[11px]">Syarat Minimal</p>
+                <p class="text-base font-bold text-emerald-400">100 Kata</p>
+            </div>
+            <div class="border-l border-outline-variant pl-4">
+                <p class="text-gray-400 text-[11px]">Reward Setoran</p>
+                <p class="text-base font-bold text-amber-400">+35 XP</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3-Tab Bar Navigation -->
+    <div class="flex items-center gap-2 border-b border-outline-variant pb-2 overflow-x-auto font-mono text-xs">
+        <button 
+            @click="currentTab = 'write'" 
+            :class="currentTab === 'write' ? 'bg-primary text-primary-on-primary font-bold border-primary shadow-sm' : 'bg-surface-low text-gray-300 hover:text-white border-outline-variant'"
+            class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
+        >
+            <span>📝 1. Tulis Laporan RESIK</span>
+            <span class="px-1.5 py-0.2 rounded bg-amber-400 text-amber-950 font-bold text-[10px]">+35 XP</span>
+        </button>
+
+        <button 
+            @click="currentTab = 'my_reports'" 
+            :class="currentTab === 'my_reports' ? 'bg-secondary text-secondary-on-secondary font-bold border-secondary shadow-sm' : 'bg-surface-low text-gray-300 hover:text-white border-outline-variant'"
+            class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
+        >
+            <span>📚 2. Riwayat Laporan Saya ({{ user_reports|length }})</span>
+        </button>
+
+        <button 
+            @click="currentTab = 'peer_feed'" 
+            :class="currentTab === 'peer_feed' ? 'bg-amber-400 text-amber-950 font-bold border-amber-400 shadow-sm' : 'bg-surface-low text-gray-300 hover:text-white border-outline-variant'"
+            class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
+        >
+            <span>🌟 3. Feed & Peer Review Kelas ({{ peer_feed|length }})</span>
+            <span class="px-1.5 py-0.2 rounded bg-surface-high text-white font-bold text-[10px]">+5 XP</span>
+        </button>
+    </div>
+
+    <!-- Tab 1: Form Tulis Laporan RESIK Baru -->
+    <div x-show="currentTab === 'write'" class="space-y-6">
+        
+        <div id="literasi-response-container"></div>
+
+        {% if user.is_authenticated %}
+        <div class="m3-surface p-6 sm:p-10 space-y-6">
+            
+            <div class="space-y-1 border-b border-outline-variant pb-4">
+                <h2 class="text-lg font-bold font-display text-white">Formulir Setoran Laporan Rabu Literasi</h2>
+                <p class="text-xs text-gray-400">Isi data sumber bacaan dan tuliskan rangkuman terstruktur minimal 100 kata.</p>
+            </div>
+
+            <form hx-post="{% url 'literasi:submit_literasi' %}" hx-target="#literasi-response-container" class="space-y-5 text-xs">
+                {% csrf_token %}
+
+                <!-- Section 1: Informasi Minggu & Sumber Bacaan -->
+                <div class="space-y-4">
+                    <h3 class="text-xs font-mono font-bold text-primary uppercase">I. Identitas Sumber Bacaan</h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block font-semibold text-gray-200 font-mono">MINGGU KE- *</label>
+                            {{ report_form.week_number }}
+                        </div>
+                        <div class="space-y-1.5 sm:col-span-2">
+                            <label class="block font-semibold text-gray-200 font-mono">TANGGAL BACA *</label>
+                            {{ report_form.report_date }}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block font-semibold text-gray-200 font-mono">JUDUL BUKU / ARTIKEL *</label>
+                            {{ report_form.book_title }}
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block font-semibold text-gray-200 font-mono">PENULIS / PENGARANG *</label>
+                            {{ report_form.author }}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block font-semibold text-gray-200 font-mono">PENERBIT</label>
+                            {{ report_form.publisher }}
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block font-semibold text-gray-200 font-mono">KOTA TERBIT</label>
+                            {{ report_form.city }}
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block font-semibold text-gray-200 font-mono">TAHUN TERBIT</label>
+                            {{ report_form.year }}
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block font-semibold text-gray-200 font-mono">RENTANG HALAMAN</label>
+                            {{ report_form.page_count }}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block font-semibold text-gray-200 font-mono">CETAKAN / EDISI</label>
+                            {{ report_form.edition }}
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block font-semibold text-gray-200 font-mono">JENIS SUMBER BACAAN *</label>
+                            {{ report_form.source_type }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Konten Rangkuman & Live Word Counter -->
+                <div class="space-y-4 pt-4 border-t border-outline-variant">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-mono font-bold text-primary uppercase">II. Rangkuman & Pesan Moral RESIK</h3>
+                        
+                        <!-- Live Word Counter Badge -->
+                        <div class="flex items-center gap-2 font-mono text-xs">
+                            <span class="text-gray-400">Jumlah Kata:</span>
+                            <span 
+                                class="px-2.5 py-0.5 rounded-full font-bold transition-colors"
+                                :class="isWordCountValid ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'"
+                            >
+                                <span x-text="wordCount"></span> / 100 Kata (Min)
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block font-semibold text-gray-200 font-mono">RANGKUMAN ISI BACAAN (MINIMAL 100 KATA) *</label>
+                        {{ report_form.summary }}
+                        <p class="text-[11px] text-gray-400">Gunakan kalimat Anda sendiri secara orisinal. Hindari menyalin teks mentah tanpa parafrase.</p>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block font-semibold text-gray-200 font-mono">PESAN MORAL / RELEVANSI SOFTWARE ENGINEERING *</label>
+                        {{ report_form.moral_message }}
+                        <p class="text-[11px] text-gray-400">Jelaskan hikmah, inspirasi, atau kaitannya dengan dunia rekayasa perangkat lunak.</p>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4 border-t border-outline-variant">
+                    <button 
+                        type="submit" 
+                        :disabled="!isWordCountValid"
+                        class="m3-btn-primary w-full py-3.5 text-xs sm:text-sm font-bold disabled:opacity-40 disabled:pointer-events-none"
+                    >
+                        <span>Kirim Laporan Literasi & Klaim +35 XP ➔</span>
+                    </button>
+                    <p x-show="!isWordCountValid" class="text-rose-400 text-center font-mono text-[11px] mt-2">
+                        * Tombol kirim akan aktif setelah rangkuman Anda mencapai minimal 100 kata.
+                    </p>
+                </div>
+
+            </form>
+
+        </div>
+        {% else %}
+        <div class="m3-surface p-10 text-center space-y-4">
+            <h3 class="text-base font-bold text-white font-display">Masuk untuk Mengirim Laporan Literasi</h3>
+            <p class="text-xs text-gray-400 max-w-md mx-auto">Masuk menggunakan akun siswa Anda untuk menyetor laporan mingguan RESIK dan mengklaim bonus XP.</p>
+            <a href="{% url 'accounts:login' %}" class="m3-btn-primary inline-flex text-xs py-2.5 px-6">Masuk Sekarang</a>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Tab 2: Riwayat Laporan Saya -->
+    <div x-show="currentTab === 'my_reports'" x-cloak class="space-y-6">
+        
+        <div class="grid grid-cols-1 gap-4">
+            {% for rep in user_reports %}
+            <div class="m3-surface p-6 space-y-4 border-l-4 {% if rep.status == 'graded' %}border-l-emerald-500{% else %}border-l-amber-500{% endif %}">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-outline-variant">
+                    <div class="space-y-0.5">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded bg-surface-lowest border border-outline-variant text-primary font-mono font-bold text-xs">
+                                Minggu Ke-{{ rep.week_number }}
+                            </span>
+                            <span class="text-xs text-gray-400 font-mono">{{ rep.report_date|date:"d M Y" }}</span>
+                        </div>
+                        <h3 class="text-base font-bold font-display text-white mt-1">{{ rep.book_title }}</h3>
+                        <p class="text-xs text-gray-400 font-sans">Karya: <strong class="text-gray-300">{{ rep.author }}</strong> &bull; {{ rep.source_type }}</p>
+                    </div>
+
+                    <!-- Grading Badge -->
+                    <div class="text-left sm:text-right font-mono">
+                        {% if rep.status == 'graded' %}
+                        <div class="space-y-1">
+                            <span class="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+                                Nilai: {{ rep.final_score }}/100
+                            </span>
+                            <p class="text-[10px] text-gray-400">Penulisan: {{ rep.writing_score }} | Presentasi: {{ rep.presentation_score }}</p>
+                        </div>
+                        {% else %}
+                        <span class="px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold">
+                            Menunggu Review Guru
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Summary Text Snippet -->
+                <div class="text-xs text-gray-300 leading-relaxed font-sans line-clamp-3">
+                    {{ rep.summary }}
+                </div>
+
+                <!-- Moral Message Snippet -->
+                <div class="p-3 rounded-lg bg-surface-lowest border border-outline-variant text-xs text-gray-300">
+                    <p class="font-bold text-primary font-mono text-[11px] mb-0.5">Pesan Moral & Relevansi RPL:</p>
+                    <p class="line-clamp-2">{{ rep.moral_message }}</p>
+                </div>
+
+                <!-- Teacher Feedback if graded -->
+                {% if rep.teacher_feedback %}
+                <div class="p-3 rounded-lg bg-surface-lowest border border-amber-500/30 text-xs text-gray-300 space-y-1">
+                    <p class="font-bold text-amber-400 font-mono text-[11px]">Catatan Pak Agung:</p>
+                    <p class="italic">"{{ rep.teacher_feedback }}"</p>
+                </div>
+                {% endif %}
+
+                <!-- Footer Stats & Link Detail -->
+                <div class="flex items-center justify-between text-xs font-mono text-gray-400 pt-2">
+                    <div class="flex items-center gap-3">
+                        <span>{{ rep.word_count }} Kata</span>
+                        <span>&bull;</span>
+                        <span class="text-amber-400">★ {{ rep.average_rating|default:"Belum ada rating" }} ({{ rep.reviews_count }} review)</span>
+                    </div>
+                    <a href="{% url 'literasi:literasi_detail' rep.id %}" class="text-primary hover:underline font-bold">
+                        Buka Laporan Lengkap ➔
+                    </a>
+                </div>
+
+            </div>
+            {% empty %}
+            <div class="m3-surface p-12 text-center text-gray-400 space-y-2">
+                <p>Belum ada laporan literasi yang Anda kumpulkan.</p>
+                <button @click="currentTab = 'write'" class="m3-btn-primary text-xs py-2 px-4">Tulis Laporan Pertama Anda</button>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <!-- Tab 3: Feed Peer Review Teman Sekelas -->
+    <div x-show="currentTab === 'peer_feed'" x-cloak class="space-y-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for rep in peer_feed %}
+            <div class="m3-surface p-6 flex flex-col justify-between space-y-4">
+                
+                <div class="space-y-3">
+                    
+                    <!-- Author & Date Header -->
+                    <div class="flex items-center justify-between text-xs font-mono pb-3 border-b border-outline-variant">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">
+                                {{ rep.user.first_name|first|default:"S" }}
+                            </div>
+                            <div>
+                                <p class="font-bold text-white leading-none">{{ rep.user.display_name }}</p>
+                                <p class="text-[10px] text-gray-500">{{ rep.user.kelas|default:"10 RPL" }}</p>
+                            </div>
+                        </div>
+                        <span class="text-gray-500 text-[11px]">{{ rep.report_date|date:"d M Y" }}</span>
+                    </div>
+
+                    <!-- Book Info -->
+                    <div class="space-y-0.5">
+                        <span class="px-2 py-0.5 rounded bg-surface-lowest text-primary font-mono font-bold text-[11px]">
+                            Minggu {{ rep.week_number }} &bull; {{ rep.source_type }}
+                        </span>
+                        <h3 class="text-base font-bold font-display text-white mt-1 leading-snug">{{ rep.book_title }}</h3>
+                        <p class="text-xs text-gray-400 font-sans">Karya: {{ rep.author }}</p>
+                    </div>
+
+                    <!-- Summary Snippet -->
+                    <p class="text-xs text-gray-300 leading-relaxed font-sans line-clamp-4">
+                        {{ rep.summary }}
+                    </p>
+
+                </div>
+
+                <!-- Bottom Peer Rating & Link -->
+                <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs font-mono">
+                    <span class="text-amber-400 font-bold">
+                        ★ {{ rep.average_rating|default:"-" }} ({{ rep.reviews_count }} Review)
+                    </span>
+                    <a href="{% url 'literasi:literasi_detail' rep.id %}" class="m3-btn-secondary text-xs py-1.5 px-3">
+                        Review & Beri Bintang (+5 XP)
+                    </a>
+                </div>
+
+            </div>
+            {% empty %}
+            <div class="col-span-full m3-surface p-12 text-center text-gray-400">
+                <p>Belum ada laporan literasi dari teman sekelas.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

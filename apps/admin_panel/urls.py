@@ -12,4 +12,6 @@ urlpatterns = [
     path('submissions/', views.submission_list_view, name='submission_list'),
     path('submissions/<int:submission_id>/grade/', views.grade_submission_view, name='grade_submission'),
     path('tka-results/', views.tka_results_view, name='tka_results'),
+    path('literasi/', views.literasi_list_view, name='literasi_list'),
+    path('literasi/<int:report_id>/grade/', views.literasi_grade_view, name='literasi_grade'),
 ]

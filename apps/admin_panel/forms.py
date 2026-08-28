@@ -1,6 +1,7 @@
 from django import forms
 from .models import EnrollmentToken, generate_random_token
 from apps.pembelajaran.models import UserSubmission
+from apps.literasi.models import LiterasiReport
 
 
 class EnrollmentTokenForm(forms.ModelForm):
@@ -65,7 +66,7 @@ class EnrollmentTokenForm(forms.ModelForm):
 
 class TeacherGradeForm(forms.ModelForm):
     """
-    Form Penilaian & Rubrik KKTP oleh Guru Pengampu.
+    Form Penilaian & Rubrik KKTP LKPD oleh Guru Pengampu.
     """
     class Meta:
         model = UserSubmission
@@ -82,5 +83,33 @@ class TeacherGradeForm(forms.ModelForm):
                 'class': 'm3-input text-xs',
                 'rows': 4,
                 'placeholder': 'Catatan feedback, evaluasi, dan apresiasi untuk siswa...'
+            }),
+        }
+
+
+class TeacherGradeLiterasiForm(forms.ModelForm):
+    """
+    Form Penilaian Laporan Rabu Literasi (RESIK) oleh Guru Pengampu.
+    """
+    class Meta:
+        model = LiterasiReport
+        fields = ['writing_score', 'presentation_score', 'teacher_feedback']
+        widgets = {
+            'writing_score': forms.NumberInput(attrs={
+                'class': 'm3-input font-mono font-bold text-base',
+                'min': 0,
+                'max': 100,
+                'placeholder': '0 - 100'
+            }),
+            'presentation_score': forms.NumberInput(attrs={
+                'class': 'm3-input font-mono font-bold text-base',
+                'min': 0,
+                'max': 100,
+                'placeholder': '0 - 100'
+            }),
+            'teacher_feedback': forms.Textarea(attrs={
+                'class': 'm3-input text-xs',
+                'rows': 4,
+                'placeholder': 'Catatan evaluasi, rekomendasi bacaan, atau apresiasi untuk siswa...'
             }),
         }

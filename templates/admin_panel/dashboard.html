@@ -26,6 +26,12 @@
                 <span class="px-1.5 py-0.2 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-[10px]">{{ pending_submissions }}</span>
                 {% endif %}
             </a>
+            <a href="{% url 'admin_panel:literasi_list' %}" class="m3-btn-outlined text-xs">
+                <span>Evaluasi Literasi RESIK</span>
+                {% if pending_literasi > 0 %}
+                <span class="px-1.5 py-0.2 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-[10px]">{{ pending_literasi }}</span>
+                {% endif %}
+            </a>
             <a href="{% url 'admin_panel:tka_results' %}" class="m3-btn-outlined text-xs">
                 <span>Hasil CBT TKA</span>
                 <span class="px-1.5 py-0.2 rounded-full bg-primary/20 text-primary font-bold font-mono text-[10px]">{{ total_tka_attempts }}</span>
