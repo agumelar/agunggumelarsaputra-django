@@ -16,6 +16,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Theme Inline Script to prevent FOUC (Flash of Unstyled Content) -->
+    <script>
+        (function() {
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+            } else {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
     <!-- Tailwind CSS (Material Design 3 Tokens) -->
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
@@ -28,9 +40,22 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body 
-    class="bg-background text-foreground min-h-screen flex flex-col font-sans antialiased selection:bg-primary/20 selection:text-primary"
+    class="bg-background text-foreground min-h-screen flex flex-col font-sans antialiased selection:bg-primary/20 selection:text-primary transition-colors duration-200"
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-    x-data="{ mobileMenuOpen: false }"
+    x-data="{ 
+        mobileMenuOpen: false,
+        darkMode: document.documentElement.classList.contains('dark'),
+        toggleTheme() {
+            this.darkMode = !this.darkMode;
+            if (this.darkMode) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    }"
 >
     <!-- Toast Notification System -->
     {% include 'components/toast.html' %}

@@ -5,15 +5,66 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --foreground: #0f172a;
+    
+    /* Material Design 3 (M3) Light Color Roles */
+    --md-sys-color-surface: #f8fafc;
+    --md-sys-color-surface-container-lowest: #ffffff;
+    --md-sys-color-surface-container-low: #f1f5f9;
+    --md-sys-color-surface-container: #e2e8f0;
+    --md-sys-color-surface-container-high: #cbd5e1;
+    --md-sys-color-surface-container-highest: #94a3b8;
+    --md-sys-color-primary: #0284c7;
+    --md-sys-color-primary-container: #e0f2fe;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-on-primary-container: #0369a1;
+    --md-sys-color-secondary: #0d9488;
+    --md-sys-color-secondary-container: #ccfbf1;
+    --md-sys-color-on-secondary: #ffffff;
+    --md-sys-color-on-secondary-container: #115e59;
+    --md-sys-color-tertiary: #d97706;
+    --md-sys-color-tertiary-container: #fef3c7;
+    --md-sys-color-on-tertiary: #ffffff;
+    --md-sys-color-on-tertiary-container: #78350f;
+    --md-sys-color-outline: rgba(15, 23, 42, 0.16);
+    --md-sys-color-outline-variant: rgba(15, 23, 42, 0.08);
+  }
+
+  .dark {
+    --foreground: #f3f4f6;
+
+    /* Material Design 3 (M3) Dark Color Roles */
+    --md-sys-color-surface: #090d16;
+    --md-sys-color-surface-container-lowest: #0d121e;
+    --md-sys-color-surface-container-low: #111827;
+    --md-sys-color-surface-container: #162032;
+    --md-sys-color-surface-container-high: #1c293e;
+    --md-sys-color-surface-container-highest: #23324d;
+    --md-sys-color-primary: #38bdf8;
+    --md-sys-color-primary-container: rgba(56, 189, 248, 0.12);
+    --md-sys-color-on-primary: #082f49;
+    --md-sys-color-on-primary-container: #bae6fd;
+    --md-sys-color-secondary: #2dd4bf;
+    --md-sys-color-secondary-container: rgba(45, 212, 191, 0.12);
+    --md-sys-color-on-secondary: #042f2e;
+    --md-sys-color-on-secondary-container: #99f6e4;
+    --md-sys-color-tertiary: #fbbf24;
+    --md-sys-color-tertiary-container: rgba(251, 191, 36, 0.12);
+    --md-sys-color-on-tertiary: #451a03;
+    --md-sys-color-on-tertiary-container: #fde68a;
+    --md-sys-color-outline: rgba(255, 255, 255, 0.14);
+    --md-sys-color-outline-variant: rgba(255, 255, 255, 0.08);
+  }
+
   html {
-    background-color: #090d16;
-    color: #f3f4f6;
+    background-color: var(--md-sys-color-surface);
+    color: var(--foreground);
     font-family: 'Inter', system-ui, sans-serif;
-    color-scheme: dark;
   }
 
   body {
-    background-color: #090d16;
+    background-color: var(--md-sys-color-surface);
     min-height: 100vh;
     overflow-x: hidden;
   }
@@ -24,22 +75,22 @@
     height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: #090d16;
+    background: var(--md-sys-color-surface);
   }
   ::-webkit-scrollbar-thumb {
-    background: #1c293e;
+    background: var(--md-sys-color-surface-container-high);
     border-radius: 4px;
-    border: 2px solid #090d16;
+    border: 2px solid var(--md-sys-color-surface);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #23324d;
+    background: var(--md-sys-color-surface-container-highest);
   }
 }
 
 @layer components {
   /* M3 Surface Card with Border-Defined Depth */
   .m3-surface {
-    @apply bg-surface-low border border-outline-variant rounded-xl transition-all duration-200;
+    @apply bg-surface-low border border-outline-variant rounded-2xl transition-all duration-200;
   }
   .m3-surface-hover {
     @apply hover:bg-surface-base hover:border-outline;
@@ -47,19 +98,19 @@
   
   /* M3 Solid Action Button */
   .m3-btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm bg-primary text-primary-on-primary hover:bg-sky-400 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-surface;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm bg-primary text-primary-on-primary hover:opacity-90 active:scale-[0.98] transition-all duration-150 focus:outline-none;
   }
 
   .m3-btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm bg-secondary text-secondary-on-secondary hover:bg-teal-300 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:ring-offset-2 focus:ring-offset-surface;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm bg-secondary text-secondary-on-secondary hover:opacity-90 active:scale-[0.98] transition-all duration-150 focus:outline-none;
   }
 
   .m3-btn-outlined {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm bg-transparent border border-outline-variant text-foreground hover:bg-surface-high hover:border-outline active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-surface;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm bg-surface-lowest border border-outline-variant text-foreground hover:bg-surface-low hover:border-outline active:scale-[0.98] transition-all duration-150 focus:outline-none;
   }
 
   /* M3 Form Input */
   .m3-input {
-    @apply w-full px-3.5 py-2.5 bg-surface-lowest border border-outline-variant rounded-lg text-sm text-foreground placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-150;
+    @apply w-full px-3.5 py-2.5 bg-surface-lowest border border-outline-variant rounded-xl text-sm text-foreground placeholder-gray-500 focus:outline-none focus:border-primary transition-all duration-150;
   }
 }
