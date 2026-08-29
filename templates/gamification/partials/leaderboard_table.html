@@ -10,31 +10,31 @@
             🥈 RANK #2
         </div>
         <div class="mt-2 space-y-2">
-            <div class="w-14 h-14 mx-auto rounded-full bg-surface-lowest border-2 border-slate-400 flex items-center justify-center font-display font-bold text-lg text-slate-300">
+            <div class="w-14 h-14 mx-auto rounded-full bg-surface-lowest border-2 border-slate-400 flex items-center justify-center font-display font-bold text-lg text-slate-400">
                 {{ s.first_name|first|default:"S" }}
             </div>
             <div>
-                <h3 class="font-bold text-white text-sm line-clamp-1">{{ s.display_name }}</h3>
-                <p class="text-[11px] text-gray-400 font-mono">{{ s.kelas|default:"10 RPL" }}</p>
+                <h3 class="font-bold text-foreground text-sm line-clamp-1">{{ s.display_name }}</h3>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ s.kelas|default:"10 RPL" }}</p>
             </div>
-            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-lowest border border-outline-variant text-[11px] font-mono text-gray-300">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-lowest border border-outline-variant text-[11px] font-mono text-gray-700 dark:text-gray-300">
                 <span>Lvl {{ s.level }}</span>
                 <span>&bull;</span>
-                <span class="text-amber-400 font-bold">{{ s.xp }} XP</span>
+                <span class="text-amber-600 dark:text-amber-400 font-bold">{{ s.xp }} XP</span>
             </div>
         </div>
-        <div class="w-full grid grid-cols-3 gap-1 text-[10px] font-mono text-gray-400 pt-3 mt-3 border-t border-outline-variant">
+        <div class="w-full grid grid-cols-3 gap-1 text-[10px] font-mono text-gray-500 dark:text-gray-400 pt-3 mt-3 border-t border-outline-variant">
             <div>
                 <p class="text-gray-500">Modul</p>
-                <p class="font-bold text-white">{{ s.modules_count }}</p>
+                <p class="font-bold text-foreground">{{ s.modules_count }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Top TKA</p>
-                <p class="font-bold text-emerald-400">{{ s.tka_top_score }}%</p>
+                <p class="font-bold text-emerald-600 dark:text-emerald-400">{{ s.tka_top_score }}%</p>
             </div>
             <div>
                 <p class="text-gray-500">Literasi</p>
-                <p class="font-bold text-white">{{ s.literasi_count }}</p>
+                <p class="font-bold text-foreground">{{ s.literasi_count }}</p>
             </div>
         </div>
     </div>
@@ -49,31 +49,31 @@
             <span>JUARA #1</span>
         </div>
         <div class="mt-2 space-y-2">
-            <div class="w-16 h-16 mx-auto rounded-full bg-surface-lowest border-2 border-amber-400 flex items-center justify-center font-display font-extrabold text-xl text-amber-400 shadow-md">
+            <div class="w-16 h-16 mx-auto rounded-full bg-surface-lowest border-2 border-amber-400 flex items-center justify-center font-display font-extrabold text-xl text-amber-500 shadow-md">
                 {{ s.first_name|first|default:"S" }}
             </div>
             <div>
-                <h3 class="font-extrabold text-white text-base line-clamp-1 font-display">{{ s.display_name }}</h3>
-                <p class="text-xs text-amber-300 font-mono font-bold">{{ s.kelas|default:"10 RPL" }}</p>
+                <h3 class="font-extrabold text-foreground text-base line-clamp-1 font-display">{{ s.display_name }}</h3>
+                <p class="text-xs text-amber-600 dark:text-amber-300 font-mono font-bold">{{ s.kelas|default:"10 RPL" }}</p>
             </div>
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-lowest border border-amber-400/40 text-xs font-mono text-white">
-                <span class="text-amber-400 font-bold">Level {{ s.level }}</span>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-lowest border border-amber-400/40 text-xs font-mono text-foreground">
+                <span class="text-amber-600 dark:text-amber-400 font-bold">Level {{ s.level }}</span>
                 <span>&bull;</span>
-                <span class="text-amber-400 font-extrabold">{{ s.xp }} XP</span>
+                <span class="text-amber-600 dark:text-amber-400 font-extrabold">{{ s.xp }} XP</span>
             </div>
         </div>
-        <div class="w-full grid grid-cols-3 gap-1 text-[11px] font-mono text-gray-300 pt-3 mt-3 border-t border-outline-variant">
+        <div class="w-full grid grid-cols-3 gap-1 text-[11px] font-mono text-gray-600 dark:text-gray-300 pt-3 mt-3 border-t border-outline-variant">
             <div>
-                <p class="text-gray-400">Modul</p>
-                <p class="font-extrabold text-white">{{ s.modules_count }}</p>
+                <p class="text-gray-500 dark:text-gray-400">Modul</p>
+                <p class="font-extrabold text-foreground">{{ s.modules_count }}</p>
             </div>
             <div>
-                <p class="text-gray-400">Top TKA</p>
-                <p class="font-extrabold text-emerald-400">{{ s.tka_top_score }}%</p>
+                <p class="text-gray-500 dark:text-gray-400">Top TKA</p>
+                <p class="font-extrabold text-emerald-600 dark:text-emerald-400">{{ s.tka_top_score }}%</p>
             </div>
             <div>
-                <p class="text-gray-400">Literasi</p>
-                <p class="font-extrabold text-white">{{ s.literasi_count }}</p>
+                <p class="text-gray-500 dark:text-gray-400">Literasi</p>
+                <p class="font-extrabold text-foreground">{{ s.literasi_count }}</p>
             </div>
         </div>
     </div>
@@ -87,31 +87,31 @@
             🥉 RANK #3
         </div>
         <div class="mt-2 space-y-2">
-            <div class="w-14 h-14 mx-auto rounded-full bg-surface-lowest border-2 border-amber-700 flex items-center justify-center font-display font-bold text-lg text-amber-500">
+            <div class="w-14 h-14 mx-auto rounded-full bg-surface-lowest border-2 border-amber-700 flex items-center justify-center font-display font-bold text-lg text-amber-600 dark:text-amber-500">
                 {{ s.first_name|first|default:"S" }}
             </div>
             <div>
-                <h3 class="font-bold text-white text-sm line-clamp-1">{{ s.display_name }}</h3>
-                <p class="text-[11px] text-gray-400 font-mono">{{ s.kelas|default:"10 RPL" }}</p>
+                <h3 class="font-bold text-foreground text-sm line-clamp-1">{{ s.display_name }}</h3>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ s.kelas|default:"10 RPL" }}</p>
             </div>
-            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-lowest border border-outline-variant text-[11px] font-mono text-gray-300">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-lowest border border-outline-variant text-[11px] font-mono text-gray-700 dark:text-gray-300">
                 <span>Lvl {{ s.level }}</span>
                 <span>&bull;</span>
-                <span class="text-amber-400 font-bold">{{ s.xp }} XP</span>
+                <span class="text-amber-600 dark:text-amber-400 font-bold">{{ s.xp }} XP</span>
             </div>
         </div>
-        <div class="w-full grid grid-cols-3 gap-1 text-[10px] font-mono text-gray-400 pt-3 mt-3 border-t border-outline-variant">
+        <div class="w-full grid grid-cols-3 gap-1 text-[10px] font-mono text-gray-500 dark:text-gray-400 pt-3 mt-3 border-t border-outline-variant">
             <div>
                 <p class="text-gray-500">Modul</p>
-                <p class="font-bold text-white">{{ s.modules_count }}</p>
+                <p class="font-bold text-foreground">{{ s.modules_count }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Top TKA</p>
-                <p class="font-bold text-emerald-400">{{ s.tka_top_score }}%</p>
+                <p class="font-bold text-emerald-600 dark:text-emerald-400">{{ s.tka_top_score }}%</p>
             </div>
             <div>
                 <p class="text-gray-500">Literasi</p>
-                <p class="font-bold text-white">{{ s.literasi_count }}</p>
+                <p class="font-bold text-foreground">{{ s.literasi_count }}</p>
             </div>
         </div>
     </div>
@@ -125,7 +125,7 @@
 <div class="m3-surface overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left text-xs">
-            <thead class="bg-surface-lowest border-b border-outline-variant text-gray-400 font-mono">
+            <thead class="bg-surface-lowest border-b border-outline-variant text-gray-500 dark:text-gray-400 font-mono">
                 <tr>
                     <th class="px-4 py-3.5 text-center w-16">Rank</th>
                     <th class="px-4 py-3.5">Siswa</th>
@@ -149,7 +149,7 @@
                         {% elif s.rank == 3 %}
                         <span class="px-2 py-0.5 rounded bg-amber-700 text-amber-100 font-bold text-xs">#3</span>
                         {% else %}
-                        <span class="text-gray-400 text-xs">#{{ s.rank }}</span>
+                        <span class="text-gray-500 dark:text-gray-400 text-xs">#{{ s.rank }}</span>
                         {% endif %}
                     </td>
 
@@ -160,7 +160,7 @@
                                 {{ s.first_name|first|default:"S" }}
                             </div>
                             <div>
-                                <p class="font-bold text-white {% if user.is_authenticated and s.id == user.id %}text-primary{% endif %}">
+                                <p class="font-bold text-foreground {% if user.is_authenticated and s.id == user.id %}text-primary{% endif %}">
                                     {{ s.display_name }}
                                     {% if user.is_authenticated and s.id == user.id %}
                                     <span class="ml-1 px-1.5 py-0.2 rounded bg-primary text-primary-on-primary text-[10px] font-mono">Anda</span>
@@ -171,46 +171,46 @@
                     </td>
 
                     <!-- Class -->
-                    <td class="px-4 py-3.5 font-mono text-gray-300">
+                    <td class="px-4 py-3.5 font-mono text-gray-600 dark:text-gray-300">
                         {{ s.kelas|default:"10 RPL" }}
                     </td>
 
                     <!-- Level Badge -->
                     <td class="px-4 py-3.5 text-center font-mono">
-                        <span class="px-2 py-0.5 rounded bg-surface-lowest border border-outline-variant text-[11px] text-gray-200">
+                        <span class="px-2 py-0.5 rounded bg-surface-lowest border border-outline-variant text-[11px] text-gray-700 dark:text-gray-200">
                             Level {{ s.level }}
                         </span>
                     </td>
 
                     <!-- Modules -->
-                    <td class="px-4 py-3.5 text-center font-mono text-gray-300">
+                    <td class="px-4 py-3.5 text-center font-mono text-gray-600 dark:text-gray-300">
                         {{ s.modules_count }} / 16
                     </td>
 
                     <!-- TKA Top Score -->
                     <td class="px-4 py-3.5 text-center font-mono">
                         {% if s.tka_top_score > 0 %}
-                        <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold text-[11px]">
+                        <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[11px]">
                             {{ s.tka_top_score }}%
                         </span>
                         {% else %}
-                        <span class="text-gray-600">-</span>
+                        <span class="text-gray-400 dark:text-gray-600">-</span>
                         {% endif %}
                     </td>
 
                     <!-- Literasi Count -->
-                    <td class="px-4 py-3.5 text-center font-mono text-gray-300">
+                    <td class="px-4 py-3.5 text-center font-mono text-gray-600 dark:text-gray-300">
                         {{ s.literasi_count }}
                     </td>
 
                     <!-- Total XP -->
-                    <td class="px-4 py-3.5 text-right font-mono font-bold text-amber-400 text-sm">
+                    <td class="px-4 py-3.5 text-right font-mono font-bold text-amber-600 dark:text-amber-400 text-sm">
                         {{ s.xp }} XP
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="8" class="px-4 py-12 text-center text-gray-400">
+                    <td colspan="8" class="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
                         Belum ada data peringkat untuk rombel atau kriteria filter yang dipilih.
                     </td>
                 </tr>

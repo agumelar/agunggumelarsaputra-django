@@ -14,13 +14,13 @@
 
     <!-- Header Banner -->
     <div class="text-center space-y-3 py-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono font-bold">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-mono font-bold">
             <span>🏆 Papan Peringkat Prestasi Belajar RPL</span>
         </div>
-        <h1 class="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
+        <h1 class="text-3xl sm:text-4xl font-extrabold font-display text-foreground tracking-tight">
             Live Leaderboard Siswa RPL
         </h1>
-        <p class="text-xs sm:text-sm text-gray-400 max-w-lg mx-auto leading-relaxed">
+        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 max-w-lg mx-auto leading-relaxed">
             Kumpulkan Experience Points (XP) dengan menyelesaikan modul praktikum, tantangan LKPD, drilling CBT TKA, dan setoran Rabu Literasi.
         </p>
 
@@ -28,24 +28,24 @@
         {% if user.is_authenticated and current_user_rank %}
         <div class="inline-flex flex-wrap items-center justify-center gap-4 p-3.5 rounded-2xl bg-surface-high border border-primary/40 shadow-lg text-xs font-mono mt-2">
             <div class="flex items-center gap-2">
-                <span class="text-gray-400">Peringkat Anda:</span>
+                <span class="text-gray-500 dark:text-gray-400">Peringkat Anda:</span>
                 <span class="px-2.5 py-0.5 rounded-lg bg-primary text-primary-on-primary font-bold text-sm">
                     #{{ current_user_rank.rank }}
                 </span>
             </div>
-            <span class="text-gray-600 hidden sm:inline">&bull;</span>
+            <span class="text-gray-400 dark:text-gray-600 hidden sm:inline">&bull;</span>
             <div class="flex items-center gap-1.5">
-                <span class="text-gray-400">Total Poin:</span>
-                <span class="text-amber-400 font-bold text-sm">{{ current_user_rank.xp }} XP</span>
+                <span class="text-gray-500 dark:text-gray-400">Total Poin:</span>
+                <span class="text-amber-600 dark:text-amber-400 font-bold text-sm">{{ current_user_rank.xp }} XP</span>
             </div>
-            <span class="text-gray-600 hidden sm:inline">&bull;</span>
+            <span class="text-gray-400 dark:text-gray-600 hidden sm:inline">&bull;</span>
             <div class="flex items-center gap-1.5">
-                <span class="text-gray-400">Level:</span>
-                <span class="text-white font-semibold">Tier {{ current_user_rank.level }}</span>
+                <span class="text-gray-500 dark:text-gray-400">Level:</span>
+                <span class="text-foreground font-semibold">Tier {{ current_user_rank.level }}</span>
             </div>
             {% if points_to_next > 0 %}
-            <span class="text-gray-600 hidden sm:inline">&bull;</span>
-            <span class="text-emerald-400 text-[11px]">
+            <span class="text-gray-400 dark:text-gray-600 hidden sm:inline">&bull;</span>
+            <span class="text-emerald-600 dark:text-emerald-400 text-[11px]">
                 Butuh +{{ points_to_next }} XP lagi untuk naik peringkat!
             </span>
             {% endif %}
@@ -66,7 +66,7 @@
                     hx-target="#leaderboard-table-container"
                     hx-include="[name='class'], [name='tokenId']"
                     @click="subject = 'all'"
-                    :class="subject === 'all' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border border-outline-variant'"
+                    :class="subject === 'all' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border border-outline-variant'"
                     class="px-3 py-1.5 rounded-lg transition-colors"
                 >
                     Semua Aktivitas
@@ -77,7 +77,7 @@
                     hx-target="#leaderboard-table-container"
                     hx-include="[name='class'], [name='tokenId']"
                     @click="subject = 'orientasi-pplg'"
-                    :class="subject === 'orientasi-pplg' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border border-outline-variant'"
+                    :class="subject === 'orientasi-pplg' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border border-outline-variant'"
                     class="px-3 py-1.5 rounded-lg transition-colors"
                 >
                     16 Modul RPL
@@ -88,7 +88,7 @@
                     hx-target="#leaderboard-table-container"
                     hx-include="[name='class'], [name='tokenId']"
                     @click="subject = 'tka'"
-                    :class="subject === 'tka' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border border-outline-variant'"
+                    :class="subject === 'tka' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border border-outline-variant'"
                     class="px-3 py-1.5 rounded-lg transition-colors"
                 >
                     Drilling CBT TKA
@@ -99,7 +99,7 @@
                     hx-target="#leaderboard-table-container"
                     hx-include="[name='class'], [name='tokenId']"
                     @click="subject = 'literasi'"
-                    :class="subject === 'literasi' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border border-outline-variant'"
+                    :class="subject === 'literasi' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border border-outline-variant'"
                     class="px-3 py-1.5 rounded-lg transition-colors"
                 >
                     Rabu Literasi RESIK
@@ -107,8 +107,8 @@
             </div>
 
             <!-- Total Students Counter -->
-            <div class="text-gray-400 font-mono text-[11px]">
-                Total: <strong class="text-white">{{ total_students }}</strong> Siswa
+            <div class="text-gray-500 dark:text-gray-400 font-mono text-[11px]">
+                Total: <strong class="text-foreground">{{ total_students }}</strong> Siswa
             </div>
         </div>
 
@@ -118,7 +118,7 @@
                 
                 <!-- Class Filter -->
                 <div class="flex items-center gap-2">
-                    <label class="text-gray-400 font-mono text-[11px]">Rombel:</label>
+                    <label class="text-gray-500 dark:text-gray-400 font-mono text-[11px]">Rombel:</label>
                     <select 
                         name="class" 
                         x-model="targetClass"
@@ -141,7 +141,7 @@
                 <!-- Token Sesi Filter -->
                 {% if tokens_list %}
                 <div class="flex items-center gap-2">
-                    <label class="text-gray-400 font-mono text-[11px]">Sesi Token:</label>
+                    <label class="text-gray-500 dark:text-gray-400 font-mono text-[11px]">Sesi Token:</label>
                     <select 
                         name="tokenId" 
                         x-model="tokenId"

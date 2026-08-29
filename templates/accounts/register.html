@@ -12,13 +12,13 @@
                 AGS
             </div>
             <div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-white font-display tracking-tight">Daftar Akun Siswa 🚀</h1>
-                <p class="text-xs text-gray-400 mt-1">Bergabunglah dalam Learning Hub & Gamifikasi Kejuruan RPL</p>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display tracking-tight">Daftar Akun Siswa 🚀</h1>
+                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Bergabunglah dalam Learning Hub & Gamifikasi Kejuruan RPL</p>
             </div>
         </div>
 
         {% if form.non_field_errors %}
-        <div class="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-medium text-center">
+        <div class="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-500 dark:text-rose-400 text-xs font-medium text-center">
             {% for error in form.non_field_errors %}
                 <p>{{ error }}</p>
             {% endfor %}
@@ -30,50 +30,50 @@
 
             <!-- Token Sesi Input -->
             <div class="space-y-1.5">
-                <label class="block font-semibold text-gray-200 font-mono flex items-center justify-between">
+                <label class="block font-semibold text-foreground font-mono flex items-center justify-between">
                     <span>KODE TOKEN SESI / ROMBEL</span>
-                    <span class="text-[11px] text-gray-400 font-sans font-normal">*Tanyakan ke Guru</span>
+                    <span class="text-[11px] text-gray-500 dark:text-gray-400 font-sans font-normal">*Tanyakan ke Guru</span>
                 </label>
                 {{ form.token }}
                 {% if form.token.errors %}
-                    <p class="text-rose-400 text-[11px] font-sans">{{ form.token.errors.0 }}</p>
+                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.token.errors.0 }}</p>
                 {% endif %}
                 <div id="token-feedback" class="mt-1"></div>
             </div>
 
             <!-- Nama Lengkap -->
             <div class="space-y-1.5">
-                <label class="block font-semibold text-gray-200 font-mono">NAMA LENGKAP SISWA</label>
+                <label class="block font-semibold text-foreground font-mono">NAMA LENGKAP SISWA</label>
                 {{ form.name }}
                 {% if form.name.errors %}
-                    <p class="text-rose-400 text-[11px] font-sans">{{ form.name.errors.0 }}</p>
+                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.name.errors.0 }}</p>
                 {% endif %}
             </div>
 
             <!-- Email Siswa -->
             <div class="space-y-1.5">
-                <label class="block font-semibold text-gray-200 font-mono">EMAIL SISWA</label>
+                <label class="block font-semibold text-foreground font-mono">EMAIL SISWA</label>
                 {{ form.email }}
                 {% if form.email.errors %}
-                    <p class="text-rose-400 text-[11px] font-sans">{{ form.email.errors.0 }}</p>
+                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.email.errors.0 }}</p>
                 {% endif %}
             </div>
 
             <!-- Password -->
             <div class="space-y-1.5">
-                <label class="block font-semibold text-gray-200 font-mono">KATA SANDI (MIN. 6 KARAKTER)</label>
+                <label class="block font-semibold text-foreground font-mono">KATA SANDI (MIN. 6 KARAKTER)</label>
                 {{ form.password }}
                 {% if form.password.errors %}
-                    <p class="text-rose-400 text-[11px] font-sans">{{ form.password.errors.0 }}</p>
+                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.password.errors.0 }}</p>
                 {% endif %}
             </div>
 
             <!-- Konfirmasi Password -->
             <div class="space-y-1.5">
-                <label class="block font-semibold text-gray-200 font-mono">ULANGI KATA SANDI</label>
+                <label class="block font-semibold text-foreground font-mono">ULANGI KATA SANDI</label>
                 {{ form.password_confirm }}
                 {% if form.password_confirm.errors %}
-                    <p class="text-rose-400 text-[11px] font-sans">{{ form.password_confirm.errors.0 }}</p>
+                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.password_confirm.errors.0 }}</p>
                 {% endif %}
             </div>
 
@@ -83,7 +83,7 @@
             </button>
         </form>
 
-        <p class="text-center text-xs text-gray-400">
+        <p class="text-center text-xs text-gray-600 dark:text-gray-400">
             Sudah memiliki akun? <a href="{% url 'accounts:login' %}" class="text-primary font-bold hover:underline">Masuk Ke Portal</a>
         </p>
     </div>

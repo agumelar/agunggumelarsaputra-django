@@ -19,21 +19,21 @@
                     <p class="text-xs font-mono font-semibold tracking-wider text-primary uppercase">
                         {{ KONSENTRASI_KEAHLIAN }} &bull; {{ SCHOOL_NAME }}
                     </p>
-                    <h2 class="text-lg sm:text-xl font-bold font-display text-white">
+                    <h2 class="text-lg sm:text-xl font-bold font-display text-foreground">
                         {{ TEACHER_NAME }}
                     </h2>
-                    <p class="text-xs sm:text-sm text-gray-400 font-sans">
+                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-sans">
                         {{ TEACHER_ROLE }}
                     </p>
                 </div>
 
                 <!-- Main Display Headline -->
-                <h1 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white font-display leading-[1.2]">
+                <h1 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground font-display leading-[1.2]">
                     Mencetak Talenta Vokasi <span class="text-primary">Rekayasa Perangkat Lunak</span> Berstandar Industri.
                 </h1>
 
                 <!-- Clear Vocational Narrative -->
-                <p class="text-xs sm:text-sm md:text-base text-gray-300 leading-relaxed font-sans max-w-2xl">
+                <p class="text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed font-sans max-w-2xl">
                     Pusat pembelajaran digital dan portal praktikum kejuruan terintegrasi bagi siswa RPL SMKN 1 Rongga. Menyediakan 16 modul terstruktur, simulator drilling CBT TKA PPLG, pembiasaan Rabu Literasi (RESIK), serta sistem pelacakan progres berbasis kompetensi.
                 </p>
 
@@ -54,15 +54,15 @@
                 <div class="grid grid-cols-3 gap-3 pt-6 border-t border-outline-variant">
                     <div class="p-3.5 rounded-2xl bg-surface-low border border-outline-variant">
                         <div class="text-xl sm:text-2xl font-black text-primary font-mono">16 Modul</div>
-                        <div class="text-[11px] text-gray-400 font-sans mt-0.5">Orientasi PPLG</div>
+                        <div class="text-[11px] text-gray-600 dark:text-gray-400 font-sans mt-0.5">Orientasi PPLG</div>
                     </div>
                     <div class="p-3.5 rounded-2xl bg-surface-low border border-outline-variant">
-                        <div class="text-xl sm:text-2xl font-black text-emerald-400 font-mono">555 Soal</div>
-                        <div class="text-[11px] text-gray-400 font-sans mt-0.5">Bank CBT TKA (A-E)</div>
+                        <div class="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">555 Soal</div>
+                        <div class="text-[11px] text-gray-600 dark:text-gray-400 font-sans mt-0.5">Bank CBT TKA (A-E)</div>
                     </div>
                     <div class="p-3.5 rounded-2xl bg-surface-low border border-outline-variant">
-                        <div class="text-xl sm:text-2xl font-black text-amber-400 font-mono">Real-time</div>
-                        <div class="text-[11px] text-gray-400 font-sans mt-0.5">Gamifikasi & Level</div>
+                        <div class="text-xl sm:text-2xl font-black text-amber-600 dark:text-amber-400 font-mono">Real-time</div>
+                        <div class="text-[11px] text-gray-600 dark:text-gray-400 font-sans mt-0.5">Gamifikasi & Level</div>
                     </div>
                 </div>
 
@@ -73,27 +73,27 @@
                 <div class="rounded-2xl bg-surface-low border border-outline-variant p-5 sm:p-6 space-y-4 shadow-xl">
                     
                     <!-- Editor Window Header -->
-                    <div class="flex items-center justify-between border-b border-outline-variant pb-3 text-xs font-mono text-gray-400">
+                    <div class="flex items-center justify-between border-b border-outline-variant pb-3 text-xs font-mono text-gray-500 dark:text-gray-400">
                         <div class="flex items-center gap-2">
                             <div class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></div>
                             <div class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
                             <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
-                            <span class="ml-2 text-gray-300">rpl-kurikulum.config.ts</span>
+                            <span class="ml-2 text-foreground">rpl-kurikulum.config.ts</span>
                         </div>
-                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold">
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold">
                             ONLINE
                         </span>
                     </div>
 
                     <!-- Code Snippet -->
-                    <div class="font-mono text-xs text-gray-300 leading-relaxed bg-surface-lowest p-4 rounded-xl border border-outline-variant overflow-x-auto">
+                    <div class="font-mono text-xs text-foreground leading-relaxed bg-surface-lowest p-4 rounded-xl border border-outline-variant overflow-x-auto">
                         <div class="text-gray-500">// Inisialisasi Kurikulum Vokasi RPL</div>
                         <div><span class="text-primary font-bold">const</span> pengajar = {</div>
-                        <div class="pl-4">nama: <span class="text-amber-300">"{{ TEACHER_NAME }}"</span>,</div>
-                        <div class="pl-4">peran: <span class="text-emerald-300">"Guru Pengampu RPL"</span>,</div>
-                        <div class="pl-4">sekolah: <span class="text-sky-300">"{{ SCHOOL_NAME }}"</span>,</div>
-                        <div class="pl-4">fase: <span class="text-purple-300">"Fase E (10) & Fase F (11-12)"</span>,</div>
-                        <div class="pl-4">standar: <span class="text-amber-300">"Industri Perangkat Lunak"</span></div>
+                        <div class="pl-4">nama: <span class="text-amber-600 dark:text-amber-300">"{{ TEACHER_NAME }}"</span>,</div>
+                        <div class="pl-4">peran: <span class="text-emerald-600 dark:text-emerald-300">"Guru Pengampu RPL"</span>,</div>
+                        <div class="pl-4">sekolah: <span class="text-sky-600 dark:text-sky-300">"{{ SCHOOL_NAME }}"</span>,</div>
+                        <div class="pl-4">fase: <span class="text-purple-600 dark:text-purple-300">"Fase E (10) & Fase F (11-12)"</span>,</div>
+                        <div class="pl-4">standar: <span class="text-amber-600 dark:text-amber-300">"Industri Perangkat Lunak"</span></div>
                         <div>};</div>
                         <div class="pt-2 text-gray-500">// Aktivitas & Asesmen Siswa</div>
                         <div><span class="text-primary font-bold">await</span> rpl.syncCompetencyMetrics();</div>
@@ -102,15 +102,15 @@
                     <!-- Mini Gamification Status Box -->
                     <div class="p-3.5 rounded-xl bg-surface-lowest border border-outline-variant space-y-2 text-xs font-mono">
                         <div class="flex items-center justify-between">
-                            <span class="text-gray-400">Peringkat & XP Siswa</span>
-                            <span class="text-amber-400 font-bold">Level 3 &bull; Frontend Crafter</span>
+                            <span class="text-gray-600 dark:text-gray-400">Peringkat & XP Siswa</span>
+                            <span class="text-amber-600 dark:text-amber-400 font-bold">Level 3 &bull; Frontend Crafter</span>
                         </div>
                         <div class="w-full h-2 rounded-full bg-surface-low overflow-hidden border border-outline-variant">
                             <div class="h-full bg-gradient-to-r from-primary to-amber-400 w-3/4 rounded-full"></div>
                         </div>
-                        <div class="flex items-center justify-between text-[11px] text-gray-400">
+                        <div class="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
                             <span>350 / 500 XP</span>
-                            <span class="text-emerald-400 font-semibold">+15 XP / Modul</span>
+                            <span class="text-emerald-600 dark:text-emerald-400 font-semibold">+15 XP / Modul</span>
                         </div>
                     </div>
 
@@ -143,10 +143,10 @@
             <p class="text-xs font-mono font-bold text-primary tracking-wider uppercase">
                 Struktur Kurikulum Kejuruan
             </p>
-            <h2 class="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+            <h2 class="text-2xl sm:text-3xl font-extrabold font-display text-foreground tracking-tight">
                 4 Pilar Kompetensi Rekayasa Perangkat Lunak
             </h2>
-            <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                 Struktur materi komprehensif yang dirancang untuk membekali siswa RPL SMKN 1 Rongga dengan kemampuan teknis berstandar industri.
             </p>
         </div>
@@ -159,10 +159,10 @@
                     <div class="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-mono font-bold text-sm">
                         01
                     </div>
-                    <h3 class="text-base font-bold font-display text-white group-hover:text-primary transition-colors">
+                    <h3 class="text-base font-bold font-display text-foreground group-hover:text-primary transition-colors">
                         Algoritma & Logika
                     </h3>
-                    <p class="text-xs text-gray-400 leading-relaxed">
+                    <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                         Pola pikir komputasional, penyusunan Flowchart, Pseudocode, dan pemecahan masalah algoritmis terstruktur.
                     </p>
                 </div>
@@ -174,17 +174,17 @@
             <!-- Pilar 2 -->
             <div class="m3-surface m3-surface-hover p-6 flex flex-col justify-between group">
                 <div class="space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center font-mono font-bold text-sm">
+                    <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center font-mono font-bold text-sm">
                         02
                     </div>
-                    <h3 class="text-base font-bold font-display text-white group-hover:text-teal-400 transition-colors">
+                    <h3 class="text-base font-bold font-display text-foreground group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                         PBO & Basis Data
                     </h3>
-                    <p class="text-xs text-gray-400 leading-relaxed">
+                    <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                         Paradigma Object-Oriented Programming (OOP), relasi database SQL, Normalisasi 1NF-3NF, dan DDL/DML.
                     </p>
                 </div>
-                <div class="pt-4 mt-4 border-t border-outline-variant text-[11px] font-mono text-teal-400 font-semibold">
+                <div class="pt-4 mt-4 border-t border-outline-variant text-[11px] font-mono text-teal-600 dark:text-teal-400 font-semibold">
                     CBT TKA Paket 02 & 03
                 </div>
             </div>
@@ -192,17 +192,17 @@
             <!-- Pilar 3 -->
             <div class="m3-surface m3-surface-hover p-6 flex flex-col justify-between group">
                 <div class="space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-mono font-bold text-sm">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-mono font-bold text-sm">
                         03
                     </div>
-                    <h3 class="text-base font-bold font-display text-white group-hover:text-indigo-400 transition-colors">
+                    <h3 class="text-base font-bold font-display text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         Web & REST API
                     </h3>
-                    <p class="text-xs text-gray-400 leading-relaxed">
+                    <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                         Frontend modern (HTML5, Tailwind, Alpine), backend web framework terstruktur, serta integrasi endpoint REST API.
                     </p>
                 </div>
-                <div class="pt-4 mt-4 border-t border-outline-variant text-[11px] font-mono text-indigo-400 font-semibold">
+                <div class="pt-4 mt-4 border-t border-outline-variant text-[11px] font-mono text-indigo-600 dark:text-indigo-400 font-semibold">
                     CBT TKA Paket 05 & 06
                 </div>
             </div>
@@ -210,17 +210,17 @@
             <!-- Pilar 4 -->
             <div class="m3-surface m3-surface-hover p-6 flex flex-col justify-between group">
                 <div class="space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center font-mono font-bold text-sm">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-mono font-bold text-sm">
                         04
                     </div>
-                    <h3 class="text-base font-bold font-display text-white group-hover:text-amber-400 transition-colors">
+                    <h3 class="text-base font-bold font-display text-foreground group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                         Security & SDLC
                     </h3>
-                    <p class="text-xs text-gray-400 leading-relaxed">
+                    <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                         Prinsip keamanan aplikasi, kolaborasi tim via Git, standardisasi kode, serta metodologi Agile Scrum.
                     </p>
                 </div>
-                <div class="pt-4 mt-4 border-t border-outline-variant text-[11px] font-mono text-amber-400 font-semibold">
+                <div class="pt-4 mt-4 border-t border-outline-variant text-[11px] font-mono text-amber-600 dark:text-amber-400 font-semibold">
                     CBT TKA Paket 08 s/d 10
                 </div>
             </div>
@@ -237,7 +237,7 @@
                 <p class="text-xs font-mono font-bold text-primary tracking-wider uppercase">
                     Katalog Modul Pembelajaran
                 </p>
-                <h2 class="text-xl sm:text-2xl font-extrabold font-display text-white mt-1">
+                <h2 class="text-xl sm:text-2xl font-extrabold font-display text-foreground mt-1">
                     Materi Orientasi & Praktikum Keahlian
                 </h2>
             </div>
@@ -254,15 +254,15 @@
                         <span class="text-primary font-bold">OR-01</span>
                         <span class="text-gray-500">2 JP (90 Menit)</span>
                     </div>
-                    <h3 class="text-base font-bold font-display text-white group-hover:text-primary transition-colors">
+                    <h3 class="text-base font-bold font-display text-foreground group-hover:text-primary transition-colors">
                         Orientasi Mapel & Sistem Skill Passport PPLG
                     </h3>
-                    <p class="text-xs text-gray-400 leading-relaxed line-clamp-2">
+                    <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2">
                         Pengenalan peta jalan kompetensi RPL, etos kerja programmer, dan sistem verifikasi capaian keterampilan.
                     </p>
                 </div>
                 <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs">
-                    <span class="text-amber-400 font-mono font-bold">+50 XP</span>
+                    <span class="text-amber-600 dark:text-amber-400 font-mono font-bold">+50 XP</span>
                     <a href="{% url 'pembelajaran:modul_detail' 'orientasi-mapel-sistem-skill-passport-pplg' %}" class="text-primary font-semibold hover:underline">
                         Buka Modul ➔
                     </a>
@@ -276,15 +276,15 @@
                         <span class="text-primary font-bold">OR-02</span>
                         <span class="text-gray-500">2 JP (90 Menit)</span>
                     </div>
-                    <h3 class="text-base font-bold font-display text-white group-hover:text-primary transition-colors">
+                    <h3 class="text-base font-bold font-display text-foreground group-hover:text-primary transition-colors">
                         8 Profesi Utama & Sinergi Tim Industri PPLG
                     </h3>
-                    <p class="text-xs text-gray-400 leading-relaxed line-clamp-2">
+                    <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2">
                         Membedah peran Frontend, Backend, QA, DevOps, UI/UX, dan Software Architect dalam siklus produk perangkat lunak.
                     </p>
                 </div>
                 <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs">
-                    <span class="text-amber-400 font-mono font-bold">+50 XP</span>
+                    <span class="text-amber-600 dark:text-amber-400 font-mono font-bold">+50 XP</span>
                     <a href="{% url 'pembelajaran:modul_detail' '8-profesi-utama-sinergi-tim-industri-pplg' %}" class="text-primary font-semibold hover:underline">
                         Buka Modul ➔
                     </a>
@@ -296,17 +296,17 @@
                 <div class="space-y-2.5">
                     <div class="flex items-center justify-between text-xs font-mono">
                         <span class="px-2 py-0.5 rounded bg-primary/20 text-primary font-bold text-[10px]">CBT TKA</span>
-                        <span class="text-emerald-400 font-bold">10 Paket Soal</span>
+                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">10 Paket Soal</span>
                     </div>
-                    <h3 class="text-base font-bold font-display text-white group-hover:text-primary transition-colors">
+                    <h3 class="text-base font-bold font-display text-foreground group-hover:text-primary transition-colors">
                         Simulator CBT TKA PPLG
                     </h3>
-                    <p class="text-xs text-gray-400 leading-relaxed">
+                    <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                         Latihan ujian tes kompetensi kejuruan dengan auto-scoring, timer simulasi, keyboard navigation, dan instant pembahasan.
                     </p>
                 </div>
                 <div class="pt-3 border-t border-outline-variant flex items-center justify-between text-xs">
-                    <span class="text-amber-400 font-mono font-bold">555 Soal CBT</span>
+                    <span class="text-amber-600 dark:text-amber-400 font-mono font-bold">555 Soal CBT</span>
                     <a href="{% url 'tka:tka_list' %}" class="m3-btn-primary text-xs px-3 py-1.5">
                         Mulai Drilling ➔
                     </a>
@@ -326,15 +326,15 @@
                     Profil Pengajar Kejuruan
                 </p>
 
-                <h2 class="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+                <h2 class="text-2xl sm:text-3xl font-extrabold font-display text-foreground tracking-tight">
                     {{ TEACHER_NAME }}
                 </h2>
 
-                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed font-sans">
+                <p class="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-sans">
                     Sarjana Terapan Teknik (S.Tr.T.) dan Praktisi Software Engineering. Mengabdi sebagai <strong>Guru Pengampu Rekayasa Perangkat Lunak (RPL) di SMKN 1 Rongga</strong> dengan dedikasi menghubungkan kurikulum vokasi SMK dengan standar industri perangkat lunak modern.
                 </p>
 
-                <div class="flex flex-wrap items-center gap-3 pt-2 text-xs font-mono text-gray-400">
+                <div class="flex flex-wrap items-center gap-3 pt-2 text-xs font-mono text-gray-600 dark:text-gray-400">
                     <span class="px-3 py-1.5 rounded-lg bg-surface-lowest border border-outline-variant">
                         👨‍🏫 Guru Pengampu RPL
                     </span>
@@ -353,8 +353,8 @@
                         AGS
                     </div>
                     <div>
-                        <div class="font-bold text-white text-sm font-display">{{ SCHOOL_NAME }}</div>
-                        <div class="text-[11px] text-gray-400 font-mono mt-0.5">Kab. Bandung Barat, Jawa Barat</div>
+                        <div class="font-bold text-foreground text-sm font-display">{{ SCHOOL_NAME }}</div>
+                        <div class="text-[11px] text-gray-500 dark:text-gray-400 font-mono mt-0.5">Kab. Bandung Barat, Jawa Barat</div>
                     </div>
                     <div class="text-[11px] font-mono font-semibold text-primary">
                         PPLG &bull; Rekayasa Perangkat Lunak

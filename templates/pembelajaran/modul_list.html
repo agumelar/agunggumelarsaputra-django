@@ -13,10 +13,10 @@
                     Kurikulum Merdeka Fase E &bull; 2026/2027
                 </span>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+            <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-foreground tracking-tight">
                 16 Modul Orientasi PPLG & Rekayasa Perangkat Lunak
             </h1>
-            <p class="text-xs sm:text-sm text-gray-400 font-sans">
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-sans">
                 Pondasi software engineering, etos kerja industri, framework review produk, dan sistem Skill Passport SMKN 1 Rongga.
             </p>
         </div>
@@ -24,11 +24,11 @@
         {% if user.is_authenticated and user.is_siswa %}
         <div class="m3-surface p-3.5 flex items-center gap-4 text-xs font-mono shrink-0">
             <div>
-                <p class="text-gray-400 text-[11px]">Modul Selesai</p>
-                <p class="text-base font-bold text-emerald-400">{{ completed_modul_ids|length }} / {{ modul_list|length }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Modul Selesai</p>
+                <p class="text-base font-bold text-emerald-600 dark:text-emerald-400">{{ completed_modul_ids|length }} / {{ modul_list|length }}</p>
             </div>
             <div class="border-l border-outline-variant pl-4">
-                <p class="text-gray-400 text-[11px]">LKPD Terkirim</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">LKPD Terkirim</p>
                 <p class="text-base font-bold text-primary">{{ submitted_lkpd_ids|length }} LKPD</p>
             </div>
         </div>
@@ -50,13 +50,13 @@
         </div>
 
         <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 font-mono">
-            <button @click="selectedCategory = 'all'" :class="selectedCategory === 'all' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border-outline-variant'" class="px-3 py-1.5 rounded-lg border text-xs whitespace-nowrap transition-colors">
+            <button @click="selectedCategory = 'all'" :class="selectedCategory === 'all' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'" class="px-3 py-1.5 rounded-lg border text-xs whitespace-nowrap transition-colors">
                 Semua (16)
             </button>
-            <button @click="selectedCategory = 'Sprint 1'" :class="selectedCategory === 'Sprint 1' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border-outline-variant'" class="px-3 py-1.5 rounded-lg border text-xs whitespace-nowrap transition-colors">
+            <button @click="selectedCategory = 'Sprint 1'" :class="selectedCategory === 'Sprint 1' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'" class="px-3 py-1.5 rounded-lg border text-xs whitespace-nowrap transition-colors">
                 Sprint 1: Wawasan (OR 01-08)
             </button>
-            <button @click="selectedCategory = 'Sprint 2'" :class="selectedCategory === 'Sprint 2' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 hover:text-white border-outline-variant'" class="px-3 py-1.5 rounded-lg border text-xs whitespace-nowrap transition-colors">
+            <button @click="selectedCategory = 'Sprint 2'" :class="selectedCategory === 'Sprint 2' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'" class="px-3 py-1.5 rounded-lg border text-xs whitespace-nowrap transition-colors">
                 Sprint 2: Review Produk (OR 09-16)
             </button>
         </div>
@@ -78,20 +78,20 @@
                     </span>
                     <div class="flex items-center gap-2">
                         {% if modul.id in completed_modul_ids %}
-                        <span class="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-semibold">
+                        <span class="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
                             Selesai
                         </span>
                         {% endif %}
-                        <span class="text-amber-400 font-semibold">+{{ modul.total_xp }} XP</span>
+                        <span class="text-amber-600 dark:text-amber-400 font-semibold">+{{ modul.total_xp }} XP</span>
                     </div>
                 </div>
 
                 <!-- Title & Meta -->
                 <div class="space-y-1">
-                    <h2 class="text-base font-bold font-display text-white group-hover:text-primary transition-colors leading-snug">
+                    <h2 class="text-base font-bold font-display text-foreground group-hover:text-primary transition-colors leading-snug">
                         {{ modul.judul }}
                     </h2>
                     <p class="text-[11px] text-gray-500 font-mono">
@@ -100,7 +100,7 @@
                 </div>
 
                 <!-- Description -->
-                <p class="text-xs text-gray-400 leading-relaxed line-clamp-3">
+                <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
                     {{ modul.deskripsi }}
                 </p>
 
@@ -109,8 +109,8 @@
             <!-- Bottom Action & Checklist Status -->
             <div class="pt-4 mt-4 border-t border-outline-variant space-y-2">
                 <div class="flex items-center justify-between text-[11px] font-mono text-gray-500">
-                    <span>Materi ({% if modul.id in completed_modul_ids %}<span class="text-emerald-400 font-bold">✓</span>{% else %}○{% endif %})</span>
-                    <span>LKPD ({% if modul.id in submitted_lkpd_ids %}<span class="text-emerald-400 font-bold">✓</span>{% else %}○{% endif %})</span>
+                    <span>Materi ({% if modul.id in completed_modul_ids %}<span class="text-emerald-500 font-bold">✓</span>{% else %}○{% endif %})</span>
+                    <span>LKPD ({% if modul.id in submitted_lkpd_ids %}<span class="text-emerald-500 font-bold">✓</span>{% else %}○{% endif %})</span>
                     <span>Refleksi</span>
                 </div>
 
@@ -124,7 +124,7 @@
 
         </div>
         {% empty %}
-        <div class="col-span-full m3-surface p-12 text-center text-gray-400">
+        <div class="col-span-full m3-surface p-12 text-center text-gray-500 dark:text-gray-400">
             <p>Belum ada modul yang dimuat.</p>
         </div>
         {% endfor %}

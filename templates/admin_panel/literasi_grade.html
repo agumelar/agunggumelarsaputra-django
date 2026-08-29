@@ -14,7 +14,7 @@
             <span class="px-3 py-1 bg-surface-high border border-outline rounded-lg font-mono font-bold text-sm text-primary">
                 Minggu Ke-{{ report.week_number }}
             </span>
-            <h1 class="text-2xl font-bold font-display text-white">Evaluasi Laporan Literasi Siswa</h1>
+            <h1 class="text-2xl font-bold font-display text-foreground">Evaluasi Laporan Literasi Siswa</h1>
         </div>
     </div>
 
@@ -22,48 +22,48 @@
     <div class="m3-surface p-6 sm:p-8 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-outline-variant">
             <div>
-                <p class="text-xs text-gray-400 font-mono">Data Siswa:</p>
-                <h2 class="text-lg font-bold text-white">{{ report.user.display_name }}</h2>
-                <p class="text-xs text-gray-400 font-mono">Kelas: {{ report.user.kelas|default:"10 RPL" }} &bull; {{ report.user.email }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">Data Siswa:</p>
+                <h2 class="text-lg font-bold text-foreground">{{ report.user.display_name }}</h2>
+                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">Kelas: {{ report.user.kelas|default:"10 RPL" }} &bull; {{ report.user.email }}</p>
             </div>
-            <div class="text-left sm:text-right text-xs font-mono text-gray-400">
+            <div class="text-left sm:text-right text-xs font-mono text-gray-500 dark:text-gray-400">
                 <p>Tanggal Setoran:</p>
-                <p class="text-gray-200">{{ report.report_date|date:"d F Y" }}</p>
+                <p class="text-foreground font-semibold">{{ report.report_date|date:"d F Y" }}</p>
             </div>
         </div>
 
         <!-- Book Meta -->
         <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div>
-                <p class="text-gray-400 text-[11px]">Judul Bacaan</p>
-                <p class="font-bold text-white">{{ report.book_title }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Judul Bacaan</p>
+                <p class="font-bold text-foreground">{{ report.book_title }}</p>
             </div>
             <div>
-                <p class="text-gray-400 text-[11px]">Pengarang</p>
-                <p class="font-semibold text-gray-200">{{ report.author }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Pengarang</p>
+                <p class="font-semibold text-foreground">{{ report.author }}</p>
             </div>
             <div>
-                <p class="text-gray-400 text-[11px]">Jenis Sumber</p>
-                <p class="font-semibold text-gray-200">{{ report.source_type }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Jenis Sumber</p>
+                <p class="font-semibold text-foreground">{{ report.source_type }}</p>
             </div>
             <div>
-                <p class="text-gray-400 text-[11px]">Jumlah Kata</p>
-                <p class="font-bold text-emerald-400 font-mono">{{ report.word_count }} Kata</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Jumlah Kata</p>
+                <p class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">{{ report.word_count }} Kata</p>
             </div>
         </div>
 
         <!-- Summary & Moral Message -->
         <div class="space-y-4">
             <div class="space-y-1.5">
-                <h3 class="text-xs font-mono font-bold text-gray-300 uppercase">I. Rangkuman Siswa:</h3>
-                <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant text-xs text-gray-200 leading-relaxed font-sans">
+                <h3 class="text-xs font-mono font-bold text-gray-700 dark:text-gray-300 uppercase">I. Rangkuman Siswa:</h3>
+                <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant text-xs text-foreground leading-relaxed font-sans">
                     {{ report.summary|linebreaks }}
                 </div>
             </div>
 
             <div class="space-y-1.5">
-                <h3 class="text-xs font-mono font-bold text-gray-300 uppercase">II. Pesan Moral & Relevansi Software Engineering:</h3>
-                <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant text-xs text-gray-200 leading-relaxed font-sans">
+                <h3 class="text-xs font-mono font-bold text-gray-700 dark:text-gray-300 uppercase">II. Pesan Moral & Relevansi Software Engineering:</h3>
+                <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant text-xs text-foreground leading-relaxed font-sans">
                     {{ report.moral_message|linebreaks }}
                 </div>
             </div>
@@ -76,11 +76,11 @@
             <div class="space-y-2">
                 {% for rev in report.peer_reviews.all %}
                 <div class="p-3 rounded-lg bg-surface-lowest border border-outline-variant text-xs space-y-1">
-                    <div class="flex items-center justify-between text-gray-400 font-mono text-[11px]">
-                        <span class="font-bold text-white">{{ rev.reviewer.display_name }}</span>
-                        <span class="text-amber-400 font-bold">★ {{ rev.rating }}/5</span>
+                    <div class="flex items-center justify-between text-gray-500 dark:text-gray-400 font-mono text-[11px]">
+                        <span class="font-bold text-foreground">{{ rev.reviewer.display_name }}</span>
+                        <span class="text-amber-600 dark:text-amber-400 font-bold">★ {{ rev.rating }}/5</span>
                     </div>
-                    <p class="text-gray-300 italic">"{{ rev.comment }}"</p>
+                    <p class="text-gray-700 dark:text-gray-300 italic">"{{ rev.comment }}"</p>
                 </div>
                 {% endfor %}
             </div>
@@ -92,8 +92,8 @@
     <!-- Teacher Grading Form -->
     <div class="m3-surface p-6 sm:p-8 space-y-6">
         <div class="space-y-1">
-            <h2 class="text-lg font-bold font-display text-white">Form Penilaian Guru Pengampu</h2>
-            <p class="text-xs text-gray-400">Beri nilai aspek penulisan, pemahaman konsep, dan catatan evaluasi/rekomendasi bacaan.</p>
+            <h2 class="text-lg font-bold font-display text-foreground">Form Penilaian Guru Pengampu</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Beri nilai aspek penulisan, pemahaman konsep, dan catatan evaluasi/rekomendasi bacaan.</p>
         </div>
 
         <form method="post" class="space-y-4 text-xs">
@@ -101,19 +101,19 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="space-y-1.5">
-                    <label class="block font-semibold text-gray-200 font-mono">NILAI PENULISAN & STRUKTUR (0 - 100) *</label>
+                    <label class="block font-semibold text-foreground font-mono">NILAI PENULISAN & STRUKTUR (0 - 100) *</label>
                     {{ form.writing_score }}
                 </div>
                 <div class="space-y-1.5">
-                    <label class="block font-semibold text-gray-200 font-mono">NILAI PEMAHAMAN & PRESENTASI (0 - 100) *</label>
+                    <label class="block font-semibold text-foreground font-mono">NILAI PEMAHAMAN & PRESENTASI (0 - 100) *</label>
                     {{ form.presentation_score }}
                 </div>
             </div>
 
             <div class="space-y-1.5">
-                <label class="block font-semibold text-gray-200 font-mono">CATATAN EVALUASI & REKOMENDASI GURU</label>
+                <label class="block font-semibold text-foreground font-mono">CATATAN EVALUASI & REKOMENDASI GURU</label>
                 {{ form.teacher_feedback }}
-                <p class="text-[11px] text-gray-400">Catatan ini akan langsung tampil di halaman riwayat laporan literasi siswa.</p>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400">Catatan ini akan langsung tampil di halaman riwayat laporan literasi siswa.</p>
             </div>
 
             <div class="pt-2">

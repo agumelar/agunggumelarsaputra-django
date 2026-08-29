@@ -13,8 +13,8 @@
                     Monitoring Evaluasi CBT
                 </span>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Hasil Simulasi CBT TKA PPLG Siswa</h1>
-            <p class="text-xs sm:text-sm text-gray-400 font-sans">
+            <h1 class="text-2xl sm:text-3xl font-bold font-display text-foreground">Hasil Simulasi CBT TKA PPLG Siswa</h1>
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-sans">
                 Pantau perolehan skor, tingkat kelulusan KKM (75%), dan riwayat pengerjaan paket drilling kejuruan siswa.
             </p>
         </div>
@@ -36,7 +36,7 @@
     <div class="m3-surface overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-                <thead class="bg-surface-lowest border-b border-outline-variant text-gray-400 font-mono">
+                <thead class="bg-surface-lowest border-b border-outline-variant text-gray-500 dark:text-gray-400 font-mono">
                     <tr>
                         <th class="px-5 py-3.5">Siswa</th>
                         <th class="px-5 py-3.5">Paket Soal</th>
@@ -52,45 +52,45 @@
                     {% for att in attempts %}
                     <tr class="hover:bg-surface-high/30 transition-colors">
                         <td class="px-5 py-4">
-                            <p class="font-bold text-white">{{ att.user.display_name }}</p>
-                            <p class="text-[11px] text-gray-400 font-mono">{{ att.user.kelas|default:"Umum" }} &bull; {{ att.user.email }}</p>
+                            <p class="font-bold text-foreground">{{ att.user.display_name }}</p>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ att.user.kelas|default:"Umum" }} &bull; {{ att.user.email }}</p>
                         </td>
                         <td class="px-5 py-4 font-mono">
                             <span class="font-bold text-primary">{{ att.package.kode }}</span>
-                            <p class="text-[11px] text-gray-400 line-clamp-1 font-sans">{{ att.package.judul }}</p>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-1 font-sans">{{ att.package.judul }}</p>
                         </td>
-                        <td class="px-5 py-4 font-mono text-gray-300">
+                        <td class="px-5 py-4 font-mono text-gray-700 dark:text-gray-300">
                             #{{ att.attempt_number }}
                         </td>
                         <td class="px-5 py-4 font-mono">
-                            <span class="text-base font-bold {% if att.is_passed %}text-emerald-400{% else %}text-amber-400{% endif %}">
+                            <span class="text-base font-bold {% if att.is_passed %}text-emerald-600 dark:text-emerald-400{% else %}text-amber-600 dark:text-amber-400{% endif %}">
                                 {{ att.score }}%
                             </span>
                         </td>
-                        <td class="px-5 py-4 font-mono text-gray-300">
+                        <td class="px-5 py-4 font-mono text-gray-700 dark:text-gray-300">
                             {{ att.correct_answers }} / {{ att.total_questions }}
                         </td>
                         <td class="px-5 py-4">
                             {% if att.is_passed %}
-                            <span class="inline-flex items-center px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold font-mono">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-bold font-mono">
                                 ✓ LULUS
                             </span>
                             {% else %}
-                            <span class="inline-flex items-center px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[11px] font-mono">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[11px] font-mono">
                                 REMEDIAL
                             </span>
                             {% endif %}
                         </td>
-                        <td class="px-5 py-4 font-mono text-amber-400 font-bold">
+                        <td class="px-5 py-4 font-mono text-amber-600 dark:text-amber-400 font-bold">
                             +{{ att.xp_earned }} XP
                         </td>
-                        <td class="px-5 py-4 font-mono text-gray-400 text-[11px]">
+                        <td class="px-5 py-4 font-mono text-gray-500 dark:text-gray-400 text-[11px]">
                             {{ att.completed_at|date:"d M Y, H:i" }}
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="8" class="px-5 py-12 text-center text-gray-400">
+                        <td colspan="8" class="px-5 py-12 text-center text-gray-500 dark:text-gray-400">
                             Belum ada riwayat pengerjaan simulasi CBT TKA.
                         </td>
                     </tr>

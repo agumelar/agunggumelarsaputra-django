@@ -7,6 +7,7 @@
 @layer base {
   :root {
     --foreground: #0f172a;
+    --muted-foreground: #64748b;
     
     /* Material Design 3 (M3) Light Color Roles */
     --md-sys-color-surface: #f8fafc;
@@ -33,6 +34,7 @@
 
   .dark {
     --foreground: #f3f4f6;
+    --muted-foreground: #9ca3af;
 
     /* Material Design 3 (M3) Dark Color Roles */
     --md-sys-color-surface: #090d16;
@@ -90,7 +92,7 @@
 @layer components {
   /* M3 Surface Card with Border-Defined Depth */
   .m3-surface {
-    @apply bg-surface-low border border-outline-variant rounded-2xl transition-all duration-200;
+    @apply bg-surface-low border border-outline-variant rounded-2xl transition-all duration-150;
   }
   .m3-surface-hover {
     @apply hover:bg-surface-base hover:border-outline;
@@ -111,6 +113,6 @@
 
   /* M3 Form Input */
   .m3-input {
-    @apply w-full px-3.5 py-2.5 bg-surface-lowest border border-outline-variant rounded-xl text-sm text-foreground placeholder-gray-500 focus:outline-none focus:border-primary transition-all duration-150;
+    @apply w-full px-3.5 py-2.5 bg-surface-lowest border border-outline-variant rounded-xl text-sm text-foreground placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-primary transition-all duration-150;
   }
 }

@@ -1,17 +1,17 @@
-<footer class="w-full border-t border-outline-variant bg-surface-lowest mt-auto py-8 text-xs text-gray-400">
+<footer class="w-full border-t border-outline-variant bg-surface-lowest mt-auto py-8 text-xs text-gray-600 dark:text-gray-400 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
             
             <div class="flex flex-col items-center md:items-start text-center md:text-left gap-1">
-                <p class="font-display font-semibold text-gray-200">
+                <p class="font-display font-semibold text-foreground">
                     {{ TEACHER_NAME }} &bull; <span class="text-primary">{{ TEACHER_ROLE }}</span>
                 </p>
-                <p class="text-gray-500 font-mono">
+                <p class="text-gray-500 dark:text-gray-400 font-mono">
                     {{ PROGRAM_KEAHLIAN }} &bull; {{ KONSENTRASI_KEAHLIAN }} &bull; {{ SCHOOL_NAME }}
                 </p>
             </div>
 
-            <div class="flex items-center gap-4 text-gray-400 font-mono text-[11px]">
+            <div class="flex items-center gap-4 text-gray-500 dark:text-gray-400 font-mono text-[11px]">
                 <span>Tahun Ajaran {{ ACADEMIC_YEAR }}</span>
                 <span>&bull;</span>
                 <span>SMKN 1 Rongga</span>

@@ -10,7 +10,7 @@
         <a href="{% url 'tka:tka_detail' package.slug %}" class="inline-flex items-center gap-1.5 text-primary hover:underline">
             ← Kembali ke Info Paket {{ package.kode }}
         </a>
-        <span class="text-gray-400">Percobaan Ke-{{ attempt.attempt_number }}</span>
+        <span class="text-gray-500 dark:text-gray-400">Percobaan Ke-{{ attempt.attempt_number }}</span>
     </div>
 
     <!-- Final Result Card -->
@@ -20,29 +20,29 @@
             
             <div class="space-y-2">
                 <div class="flex items-center gap-2">
-                    <span class="px-3 py-1 rounded-full font-mono font-bold text-xs {% if attempt.is_passed %}bg-emerald-500/20 text-emerald-400 border border-emerald-500/30{% else %}bg-amber-500/20 text-amber-400 border border-amber-500/30{% endif %}">
+                    <span class="px-3 py-1 rounded-full font-mono font-bold text-xs {% if attempt.is_passed %}bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30{% else %}bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30{% endif %}">
                         {% if attempt.is_passed %}✓ LULUS KKM (PASSING GRADE){% else %}⚠ PERLU REMEDIAL / LATIHAN LAGI{% endif %}
                     </span>
-                    <span class="px-2.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-mono font-bold text-xs">
+                    <span class="px-2.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-bold text-xs">
                         +{{ attempt.xp_earned }} XP Diperoleh
                     </span>
                 </div>
 
-                <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-white">
+                <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-foreground">
                     Hasil Simulasi CBT: {{ package.judul }}
                 </h1>
-                <p class="text-xs sm:text-sm text-gray-400 font-mono">
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-mono">
                     Waktu Selesai: {{ attempt.completed_at|date:"d F Y, H:i" }} &bull; Durasi Pengerjaan: {{ attempt.time_spent_seconds|default:0 }} Detik
                 </p>
             </div>
 
             <!-- Score Big Display -->
             <div class="flex flex-col items-center justify-center p-6 rounded-2xl bg-surface-lowest border border-outline-variant min-w-[160px] shrink-0 text-center">
-                <p class="text-xs font-mono text-gray-400 uppercase">Skor Akhir</p>
-                <p class="text-4xl font-extrabold font-mono {% if attempt.is_passed %}text-emerald-400{% else %}text-amber-400{% endif %}">
+                <p class="text-xs font-mono text-gray-500 dark:text-gray-400 uppercase">Skor Akhir</p>
+                <p class="text-4xl font-extrabold font-mono {% if attempt.is_passed %}text-emerald-600 dark:text-emerald-400{% else %}text-amber-600 dark:text-amber-400{% endif %}">
                     {{ attempt.score }}%
                 </p>
-                <p class="text-[11px] font-mono text-gray-400 mt-1">KKM: {{ package.passing_grade }}%</p>
+                <p class="text-[11px] font-mono text-gray-500 dark:text-gray-400 mt-1">KKM: {{ package.passing_grade }}%</p>
             </div>
 
         </div>
@@ -50,16 +50,16 @@
         <!-- 3-Stats Grid -->
         <div class="grid grid-cols-3 gap-4 text-center text-xs font-mono">
             <div class="p-4 rounded-xl bg-surface-lowest border border-emerald-500/20">
-                <p class="text-gray-400 text-[11px]">Jawaban Benar</p>
-                <p class="text-xl font-bold text-emerald-400">{{ attempt.correct_answers }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Jawaban Benar</p>
+                <p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">{{ attempt.correct_answers }}</p>
             </div>
             <div class="p-4 rounded-xl bg-surface-lowest border border-rose-500/20">
-                <p class="text-gray-400 text-[11px]">Jawaban Salah / Kosong</p>
-                <p class="text-xl font-bold text-rose-400">{{ attempt.wrong_answers }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Jawaban Salah / Kosong</p>
+                <p class="text-xl font-bold text-rose-500 dark:text-rose-400">{{ attempt.wrong_answers }}</p>
             </div>
             <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant">
-                <p class="text-gray-400 text-[11px]">Total Butir Soal</p>
-                <p class="text-xl font-bold text-white">{{ attempt.total_questions }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Total Butir Soal</p>
+                <p class="text-xl font-bold text-foreground">{{ attempt.total_questions }}</p>
             </div>
         </div>
 
@@ -80,8 +80,8 @@
         
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="space-y-1">
-                <h2 class="text-xl font-bold font-display text-white">Pembahasan & Analisis Butir Soal</h2>
-                <p class="text-xs text-gray-400 font-sans">
+                <h2 class="text-xl font-bold font-display text-foreground">Pembahasan & Analisis Butir Soal</h2>
+                <p class="text-xs text-gray-600 dark:text-gray-400 font-sans">
                     Pelajari kunci jawaban benar dan penjelasan konsep di balik setiap soal untuk memperkuat pemahaman Anda.
                 </p>
             </div>
@@ -91,7 +91,7 @@
                 <button 
                     type="button"
                     @click="filterMode = 'all'" 
-                    :class="filterMode === 'all' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-300 border-outline-variant'"
+                    :class="filterMode === 'all' ? 'bg-primary text-primary-on-primary font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
                     class="px-3 py-1.5 rounded-lg border transition-colors"
                 >
                     Semua ({{ question_reviews|length }})
@@ -99,7 +99,7 @@
                 <button 
                     type="button"
                     @click="filterMode = 'wrong'" 
-                    :class="filterMode === 'wrong' ? 'bg-rose-500 text-white font-bold' : 'bg-surface-low text-gray-300 border-outline-variant'"
+                    :class="filterMode === 'wrong' ? 'bg-rose-500 text-white font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
                     class="px-3 py-1.5 rounded-lg border transition-colors"
                 >
                     Salah ({{ attempt.wrong_answers }})
@@ -107,7 +107,7 @@
                 <button 
                     type="button"
                     @click="filterMode = 'correct'" 
-                    :class="filterMode === 'correct' ? 'bg-emerald-500 text-black font-bold' : 'bg-surface-low text-gray-300 border-outline-variant'"
+                    :class="filterMode === 'correct' ? 'bg-emerald-500 text-white font-bold' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
                     class="px-3 py-1.5 rounded-lg border transition-colors"
                 >
                     Benar ({{ attempt.correct_answers }})
@@ -125,34 +125,34 @@
                 <!-- Question Top Header -->
                 <div class="flex items-center justify-between text-xs font-mono">
                     <div class="flex items-center gap-2">
-                        <span class="font-bold text-white">Soal No. {{ item.question.urutan }}</span>
+                        <span class="font-bold text-foreground">Soal No. {{ item.question.urutan }}</span>
                         {% if item.is_correct %}
-                        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[11px]">✓ Benar</span>
+                        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold text-[11px]">✓ Benar</span>
                         {% else %}
-                        <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold text-[11px]">✕ Salah / Kosong</span>
+                        <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 font-bold text-[11px]">✕ Salah / Kosong</span>
                         {% endif %}
                     </div>
                     <span class="text-gray-500">{{ item.question.category }}</span>
                 </div>
 
                 <!-- Question Text -->
-                <div class="text-sm font-sans text-gray-200 leading-relaxed">
+                <div class="text-sm font-sans text-foreground leading-relaxed">
                     {{ item.question.question_text }}
                 </div>
 
                 <!-- Comparison: User Choice vs Correct Answer -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-sans">
                     
-                    <div class="p-3 rounded-xl {% if item.is_correct %}bg-emerald-500/10 border border-emerald-500/30 text-emerald-300{% else %}bg-rose-500/10 border border-rose-500/30 text-rose-300{% endif %}">
+                    <div class="p-3 rounded-xl {% if item.is_correct %}bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300{% else %}bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300{% endif %}">
                         <p class="font-mono text-[11px] font-bold opacity-80">Jawaban Anda:</p>
                         <p class="font-semibold mt-0.5">
                             <span class="font-mono font-bold">[{{ item.user_choice }}]</span> {{ item.user_choice_text }}
                         </p>
                     </div>
 
-                    <div class="p-3 rounded-xl bg-surface-lowest border border-outline-variant text-gray-200">
+                    <div class="p-3 rounded-xl bg-surface-lowest border border-outline-variant text-foreground">
                         <p class="font-mono text-[11px] font-bold text-primary">Kunci Jawaban Benar:</p>
-                        <p class="font-semibold mt-0.5 text-white">
+                        <p class="font-semibold mt-0.5 text-foreground">
                             <span class="font-mono font-bold text-primary">[{{ item.correct_answer }}]</span> {{ item.correct_answer_text }}
                         </p>
                     </div>
@@ -162,8 +162,8 @@
                 <!-- Explanation Box -->
                 {% if item.explanation %}
                 <div class="p-4 rounded-xl bg-surface-lowest border border-amber-500/30 space-y-1">
-                    <p class="text-[11px] font-mono font-bold text-amber-400">💡 Pembahasan & Tips Menjawab:</p>
-                    <p class="text-xs text-gray-300 leading-relaxed font-sans">{{ item.explanation }}</p>
+                    <p class="text-[11px] font-mono font-bold text-amber-600 dark:text-amber-400">💡 Pembahasan & Tips Menjawab:</p>
+                    <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed font-sans">{{ item.explanation }}</p>
                 </div>
                 {% endif %}
 

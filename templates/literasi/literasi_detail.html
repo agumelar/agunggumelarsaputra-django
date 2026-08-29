@@ -22,19 +22,19 @@
                     {{ report.user.first_name|first|default:"S" }}
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold text-white font-display">{{ report.user.display_name }}</h1>
-                    <p class="text-xs text-gray-400 font-mono">{{ report.user.kelas|default:"10 RPL" }} &bull; Minggu Ke-{{ report.week_number }}</p>
+                    <h1 class="text-lg font-bold text-foreground font-display">{{ report.user.display_name }}</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">{{ report.user.kelas|default:"10 RPL" }} &bull; Minggu Ke-{{ report.week_number }}</p>
                 </div>
             </div>
 
             <!-- Grade status -->
             <div class="text-left sm:text-right font-mono">
                 {% if report.status == 'graded' %}
-                <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+                <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs font-bold">
                     ✓ Nilai Guru: {{ report.final_score }}/100
                 </span>
                 {% else %}
-                <span class="px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs">
+                <span class="px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-xs">
                     Menunggu Penilaian Guru
                 </span>
                 {% endif %}
@@ -48,43 +48,43 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                 <div>
                     <p class="text-gray-500 text-[11px]">Judul Buku / Sumber</p>
-                    <p class="font-bold text-white">{{ report.book_title }}</p>
+                    <p class="font-bold text-foreground">{{ report.book_title }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500 text-[11px]">Penulis</p>
-                    <p class="font-semibold text-gray-200">{{ report.author }}</p>
+                    <p class="font-semibold text-foreground">{{ report.author }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500 text-[11px]">Jenis Sumber</p>
-                    <p class="font-semibold text-gray-200">{{ report.source_type }}</p>
+                    <p class="font-semibold text-foreground">{{ report.source_type }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500 text-[11px]">Penerbit / Kota</p>
-                    <p class="text-gray-300">{{ report.publisher|default:"-" }} / {{ report.city|default:"-" }}</p>
+                    <p class="text-gray-700 dark:text-gray-300">{{ report.publisher|default:"-" }} / {{ report.city|default:"-" }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500 text-[11px]">Tahun / Edisi</p>
-                    <p class="text-gray-300">{{ report.year|default:"-" }} / {{ report.edition|default:"-" }}</p>
+                    <p class="text-gray-700 dark:text-gray-300">{{ report.year|default:"-" }} / {{ report.edition|default:"-" }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500 text-[11px]">Jumlah Halaman</p>
-                    <p class="text-gray-300">{{ report.page_count|default:"-" }} ({{ report.word_count }} Kata Rangkuman)</p>
+                    <p class="text-gray-700 dark:text-gray-300">{{ report.page_count|default:"-" }} ({{ report.word_count }} Kata Rangkuman)</p>
                 </div>
             </div>
         </div>
 
         <!-- Full Summary Content -->
         <div class="space-y-3">
-            <h3 class="text-xs font-mono font-bold text-gray-300 uppercase">I. Rangkuman & Poin-Poin Penting:</h3>
-            <div class="p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs text-gray-200 leading-relaxed font-sans space-y-2">
+            <h3 class="text-xs font-mono font-bold text-gray-700 dark:text-gray-300 uppercase">I. Rangkuman & Poin-Poin Penting:</h3>
+            <div class="p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs text-foreground leading-relaxed font-sans space-y-2">
                 {{ report.summary|linebreaks }}
             </div>
         </div>
 
         <!-- Moral Message Content -->
         <div class="space-y-3">
-            <h3 class="text-xs font-mono font-bold text-gray-300 uppercase">II. Pesan Moral / Relevansi Software Engineering:</h3>
-            <div class="p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs text-gray-200 leading-relaxed font-sans space-y-2">
+            <h3 class="text-xs font-mono font-bold text-gray-700 dark:text-gray-300 uppercase">II. Pesan Moral / Relevansi Software Engineering:</h3>
+            <div class="p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs text-foreground leading-relaxed font-sans space-y-2">
                 {{ report.moral_message|linebreaks }}
             </div>
         </div>
@@ -93,10 +93,10 @@
         {% if report.teacher_feedback %}
         <div class="p-5 rounded-2xl bg-surface-lowest border border-amber-500/40 space-y-2">
             <div class="flex items-center justify-between text-xs font-mono">
-                <span class="font-bold text-amber-400">💡 Catatan Evaluasi Pak Agung:</span>
-                <span class="text-gray-400">{{ report.graded_at|date:"d M Y, H:i" }}</span>
+                <span class="font-bold text-amber-600 dark:text-amber-400">💡 Catatan Evaluasi Pak Agung:</span>
+                <span class="text-gray-500 dark:text-gray-400">{{ report.graded_at|date:"d M Y, H:i" }}</span>
             </div>
-            <p class="text-xs text-gray-200 italic font-sans leading-relaxed">
+            <p class="text-xs text-foreground italic font-sans leading-relaxed">
                 "{{ report.teacher_feedback }}"
             </p>
         </div>
@@ -109,9 +109,9 @@
         
         <div class="flex items-center justify-between border-b border-outline-variant pb-4">
             <div class="space-y-1">
-                <h3 class="text-base font-bold font-display text-white">Peer Review & Apresiasi Teman Sekelas</h3>
-                <p class="text-xs text-gray-400 font-mono">
-                    Rata-rata Rating: <strong class="text-amber-400">★ {{ report.average_rating|default:"Belum ada rating" }}</strong> ({{ report.reviews_count }} Ulasan)
+                <h3 class="text-base font-bold font-display text-foreground">Peer Review & Apresiasi Teman Sekelas</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                    Rata-rata Rating: <strong class="text-amber-600 dark:text-amber-400">★ {{ report.average_rating|default:"Belum ada rating" }}</strong> ({{ report.reviews_count }} Ulasan)
                 </p>
             </div>
         </div>
@@ -126,12 +126,12 @@
                     {% csrf_token %}
 
                     <div class="space-y-1.5">
-                        <label class="block font-semibold text-gray-200 font-mono">RATING BINTANG</label>
+                        <label class="block font-semibold text-foreground font-mono">RATING BINTANG</label>
                         {{ peer_form.rating }}
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="block font-semibold text-gray-200 font-mono">KOMENTAR / APRESIASI ANDA</label>
+                        <label class="block font-semibold text-foreground font-mono">KOMENTAR / APRESIASI ANDA</label>
                         {{ peer_form.comment }}
                     </div>
 
@@ -149,12 +149,12 @@
             <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant space-y-2">
                 <div class="flex items-center justify-between text-xs font-mono">
                     <div class="flex items-center gap-2">
-                        <span class="font-bold text-white">{{ rev.reviewer.display_name }}</span>
-                        <span class="text-amber-400 font-bold">★ {{ rev.rating }}/5</span>
+                        <span class="font-bold text-foreground">{{ rev.reviewer.display_name }}</span>
+                        <span class="text-amber-600 dark:text-amber-400 font-bold">★ {{ rev.rating }}/5</span>
                     </div>
                     <span class="text-gray-500 text-[11px]">{{ rev.created_at|date:"d M Y, H:i" }}</span>
                 </div>
-                <p class="text-xs text-gray-300 font-sans leading-relaxed">
+                <p class="text-xs text-gray-700 dark:text-gray-300 font-sans leading-relaxed">
                     "{{ rev.comment }}"
                 </p>
             </div>

@@ -12,7 +12,7 @@
                         <span class="font-display font-bold text-sm tracking-tight text-foreground group-hover:text-primary transition-colors">
                             {{ TEACHER_NAME }}
                         </span>
-                        <span class="text-xs text-gray-400 font-mono">
+                        <span class="text-xs text-gray-500 dark:text-gray-400 font-mono">
                             {{ KONSENTRASI_KEAHLIAN }} &bull; {{ SCHOOL_NAME }}
                         </span>
                     </div>
@@ -22,28 +22,28 @@
             <!-- Middle: Desktop Navigation Links -->
             <nav class="hidden md:flex items-center gap-1">
                 <a href="{% url 'core:home' %}" 
-                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'core' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
+                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'core' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-600 dark:text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
                     Beranda
                 </a>
                 <a href="{% url 'pembelajaran:modul_list' %}" 
-                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'pembelajaran' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
+                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'pembelajaran' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-600 dark:text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
                     Modul RPL
                 </a>
                 <a href="{% url 'tka:tka_list' %}" 
-                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'tka' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
+                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'tka' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-600 dark:text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
                     CBT TKA
                 </a>
                 <a href="{% url 'literasi:literasi_home' %}" 
-                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'literasi' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
+                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'literasi' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-600 dark:text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
                     Rabu Literasi
                 </a>
                 <a href="{% url 'gamification:leaderboard' %}" 
-                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'gamification' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
+                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors {% if request.resolver_match.app_name == 'gamification' %}bg-surface-high text-primary font-semibold border border-outline-variant{% else %}text-gray-600 dark:text-gray-300 hover:text-foreground hover:bg-surface-low{% endif %}">
                     Leaderboard
                 </a>
                 {% if user.is_authenticated and user.is_guru %}
                 <a href="{% url 'admin_panel:dashboard' %}" 
-                   class="px-3 py-2 rounded-lg text-sm font-medium text-amber-400 hover:bg-amber-400/10 border border-amber-500/20 transition-colors">
+                   class="px-3 py-2 rounded-lg text-sm font-medium text-amber-500 dark:text-amber-400 hover:bg-amber-500/10 border border-amber-500/20 transition-colors">
                     Panel Guru
                 </a>
                 {% endif %}
@@ -54,26 +54,30 @@
                 
                 <!-- Theme Switcher Button -->
                 <button 
-                    @click="toggleTheme()" 
+                    @click="$store.theme.toggle()" 
                     type="button" 
-                    class="w-9 h-9 flex items-center justify-center rounded-xl bg-surface-lowest border border-outline-variant hover:border-outline text-gray-300 hover:text-foreground transition-all focus:outline-none"
+                    class="w-9 h-9 flex items-center justify-center rounded-xl bg-surface-lowest border border-outline-variant hover:border-outline text-foreground transition-all focus:outline-none"
                     aria-label="Toggle Light/Dark Theme"
                     title="Ganti Tema (Terang / Gelap)"
                 >
                     <!-- Sun Icon (shown in Dark mode) -->
-                    <svg x-show="darkMode" class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
+                    <span x-show="$store.theme.isDark" x-cloak>
+                        <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </span>
                     <!-- Moon Icon (shown in Light mode) -->
-                    <svg x-show="!darkMode" x-cloak class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
+                    <span x-show="!$store.theme.isDark" x-cloak>
+                        <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </span>
                 </button>
 
                 {% if user.is_authenticated %}
                     {% if user.is_siswa %}
-                    <div class="flex items-center gap-1.5 px-3 py-1 bg-surface-lowest border border-outline-variant rounded-full text-xs font-mono text-amber-400">
-                        <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="flex items-center gap-1.5 px-3 py-1 bg-surface-lowest border border-outline-variant rounded-full text-xs font-mono text-amber-600 dark:text-amber-400">
+                        <svg class="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                         </svg>
                         <span>{{ user.xp }} XP</span>
@@ -97,11 +101,11 @@
                              x-cloak
                              class="absolute right-0 mt-2 w-48 bg-surface-low border border-outline rounded-xl shadow-xl py-1 z-50">
                             <div class="px-4 py-2 border-b border-outline-variant">
-                                <p class="text-xs text-gray-400">Masuk sebagai:</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Masuk sebagai:</p>
                                 <p class="text-sm font-semibold text-foreground truncate">{{ user.get_role_display }}</p>
                             </div>
-                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-gray-300 hover:bg-surface-high hover:text-foreground">Profil Saya</a>
-                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-red-400 hover:bg-red-500/10">Keluar</a>
+                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-surface-high hover:text-foreground">Profil Saya</a>
+                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-red-500 dark:text-red-400 hover:bg-red-500/10">Keluar</a>
                         </div>
                     </div>
                 {% else %}
@@ -119,20 +123,24 @@
             <!-- Mobile Action Row: Theme Toggle + Menu Toggle -->
             <div class="flex md:hidden items-center gap-2">
                 <button 
-                    @click="toggleTheme()" 
+                    @click="$store.theme.toggle()" 
                     type="button" 
-                    class="p-2 rounded-lg bg-surface-low border border-outline-variant text-gray-300 hover:text-foreground focus:outline-none"
+                    class="p-2 rounded-lg bg-surface-low border border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground focus:outline-none"
                     aria-label="Toggle Theme"
                 >
-                    <svg x-show="darkMode" class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <svg x-show="!darkMode" x-cloak class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
+                    <span x-show="$store.theme.isDark" x-cloak>
+                        <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </span>
+                    <span x-show="!$store.theme.isDark" x-cloak>
+                        <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </span>
                 </button>
 
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-lg bg-surface-low border border-outline-variant text-gray-300 hover:text-foreground focus:outline-none">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-lg bg-surface-low border border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground focus:outline-none">
                     <svg x-show="!mobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -156,7 +164,7 @@
         {% if user.is_authenticated %}
             <div class="pt-2 border-t border-outline-variant mt-2">
                 <a href="{% url 'accounts:profile' %}" class="block px-3 py-2 rounded-lg text-sm text-primary">Profil ({{ user.display_name }})</a>
-                <a href="{% url 'accounts:logout' %}" class="block px-3 py-2 rounded-lg text-sm text-red-400">Keluar</a>
+                <a href="{% url 'accounts:logout' %}" class="block px-3 py-2 rounded-lg text-sm text-red-500 dark:text-red-400">Keluar</a>
             </div>
         {% else %}
             <div class="pt-2 border-t border-outline-variant mt-2">

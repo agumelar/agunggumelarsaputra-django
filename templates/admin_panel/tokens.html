@@ -8,8 +8,8 @@
     <!-- Top Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="space-y-1">
-            <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Manajemen Token Sesi KBM</h1>
-            <p class="text-xs sm:text-sm text-gray-400 font-sans">
+            <h1 class="text-2xl sm:text-3xl font-bold font-display text-foreground">Manajemen Token Sesi KBM</h1>
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-sans">
                 Buat dan pantau kode token pendaftaran kelas untuk mengakses materi dan asesmen.
             </p>
         </div>
@@ -24,22 +24,22 @@
 
     <!-- Filters -->
     <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-mono">
-        <a href="{% url 'admin_panel:token_list' %}" class="px-3 py-1.5 rounded-lg border transition-colors {% if not selected_class or selected_class == 'Semua' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+        <a href="{% url 'admin_panel:token_list' %}" class="px-3 py-1.5 rounded-lg border transition-colors {% if not selected_class or selected_class == 'Semua' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground{% endif %}">
             Semua Rombel
         </a>
-        <a href="{% url 'admin_panel:token_list' %}?class=10 RPL 1" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '10 RPL 1' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+        <a href="{% url 'admin_panel:token_list' %}?class=10 RPL 1" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '10 RPL 1' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground{% endif %}">
             10 RPL 1
         </a>
-        <a href="{% url 'admin_panel:token_list' %}?class=10 RPL 2" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '10 RPL 2' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+        <a href="{% url 'admin_panel:token_list' %}?class=10 RPL 2" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '10 RPL 2' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground{% endif %}">
             10 RPL 2
         </a>
-        <a href="{% url 'admin_panel:token_list' %}?class=11 RPL 1" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '11 RPL 1' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+        <a href="{% url 'admin_panel:token_list' %}?class=11 RPL 1" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '11 RPL 1' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground{% endif %}">
             11 RPL 1
         </a>
-        <a href="{% url 'admin_panel:token_list' %}?class=11 RPL 2" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '11 RPL 2' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+        <a href="{% url 'admin_panel:token_list' %}?class=11 RPL 2" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '11 RPL 2' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground{% endif %}">
             11 RPL 2
         </a>
-        <a href="{% url 'admin_panel:token_list' %}?class=12 RPL 1" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '12 RPL 1' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-300 hover:text-white{% endif %}">
+        <a href="{% url 'admin_panel:token_list' %}?class=12 RPL 1" class="px-3 py-1.5 rounded-lg border transition-colors {% if selected_class == '12 RPL 1' %}bg-primary text-primary-on-primary border-primary font-bold{% else %}bg-surface-low border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground{% endif %}">
             12 RPL 1
         </a>
     </div>
@@ -48,7 +48,7 @@
     <div class="m3-surface overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-                <thead class="bg-surface-lowest border-b border-outline-variant text-gray-400 font-mono">
+                <thead class="bg-surface-lowest border-b border-outline-variant text-gray-500 dark:text-gray-400 font-mono">
                     <tr>
                         <th class="px-5 py-3.5">Kode Token</th>
                         <th class="px-5 py-3.5">Judul Sesi / KBM</th>
@@ -63,7 +63,7 @@
                         {% include 'admin_panel/partials/token_row.html' with token=token %}
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="px-5 py-12 text-center text-gray-400">
+                        <td colspan="6" class="px-5 py-12 text-center text-gray-500 dark:text-gray-400">
                             Belum ada token sesi yang sesuai filter.
                         </td>
                     </tr>

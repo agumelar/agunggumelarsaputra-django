@@ -12,6 +12,7 @@ module.exports = {
       colors: {
         background: 'var(--md-sys-color-surface)',
         foreground: 'var(--foreground)',
+        muted: 'var(--muted-foreground)',
         surface: {
           DEFAULT: 'var(--md-sys-color-surface)',
           lowest: 'var(--md-sys-color-surface-container-lowest)',

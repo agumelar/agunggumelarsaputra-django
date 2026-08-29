@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,20 +9,29 @@
     <!-- Meta & Branding -->
     <meta name="description" content="Personal Website & Vocational Learning Hub RPL SMKN 1 Rongga oleh Agung Gumelar Saputra, S.Tr.T.">
     <meta name="author" content="Agung Gumelar Saputra, S.Tr.T.">
-    <meta name="theme-color" content="#090d16">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+
     <!-- Theme Inline Script to prevent FOUC (Flash of Unstyled Content) -->
     <script>
         (function() {
-            const storedTheme = localStorage.getItem('theme');
-            if (storedTheme === 'light') {
-                document.documentElement.classList.remove('dark');
-            } else {
+            try {
+                const storedTheme = localStorage.getItem('theme');
+                if (storedTheme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {
                 document.documentElement.classList.add('dark');
             }
         })();
@@ -36,26 +45,32 @@
 
     <!-- Alpine.js 3.14.8 -->
     <script defer src="https://unpkg.com/alpinejs@3.14.8/dist/cdn.min.js"></script>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('theme', {
+                isDark: document.documentElement.classList.contains('dark'),
+                toggle() {
+                    this.isDark = !this.isDark;
+                    if (this.isDark) {
+                        document.documentElement.classList.add('dark');
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        document.documentElement.setAttribute('data-theme', 'light');
+                        localStorage.setItem('theme', 'light');
+                    }
+                }
+            });
+        });
+    </script>
 
     {% block extra_head %}{% endblock %}
 </head>
 <body 
-    class="bg-background text-foreground min-h-screen flex flex-col font-sans antialiased selection:bg-primary/20 selection:text-primary transition-colors duration-200"
+    class="bg-background text-foreground min-h-screen flex flex-col font-sans antialiased selection:bg-primary/20 selection:text-primary"
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-    x-data="{ 
-        mobileMenuOpen: false,
-        darkMode: document.documentElement.classList.contains('dark'),
-        toggleTheme() {
-            this.darkMode = !this.darkMode;
-            if (this.darkMode) {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            }
-        }
-    }"
+    x-data="{ mobileMenuOpen: false }"
 >
     <!-- Toast Notification System -->
     {% include 'components/toast.html' %}

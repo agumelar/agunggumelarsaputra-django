@@ -19,8 +19,8 @@
                 {{ package.kode }}
             </span>
             <div>
-                <h1 class="text-sm font-bold text-white font-display line-clamp-1">{{ package.judul }}</h1>
-                <p class="text-[11px] text-gray-400 font-mono">
+                <h1 class="text-sm font-bold text-foreground font-display line-clamp-1">{{ package.judul }}</h1>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">
                     Nomor Soal: <span class="text-primary font-bold" x-text="currentIndex + 1"></span> dari <span x-text="questions.length"></span>
                 </p>
             </div>
@@ -32,7 +32,7 @@
             <!-- Countdown Timer -->
             <div 
                 class="px-4 py-2 rounded-xl border font-mono font-bold text-sm flex items-center gap-2 transition-colors"
-                :class="timeLeft <= 300 ? 'bg-rose-500/20 border-rose-500/40 text-rose-400 animate-pulse' : 'bg-surface-lowest border-outline-variant text-gray-200'"
+                :class="timeLeft <= 300 ? 'bg-rose-500/20 border-rose-500/40 text-rose-500 dark:text-rose-400 animate-pulse' : 'bg-surface-lowest border-outline-variant text-foreground'"
             >
                 <svg class="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -67,11 +67,11 @@
                         <span class="px-2.5 py-0.5 rounded bg-surface-lowest text-primary font-bold">
                             Soal No. <span x-text="currentQuestion.number"></span>
                         </span>
-                        <span class="text-gray-400" x-text="currentQuestion.category"></span>
+                        <span class="text-gray-500 dark:text-gray-400" x-text="currentQuestion.category"></span>
                     </div>
 
                     <!-- Question Text -->
-                    <div class="text-sm sm:text-base font-sans text-gray-100 leading-relaxed space-y-2">
+                    <div class="text-sm sm:text-base font-sans text-foreground leading-relaxed space-y-2">
                         <p x-text="currentQuestion.text"></p>
                     </div>
 
@@ -82,14 +82,14 @@
                                 @click="selectAnswer(currentQuestion.id, opt.key)"
                                 class="p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 group select-none"
                                 :class="answers[currentQuestion.id] === opt.key 
-                                    ? 'bg-primary/10 border-primary text-white shadow-sm' 
-                                    : 'bg-surface-lowest hover:bg-surface-high border-outline-variant text-gray-300'"
+                                    ? 'bg-primary/10 border-primary text-foreground shadow-sm' 
+                                    : 'bg-surface-lowest hover:bg-surface-high border-outline-variant text-gray-700 dark:text-gray-300'"
                             >
                                 <div 
                                     class="w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs shrink-0 transition-colors"
                                     :class="answers[currentQuestion.id] === opt.key 
                                         ? 'bg-primary text-primary-on-primary' 
-                                        : 'bg-surface-high text-gray-400 group-hover:text-white'"
+                                        : 'bg-surface-high text-gray-500 dark:text-gray-400 group-hover:text-foreground'"
                                     x-text="opt.key"
                                 ></div>
                                 <div class="text-xs sm:text-sm font-sans pt-1 leading-normal" x-text="opt.text"></div>
@@ -106,7 +106,7 @@
                         type="button" 
                         @click="prevQuestion()" 
                         :disabled="currentIndex === 0"
-                        class="px-4 py-2 rounded-lg border border-outline-variant bg-surface-low hover:bg-surface-high disabled:opacity-30 disabled:pointer-events-none text-gray-300"
+                        class="px-4 py-2 rounded-lg border border-outline-variant bg-surface-low hover:bg-surface-high disabled:opacity-30 disabled:pointer-events-none text-foreground"
                     >
                         ← Sebelumnya
                     </button>
@@ -118,7 +118,7 @@
                         class="px-4 py-2 rounded-lg border transition-colors flex items-center gap-1.5"
                         :class="doubtful[currentQuestion.id] 
                             ? 'bg-amber-400 text-amber-950 font-bold border-amber-400' 
-                            : 'bg-surface-lowest text-amber-400 border-amber-500/30 hover:border-amber-500'"
+                            : 'bg-surface-lowest text-amber-600 dark:text-amber-400 border-amber-500/30 hover:border-amber-500'"
                     >
                         <span x-text="doubtful[currentQuestion.id] ? '★ Ragu-ragu (Aktif)' : '☆ Tandai Ragu-ragu (R)'"></span>
                     </button>
@@ -127,7 +127,7 @@
                         type="button" 
                         @click="nextQuestion()" 
                         :disabled="currentIndex === questions.length - 1"
-                        class="px-4 py-2 rounded-lg border border-outline-variant bg-surface-low hover:bg-surface-high disabled:opacity-30 disabled:pointer-events-none text-gray-300"
+                        class="px-4 py-2 rounded-lg border border-outline-variant bg-surface-low hover:bg-surface-high disabled:opacity-30 disabled:pointer-events-none text-foreground"
                     >
                         Selanjutnya →
                     </button>
@@ -137,7 +137,7 @@
             </div>
 
             <!-- Keyboard Shortcut Helper Bar -->
-            <div class="p-3 rounded-xl bg-surface-lowest border border-outline-variant text-[11px] font-mono text-gray-400 flex flex-wrap items-center justify-between gap-2">
+            <div class="p-3 rounded-xl bg-surface-lowest border border-outline-variant text-[11px] font-mono text-gray-500 dark:text-gray-400 flex flex-wrap items-center justify-between gap-2">
                 <span>⚡ Shortcut Keyboard:</span>
                 <div class="flex items-center gap-3">
                     <span><kbd class="px-1.5 py-0.5 rounded bg-surface-high border border-outline-variant text-gray-300 font-bold">A-E</kbd> Pilih Opsi</span>
@@ -227,23 +227,23 @@
             class="m3-surface max-w-md w-full p-6 sm:p-8 space-y-5 border-2 border-primary/40"
         >
             <div class="space-y-1 text-center">
-                <h3 class="text-lg font-bold font-display text-white">Konfirmasi Pengumpulan Ujian</h3>
-                <p class="text-xs text-gray-300">Pastikan seluruh jawaban Anda telah diperiksa sebelum mengakhiri simulasi CBT.</p>
+                <h3 class="text-lg font-bold font-display text-foreground">Konfirmasi Pengumpulan Ujian</h3>
+                <p class="text-xs text-gray-600 dark:text-gray-300">Pastikan seluruh jawaban Anda telah diperiksa sebelum mengakhiri simulasi CBT.</p>
             </div>
 
             <!-- Summary Box -->
             <div class="grid grid-cols-3 gap-2 p-3 bg-surface-lowest rounded-xl border border-outline-variant text-center text-xs font-mono">
                 <div>
-                    <p class="text-gray-400 text-[10px]">Terjawab</p>
-                    <p class="text-base font-bold text-emerald-400" x-text="answeredCount"></p>
+                    <p class="text-gray-500 dark:text-gray-400 text-[10px]">Terjawab</p>
+                    <p class="text-base font-bold text-emerald-600 dark:text-emerald-400" x-text="answeredCount"></p>
                 </div>
                 <div>
-                    <p class="text-gray-400 text-[10px]">Ragu-ragu</p>
-                    <p class="text-base font-bold text-amber-400" x-text="doubtfulCount"></p>
+                    <p class="text-gray-500 dark:text-gray-400 text-[10px]">Ragu-ragu</p>
+                    <p class="text-base font-bold text-amber-600 dark:text-amber-400" x-text="doubtfulCount"></p>
                 </div>
                 <div>
-                    <p class="text-gray-400 text-[10px]">Kosong</p>
-                    <p class="text-base font-bold text-rose-400" x-text="questions.length - answeredCount"></p>
+                    <p class="text-gray-500 dark:text-gray-400 text-[10px]">Kosong</p>
+                    <p class="text-base font-bold text-rose-500 dark:text-rose-400" x-text="questions.length - answeredCount"></p>
                 </div>
             </div>
 

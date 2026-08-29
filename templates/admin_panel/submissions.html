@@ -8,20 +8,20 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="space-y-1">
-            <h1 class="text-2xl sm:text-3xl font-bold font-display text-white">Hub Penilaian LKPD & KKTP Siswa</h1>
-            <p class="text-xs sm:text-sm text-gray-400 font-sans">
+            <h1 class="text-2xl sm:text-3xl font-bold font-display text-foreground">Hub Penilaian LKPD & KKTP Siswa</h1>
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-sans">
                 Review folder Google Drive evidence siswa, input level KKTP, nilai angka, dan berikan catatan feedback.
             </p>
         </div>
 
         <div class="flex items-center gap-2 font-mono text-xs">
-            <a href="{% url 'admin_panel:submission_list' %}?status=pending" class="px-3 py-1.5 rounded-lg border transition-colors {% if filter_status == 'pending' %}bg-amber-400 text-amber-950 font-bold border-amber-400{% else %}bg-surface-low text-gray-300 hover:text-white border-outline-variant{% endif %}">
+            <a href="{% url 'admin_panel:submission_list' %}?status=pending" class="px-3 py-1.5 rounded-lg border transition-colors {% if filter_status == 'pending' %}bg-amber-400 text-amber-950 font-bold border-amber-400{% else %}bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant{% endif %}">
                 Menunggu Penilaian
             </a>
-            <a href="{% url 'admin_panel:submission_list' %}?status=graded" class="px-3 py-1.5 rounded-lg border transition-colors {% if filter_status == 'graded' %}bg-emerald-400 text-emerald-950 font-bold border-emerald-400{% else %}bg-surface-low text-gray-300 hover:text-white border-outline-variant{% endif %}">
+            <a href="{% url 'admin_panel:submission_list' %}?status=graded" class="px-3 py-1.5 rounded-lg border transition-colors {% if filter_status == 'graded' %}bg-emerald-400 text-emerald-950 font-bold border-emerald-400{% else %}bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant{% endif %}">
                 Sudah Dinilai
             </a>
-            <a href="{% url 'admin_panel:submission_list' %}" class="px-3 py-1.5 rounded-lg border transition-colors {% if filter_status == 'all' or not filter_status %}bg-primary text-primary-on-primary font-bold border-primary{% else %}bg-surface-low text-gray-300 hover:text-white border-outline-variant{% endif %}">
+            <a href="{% url 'admin_panel:submission_list' %}" class="px-3 py-1.5 rounded-lg border transition-colors {% if filter_status == 'all' or not filter_status %}bg-primary text-primary-on-primary font-bold border-primary{% else %}bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant{% endif %}">
                 Semua Submisi
             </a>
         </div>
@@ -31,7 +31,7 @@
     <div class="m3-surface overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-                <thead class="bg-surface-lowest border-b border-outline-variant text-gray-400 font-mono">
+                <thead class="bg-surface-lowest border-b border-outline-variant text-gray-500 dark:text-gray-400 font-mono">
                     <tr>
                         <th class="px-5 py-3.5">Siswa</th>
                         <th class="px-5 py-3.5">Modul</th>
@@ -46,17 +46,17 @@
                     {% for sub in submissions %}
                     <tr class="hover:bg-surface-high/30 transition-colors">
                         <td class="px-5 py-4">
-                            <p class="font-bold text-white">{{ sub.user.display_name }}</p>
-                            <p class="text-[11px] text-gray-400 font-mono">{{ sub.user.kelas|default:"Umum" }} &bull; {{ sub.user.email }}</p>
+                            <p class="font-bold text-foreground">{{ sub.user.display_name }}</p>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ sub.user.kelas|default:"Umum" }} &bull; {{ sub.user.email }}</p>
                         </td>
                         <td class="px-5 py-4 font-mono">
                             <span class="font-bold text-primary">{{ sub.modul.kode }}</span>
-                            <p class="text-[11px] text-gray-400 line-clamp-1 font-sans">{{ sub.modul.judul }}</p>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-1 font-sans">{{ sub.modul.judul }}</p>
                         </td>
-                        <td class="px-5 py-4 font-mono text-gray-300">
+                        <td class="px-5 py-4 font-mono text-gray-700 dark:text-gray-300">
                             {{ sub.get_submission_type_display }}
                         </td>
-                        <td class="px-5 py-4 font-mono text-gray-400 text-[11px]">
+                        <td class="px-5 py-4 font-mono text-gray-500 dark:text-gray-400 text-[11px]">
                             {{ sub.submitted_at|date:"d M Y, H:i" }}
                         </td>
                         <td class="px-5 py-4">
@@ -70,11 +70,11 @@
                         </td>
                         <td class="px-5 py-4 font-mono">
                             {% if sub.status == 'graded' %}
-                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-bold">
                                 {{ sub.teacher_level|default:"Dinilai" }} ({{ sub.teacher_score }}/100)
                             </span>
                             {% else %}
-                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[11px]">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[11px]">
                                 Menunggu Review
                             </span>
                             {% endif %}
@@ -87,7 +87,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="px-5 py-12 text-center text-gray-400">
+                        <td colspan="7" class="px-5 py-12 text-center text-gray-500 dark:text-gray-400">
                             Belum ada submisi tugas yang sesuai kriteria filter.
                         </td>
                     </tr>

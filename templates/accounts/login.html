@@ -12,13 +12,13 @@
                 AGS
             </div>
             <div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-white font-display tracking-tight">Selamat Datang</h1>
-                <p class="text-xs text-gray-400 mt-1">Masuk ke Hub Pembelajaran & Praktikum RPL SMKN 1 Rongga</p>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-foreground font-display tracking-tight">Selamat Datang</h1>
+                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Masuk ke Hub Pembelajaran & Praktikum RPL SMKN 1 Rongga</p>
             </div>
         </div>
 
         {% if form.non_field_errors %}
-        <div class="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-medium text-center">
+        <div class="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-500 dark:text-rose-400 text-xs font-medium text-center">
             {% for error in form.non_field_errors %}
                 <p>{{ error }}</p>
             {% endfor %}
@@ -26,7 +26,7 @@
         {% endif %}
 
         <!-- Google OAuth Button -->
-        <a href="{% url 'accounts:google_login' %}" class="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-surface-lowest hover:bg-surface-low border border-outline hover:border-primary/50 text-gray-200 hover:text-white font-sans text-xs sm:text-sm font-semibold transition-all shadow-sm">
+        <a href="{% url 'accounts:google_login' %}" class="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl bg-surface-lowest hover:bg-surface-low border border-outline hover:border-primary/50 text-foreground font-sans text-xs sm:text-sm font-semibold transition-all shadow-sm">
             <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -48,19 +48,19 @@
 
             <!-- Identifier Input -->
             <div class="space-y-1.5">
-                <label class="block font-semibold text-gray-200 font-mono">EMAIL / NISN / NIP / USERNAME</label>
+                <label class="block font-semibold text-foreground font-mono">EMAIL / NISN / NIP / USERNAME</label>
                 {{ form.identifier }}
                 {% if form.identifier.errors %}
-                    <p class="text-rose-400 text-[11px] font-sans">{{ form.identifier.errors.0 }}</p>
+                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.identifier.errors.0 }}</p>
                 {% endif %}
             </div>
 
             <!-- Password Input -->
             <div class="space-y-1.5">
-                <label class="block font-semibold text-gray-200 font-mono">KATA SANDI</label>
+                <label class="block font-semibold text-foreground font-mono">KATA SANDI</label>
                 {{ form.password }}
                 {% if form.password.errors %}
-                    <p class="text-rose-400 text-[11px] font-sans">{{ form.password.errors.0 }}</p>
+                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.password.errors.0 }}</p>
                 {% endif %}
             </div>
 
@@ -71,7 +71,7 @@
         </form>
 
         <div class="pt-2 border-t border-outline-variant text-center space-y-2">
-            <p class="text-xs text-gray-400">
+            <p class="text-xs text-gray-600 dark:text-gray-400">
                 Siswa baru belum punya akun? <a href="{% url 'accounts:register' %}" class="text-primary font-bold hover:underline">Daftar dengan Token Rombel</a>
             </p>
         </div>

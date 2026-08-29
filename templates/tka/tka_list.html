@@ -14,21 +14,21 @@
                     10 Paket Bank Soal &bull; 555+ Butir Soal
                 </span>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+            <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-foreground tracking-tight">
                 Simulator CBT Tes Kemampuan Akademik (TKA) PPLG
             </h1>
-            <p class="text-xs sm:text-sm text-gray-400 font-sans">
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-sans">
                 Drilling intensif soal kejuruan software engineering, algoritma, PBO, database SQL, web development, dan devops berstandar asesmen industri.
             </p>
         </div>
 
         <div class="m3-surface p-3.5 flex items-center gap-4 text-xs font-mono shrink-0">
             <div>
-                <p class="text-gray-400 text-[11px]">Passing Grade</p>
-                <p class="text-base font-bold text-emerald-400">75% (KKM)</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Passing Grade</p>
+                <p class="text-base font-bold text-emerald-600 dark:text-emerald-400">75% (KKM)</p>
             </div>
             <div class="border-l border-outline-variant pl-4">
-                <p class="text-gray-400 text-[11px]">Durasi Ujian</p>
+                <p class="text-gray-500 dark:text-gray-400 text-[11px]">Durasi Ujian</p>
                 <p class="text-base font-bold text-primary">60 Menit</p>
             </div>
         </div>
@@ -61,12 +61,12 @@
                     <span class="px-2 py-0.5 rounded bg-surface-lowest border border-outline-variant text-primary font-bold">
                         {{ pkg.kode }}
                     </span>
-                    <span class="text-amber-400 font-semibold">+{{ pkg.xp_base }} XP Base</span>
+                    <span class="text-amber-600 dark:text-amber-400 font-semibold">+{{ pkg.xp_base }} XP Base</span>
                 </div>
 
                 <!-- Title & Meta -->
                 <div class="space-y-1">
-                    <h2 class="text-base font-bold font-display text-white group-hover:text-primary transition-colors leading-snug">
+                    <h2 class="text-base font-bold font-display text-foreground group-hover:text-primary transition-colors leading-snug">
                         {{ pkg.judul }}
                     </h2>
                     <p class="text-[11px] text-gray-500 font-mono">
@@ -75,7 +75,7 @@
                 </div>
 
                 <!-- Description -->
-                <p class="text-xs text-gray-400 leading-relaxed line-clamp-3">
+                <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
                     {{ pkg.deskripsi|default:"Latihan soal komprehensif untuk mengasah ketajaman logika dan konsep kejuruan RPL." }}
                 </p>
 
@@ -89,8 +89,8 @@
                     {% with attempt=user_best_attempts|get_item:pkg.id %}
                         {% if attempt %}
                         <div class="flex items-center justify-between text-[11px] font-mono p-2 rounded-lg bg-surface-lowest border border-outline-variant">
-                            <span class="text-gray-400">Skor Terbaik:</span>
-                            <span class="font-bold {% if attempt.is_passed %}text-emerald-400{% else %}text-amber-400{% endif %}">
+                            <span class="text-gray-500 dark:text-gray-400">Skor Terbaik:</span>
+                            <span class="font-bold {% if attempt.is_passed %}text-emerald-600 dark:text-emerald-400{% else %}text-amber-600 dark:text-amber-400{% endif %}">
                                 {{ attempt.score }}% {% if attempt.is_passed %}(LULUS){% else %}(Remedial){% endif %}
                             </span>
                         </div>
@@ -112,7 +112,7 @@
 
         </div>
         {% empty %}
-        <div class="col-span-full m3-surface p-12 text-center text-gray-400">
+        <div class="col-span-full m3-surface p-12 text-center text-gray-500 dark:text-gray-400">
             <p>Belum ada paket soal TKA yang dimuat.</p>
         </div>
         {% endfor %}
