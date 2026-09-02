@@ -3,12 +3,12 @@
 {% block title %}Daftar Akun Siswa RPL | {{ SITE_TITLE }}{% endblock %}
 
 {% block content %}
-<div class="min-h-[80vh] flex items-center justify-center py-10 px-4">
-    <div class="m3-surface w-full max-w-md p-6 sm:p-8 space-y-6">
+<div class="min-h-[75vh] flex items-center justify-center py-10 px-4">
+    <div class="m3-surface w-full max-w-md p-6 sm:p-8 space-y-6 rounded-3xl shadow-xl border border-outline-variant">
         
         <!-- Header -->
         <div class="text-center space-y-2 flex flex-col items-center">
-            <div class="w-12 h-12 rounded-xl bg-surface-high border border-outline flex items-center justify-center font-display font-bold text-primary text-xl">
+            <div class="w-12 h-12 rounded-2xl bg-surface-lowest border border-outline-variant flex items-center justify-center font-display font-bold text-primary text-xl shadow-inner">
                 AGS
             </div>
             <div>
@@ -17,11 +17,20 @@
             </div>
         </div>
 
+        <!-- Non-field Errors (M3 Tonal Container) -->
         {% if form.non_field_errors %}
-        <div class="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-500 dark:text-rose-400 text-xs font-medium text-center">
-            {% for error in form.non_field_errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
+        <div class="p-4 rounded-2xl bg-rose-500/10 dark:bg-rose-950/40 border border-rose-500/25 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-3">
+            <div class="shrink-0 mt-0.5">
+                <svg class="w-5 h-5 text-rose-500 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div class="space-y-0.5 leading-relaxed">
+                <p class="font-bold text-rose-800 dark:text-rose-200">Pendaftaran Gagal</p>
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
         </div>
         {% endif %}
 
@@ -36,7 +45,12 @@
                 </label>
                 {{ form.token }}
                 {% if form.token.errors %}
-                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.token.errors.0 }}</p>
+                <div class="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 text-[11px] font-medium mt-1">
+                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{{ form.token.errors.0 }}</span>
+                </div>
                 {% endif %}
                 <div id="token-feedback" class="mt-1"></div>
             </div>
@@ -46,7 +60,12 @@
                 <label class="block font-semibold text-foreground font-mono">NAMA LENGKAP SISWA</label>
                 {{ form.name }}
                 {% if form.name.errors %}
-                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.name.errors.0 }}</p>
+                <div class="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 text-[11px] font-medium mt-1">
+                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{{ form.name.errors.0 }}</span>
+                </div>
                 {% endif %}
             </div>
 
@@ -55,7 +74,12 @@
                 <label class="block font-semibold text-foreground font-mono">EMAIL SISWA</label>
                 {{ form.email }}
                 {% if form.email.errors %}
-                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.email.errors.0 }}</p>
+                <div class="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 text-[11px] font-medium mt-1">
+                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{{ form.email.errors.0 }}</span>
+                </div>
                 {% endif %}
             </div>
 
@@ -64,7 +88,12 @@
                 <label class="block font-semibold text-foreground font-mono">KATA SANDI (MIN. 6 KARAKTER)</label>
                 {{ form.password }}
                 {% if form.password.errors %}
-                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.password.errors.0 }}</p>
+                <div class="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 text-[11px] font-medium mt-1">
+                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{{ form.password.errors.0 }}</span>
+                </div>
                 {% endif %}
             </div>
 
@@ -73,13 +102,21 @@
                 <label class="block font-semibold text-foreground font-mono">ULANGI KATA SANDI</label>
                 {{ form.password_confirm }}
                 {% if form.password_confirm.errors %}
-                    <p class="text-rose-500 dark:text-rose-400 text-[11px] font-sans">{{ form.password_confirm.errors.0 }}</p>
+                <div class="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 text-[11px] font-medium mt-1">
+                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{{ form.password_confirm.errors.0 }}</span>
+                </div>
                 {% endif %}
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="m3-btn-primary w-full py-3 font-bold text-xs sm:text-sm mt-2">
-                Daftar & Klaim +50 XP ➔
+            <button type="submit" class="m3-btn-primary w-full py-3 font-bold text-xs sm:text-sm mt-2 justify-center">
+                <span>Daftar & Klaim +50 XP</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
             </button>
         </form>
 
