@@ -23,6 +23,7 @@ services:
     depends_on:
       - db
     volumes:
+      - .:/app
       - ags_media:/app/media
       - ags_static:/app/staticfiles
     networks:
