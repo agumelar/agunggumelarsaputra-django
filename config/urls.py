@@ -7,10 +7,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from apps.accounts.views import google_oauth_callback_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.core.urls', namespace='core')),
     path('accounts/', include('apps.accounts.urls', namespace='accounts')),
+    path('api/auth/callback/google', google_oauth_callback_view, name='legacy_google_callback'),
     path('pembelajaran/', include('apps.pembelajaran.urls', namespace='pembelajaran')),
     path('tka/', include('apps.tka.urls', namespace='tka')),
     path('literasi/', include('apps.literasi.urls', namespace='literasi')),
