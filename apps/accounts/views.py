@@ -158,9 +158,11 @@ def login_view(request):
                     return redirect(next_url)
                 return redirect('admin_panel:dashboard' if user.is_guru else 'core:home')
             else:
-                messages.error(request, "Kata sandi yang Anda masukkan salah.")
+                form.add_error('password', "Kata sandi tidak sesuai.")
+                form.add_error(None, "Kombinasi kata sandi tidak cocok. Silakan periksa kembali kata sandi Anda.")
         else:
-            messages.error(request, "Akun dengan identifier tersebut tidak ditemukan.")
+            form.add_error('identifier', "Akun tidak ditemukan.")
+            form.add_error(None, f"Akun dengan identifier '{identifier}' tidak ditemukan. Pastikan Anda telah mendaftar dengan Token Rombel.")
 
     return render(request, 'accounts/login.html', {'form': form})
 
