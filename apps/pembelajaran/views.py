@@ -13,12 +13,15 @@ from apps.gamification.models import XPHistory
 def modul_list_view(request):
     """
     Daftar 16 Modul Orientasi PPLG / Konsentrasi Keahlian RPL.
-    Menampilkan status progres penyelesaian dan akumulasi XP per modul.
+    Menampilkan status progres penyelesaian, gating sekuensial, dan akumulasi XP per modul.
     """
     modul_list = Modul.objects.filter(is_published=True).order_by('urutan')
     
     completed_modul_ids = set()
     submitted_lkpd_ids = set()
+    unlocked_modul_ids = set()
+
+    is_teacher = request.user.is_authenticated and (request.user.is_staff or getattr(request.user, 'is_guru', False))
 
     if request.user.is_authenticated:
         completed_modul_ids = set(
@@ -28,10 +31,21 @@ def modul_list_view(request):
             UserSubmission.objects.filter(user=request.user, submission_type='lkpd').values_list('modul_id', flat=True)
         )
 
+    # Gating Sekuensial: Modul 1 selalu terbuka, Modul N+1 terbuka jika Modul N selesai
+    for m in modul_list:
+        if is_teacher or m.urutan == 1:
+            unlocked_modul_ids.add(m.id)
+        else:
+            prev_m = next((pm for pm in modul_list if pm.urutan == m.urutan - 1), None)
+            if prev_m and prev_m.id in completed_modul_ids:
+                unlocked_modul_ids.add(m.id)
+
     context = {
         'modul_list': modul_list,
         'completed_modul_ids': completed_modul_ids,
         'submitted_lkpd_ids': submitted_lkpd_ids,
+        'unlocked_modul_ids': unlocked_modul_ids,
+        'is_teacher': is_teacher,
         'active_nav': 'pembelajaran',
     }
     return render(request, 'pembelajaran/modul_list.html', context)
@@ -39,15 +53,16 @@ def modul_list_view(request):
 
 def modul_detail_view(request, slug):
     """
-    4-Tab Reader Modul Pembelajaran:
+    4-Tab Reader Modul Pembelajaran dengan Sequential Gating & Anti Copy-Paste Protection:
     Tab 1: Materi & Konsep Interaktif
-    Tab 2: Form LKPD Interaktif & Bukti Google Drive
-    Tab 3: Jurnal Refleksi Pembelajaran Mandiri
-    Tab 4: Panduan KKTP & Hasil Penilaian Guru
+    Tab 2: Form LKPD Interaktif & Bukti Google Drive (+25 XP)
+    Tab 3: Jurnal Refleksi Pembelajaran Mandiri (+15 XP) [Lokasi Tombol Selesai Modul]
+    Tab 4: Panduan KKTP & Hasil Penilaian Guru (Level 0 - Level 4)
     """
     modul = get_object_or_404(Modul, slug=slug, is_published=True)
     all_modules = Modul.objects.filter(is_published=True).order_by('urutan')
 
+    is_teacher = request.user.is_authenticated and (request.user.is_staff or getattr(request.user, 'is_guru', False))
     is_completed = False
     lkpd_submission = None
     reflection_submission = None
@@ -56,6 +71,18 @@ def modul_detail_view(request, slug):
         is_completed = UserProgress.objects.filter(user=request.user, modul=modul).exists()
         lkpd_submission = UserSubmission.objects.filter(user=request.user, modul=modul, submission_type='lkpd').first()
         reflection_submission = UserSubmission.objects.filter(user=request.user, modul=modul, submission_type='reflection').first()
+
+    # Gating Sekuensial: Siswa non-guru harus menyelesaikan modul prasyarat
+    if not is_teacher and modul.urutan > 1:
+        prev_m = Modul.objects.filter(urutan=modul.urutan - 1, is_published=True).first()
+        if prev_m:
+            prereq_completed = request.user.is_authenticated and UserProgress.objects.filter(user=request.user, modul=prev_m).exists()
+            if not prereq_completed:
+                return render(request, 'pembelajaran/modul_locked.html', {
+                    'modul': modul,
+                    'prereq_modul': prev_m,
+                    'active_nav': 'pembelajaran',
+                })
 
     # Inisialisasi Form
     initial_lkpd = {}
@@ -90,6 +117,7 @@ def modul_detail_view(request, slug):
         'reflection_submission': reflection_submission,
         'lkpd_form': lkpd_form,
         'reflection_form': reflection_form,
+        'is_teacher': is_teacher,
         'active_nav': 'pembelajaran',
     }
     return render(request, 'pembelajaran/modul_detail.html', context)
@@ -129,8 +157,21 @@ def mark_material_read_view(request, slug):
 def submit_lkpd_view(request, slug):
     """
     HTMX Endpoint: Submisi LKPD & Google Drive Link evidence oleh siswa (+25 XP).
+    KKM Guard (75): Jika sudah dinilai dan tuntas (>= 75), terkunci dari resubmission.
     """
     modul = get_object_or_404(Modul, slug=slug, is_published=True)
+
+    # Cek apakah sudah dinilai tuntas KKM 75
+    existing = UserSubmission.objects.filter(user=request.user, modul=modul, submission_type='lkpd').first()
+    if existing and existing.status == 'graded' and existing.teacher_score is not None and existing.teacher_score >= 75:
+        context = {
+            'modul': modul,
+            'lkpd_submission': existing,
+            'success': False,
+            'message': 'LKPD Anda telah dinilai TUNTAS oleh Guru dan telah terkunci permanen.',
+        }
+        return render(request, 'pembelajaran/partials/lkpd_status.html', context)
+
     form = LkpdSubmissionForm(request.POST)
 
     if form.is_valid():
@@ -186,7 +227,7 @@ def submit_lkpd_view(request, slug):
 @require_POST
 def submit_reflection_view(request, slug):
     """
-    HTMX Endpoint: Submisi Jurnal Refleksi oleh siswa (+15 XP).
+    HTMX Endpoint: Submisi Jurnal Refleksi oleh siswa (+15 XP) dan Menandai Selesai Modul.
     """
     modul = get_object_or_404(Modul, slug=slug, is_published=True)
     form = ReflectionSubmissionForm(request.POST)
@@ -204,11 +245,14 @@ def submit_reflection_view(request, slug):
                 'form_data': {
                     'understanding': understanding,
                     'obstacle': obstacle,
-                'action_plan': action_plan,
+                    'action_plan': action_plan,
                 },
                 'status': 'submitted',
             }
         )
+
+        # Tandai modul selesai pada UserProgress
+        progress, prog_created = UserProgress.objects.get_or_create(user=request.user, modul=modul)
 
         if created:
             request.user.xp += modul.xp_reflection
@@ -225,8 +269,9 @@ def submit_reflection_view(request, slug):
         context = {
             'modul': modul,
             'reflection_submission': submission,
+            'is_completed': True,
             'success': True,
-            'message': 'Jurnal Refleksi berhasil disimpan!',
+            'message': 'Jurnal Refleksi berhasil disimpan! Modul ini telah tuntas ditandai selesai.',
             'just_claimed': created,
         }
     else:

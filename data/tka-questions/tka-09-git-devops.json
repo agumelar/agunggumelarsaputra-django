@@ -1,0 +1,362 @@
+[
+  {
+    "id": 1,
+    "category": "Git & DevOps",
+    "question": "Sistem pengontrol versi terdistribusi (Distributed Version Control System) paling populer yang digunakan pengembang untuk memantau perubahan kode adalah...",
+    "options": ["Git", "SVN", "Mercurial", "CVS", "Perforce"],
+    "correctAnswer": 0,
+    "explanation": "💡 Git adalah DVCS standar industri buatan Linus Torvalds."
+  },
+  {
+    "id": 2,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk menginisialisasi repositori Git baru pada direktori proyek lokal adalah...",
+    "options": ["git init", "git start", "git create", "git new", "git setup"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git init` membuat repositori lokal baru dengan folder tersembunyi `.git`."
+  },
+  {
+    "id": 3,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk memindahkan file perubahan dari Working Directory ke Staging Area adalah...",
+    "options": ["git add", "git commit", "git push", "git stage", "git track"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git add <file>` menyiapkan perubahan di Staging Area sebelum di-commit."
+  },
+  {
+    "id": 4,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk menyimpan rekam jejak (*snapshot*) perubahan dari Staging Area ke Repositori Lokal dinamakan...",
+    "options": ["git commit -m \"pesan\"", "git save", "git push", "git store", "git record"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git commit` mengunci snapshot perubahan secara permanen di history repositori."
+  },
+  {
+    "id": 5,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk mengunggah commit dari repositori lokal ke repositori remote (seperti GitHub/GitLab) dinamakan...",
+    "options": ["git push", "git pull", "git upload", "git send", "git publish"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git push` mengirimkan commit lokal ke remote repository."
+  },
+  {
+    "id": 6,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk mengambil dan MENGGABUNGKAN (fetch + merge) perubahan terbaru dari repositori remote ke lokal dinamakan...",
+    "options": ["git pull", "git fetch", "git download", "git sync", "git clone"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git pull` secara otomatis melakukan fetch sekaligus merge perubahan remote ke cabang lokal."
+  },
+  {
+    "id": 7,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk mengunduh/menyalin repositori remote yang sudah ada ke komputer lokal untuk pertama kali dinamakan...",
+    "options": ["git clone", "git copy", "git init", "git get", "git download"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git clone <url>` menyalin seluruh repositori remote beserta histori commit-nya."
+  },
+  {
+    "id": 8,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk memeriksa status file (apakah untracked, modified, atau staged) adalah...",
+    "options": ["git status", "git check", "git log", "git info", "git diff"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git status` menampilkan kondisi area kerja (working directory & staging area)."
+  },
+  {
+    "id": 9,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk melihat riwayat (history) commit yang pernah dilakukan dinamakan...",
+    "options": ["git log", "git history", "git status", "git list", "git show"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git log` menampilkan kronologis riwayat commit beserta author dan pesan commit."
+  },
+  {
+    "id": 10,
+    "category": "Git & DevOps",
+    "question": "File tersembunyi khusus yang digunakan untuk memberi tahu Git agar MENGABAIKAN file/folder tertentu (seperti `node_modules` atau `.env`) dinamakan...",
+    "options": [".gitignore", ".gitconfig", ".gitkeep", "gitignore.txt", ".gitoverride"],
+    "correctAnswer": 0,
+    "explanation": "💡 File `.gitignore` memuat pola berkas yang dilarang dilacak oleh Git."
+  },
+  {
+    "id": 11,
+    "category": "Git & DevOps",
+    "question": "Cabang utama (default branch) pada repositori Git modern biasanya dinamai...",
+    "options": ["main (atau master)", "develop", "production", "head", "root"],
+    "correctAnswer": 0,
+    "explanation": "💡 Cabang utama default standar Git/GitHub modern adalah `main`."
+  },
+  {
+    "id": 12,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk membuat atau berpindah ke cabang (branch) baru bernama `feature-login` adalah...",
+    "options": ["git checkout -b feature-login (atau git switch -c feature-login)", "git branch new feature-login", "git create branch feature-login", "git goto feature-login", "git move feature-login"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git checkout -b <nama>` atau `git switch -c <nama>` membuat sekaligus berpindah cabang."
+  },
+  {
+    "id": 13,
+    "category": "Git & DevOps",
+    "question": "Singkatan CI/CD dalam praktik modern Software Engineering dan DevOps berarti...",
+    "options": ["Continuous Integration / Continuous Deployment (atau Delivery)", "Code Inspection / Code Delivery", "Central Integration / Cloud Deployment", "Computer Interface / Client Device", "Control Integration / Control Deployment"],
+    "correctAnswer": 0,
+    "explanation": "💡 CI/CD = Continuous Integration / Continuous Deployment."
+  },
+  {
+    "id": 14,
+    "category": "Git & DevOps",
+    "question": "Teknologi kontainerisasi (Containerization) populer yang membungkus aplikasi beserta seluruh dependensinya agar berjalan konsisten di server manapun dinamakan...",
+    "options": ["Docker", "Kubernetes", "Git", "Jenkins", "Vercel"],
+    "correctAnswer": 0,
+    "explanation": "💡 Docker memaketkan aplikasi ke dalam kontainer yang terisolasi dan portabel."
+  },
+  {
+    "id": 15,
+    "category": "Git & DevOps",
+    "question": "Platform pengorganisasian dan pengoperasian otomatis (Orchestration) untuk mengelola ribuan kontainer Docker di cluster server dinamakan...",
+    "options": ["Kubernetes (K8s)", "Docker Compose", "GitLab CI", "Nginx", "Terraform"],
+    "correctAnswer": 0,
+    "explanation": "💡 Kubernetes (K8s) adalah alat orkestrasi kontainer skala besar."
+  },
+  {
+    "id": 16,
+    "category": "Git & DevOps",
+    "question": "Kondisi perselisihan di mana dua pengembang mengubah baris kode yang sama pada file yang sama di cabang berbeda sehingga Git gagal menggabungkan otomatis dinamakan...",
+    "options": ["Merge Conflict", "Branch Leak", "Commit Collision", "Git Crash", "Detached HEAD"],
+    "correctAnswer": 0,
+    "explanation": "💡 Merge Conflict terjadi saat Git tidak bisa menentukan perubahan mana yang benar secara otomatis."
+  },
+  {
+    "id": 17,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk menyimpan sementara perubahan di Working Directory yang belum di-commit agar area kerja bersih dinamakan...",
+    "options": ["git stash", "git save", "git pause", "git hide", "git hold"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git stash` menyembunyikan sementara draft perubahan ke dalam tumpukan stash."
+  },
+  {
+    "id": 18,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk mengembalikan perubahan dari tumpukan `git stash` ke area kerja dinamakan...",
+    "options": ["git stash pop (atau git stash apply)", "git stash restore", "git stash get", "git stash load", "git stash unhide"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git stash pop` menerapkan kembali perubahan tersimpan dan menghapusnya dari tumpukan stash."
+  },
+  {
+    "id": 19,
+    "category": "Git & DevOps",
+    "question": "Perbedaan mendasar antara `git merge` dan `git rebase` saat menggabungkan cabang adalah...",
+    "options": ["`git merge` membuat commit gabungan baru (merge commit) menjaga histori asli, sedangkan `git rebase` memindahkan titik pangkal commit cabang ke ujung cabang target (menghasilkan histori linier)", "`git rebase` menghapus kode", "`git merge` hanya untuk remote", "`git rebase` tidak bisa menangani conflict", "Keduanya persis sama"],
+    "correctAnswer": 0,
+    "explanation": "💡 `merge` membuat merge commit, `rebase` menulis ulang histori agar linier lurus."
+  },
+  {
+    "id": 20,
+    "category": "Git & DevOps",
+    "question": "Perintah Git yang digunakan untuk MEMBATALKAN commit lama dengan cara membuat COMMIT BARU yang berisi kebalikan dari perubahan commit tersebut (aman untuk remote) dinamakan...",
+    "options": ["git revert <commit-id>", "git reset --hard", "git delete commit", "git undo", "git rollback"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git revert` aman untuk repositori publik karena tidak mengubah/menghapus riwayat masa lalu."
+  },
+  {
+    "id": 21,
+    "category": "Git & DevOps",
+    "question": "Perintah Git berbahaya `git reset --hard <commit-id>` berfungsi untuk...",
+    "options": ["Menghapus commit dan MENGHAPUS SELURUH PERUBAHAN di Working Directory & Staging Area secara paksa!", "Menyimpan commit ke stash", "Membuat branch baru", "Mengunggah kode ke GitHub", "Menampilkan log"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git reset --hard` membuang secara permanen seluruh perubahan di staging & working directory."
+  },
+  {
+    "id": 22,
+    "category": "Git & DevOps",
+    "question": "Perintah `git reset --soft <commit-id>` berfungsi untuk...",
+    "options": ["Membatalkan commit tetapi TETAP MEMPERTAHANKAN file perubahan di Staging Area", "Menghapus file", "Membuat branch baru", "Mendorong ke remote", "Menghapus `.git`"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git reset --soft` memundurkan posisi HEAD tapi menjaga perubahan tetap staged."
+  },
+  {
+    "id": 23,
+    "category": "Git & DevOps",
+    "question": "Dalam workflow Kolaborasi Git (Git Flow), Pull Request (PR) atau Merge Request (MR) adalah...",
+    "options": ["Mekanisme pengusulan penggabungan kode dari cabang pengembang ke cabang utama yang dilengkapi fitur Peninjauan Kode (Code Review)", "Perintah mengunduh file", "Metode menghapus repositori", "Perintah kompilasi program", "Sertifikat HTTPS"],
+    "correctAnswer": 0,
+    "explanation": "💡 Pull Request adalah mekanisme peninjauan dan persetujuan kode sebelum di-merge."
+  },
+  {
+    "id": 24,
+    "category": "Git & DevOps",
+    "question": "File konfigurasi Docker yang memuat instruksi langkah demi langkah untuk membangun sebuah Docker Image dinamakan...",
+    "options": ["Dockerfile", "docker-compose.yml", ".dockerignore", "Docker.config", "Containerfile"],
+    "correctAnswer": 0,
+    "explanation": "💡 Dockerfile berisi cetak biru instruksi membangun image kontainer."
+  },
+  {
+    "id": 25,
+    "category": "Git & DevOps",
+    "question": "Alat Docker yang digunakan untuk mendefinisikan dan menjalankan aplikasi multi-kontainer (misal: App + Database Redis + Postgres) menggunakan file YAML dinamakan...",
+    "options": ["Docker Compose", "Dockerfile", "Docker Hub", "Docker Swarm", "Kubectl"],
+    "correctAnswer": 0,
+    "explanation": "💡 `docker-compose.yml` mengelola orkestrasi multi-kontainer lokal."
+  },
+  {
+    "id": 26,
+    "category": "Git & DevOps",
+    "question": "Model percabangan Git Flow populer yang membagi cabang menjadi `main`, `develop`, `feature/*`, `release/*`, dan `hotfix/*` dinamakan...",
+    "options": ["Git Flow Strategy", "Trunk-Based Development", "GitHub Flow", "Single Branch Flow", "Linear Flow"],
+    "correctAnswer": 0,
+    "explanation": "💡 Git Flow menetapkan alur percabangan terstruktur untuk pengawasan rilis."
+  },
+  {
+    "id": 27,
+    "category": "Git & DevOps",
+    "question": "Model percabangan modern di mana pengembang sering membuat cabang fitur kecil yang berumur pendek dan langsung di-merge kembali ke cabang utama `main` beberapa kali sehari dinamakan...",
+    "options": ["Trunk-Based Development", "Git Flow Classic", "Waterfall Branching", "Feature Freeze Flow", "Monorepo Flow"],
+    "correctAnswer": 0,
+    "explanation": "💡 Trunk-Based Development mendorong integrasi berkelanjutan cepat ke cabang utama."
+  },
+  {
+    "id": 28,
+    "category": "Git & DevOps",
+    "question": "Perintah `git fetch` berbeda dari `git pull` karena `git fetch`...",
+    "options": ["Mengunduh metadata & commit baru dari remote TANPA langsung menggabungkannya (merge) ke cabang kerja lokal", "Langsung meng-overwrite file lokal", "Menghapus branch", "Membuat commit baru", "Meng-upload file"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git fetch` hanya mengunduh data remote untuk diperiksa tanpa otomatis me-merge."
+  },
+  {
+    "id": 29,
+    "category": "Git & DevOps",
+    "question": "Kondisi 'Detached HEAD' pada Git terjadi ketika...",
+    "options": ["HEAD menunjuk langsung ke sebuah Commit ID spesifik alih-alih menunjuk ke sebuah Cabang (Branch)", "File `.git` terhapus", "Git kehabisan memori", "Koneksi remote putus", "Branch main terhapus"],
+    "correctAnswer": 0,
+    "explanation": "💡 Detached HEAD berarti posisi penunjuk checkout berada di commit commit murni, bukan di ujung nama branch."
+  },
+  {
+    "id": 30,
+    "category": "Git & DevOps",
+    "question": "Perintah `git cherry-pick <commit-id>` berguna untuk...",
+    "options": ["Mengambil dan menerapkan SATU COMMIT SPESIFIK dari cabang lain ke dalam cabang yang sedang aktif saat ini", "Menghapus commit", "Menggabungkan seluruh branch", "Membuat tag rilis", "Menghapus repositori"],
+    "correctAnswer": 0,
+    "explanation": "💡 `cherry-pick` memetik 1 commit spesifik dari branch luar ke branch aktif."
+  },
+  {
+    "id": 31,
+    "category": "Git & DevOps",
+    "question": "Dalam pipeline CI/CD, tahap 'Continuous Integration' (CI) berfokus pada...",
+    "options": ["Otomatisasi pengujian (automated testing), linting, dan kompilasi kode setiap kali ada commit/PR baru yang di-push ke repositori", "Otomatisasi pembayaran server", "Pembelian domain web", "Pembuatan desain UI", "Pengiriman email marketing"],
+    "correctAnswer": 0,
+    "explanation": "💡 CI berfokus pada otomatisasi build & test verifikasi kode saat integrasi."
+  },
+  {
+    "id": 32,
+    "category": "Git & DevOps",
+    "question": "Tahap 'Continuous Deployment' (CD) berfokus pada...",
+    "options": ["Otomatisasi peluncuran kode yang lolos pengujian CI langsung ke lingkungan produksi (production) secara otomatis tanpa campur tangan manual", "Penulisan manual koding", "Pembuatan dokumentasi", "Desain database", "Penjualan software"],
+    "correctAnswer": 0,
+    "explanation": "💡 CD otomatis merilis perubahan teruji ke server produksi."
+  },
+  {
+    "id": 33,
+    "category": "Git & DevOps",
+    "question": "Perbedaan 'Continuous Delivery' dan 'Continuous Deployment' adalah...",
+    "options": ["Continuous Delivery membutuhkan persetujuan manual (manual approval) sebelum rilis ke production, sedangkan Continuous Deployment rilis otomatis tanpa approval manual", "Continuous Delivery khusus mobile", "Continuous Deployment khusus Windows", "Keduanya sama saja", "Continuous Delivery tidak pakai CI"],
+    "correctAnswer": 0,
+    "explanation": "💡 Continuous Delivery menyiap rilis teruji dan menunggu klik tombol deploy manual; Deployment serba otomatis."
+  },
+  {
+    "id": 34,
+    "category": "Git & DevOps",
+    "question": "Perintah `git bisect` berguna untuk...",
+    "options": ["Menggunakan pencarian biner (Binary Search) pada histori commit untuk menemukan commit spesifik mana yang PERTAMA KALI menyebabkan bug/regression!", "Membagi branch jadi dua", "Memotong isi file", "Mengompres repositori", "Menghapus commit"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git bisect` mengisolasi commit penyebab bug secara otomatis dengan binary search."
+  },
+  {
+    "id": 35,
+    "category": "Git & DevOps",
+    "question": "Skenario Git: Anda bekerja di branch `feature` dan ingin menggabungkannya ke `main`. Saat di-merge, Git menampilkan `Fast-forward`. Artinya...",
+    "options": ["Cabang `main` belum pernah memiliki commit baru sejak `feature` dibuat, sehingga Git cukup memindahkan penunjuk `main` ke ujung `feature` tanpa membuat merge commit", "Terjadi conflict berat", "File terhapus", "Git crash", "Rebase gagal"],
+    "correctAnswer": 0,
+    "explanation": "💡 Fast-forward terjadi jika cabang tujuan tidak memiliki commit baru yang berselisih."
+  },
+  {
+    "id": 36,
+    "category": "Git & DevOps",
+    "question": "Mengapa menuliskan pesan commit murni seperti 'fix bug' atau 'update' dianggap sebagai Anti-Pattern dalam tim pengembang?",
+    "options": ["Pesan commit yang samar menyulitkan penelusuran histori (traceability) dan audit mengapa perubahan tersebut dilakukan saat debugging di masa depan", "Git akan menolak commit", "Vercel akan error", "Ukuran file membengkak", "Branch akan terhapus"],
+    "correctAnswer": 0,
+    "explanation": "💡 Conventional Commits mendorong pesan deskriptif (misal: `fix(auth): fix jwt expiration check`)."
+  },
+  {
+    "id": 37,
+    "category": "Git & DevOps",
+    "question": "Dalam perancangan Dockerfile, mengapa urutan instruksi `COPY package.json ./` dan `RUN npm install` diletakkan SEBELUM `COPY . .`?",
+    "options": ["Agar Docker dapat memanfaatkan Caching Layer untuk `node_modules` sehingga `npm install` tidak perlu diulang jika hanya kodingan yang berubah!", "Agar Dockerfile lebih pendek", "Persyaratan wajib Node.js", "Agar gambar lebih kecil", "Mencegah error sintaks"],
+    "correctAnswer": 0,
+    "explanation": "💡 Docker Caching Layer melewatkan `npm install` yang lambat jika `package.json` tidak berubah."
+  },
+  {
+    "id": 38,
+    "category": "Git & DevOps",
+    "question": "Strategi Multi-Stage Build pada Dockerfile bertujuan untuk...",
+    "options": ["Menghasilkan Docker Image berukuran sangat kecil di stage akhir dengan membuang alat-alat build (compiler/SDK) dari stage pengembangan", "Menjalankan 10 kontainer bersamaan", "Membuat 10 branch Git", "Mengacak password kontainer", "Menghapus Dockerfile"],
+    "correctAnswer": 0,
+    "explanation": "💡 Multi-stage build hanya menyalin hasil kompilasi akhir ke runtime image yang ramping."
+  },
+  {
+    "id": 39,
+    "category": "Git & DevOps",
+    "question": "Prinsip 'Infrastructure as Code' (IaC) yang diterapkan oleh alat seperti Terraform atau Ansible berarti...",
+    "options": ["Pengelolaan dan konfigurasi infrastruktur server (VM, Firewall, Network) didefinisikan menggunakan file deklaratif yang di-version-control via Git", "Server dibuat manual lewat GUI", "Server koding pakai HTML", "Menghapus cloud provider", "Koding di terminal"],
+    "correctAnswer": 0,
+    "explanation": "💡 IaC memodelkan server sebagai berkas konfigurasi teruji dan dapat diulang."
+  },
+  {
+    "id": 40,
+    "category": "Git & DevOps",
+    "question": "Perintah `git reflog` adalah alat penyelamat bagi pengembang karena `git reflog`...",
+    "options": ["Mencatat seluruh pergerakan penunjuk HEAD di repositori lokal, memungkinkan pemulihan commit atau branch yang sengaja/tidak sengaja terhapus via `git reset --hard`!", "Menghapus seluruh file", "Mengunggah kode ke server", "Menyimpan password", "Mengompres git"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git reflog` mencatat pergerakan HEAD lokal dan memulihkan commit terbuang."
+  },
+  {
+    "id": 41,
+    "category": "Git & DevOps",
+    "question": "Dalam strategi Deployment, teknik 'Blue-Green Deployment' berfungsi untuk...",
+    "options": ["Meminimalkan downtime dengan menyiap dua lingkungan identik (Blue & Green); saat Green di-update, trafik dipindahkan seketika dari Blue ke Green", "Menghapus server lama", "Membuat web berwarna hijau", "Menguji kode di browser", "Mengacak IP server"],
+    "correctAnswer": 0,
+    "explanation": "💡 Blue-Green deployment menghilangkan downtime rilis dengan switching router trafik."
+  },
+  {
+    "id": 42,
+    "category": "Git & DevOps",
+    "question": "Teknik 'Canary Deployment' pada peluncuran software berarti...",
+    "options": ["Merilis pembaruan aplikasi baru ke SEBAGIAN KECIL persentase pengguna (misal 5%) terlebih dahulu untuk memantau error sebelum dirilis masal ke 100% pengguna", "Merilis aplikasi jam 5 pagi", "Merilis khusus browser Chrome", "Merilis tanpa testing", "Merilis via email"],
+    "correctAnswer": 0,
+    "explanation": "💡 Canary Deployment menguji rilis baru pada sampel trafik kecil untuk mitigasi risiko."
+  },
+  {
+    "id": 43,
+    "category": "Git & DevOps",
+    "question": "Dalam pengoperasian Docker, perbedaan perintah `CMD` dan `ENTRYPOINT` di Dockerfile adalah...",
+    "options": ["`ENTRYPOINT` menentukan perintah utama yang selalu dieksekusi saat kontainer jalan, sedangkan `CMD` menyediakan argumen default yang dapat di-override saat `docker run`", "CMD khusus Linux", "ENTRYPOINT hanya untuk windows", "Keduanya persis sama", "CMD lebih cepat"],
+    "correctAnswer": 0,
+    "explanation": "💡 ENTRYPOINT tidak mudah di-override, CMD menyediakan argumen default."
+  },
+  {
+    "id": 44,
+    "category": "Git & DevOps",
+    "question": "Apa dampak dari menyertakan file rahasia `.env` ke dalam commit Git public di GitHub?",
+    "options": ["Kunci rahasia (Database URL, JWT Secret, API Key) akan terekspos publik dan siapapun dapat membajak infrastruktur cloud server Anda!", "GitHub akan mematikan PC", "Vercel akan menghapus akun", "Tidak ada dampak", "File otomatis dienkripsi"],
+    "correctAnswer": 0,
+    "explanation": "💡 Hardcoded `.env` di Git mengundang peretasan otomatis dalam hitungan detik."
+  },
+  {
+    "id": 45,
+    "category": "Git & DevOps",
+    "question": "Perintah `git clean -fd` berfungsi untuk...",
+    "options": ["Menghapus secara paksa seluruh file dan direktori baru yang belum dilacak (Untracked) dari Working Directory", "Menghapus commit", "Menghapus branch main", "Mengompres repositori", "Menyimpan ke stash"],
+    "correctAnswer": 0,
+    "explanation": "💡 `git clean -fd` membersihkan file & folder untracked dari area kerja."
+  }
+]

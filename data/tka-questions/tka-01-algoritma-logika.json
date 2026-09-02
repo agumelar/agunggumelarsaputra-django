@@ -1,0 +1,482 @@
+[
+  {
+    "id": 1,
+    "category": "Algoritma & Logika",
+    "question": "Langkah-langkah sistematis dan logis dalam menyelesaikan suatu masalah disebut...",
+    "options": ["Program", "Algoritma", "Flowchart", "Pseudocode", "Sintaksis"],
+    "correctAnswer": 1,
+    "explanation": "💡 Algoritma adalah urutan langkah logis yang disusun secara sistematis untuk menyelesaikan masalah."
+  },
+  {
+    "id": 2,
+    "category": "Algoritma & Logika",
+    "question": "Tipe data yang digunakan untuk menyimpan nilai bilangan bulat adalah...",
+    "options": ["Float", "String", "Integer", "Boolean", "Double"],
+    "correctAnswer": 2,
+    "explanation": "💡 Integer adalah tipe data khusus untuk bilangan bulat tanpa pecahan."
+  },
+  {
+    "id": 3,
+    "category": "Algoritma & Logika",
+    "question": "Di antara berikut ini, manakah yang BUKAN merupakan representasi dari algoritma?",
+    "options": ["Flowchart", "Pseudocode", "Bahasa Alami", "Database", "UML Activity Diagram"],
+    "correctAnswer": 3,
+    "explanation": "💡 Database adalah tempat penyimpanan data, bukan representasi logika algoritma."
+  },
+  {
+    "id": 4,
+    "category": "Algoritma & Logika",
+    "question": "Simbol jajar genjang (parallelogram) pada flowchart berfungsi untuk menunjukkan...",
+    "options": ["Proses", "Input/Output", "Keputusan", "Mulai/Selesai", "Konektor"],
+    "correctAnswer": 1,
+    "explanation": "💡 Jajar genjang digunakan untuk operasi Input dan Output data."
+  },
+  {
+    "id": 5,
+    "category": "Algoritma & Logika",
+    "question": "Simbol belah ketupat (diamond) pada flowchart berfungsi untuk...",
+    "options": ["Input", "Output", "Percabangan/Kondisi", "Konektor", "Proses Berulang"],
+    "correctAnswer": 2,
+    "explanation": "💡 Belah ketupat (Decision) digunakan untuk menyeleksi kondisi benar atau salah."
+  },
+  {
+    "id": 6,
+    "category": "Algoritma & Logika",
+    "question": "Tipe data yang memiliki dua nilai saja yaitu True atau False adalah...",
+    "options": ["Boolean", "Char", "String", "Double", "Integer"],
+    "correctAnswer": 0,
+    "explanation": "💡 Boolean hanya merepresentasikan nilai kebenaran: Benar (True) atau Salah (False)."
+  },
+  {
+    "id": 7,
+    "category": "Algoritma & Logika",
+    "question": "Variabel berfungsi sebagai...",
+    "options": ["Struktur pengulangan", "Alat pencetak teks", "Tempat penyimpanan data sementara di memori", "Penghubung antar flowchart", "Alat validasi logika"],
+    "correctAnswer": 2,
+    "explanation": "💡 Variabel adalah lokasi di memori yang digunakan untuk menampung data yang nilainya dapat berubah."
+  },
+  {
+    "id": 8,
+    "category": "Algoritma & Logika",
+    "question": "Operator yang digunakan untuk mencari sisa pembagian adalah...",
+    "options": ["/", "*", "% (Modulus)", "div", "mod()"],
+    "correctAnswer": 2,
+    "explanation": "💡 Modulus (%) mengembalikan sisa dari operasi pembagian."
+  },
+  {
+    "id": 9,
+    "category": "Algoritma & Logika",
+    "question": "Jika A = 5 dan B = 2, maka hasil dari A % B adalah...",
+    "options": ["2", "1", "2.5", "3", "0"],
+    "correctAnswer": 1,
+    "explanation": "💡 5 dibagi 2 adalah 2 sisa 1. Jadi 5 % 2 = 1."
+  },
+  {
+    "id": 10,
+    "category": "Algoritma & Logika",
+    "question": "Pada penulisan pseudocode, perintah untuk menerima masukan dari pengguna biasanya ditandai dengan kata...",
+    "options": ["PRINT", "READ / INPUT", "WRITE", "DISPLAY", "ECHO"],
+    "correctAnswer": 1,
+    "explanation": "💡 READ atau INPUT adalah konvensi pseudocode untuk membaca data masukan pengguna."
+  },
+  {
+    "id": 11,
+    "category": "Algoritma & Logika",
+    "question": "Konvensi penulisan nama variabel yang menggabungkan beberapa kata tanpa spasi, di mana kata pertama huruf kecil dan huruf pertama kata berikutnya besar disebut...",
+    "options": ["PascalCase", "snake_case", "camelCase", "kebab-case", "UPPER_CASE"],
+    "correctAnswer": 2,
+    "explanation": "💡 Contoh camelCase: totalHargaBarang."
+  },
+  {
+    "id": 12,
+    "category": "Algoritma & Logika",
+    "question": "Kumpulan karakter (teks) dalam pemrograman disimpan menggunakan tipe data...",
+    "options": ["Integer", "Boolean", "Float", "String", "Character"],
+    "correctAnswer": 3,
+    "explanation": "💡 String digunakan untuk menampung barisan karakter atau teks."
+  },
+  {
+    "id": 13,
+    "category": "Algoritma & Logika",
+    "question": "Hasil dari ekspresi logika: TRUE AND FALSE adalah...",
+    "options": ["TRUE", "FALSE", "ERROR", "NULL", "UNDEFINED"],
+    "correctAnswer": 1,
+    "explanation": "💡 Operator AND hanya bernilai TRUE jika kedua sisi bernilai TRUE."
+  },
+  {
+    "id": 14,
+    "category": "Algoritma & Logika",
+    "question": "Hasil dari ekspresi logika: TRUE OR FALSE adalah...",
+    "options": ["TRUE", "FALSE", "ERROR", "NULL", "UNDEFINED"],
+    "correctAnswer": 0,
+    "explanation": "💡 Operator OR akan bernilai TRUE jika setidaknya ada satu kondisi yang TRUE."
+  },
+  {
+    "id": 15,
+    "category": "Algoritma & Logika",
+    "question": "Operator logika NOT berfungsi untuk...",
+    "options": ["Membandingkan dua nilai", "Membalikkan nilai logika", "Menjumlahkan nilai Boolean", "Menghapus variabel", "Menggabungkan dua logika"],
+    "correctAnswer": 1,
+    "explanation": "💡 NOT (negasi) akan mengubah TRUE menjadi FALSE dan sebaliknya."
+  },
+  {
+    "id": 16,
+    "category": "Algoritma & Logika",
+    "question": "Struktur kontrol yang digunakan untuk mengeksekusi blok kode HANYA JIKA kondisinya terpenuhi (benar) adalah...",
+    "options": ["FOR", "WHILE", "IF", "DO-WHILE", "SWITCH"],
+    "correctAnswer": 2,
+    "explanation": "💡 Pernyataan IF digunakan untuk percabangan kondisional tunggal."
+  },
+  {
+    "id": 17,
+    "category": "Algoritma & Logika",
+    "question": "Struktur IF-ELSE IF-ELSE tepat digunakan ketika kita memiliki...",
+    "options": ["Satu kondisi saja", "Dua kondisi pasti benar", "Banyak pilihan kondisi yang saling bergantung", "Perulangan tanpa henti", "Struktur data Array"],
+    "correctAnswer": 2,
+    "explanation": "💡 IF-ELSE IF cocok untuk menyeleksi banyak kondisi berurutan seperti grade A, B, C."
+  },
+  {
+    "id": 18,
+    "category": "Algoritma & Logika",
+    "question": "Untuk mengevaluasi satu variabel terhadap banyak nilai tetap secara spesifik dan efisien, sebaiknya menggunakan...",
+    "options": ["Nested IF", "SWITCH-CASE", "FOR loop", "WHILE loop", "DO-WHILE"],
+    "correctAnswer": 1,
+    "explanation": "💡 SWITCH-CASE lebih rapi dan efisien dibanding banyak kondisi IF-ELSE IF pada satu variabel."
+  },
+  {
+    "id": 19,
+    "category": "Algoritma & Logika",
+    "question": "Apa yang terjadi jika kita tidak menggunakan keyword 'break' pada blok SWITCH-CASE di JavaScript/Java?",
+    "options": ["Error kompilasi", "Program berhenti", "Terjadi 'fall-through' mengeksekusi case berikutnya", "Akan me-return null", "Blok akan di-skip"],
+    "correctAnswer": 2,
+    "explanation": "💡 Tanpa 'break', eksekusi akan terus meluncur (fall-through) ke blok case di bawahnya meskipun kondisinya tidak cocok."
+  },
+  {
+    "id": 20,
+    "category": "Algoritma & Logika",
+    "question": "Operator ternary ( ? : ) merupakan bentuk ringkas dari...",
+    "options": ["FOR loop", "WHILE loop", "IF-ELSE", "SWITCH-CASE", "TRY-CATCH"],
+    "correctAnswer": 2,
+    "explanation": "💡 Kondisi ? nilai_jika_benar : nilai_jika_salah setara dengan blok IF-ELSE."
+  },
+  {
+    "id": 21,
+    "category": "Algoritma & Logika",
+    "question": "Perhatikan kode: if(x > 10 && x < 20). Kapan kondisi tersebut bernilai benar?",
+    "options": ["Jika x adalah 10", "Jika x adalah 20", "Jika x berada di antara 11 sampai 19", "Jika x di bawah 10", "Jika x lebih besar dari 20"],
+    "correctAnswer": 2,
+    "explanation": "💡 Syaratnya x harus lebih besar dari 10 DAN lebih kecil dari 20."
+  },
+  {
+    "id": 22,
+    "category": "Algoritma & Logika",
+    "question": "Jika kita ingin sebuah blok kode dijalankan ketika variabel 'nilai' lebih dari 75 ATAU variabel 'kehadiran' lebih dari 80, operator yang digunakan adalah...",
+    "options": ["&& (AND)", "|| (OR)", "== (EQUAL)", "!= (NOT EQUAL)", "=> (ARROW)"],
+    "correctAnswer": 1,
+    "explanation": "💡 OR (||) memastikan salah satu saja terpenuhi maka hasilnya benar."
+  },
+  {
+    "id": 23,
+    "category": "Algoritma & Logika",
+    "question": "Percabangan bersarang (Nested IF) berarti...",
+    "options": ["Banyak IF yang berjajar sejajar", "Ada IF di dalam blok IF lainnya", "IF yang diganti dengan SWITCH", "Menggabungkan FOR dan IF", "Sintaks IF yang salah"],
+    "correctAnswer": 1,
+    "explanation": "💡 Nested IF adalah kondisi bercabang di dalam kondisi bercabang lainnya."
+  },
+  {
+    "id": 24,
+    "category": "Algoritma & Logika",
+    "question": "Pada JavaScript, operator '===' berbeda dengan '==' karena '===' juga memeriksa...",
+    "options": ["Kecepatan variabel", "Tipe data dari variabel", "Lokasi memori variabel", "Nama variabel", "Ruang lingkup (scope) variabel"],
+    "correctAnswer": 1,
+    "explanation": "💡 Strict equality (===) memeriksa nilai sekaligus tipe datanya tanpa konversi tipe otomatis."
+  },
+  {
+    "id": 25,
+    "category": "Algoritma & Logika",
+    "question": "Perhatikan: let x = '5'; let y = 5; Hasil dari x === y adalah...",
+    "options": ["TRUE", "FALSE", "ERROR", "UNDEFINED", "NaN"],
+    "correctAnswer": 1,
+    "explanation": "💡 FALSE karena '5' adalah string, sedangkan 5 adalah number."
+  },
+  {
+    "id": 26,
+    "category": "Algoritma & Logika",
+    "question": "Apabila variabel 'hujan' bernilai TRUE dan 'payung' bernilai FALSE, maka ekspresi (hujan AND NOT payung) bernilai...",
+    "options": ["TRUE", "FALSE", "ERROR", "NULL", "1"],
+    "correctAnswer": 0,
+    "explanation": "💡 TRUE AND (NOT FALSE) -> TRUE AND TRUE -> TRUE."
+  },
+  {
+    "id": 27,
+    "category": "Algoritma & Logika",
+    "question": "Istilah untuk baris kode yang tidak pernah bisa dieksekusi karena logikanya tidak mungkin tercapai disebut...",
+    "options": ["Infinite Loop", "Dead Code / Unreachable Code", "Syntax Error", "Runtime Error", "Logical Bug"],
+    "correctAnswer": 1,
+    "explanation": "💡 Unreachable code sering terjadi jika ada statement setelah 'return' atau kondisi IF yang mustahil."
+  },
+  {
+    "id": 28,
+    "category": "Algoritma & Logika",
+    "question": "Kondisi 'if (x % 2 == 0)' sering digunakan untuk mengecek apakah bilangan x adalah...",
+    "options": ["Bilangan Prima", "Bilangan Ganjil", "Bilangan Genap", "Bilangan Negatif", "Bilangan Real"],
+    "correctAnswer": 2,
+    "explanation": "💡 Suatu bilangan adalah genap jika habis dibagi 2 (sisanya 0)."
+  },
+  {
+    "id": 29,
+    "category": "Algoritma & Logika",
+    "question": "Pada pseudocode, bagian ELSE akan dieksekusi apabila...",
+    "options": ["Kondisi IF di atasnya bernilai benar", "Kondisi IF di atasnya bernilai salah", "Terjadi perulangan", "Program telah selesai", "Tidak ada kondisi yang valid"],
+    "correctAnswer": 1,
+    "explanation": "💡 ELSE adalah alternatif mutlak jika kondisi IF tidak terpenuhi."
+  },
+  {
+    "id": 30,
+    "category": "Algoritma & Logika",
+    "question": "Struktur percabangan paling tidak cocok digunakan untuk...",
+    "options": ["Menyeleksi login user", "Mengulang pencetakan angka 1-100", "Menentukan kelulusan siswa", "Memilih menu makanan", "Mengecek status pembayaran"],
+    "correctAnswer": 1,
+    "explanation": "💡 Pencetakan berulang adalah tugas struktur perulangan (loop), bukan percabangan."
+  },
+  {
+    "id": 31,
+    "category": "Algoritma & Logika",
+    "question": "Struktur kontrol yang digunakan untuk mengulang sebuah blok instruksi selama kondisinya benar adalah...",
+    "options": ["IF-ELSE", "SWITCH", "WHILE", "RETURN", "BREAK"],
+    "correctAnswer": 2,
+    "explanation": "💡 WHILE adalah loop dasar yang berjalan selama evaluasi kondisinya TRUE."
+  },
+  {
+    "id": 32,
+    "category": "Algoritma & Logika",
+    "question": "Perbedaan utama WHILE dan DO-WHILE adalah...",
+    "options": ["WHILE tidak butuh kondisi", "DO-WHILE mengeksekusi blok kode minimal 1 kali", "WHILE mengeksekusi minimal 1 kali", "DO-WHILE hanya untuk string", "Keduanya sama saja"],
+    "correctAnswer": 1,
+    "explanation": "💡 Pada DO-WHILE, pengecekan kondisi dilakukan di akhir (setelah DO), jadi minimal jalan 1 kali."
+  },
+  {
+    "id": 33,
+    "category": "Algoritma & Logika",
+    "question": "Perulangan FOR sangat ideal digunakan ketika...",
+    "options": ["Jumlah perulangan tidak diketahui pasti", "Kondisi bergantung pada input user saat itu", "Jumlah iterasi sudah diketahui secara pasti (fixed)", "Ingin membuat percabangan", "Program membutuhkan input tak terbatas"],
+    "correctAnswer": 2,
+    "explanation": "💡 FOR sangat efisien untuk counter (penghitung) yang batas iterasi awal dan akhirnya jelas."
+  },
+  {
+    "id": 34,
+    "category": "Algoritma & Logika",
+    "question": "Komponen utama dalam deklarasi FOR loop di bahasa C/Java adalah...",
+    "options": ["Inisialisasi, Kondisi, Terminasi", "Inisialisasi, Kondisi, Iterasi (Increment/Decrement)", "Kondisi, Eksekusi, Break", "Start, Run, Stop", "Setup, Execute, Teardown"],
+    "correctAnswer": 1,
+    "explanation": "💡 Contoh: for (let i = 0; i < 10; i++). Inisialisasi, Kondisi, Iterasi."
+  },
+  {
+    "id": 35,
+    "category": "Algoritma & Logika",
+    "question": "Operator i++ pada perulangan disebut sebagai...",
+    "options": ["Decrement", "Increment", "Assignment", "Logical", "Relational"],
+    "correctAnswer": 1,
+    "explanation": "💡 Increment (++) berfungsi untuk menambah nilai variabel sebesar 1."
+  },
+  {
+    "id": 36,
+    "category": "Algoritma & Logika",
+    "question": "Apa yang akan terjadi jika kondisi pada WHILE selalu bernilai TRUE tanpa ada instruksi perubahan di dalamnya?",
+    "options": ["Program akan error syntax", "Program akan berhenti perlahan", "Terjadi Infinite Loop (perulangan tanpa henti)", "Sistem akan otomatis me-restart PC", "Loop akan otomatis di-break oleh compiler"],
+    "correctAnswer": 2,
+    "explanation": "💡 Infinite loop terjadi saat kondisi keluar loop tidak pernah tercapai, membuat browser/program hang."
+  },
+  {
+    "id": 37,
+    "category": "Algoritma & Logika",
+    "question": "Keyword yang digunakan untuk MELOMPATI sisa instruksi di dalam loop dan melanjutkan ke iterasi berikutnya adalah...",
+    "options": ["break", "continue", "return", "pass", "skip"],
+    "correctAnswer": 1,
+    "explanation": "💡 Continue langsung melompat ke pengecekan kondisi/increment berikutnya."
+  },
+  {
+    "id": 38,
+    "category": "Algoritma & Logika",
+    "question": "Keyword yang digunakan untuk KELUAR secara paksa dari sebuah perulangan adalah...",
+    "options": ["break", "continue", "stop", "exit", "halt"],
+    "correctAnswer": 0,
+    "explanation": "💡 Break menghentikan eksekusi blok loop secara total."
+  },
+  {
+    "id": 39,
+    "category": "Algoritma & Logika",
+    "question": "Struktur data variabel yang dapat menyimpan sekumpulan nilai dalam satu nama dan diakses melalui indeks adalah...",
+    "options": ["Integer", "String", "Object", "Array", "Float"],
+    "correctAnswer": 3,
+    "explanation": "💡 Array (Larik) adalah kumpulan nilai berindeks."
+  },
+  {
+    "id": 40,
+    "category": "Algoritma & Logika",
+    "question": "Indeks pertama pada Array di hampir semua bahasa pemrograman dimulai dari angka...",
+    "options": ["-1", "0", "1", "Tidak berindeks", "Panjang Array"],
+    "correctAnswer": 1,
+    "explanation": "💡 Array bersifat zero-indexed (indeks dimulai dari 0)."
+  },
+  {
+    "id": 41,
+    "category": "Algoritma & Logika",
+    "question": "Untuk mengakses elemen ke-5 dari array 'data', penulisannya adalah...",
+    "options": ["data[5]", "data(5)", "data[4]", "data{5}", "data<5>"],
+    "correctAnswer": 2,
+    "explanation": "💡 Karena indeks mulai dari 0, elemen ke-5 berada pada indeks ke-4."
+  },
+  {
+    "id": 42,
+    "category": "Algoritma & Logika",
+    "question": "Perulangan bersarang (Nested Loop) sering digunakan untuk menangani kasus seperti...",
+    "options": ["Mengisi password", "Mencetak elemen pada matriks (Array 2 Dimensi)", "Menghitung luas lingkaran", "Mencari panjang string", "Menghapus data di database"],
+    "correctAnswer": 1,
+    "explanation": "💡 Iterasi matriks butuh baris (loop luar) dan kolom (loop dalam)."
+  },
+  {
+    "id": 43,
+    "category": "Algoritma & Logika",
+    "question": "Berapa kali kata 'Halo' dicetak: for(i=1; i<=3; i++) { for(j=1; j<=3; j++) { print('Halo') } } ?",
+    "options": ["3 kali", "6 kali", "9 kali", "12 kali", "27 kali"],
+    "correctAnswer": 2,
+    "explanation": "💡 Loop luar berjalan 3 kali. Setiap iterasi luar, loop dalam jalan 3 kali. 3 x 3 = 9."
+  },
+  {
+    "id": 44,
+    "category": "Algoritma & Logika",
+    "question": "Perulangan FOR EACH biasanya diperuntukkan secara khusus bagi...",
+    "options": ["Integer counting", "Array / Iterable Collection", "Boolean check", "Infinite loop", "Recursive function"],
+    "correctAnswer": 1,
+    "explanation": "💡 forEach digunakan untuk menelusuri tiap elemen array secara langsung tanpa counter manual."
+  },
+  {
+    "id": 45,
+    "category": "Algoritma & Logika",
+    "question": "Pada flowchart, struktur perulangan dikenali dengan adanya arah panah yang...",
+    "options": ["Berakhir di Terminator", "Mengarah kembali (berbalik) ke proses sebelumnya", "Bercabang dua namun lurus ke bawah", "Terputus", "Menghilang dari garis utama"],
+    "correctAnswer": 1,
+    "explanation": "💡 Panah balik (loopback) adalah ciri khas perulangan di diagram alir."
+  },
+  {
+    "id": 46,
+    "category": "Algoritma & Logika",
+    "question": "Tracing Code: let a=2, b=3; a = a + b; b = a - b; a = a - b; Nilai a dan b sekarang adalah...",
+    "options": ["a=5, b=2", "a=3, b=2", "a=2, b=3", "a=0, b=0", "a=5, b=3"],
+    "correctAnswer": 1,
+    "explanation": "💡 Ini adalah algoritma menukar nilai variabel tanpa variabel bantuan (swap). Hasilnya a=3, b=2."
+  },
+  {
+    "id": 47,
+    "category": "Algoritma & Logika",
+    "question": "Fungsi yang memanggil dirinya sendiri secara terus-menerus hingga mencapai kondisi basis (base case) disebut...",
+    "options": ["Iterative", "Recursive", "Generative", "Responsive", "Reactive"],
+    "correctAnswer": 1,
+    "explanation": "💡 Fungsi rekursif (misal faktorial) memanggil dirinya sendiri."
+  },
+  {
+    "id": 48,
+    "category": "Algoritma & Logika",
+    "question": "Tracing: function f(n) { if (n <= 1) return 1; return n * f(n-1); } Hasil dari f(4) adalah...",
+    "options": ["4", "10", "16", "24", "120"],
+    "correctAnswer": 3,
+    "explanation": "💡 Ini adalah fungsi Faktorial. f(4) = 4 * f(3) = 4 * 3 * 2 * 1 = 24."
+  },
+  {
+    "id": 49,
+    "category": "Algoritma & Logika",
+    "question": "Tracing loop: let x=0; while(x < 5){ x+=2; } Berapa nilai akhir x setelah loop selesai?",
+    "options": ["4", "5", "6", "Infinite", "0"],
+    "correctAnswer": 2,
+    "explanation": "💡 x=0 -> x=2 -> x=4 -> x=6. Saat x=6 kondisi (6<5) FALSE, loop berhenti. x bernilai 6."
+  },
+  {
+    "id": 50,
+    "category": "Algoritma & Logika",
+    "question": "Sebuah array memiliki elemen: [5, 2, 8, 1, 9]. Algoritma pengurutan yang membandingkan dua elemen bersebelahan secara terus-menerus dan menukarnya jika salah posisi adalah...",
+    "options": ["Selection Sort", "Bubble Sort", "Merge Sort", "Quick Sort", "Insertion Sort"],
+    "correctAnswer": 1,
+    "explanation": "💡 Bubble sort beroperasi dengan mengecek pasangan bersebelahan hingga terbesar 'menggelembung' ke atas."
+  },
+  {
+    "id": 51,
+    "category": "Algoritma & Logika",
+    "question": "Algoritma pencarian yang mengharuskan data sudah terurut (sorted) sebelum dapat dilakukan pencarian dengan cara membagi dua area pencarian adalah...",
+    "options": ["Linear Search", "Binary Search", "Hash Search", "Depth First Search", "Breadth First Search"],
+    "correctAnswer": 1,
+    "explanation": "💡 Binary search memerlukan kondisi data pre-sorted untuk mengeleminasi setengah area pada setiap langkah."
+  },
+  {
+    "id": 52,
+    "category": "Algoritma & Logika",
+    "question": "Tracing: let arr=[1,2,3]; arr.push(4); arr.pop(); Berapakah elemen terakhir arr sekarang?",
+    "options": ["1", "2", "3", "4", "Undefined"],
+    "correctAnswer": 2,
+    "explanation": "💡 Push menambah 4. Pop membuang 4 (elemen terakhir). Sisa [1,2,3], elemen terakhir adalah 3."
+  },
+  {
+    "id": 53,
+    "category": "Algoritma & Logika",
+    "question": "Struktur data Antrean (Queue) beroperasi dengan prinsip FIFO. Artinya...",
+    "options": ["Masuk terakhir, Keluar pertama", "Masuk pertama, Keluar terakhir", "Masuk pertama, Keluar pertama", "Akses bebas", "Keluar acak"],
+    "correctAnswer": 2,
+    "explanation": "💡 FIFO = First In First Out. Antrean pelanggan masuk duluan dilayani duluan."
+  },
+  {
+    "id": 54,
+    "category": "Algoritma & Logika",
+    "question": "Dalam analisis kompleksitas, Big-O Notation 'O(1)' berarti...",
+    "options": ["Waktu eksekusi meningkat linear dengan data", "Waktu eksekusi selalu konstan terlepas dari besarnya data", "Waktu eksekusi kuadratik", "Program tidak dapat dieksekusi", "Eksekusi bergantung memori CPU"],
+    "correctAnswer": 1,
+    "explanation": "💡 O(1) berarti Constant Time. Operasi sangat efisien."
+  },
+  {
+    "id": 55,
+    "category": "Algoritma & Logika",
+    "question": "Sebuah program mengandung Nested Loop ganda: for(1..N){ for(1..N){ ... } }. Kompleksitas waktu Big-O dari program ini kemungkinan besar adalah...",
+    "options": ["O(1)", "O(log N)", "O(N)", "O(N^2)", "O(N!)"],
+    "correctAnswer": 3,
+    "explanation": "💡 Loop di dalam loop dengan panjang N menghasilkan iterasi N * N = O(N kuadrat)."
+  },
+  {
+    "id": 56,
+    "category": "Algoritma & Logika",
+    "question": "Mencari nama 'Zaki' di buku telepon dengan membaliknya halaman per halaman dari depan adalah contoh dari algoritma...",
+    "options": ["Binary Search", "Linear / Sequential Search", "Interpolation Search", "Hashing", "Tree Traversal"],
+    "correctAnswer": 1,
+    "explanation": "💡 Sequential search mencari secara urut satu per satu dari awal."
+  },
+  {
+    "id": 57,
+    "category": "Algoritma & Logika",
+    "question": "Tracing: let s = ''; for(let i=0; i<3; i++) { s += '*'; } console.log(s); Hasilnya?",
+    "options": ["*", "***", "*\n*\n*", "3*", "Error"],
+    "correctAnswer": 1,
+    "explanation": "💡 Loop berjalan 3x dan menyambung string '*' tanpa pindah baris, menjadi '***'."
+  },
+  {
+    "id": 58,
+    "category": "Algoritma & Logika",
+    "question": "Kesalahan logika dalam algoritma (Logical Error) akan menyebabkan...",
+    "options": ["Program tidak bisa dikompilasi (build failed)", "Program berjalan tapi output/hasil tidak sesuai harapan", "Program crash di awal karena syntax", "Komputer mengalami hang keras", "Layar bluescreen"],
+    "correctAnswer": 1,
+    "explanation": "💡 Logical error tidak melanggar aturan sintaks, sehingga program tetap jalan namun hasil salah (misal rumus salah)."
+  },
+  {
+    "id": 59,
+    "category": "Algoritma & Logika",
+    "question": "Jika sebuah algoritma membutuhkan waktu yang eksponensial O(2^N) untuk data yang sedikit bertambah, hal ini menandakan bahwa algoritma tersebut...",
+    "options": ["Sangat lambat dan tidak efisien untuk data besar", "Sangat cepat dan efisien", "Pilihan terbaik di industri", "Berjalan konstan", "Selalu O(1) di server mahal"],
+    "correctAnswer": 0,
+    "explanation": "💡 O(2^N) adalah salah satu kompleksitas terburuk (Eksponensial), waktu membludak sangat cepat saat N bertambah."
+  },
+  {
+    "id": 60,
+    "category": "Algoritma & Logika",
+    "question": "Untuk menghindari Infinite Recursion (rekursif tanpa henti), setiap fungsi rekursif wajib memiliki...",
+    "options": ["Base Case (Kondisi Berhenti)", "For Loop", "Global Variable", "Tipe data Float", "Try Catch Block"],
+    "correctAnswer": 0,
+    "explanation": "💡 Base case adalah kondisi if di dalam fungsi rekursif yang memerintahkannya berhenti memanggil dirinya lagi dan mulai mengembalikan nilai akhir."
+  }
+]

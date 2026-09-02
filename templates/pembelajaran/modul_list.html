@@ -67,7 +67,7 @@
         {% for modul in modul_list %}
         <div 
             x-show="(searchQuery === '' || '{{ modul.judul|lower }}'.includes(searchQuery.toLowerCase()) || '{{ modul.kode|lower }}'.includes(searchQuery.toLowerCase())) && (selectedCategory === 'all' || (selectedCategory === 'Sprint 1' && {{ modul.urutan }} <= 8) || (selectedCategory === 'Sprint 2' && {{ modul.urutan }} > 8))"
-            class="m3-surface m3-surface-hover p-6 flex flex-col justify-between group transition-all"
+            class="m3-surface {% if modul.id in unlocked_modul_ids %}m3-surface-hover{% else %}opacity-75 border-dashed{% endif %} p-6 flex flex-col justify-between group transition-all rounded-3xl"
         >
             <div class="space-y-3">
                 
@@ -78,11 +78,16 @@
                     </span>
                     <div class="flex items-center gap-2">
                         {% if modul.id in completed_modul_ids %}
-                        <span class="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            Selesai
+                        <span class="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                            ✓ Selesai
+                        </span>
+                        {% elif modul.id in unlocked_modul_ids %}
+                        <span class="inline-flex items-center gap-1 text-[11px] text-primary font-semibold bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
+                            🚀 Siap Dipelajari
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-1 text-[11px] text-gray-500 font-semibold bg-surface-lowest px-2 py-0.5 rounded-full border border-outline-variant">
+                            🔒 Terkunci
                         </span>
                         {% endif %}
                         <span class="text-amber-600 dark:text-amber-400 font-semibold">+{{ modul.total_xp }} XP</span>
@@ -91,7 +96,7 @@
 
                 <!-- Title & Meta -->
                 <div class="space-y-1">
-                    <h2 class="text-base font-bold font-display text-foreground group-hover:text-primary transition-colors leading-snug">
+                    <h2 class="text-base font-bold font-display text-foreground {% if modul.id in unlocked_modul_ids %}group-hover:text-primary{% endif %} transition-colors leading-snug">
                         {{ modul.judul }}
                     </h2>
                     <p class="text-[11px] text-gray-500 font-mono">
@@ -111,15 +116,21 @@
                 <div class="flex items-center justify-between text-[11px] font-mono text-gray-500">
                     <span>Materi ({% if modul.id in completed_modul_ids %}<span class="text-emerald-500 font-bold">✓</span>{% else %}○{% endif %})</span>
                     <span>LKPD ({% if modul.id in submitted_lkpd_ids %}<span class="text-emerald-500 font-bold">✓</span>{% else %}○{% endif %})</span>
-                    <span>Refleksi</span>
+                    <span>Refleksi ({% if modul.id in completed_modul_ids %}<span class="text-emerald-500 font-bold">✓</span>{% else %}○{% endif %})</span>
                 </div>
 
-                <a href="{% url 'pembelajaran:modul_detail' modul.slug %}" class="m3-btn-primary w-full text-xs py-2">
+                {% if modul.id in unlocked_modul_ids %}
+                <a href="{% url 'pembelajaran:modul_detail' modul.slug %}" class="m3-btn-primary w-full text-xs py-2 justify-center">
                     <span>Buka 4-Tab Reader</span>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
                 </a>
+                {% else %}
+                <a href="{% url 'pembelajaran:modul_detail' modul.slug %}" class="m3-btn-outlined w-full text-xs py-2 justify-center text-gray-500 border-outline-variant hover:bg-surface-lowest">
+                    <span>🔒 Selesaikan Modul Prasyarat</span>
+                </a>
+                {% endif %}
             </div>
 
         </div>

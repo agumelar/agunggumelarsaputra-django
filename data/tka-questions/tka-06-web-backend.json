@@ -1,0 +1,482 @@
+[
+  {
+    "id": 1,
+    "category": "Web Dev Lanjutan",
+    "question": "Metode HTTP yang digunakan untuk MEMINTA (mengambil) data dari server tanpa mengubah state data di server adalah...",
+    "options": ["POST", "GET", "PUT", "DELETE", "PATCH"],
+    "correctAnswer": 1,
+    "explanation": "💡 GET digunakan khusus untuk murni membaca/mengambil data (safe & idempotent)."
+  },
+  {
+    "id": 2,
+    "category": "Web Dev Lanjutan",
+    "question": "Metode HTTP yang digunakan untuk MENGIRIM data baru ke server untuk membuat resource baru di database adalah...",
+    "options": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "correctAnswer": 1,
+    "explanation": "💡 POST digunakan untuk mengirimkan payload data baru ke server."
+  },
+  {
+    "id": 3,
+    "category": "Web Dev Lanjutan",
+    "question": "Metode HTTP yang digunakan untuk MEMPERBARUI (mengganti secara keseluruhan) suatu resource yang ada adalah...",
+    "options": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    "correctAnswer": 2,
+    "explanation": "💡 PUT mengganti seluruh representasi resource target."
+  },
+  {
+    "id": 4,
+    "category": "Web Dev Lanjutan",
+    "question": "Metode HTTP yang digunakan untuk memperbarui data HANYA SEBAGIAN (partial update) atribut saja dinamakan...",
+    "options": ["PUT", "PATCH", "POST", "UPDATE", "MODIFY"],
+    "correctAnswer": 1,
+    "explanation": "💡 PATCH diperuntukkan bagi pembaruan parsial pada atribut tertentu."
+  },
+  {
+    "id": 5,
+    "category": "Web Dev Lanjutan",
+    "question": "Kode status HTTP (HTTP Status Code) `200 OK` menandakan bahwa...",
+    "options": ["Request berhasil dan server mengembalikan respon yang diminta", "Resource tidak ditemukan", "Server mengalami error internal", "Pengguna belum login", "Request dilarang"],
+    "correctAnswer": 0,
+    "explanation": "💡 200 OK adalah status baku keberhasilan pemrosesan HTTP request."
+  },
+  {
+    "id": 6,
+    "category": "Web Dev Lanjutan",
+    "question": "Kode status HTTP `201 Created` biasanya dikembalikan oleh REST API setelah sukses mengeksekusi metode...",
+    "options": ["GET", "POST (pembuatan data baru)", "DELETE", "OPTIONS", "HEAD"],
+    "correctAnswer": 1,
+    "explanation": "💡 201 Created menandakan request berhasil dan pembuatan resource baru tuntas."
+  },
+  {
+    "id": 7,
+    "category": "Web Dev Lanjutan",
+    "question": "Kode status HTTP `404 Not Found` menandakan bahwa...",
+    "options": ["Server down", "Resource URL yang diminta tidak ditemukan di server", "Password pengguna salah", "Format JSON salah", "Akses dilarang"],
+    "correctAnswer": 1,
+    "explanation": "💡 404 Not Found berarti server tidak menemukan URI endpoint yang diminta client."
+  },
+  {
+    "id": 8,
+    "category": "Web Dev Lanjutan",
+    "question": "Kode status HTTP `401 Unauthorized` menandakan bahwa...",
+    "options": ["Resource tidak ada", "Client belum melakukan autentikasi (belum login / token tidak valid)", "Server sedang maintenance", "Format data salah", "Metode HTTP tidak diizinkan"],
+    "correctAnswer": 1,
+    "explanation": "💡 401 Unauthorized mengindikasikan kredensial autentikasi tidak ada atau tidak sah."
+  },
+  {
+    "id": 9,
+    "category": "Web Dev Lanjutan",
+    "question": "Kode status HTTP `403 Forbidden` menandakan bahwa...",
+    "options": ["Client belum login", "Client sudah terautentikasi tetapi TIDAK MEMILIKI HAK AKSES (otorisasi) ke resource tersebut", "Server crash", "Koneksi terputus", "Data berhasil dihapus"],
+    "correctAnswer": 1,
+    "explanation": "💡 403 Forbidden terjadi saat server mengenali user tetapi menolak memberikan akses."
+  },
+  {
+    "id": 10,
+    "category": "Web Dev Lanjutan",
+    "question": "Kode status HTTP `500 Internal Server Error` mengindikasikan bahwa...",
+    "options": ["Kesalahan ada di sisi input client", "Terjadi crash/unhandled exception di sisi aplikasi server", "URL salah", "Database kosong", "Koneksi internet client putus"],
+    "correctAnswer": 1,
+    "explanation": "💡 500 menandakan kegagalan pemrosesan tak terduga di server."
+  },
+  {
+    "id": 11,
+    "category": "Web Dev Lanjutan",
+    "question": "Format pertukaran data berbasis teks ringan yang paling populer digunakan dalam komunikasi REST API adalah...",
+    "options": ["XML", "JSON (JavaScript Object Notation)", "CSV", "YAML", "HTML"],
+    "correctAnswer": 1,
+    "explanation": "💡 JSON adalah format standar industri komunikasi REST API."
+  },
+  {
+    "id": 12,
+    "category": "Web Dev Lanjutan",
+    "question": "Metode Fetch API browser JavaScript `fetch(url)` mengembalikan sebuah kembalian berupa...",
+    "options": ["String JSON langsung", "Promise yang menyelesaikan objek Response", "Array objek", "Boolean true/false", "XML Document"],
+    "correctAnswer": 1,
+    "explanation": "💡 `fetch()` bersifat asynchronous dan me-return sebuah Promise."
+  },
+  {
+    "id": 13,
+    "category": "Web Dev Lanjutan",
+    "question": "Fungsi middleware pada framework Node.js (seperti Express.js) adalah...",
+    "options": ["Fungsi yang memiliki akses ke objek Request, Response, dan fungsi `next()` untuk memproses request di tengah jalan", "Fungsi untuk membuat tabel database", "Fungsi untuk merender HTML di browser", "Fungsi untuk mengacak password", "Fungsi untuk mengganti CSS"],
+    "correctAnswer": 0,
+    "explanation": "💡 Middleware bertindak sebagai perantara pemroses request sebelum mencapai route handler akhir."
+  },
+  {
+    "id": 14,
+    "category": "Web Dev Lanjutan",
+    "question": "Header HTTP yang digunakan client untuk mengirimkan token autentikasi (misal Bearer Token) ke server adalah...",
+    "options": ["Content-Type", "Authorization", "Accept", "User-Agent", "Host"],
+    "correctAnswer": 1,
+    "explanation": "💡 Header `Authorization: Bearer <token>` digunakan untuk otentikasi."
+  },
+  {
+    "id": 15,
+    "category": "Web Dev Lanjutan",
+    "question": "Header HTTP `Content-Type: application/json` memberitahu server bahwa...",
+    "options": ["Client meminta file gambar", "Body pesan yang dikirim berformat JSON", "Koneksi bersifat rahasia", "Response berukuran 100kb", "Client menggunakan browser Chrome"],
+    "correctAnswer": 1,
+    "explanation": "💡 `Content-Type` memberitahukan media type dari body payload yang dikirim."
+  },
+  {
+    "id": 16,
+    "category": "Web Dev Lanjutan",
+    "question": "Standar industri terbuka untuk representasi klaim keamanan secara aman antara dua pihak yang terdiri dari 3 bagian (Header, Payload, Signature) dinamakan...",
+    "options": ["JWT (JSON Web Token)", "API Key", "Session Cookie", "Basic Auth", "OAuth1"],
+    "correctAnswer": 0,
+    "explanation": "💡 JWT terdiri dari 3 komponen terpisah titik: Header.Payload.Signature."
+  },
+  {
+    "id": 17,
+    "category": "Web Dev Lanjutan",
+    "question": "Tiga bagian pembentuk struktur JSON Web Token (JWT) secara berurutan adalah...",
+    "options": ["Header, Payload, Signature", "Title, Body, Footer", "User, Pass, Secret", "Algorithm, Data, Key", "Token, Hash, Salt"],
+    "correctAnswer": 0,
+    "explanation": "💡 JWT = Header (algoritma) + Payload (data klaim) + Signature (verifikasi kunci rahasia)."
+  },
+  {
+    "id": 18,
+    "category": "Web Dev Lanjutan",
+    "question": "Apakah informasi (claims) di dalam bagian Payload JWT terenkripsi secara rahasia secara default?",
+    "options": ["Ya, sangat rahasia", "TIDAK terenkripsi, hanya di-encode dengan Base64Url sehingga BISA DIBACA oleh siapapun yang memiliki token!", "Hanya bisa dibaca oleh Google", "Hanya berupa angka", "Terdekripsi otomatis"],
+    "correctAnswer": 1,
+    "explanation": "💡 Payload JWT di-encode Base64Url, bukan terenkripsi! Jangan menyimpan password/data sensitif di payload."
+  },
+  {
+    "id": 19,
+    "category": "Web Dev Lanjutan",
+    "question": "Mekanisme keamanan browser yang membatasi skrip web di satu origin untuk meminta resource dari origin (domain/port) lain dinamakan...",
+    "options": ["XSS", "CORS (Cross-Origin Resource Sharing)", "CSRF", "CSP", "SameSite"],
+    "correctAnswer": 1,
+    "explanation": "💡 CORS adalah kebijakan keamanan browser untuk mengatur akses antar origin berbeda."
+  },
+  {
+    "id": 20,
+    "category": "Web Dev Lanjutan",
+    "question": "Jika frontend berjalan di `http://localhost:3000` dan memanggil backend di `http://localhost:5000`, browser akan memblokir request tersebut jika server tidak mengirimkan response header...",
+    "options": ["Access-Control-Allow-Origin: * (atau http://localhost:3000)", "Authorization: Bearer", "Content-Type: text/html", "Cache-Control: no-cache", "Set-Cookie: sessionid"],
+    "correctAnswer": 0,
+    "explanation": "💡 Header `Access-Control-Allow-Origin` wajib diizinkan server agar browser meloloskan panggilan CORS."
+  },
+  {
+    "id": 21,
+    "category": "Web Dev Lanjutan",
+    "question": "Prinsip utama arsitektur RESTful yang menyatakan bahwa server TIDAK menyimpan status sesi client di memori server antara request dinamakan...",
+    "options": ["Stateful", "Statelessness", "Cacheable", "Layered System", "Code on Demand"],
+    "correctAnswer": 1,
+    "explanation": "💡 Statelessness berarti setiap request dari client harus memuat seluruh informasi yang dibutuhkan server."
+  },
+  {
+    "id": 22,
+    "category": "Web Dev Lanjutan",
+    "question": "Keyword `async` sebelum deklarasi fungsi di JavaScript menandakan bahwa fungsi tersebut...",
+    "options": ["Berjalan secara synchronous", "SELALU mengembalikan sebuah Promise", "Tidak bisa memiliki parameter", "Berjalan di thread terpisah", "Otomatis di-loop"],
+    "correctAnswer": 1,
+    "explanation": "💡 Fungsi `async` otomatis mengembalikan Promise yang membungkus nilai return-nya."
+  },
+  {
+    "id": 23,
+    "category": "Web Dev Lanjutan",
+    "question": "Keyword `await` HANYA dapat digunakan di dalam...",
+    "options": ["Fungsi biasa synchronous", "Fungsi yang dideklarasikan dengan keyword `async`", "Blok for loop biasa", "Di dalam file CSS", "Di dalam tag HTML nav"],
+    "correctAnswer": 1,
+    "explanation": "💡 `await` menunda eksekusi dalam async function hingga Promise tuntas (resolved/rejected)."
+  },
+  {
+    "id": 24,
+    "category": "Web Dev Lanjutan",
+    "question": "Manakah penanganan error (error handling) yang tepat saat menggunakan `async/await` di JavaScript?",
+    "options": ["Menggunakan blok `try { ... } catch (error) { ... }`", "Menggunakan if(error)", "Menggunakan event.onerror", "Tidak perlu error handling", "Menggunakan return null"],
+    "correctAnswer": 0,
+    "explanation": "💡 Blok `try...catch` adalah cara standar menangani rejeksi Promise pada `async/await`."
+  },
+  {
+    "id": 25,
+    "category": "Web Dev Lanjutan",
+    "question": "Di Express.js, bagaimana cara mengambil parameter URL dari route `/users/:id`?",
+    "options": ["req.body.id", "req.params.id", "req.query.id", "req.headers.id", "req.get('id')"],
+    "correctAnswer": 1,
+    "explanation": "💡 `req.params` menampung parameter variabel path URL (`:id`)."
+  },
+  {
+    "id": 26,
+    "category": "Web Dev Lanjutan",
+    "question": "Bagaimana cara mengambil query string dari URL `/products?category=shoes` di Express.js?",
+    "options": ["req.params.category", "req.query.category", "req.body.category", "req.get('shoes')", "req.search"],
+    "correctAnswer": 1,
+    "explanation": "💡 `req.query` menampung nilai query string URL setelah tanda tanya `?`."
+  },
+  {
+    "id": 27,
+    "category": "Web Dev Lanjutan",
+    "question": "Bagaimana cara mengambil data payload JSON yang dikirim client via method POST di Express.js?",
+    "options": ["req.params", "req.query", "req.body (dengan bantuan middleware `express.json()`)", "req.payload", "req.data"],
+    "correctAnswer": 2,
+    "explanation": "💡 `req.body` berisi payload masukan POST/PUT setelah diparse oleh `express.json()`."
+  },
+  {
+    "id": 28,
+    "category": "Web Dev Lanjutan",
+    "question": "Protokol standar untuk otorisasi delegasi pihak ketiga (seperti 'Login dengan Google' atau 'Login dengan GitHub') dinamakan...",
+    "options": ["OAuth 2.0", "JWT", "Basic Auth", "SAML", "OpenID Connect"],
+    "correctAnswer": 0,
+    "explanation": "💡 OAuth 2.0 adalah kerangka kerja otorisasi standar untuk akses delegasi."
+  },
+  {
+    "id": 29,
+    "category": "Web Dev Lanjutan",
+    "question": "Mekanisme pengamanan cookie dengan atribut `HttpOnly` berfungsi untuk...",
+    "options": ["Mencegah cookie dibaca/diakses oleh skrip JavaScript di browser (mencegah pencurian cookie via XSS)", "Mencegah cookie dikirim lewat HTTPS", "Membuat cookie bertahan 100 tahun", "Mengompres ukuran cookie", "Menyimpan cookie di server"],
+    "correctAnswer": 0,
+    "explanation": "💡 Cookie `HttpOnly` ditutup dari akses `document.cookie` di JS, menangkal pencurian session token via XSS."
+  },
+  {
+    "id": 30,
+    "category": "Web Dev Lanjutan",
+    "question": "Atribut cookie `SameSite=Strict` berfungsi untuk...",
+    "options": ["Mencetak cookie di terminal", "Mencegah browser mengikutkan cookie pada cross-site request (mencegah serangan CSRF)", "Membuat cookie expired 1 jam", "Mengenkripsi isi cookie", "Mematikan CORS"],
+    "correctAnswer": 1,
+    "explanation": "💡 `SameSite=Strict` menangkal serangan Cross-Site Request Forgery (CSRF)."
+  },
+  {
+    "id": 31,
+    "category": "Web Dev Lanjutan",
+    "question": "Tracing Fetch API:\n`async function getData() {\n  const res = await fetch('/api/data');\n  const data = await res.json();\n  console.log(data);\n}`\nMengapa kita butuh `await` DUA KALI pada fungsi di atas?",
+    "options": ["Hanya syarat sintaks JS", "Pemanggilan `fetch()` mengembalikan Promise Objek Response, dan `res.json()` JUGA mengembalikan Promise hasil parse body JSON!", "Agar kode berjalan lebih lambat", "Untuk mencegah CORS", "Untuk membuat variabel const"],
+    "correctAnswer": 1,
+    "explanation": "💡 Baik koneksi HTTP `fetch()` maupun pembacaan stream body `res.json()` keduanya bernilai asynchronous Promise."
+  },
+  {
+    "id": 32,
+    "category": "Web Dev Lanjutan",
+    "question": "Strategi API Versioning yang paling umum dan bersih direkomendasikan pada URL REST API adalah...",
+    "options": ["Menaruh versi di URL path (contoh: `/api/v1/users` dan `/api/v2/users`)", "Mengubah nama database", "Mengganti nama domain", "Menghapus API lama", "Menggunakan nama file berlainan"],
+    "correctAnswer": 0,
+    "explanation": "💡 URI Versioning (`/api/v1/...`) menjaga backward-compatibility aplikasi lama tanpa mengganggu versi baru."
+  },
+  {
+    "id": 33,
+    "category": "Web Dev Lanjutan",
+    "question": "Teknik pembatasan jumlah request HTTP dari 1 IP address dalam rentang waktu tertentu pada server API dinamakan...",
+    "options": ["Rate Limiting", "Load Balancing", "API Gateway", "Caching", "Reverse Proxy"],
+    "correctAnswer": 0,
+    "explanation": "💡 Rate Limiting melindungi API dari penyalahgunaan (DDoS/Spam request) dengan membatasi quota request."
+  },
+  {
+    "id": 34,
+    "category": "Web Dev Lanjutan",
+    "question": "Kode status HTTP yang dikembalikan server ketika client MELAMPAUI batas quota Rate Limiting adalah...",
+    "options": ["400 Bad Request", "401 Unauthorized", "429 Too Many Requests", "503 Service Unavailable", "408 Request Timeout"],
+    "correctAnswer": 2,
+    "explanation": "💡 429 Too Many Requests dikembalikan saat client melebihi quota rate limit."
+  },
+  {
+    "id": 35,
+    "category": "Web Dev Lanjutan",
+    "question": "Dalam arsitektur Microservices, komponen tunggal yang bertindak sebagai pintu masuk terpusat untuk mengarahkan (routing) request client ke microservice yang sesuai dinamakan...",
+    "options": ["API Gateway", "Load Balancer", "Reverse Proxy", "Message Broker", "Database Cluster"],
+    "correctAnswer": 0,
+    "explanation": "💡 API Gateway menangani routing, otentikasi, dan rate limiting terpusat bagi seluruh microservices."
+  },
+  {
+    "id": 36,
+    "category": "Web Dev Lanjutan",
+    "question": "Teknik menyimpan hasil query API yang sering diakses di memori cepat (seperti Redis) untuk mempercepat response time dinamakan...",
+    "options": ["API Caching", "Database Indexing", "Connection Pooling", "Load Balancing", "Sharding"],
+    "correctAnswer": 0,
+    "explanation": "💡 API Caching menghindari pemrosesan/query berulang yang berat ke database utama."
+  },
+  {
+    "id": 37,
+    "category": "Web Dev Lanjutan",
+    "question": "Metode autentikasi API di mana client mengirimkan username dan password yang di-encode Base64 pada header `Authorization: Basic ...` dinamakan...",
+    "options": ["Bearer Auth", "Basic Authentication", "API Key Auth", "OAuth 2.0", "Digest Auth"],
+    "correctAnswer": 1,
+    "explanation": "💡 Basic Auth mengirim kredensial Base64 `user:pass` pada header Authorization."
+  },
+  {
+    "id": 38,
+    "category": "Web Dev Lanjutan",
+    "question": "Manakah perbedaan utama arsitektur REST API dan GraphQL?",
+    "options": ["REST API memiliki multiple fixed endpoint untuk setiap resource, sedangkan GraphQL memiliki 1 single endpoint di mana client bisa meminta persis bidang data yang dibutuhkan", "GraphQL lebih lambat", "REST tidak didukung JSON", "GraphQL khusus PHP", "Keduanya persis sama"],
+    "correctAnswer": 0,
+    "explanation": "💡 GraphQL mengeliminasi over-fetching dan under-fetching data dengan 1 single endpoint kustom query."
+  },
+  {
+    "id": 39,
+    "category": "Web Dev Lanjutan",
+    "question": "Istilah 'Over-fetching' dalam pengonsumsian REST API berarti...",
+    "options": ["Client menerima terlalu BANYAK data yang tidak dibutuhkan dari endpoint API", "Client kurang menerima data", "Request gagal karena timeout", "Server kehabisan memori", "Format JSON rusak"],
+    "correctAnswer": 0,
+    "explanation": "💡 Over-fetching terjadi saat API mengembalikan objek raksasa padahal client hanya butuh 1 atribut nama."
+  },
+  {
+    "id": 40,
+    "category": "Web Dev Lanjutan",
+    "question": "Istilah 'Under-fetching' dalam pengonsumsian REST API berarti...",
+    "options": ["Satu request API tidak memberikan data yang cukup sehingga client terpaksa melakukan MULTIPLE REQUEST berulang ke beberapa endpoint berbeda", "Data yang dikirim terlalu besar", "Database crash", "Token kadaluwarsa", "Response berstatus 200"],
+    "correctAnswer": 0,
+    "explanation": "💡 Under-fetching memaksa client memanggil endpoint `/users/1`, lalu `/users/1/posts`, lalu `/users/1/comments`."
+  },
+  {
+    "id": 41,
+    "category": "Web Dev Lanjutan",
+    "question": "Di Node.js Express, jika fungsi middleware tidak memanggil `next()` dan tidak mengembalikan `res.send()`, apa yang terjadi pada request client?",
+    "options": ["Request akan menggantung (hang / timeout) selamanya!", "Express otomatis me-return 200 OK", "Server akan crash", "Halaman otomatis dikosongkan", "Database terhapus"],
+    "correctAnswer": 0,
+    "explanation": "💡 Tanpa `next()` atau pemutusan response, alur execution pipeline Express berhenti menggantung."
+  },
+  {
+    "id": 42,
+    "category": "Web Dev Lanjutan",
+    "question": "Apa kegunaan dari Refresh Token dalam sistem autentikasi berbasis JWT?",
+    "options": ["Memungkinkan client mendapatkan Access Token baru tanpa harus meminta pengguna memasukkan ulang password saat Access Token expired", "Mengganti password pengguna", "Menghapus cookie", "Membuat token berukuran 0", "Menyimpan data di server"],
+    "correctAnswer": 0,
+    "explanation": "💡 Refresh Token berumur panjang digunakan untuk me-issue Access Token baru yang berumur pendek secara aman."
+  },
+  {
+    "id": 43,
+    "category": "Web Dev Lanjutan",
+    "question": "Serangan keamanan Cross-Site Request Forgery (CSRF) memanfaatkan fakta bahwa...",
+    "options": ["Browser otomatis menyertakan Cookie session domain target pada setiap request yang dipicu oleh situs jebakan pihak ketiga", "Password tersimpan polos", "Server tidak memiliki HTTPS", "Database menggunakan MySQL", "JSON berukuran besar"],
+    "correctAnswer": 0,
+    "explanation": "💡 CSRF memanfaatkan kepercayaan server terhadap cookie yang dikirimkan otomatis oleh browser."
+  },
+  {
+    "id": 44,
+    "category": "Web Dev Lanjutan",
+    "question": "Untuk menangani operasi asynchronous dalam jumlah banyak secara SEJAJAR (paralel) dan menunggu semuanya tuntas di JS, kita menggunakan...",
+    "options": ["Promise.all([p1, p2, p3])", "Promise.race()", "for loop biasa", "setInterval()", "async step()"],
+    "correctAnswer": 0,
+    "explanation": "💡 `Promise.all()` mengeksekusi sekumpulan Promise secara paralel dan me-resolve saat semuanya selesai."
+  },
+  {
+    "id": 45,
+    "category": "Web Dev Lanjutan",
+    "question": "Jika salah satu Promise di dalam `Promise.all()` mengalami rejection (error), apa yang terjadi?",
+    "options": ["`Promise.all()` langsung me-reject seketika dengan error dari Promise yang gagal tersebut (Short-circuit on failure)", "Promise lain tetap ditunggu sampai selesai", "Error diabaikan", "Me-return array kosong", "Program crash total"],
+    "correctAnswer": 0,
+    "explanation": "💡 `Promise.all` menganut sifat fail-fast; jika 1 gagal, seluruh Promise.all ikut rejected."
+  },
+  {
+    "id": 46,
+    "category": "Web Dev Lanjutan",
+    "question": "Mengapa menyimpan Access Token JWT di `localStorage` browser berisiko dari sudut pandang Keamanan Perangkat Lunak?",
+    "options": ["Skrip jahat yang berhasil disuntikkan via serangan XSS dapat dengan mudah membaca `localStorage.getItem('jwt')` dan mencuri akun pengguna!", "LocalStorage mudah penuh", "Token otomatis terhapus", "Server tidak bisa membaca LocalStorage", "LocalStorage membuat web lambat"],
+    "correctAnswer": 0,
+    "explanation": "💡 LocalStorage rentan diakses oleh skrip XSS. Penyimpanan paling aman untuk token sensitive adalah `HttpOnly, Secure Cookie`."
+  },
+  {
+    "id": 47,
+    "category": "Web Dev Lanjutan",
+    "question": "Bagaimana cara kerja metode HTTP Preflight Request (`OPTIONS`) pada CORS?",
+    "options": ["Browser secara otomatis mengirimkan request `OPTIONS` ke server terlebih dahulu untuk memeriksa apakah domain client diizinkan sebelum mengirim request utama (seperti POST/DELETE dengan custom header)", "Server mematikan koneksi", "Client menghapus cache", "Browser mengompres data", "Database mengunci tabel"],
+    "correctAnswer": 0,
+    "explanation": "💡 Browser mengirim Preflight OPTIONS untuk mengonfirmasi izin CORS sebelum mengeksekusi request berisiko."
+  },
+  {
+    "id": 48,
+    "category": "Web Dev Lanjutan",
+    "question": "Di Node.js, jika terjadi unhandled Promise rejection (`process.on('unhandledRejection')`), tindakan terbaik bagi server production adalah...",
+    "options": ["Mencatat log error dan melakukan Graceful Shutdown pada proses server agar tidak menyisakan state corrupt", "Mengabaikan error", "Mengirim email ke user", "Menghapus file database", "Me-restart server tanpa log"],
+    "correctAnswer": 0,
+    "explanation": "💡 Unhandled rejection bisa membuat state aplikasi terdistorsi. Graceful shutdown + process manager (PM2/K8s) merekomendasikan restart bersih."
+  },
+  {
+    "id": 49,
+    "category": "Web Dev Lanjutan",
+    "question": "Tracing Express Middleware Chain:\n`app.use((req, res, next) => { req.user = 'Admin'; next(); });` \n`app.get('/dashboard', (req, res) => { res.send(req.user); });` \nHasil response saat GET `/dashboard` adalah...",
+    "options": ["\"Admin\"", "undefined", "Error req.user not found", "404 Not Found", "500 Server Error"],
+    "correctAnswer": 0,
+    "explanation": "💡 Middleware menambah properti `user` pada objek `req`, yang lalu bisa dibaca oleh route handler berikutnya."
+  },
+  {
+    "id": 50,
+    "category": "Web Dev Lanjutan",
+    "question": "Dalam arsitektur Serverless (seperti Vercel Functions / AWS Lambda), tantangan utama 'Cold Start' terjadi karena...",
+    "options": ["Serverless container harus diinstansiasi dan dinyalakan dari awal saat ada request pertama setelah periode tidak aktif, menyebabkan latency ekstra pada request pertama", "Serverless memakan listrik mahal", "Serverless tidak mendukung JS", "Database terhapus saat idle", "Koneksi internet terputus"],
+    "correctAnswer": 0,
+    "explanation": "💡 Cold start adalah waktu booting container baru saat menampung request pertama setelah idle."
+  },
+  {
+    "id": 51,
+    "category": "Web Dev Lanjutan",
+    "question": "Strategi penanganan masalah 'Cold Start' dan eksekusi jaringan ultra-cepat pada arsitektur web modern adalah dengan memanfaatkan...",
+    "options": ["Edge Network / Edge Functions (menjalankan skrip serverless di CDN node terdekat dengan lokasi fisik pengguna)", "Membuat server fisik sendiri", "Menggunakan HTTP/1.0", "Menghapus backend", "Menggunakan database MySQL lokal"],
+    "correctAnswer": 0,
+    "explanation": "💡 Edge Runtime mengeksekusi kode di PoP CDN terdekat dari posisi geografis client untuk mengeliminasi latency."
+  },
+  {
+    "id": 52,
+    "category": "Web Dev Lanjutan",
+    "question": "Perbedaan utama `Promise.allSettled()` dibanding `Promise.all()` adalah...",
+    "options": ["`Promise.allSettled()` selalu menunggu SELURUH Promise tuntas (baik resolved maupun rejected) dan me-return status tiap promise tanpa short-circuit error", "allSettled lebih lambat", "allSettled khusus string", "allSettled otomatis me-retry error", "Keduanya persis sama"],
+    "correctAnswer": 0,
+    "explanation": "💡 `Promise.allSettled` tidak membatalkan eksekusi jika ada Promise yang rejected."
+  },
+  {
+    "id": 53,
+    "category": "Web Dev Lanjutan",
+    "question": "Dalam enkripsi autentikasi password pengguna di database backend, penggunaan algoritma Hash bertipe 'Bcrypt' atau 'Argon2' lebih disarankan dibanding MD5/SHA256 karena...",
+    "options": ["Bcrypt menggunakan teknik Salting otomatis dan faktor kerja (Work Factor / Cost Factor) yang lambat secara sengaja untuk menahan serangan Brute-Force & Rainbow Table", "Bcrypt bisa didekripsi kembali", "MD5 terlalu panjang", "Bcrypt dibuat oleh Google", "Bcrypt tidak butuh memori"],
+    "correctAnswer": 0,
+    "explanation": "💡 Bcrypt dirancang slow-hash + salt untuk mengamankan password dari cracking GPU modern."
+  },
+  {
+    "id": 54,
+    "category": "Web Dev Lanjutan",
+    "question": "Apa yang dimaksud dengan 'Idempotent' pada metode HTTP?",
+    "options": ["Panggilan metode tersebut berkali-kali dengan payload yang sama akan menghasilkan EFEK STATE SERVER YANG SAMA seperti dipanggil 1 kali", "Request yang sangat cepat", "Request yang dienkripsi", "Request tanpa header", "Request yang selalu me-return 404"],
+    "correctAnswer": 0,
+    "explanation": "💡 GET, PUT, DELETE bersifat Idempotent (1x atau 100x dipanggil, efek akhir di server sama). POST TIDAK idempotent."
+  },
+  {
+    "id": 55,
+    "category": "Web Dev Lanjutan",
+    "question": "Mengapa metode HTTP POST dikatakan TIDAK Idempotent?",
+    "options": ["Memanggil POST 5 kali dengan data yang sama akan menghasilkan 5 record data baru yang berbeda di database!", "POST tidak mendukung JSON", "POST hanya untuk membaca data", "POST tidak punya header", "POST selalu error"],
+    "correctAnswer": 0,
+    "explanation": "💡 Setiap eksekusi POST menciptakan resource baru secara independen."
+  },
+  {
+    "id": 56,
+    "category": "Web Dev Lanjutan",
+    "question": "Dalam arsitektur API, istilah 'Payload' merujuk pada...",
+    "options": ["Data murni yang dikirimkan di dalam body HTTP request atau response", "Header rahasia server", "Nama domain server", "Status code HTTP", "File gambar CSS"],
+    "correctAnswer": 0,
+    "explanation": "💡 Payload adalah bagian data utama dari paket transaksi HTTP."
+  },
+  {
+    "id": 57,
+    "category": "Web Dev Lanjutan",
+    "question": "Untuk menangani beban trafik HTTP super besar pada backend, teknik 'Load Balancing' bertugas untuk...",
+    "options": ["Membagi dan mendistribusikan lalu lintas incoming request secara merata ke beberapa instance server backend", "Mempercepat koding JS", "Mengompres file HTML", "Menghapus database", "Mengacak IP user"],
+    "correctAnswer": 0,
+    "explanation": "💡 Load Balancer membagikan lalu lintas ke kluster server agar tidak ada 1 server yang overload."
+  },
+  {
+    "id": 58,
+    "category": "Web Dev Lanjutan",
+    "question": "Tracing Async Error Handling:\n`async function test() {\n  try {\n    return await Promise.reject('Gagal');\n  } catch(e) {\n    return 'Ditangkap';\n  }\n}`\nHasil kembalian fungsi `test()` jika di-await adalah...",
+    "options": ["\"Ditangkap\"", "Uncaught Rejection \"Gagal\"", "undefined", "null", "Error"],
+    "correctAnswer": 0,
+    "explanation": "💡 Karena `await` digunakan di dalam `try`, rejebakan rejection masuk ke blok `catch` dan me-return \"Ditangkap\"."
+  },
+  {
+    "id": 59,
+    "category": "Web Dev Lanjutan",
+    "question": "Atribut cookie `Secure` memberitahu browser untuk...",
+    "options": ["HANYA mengirimkan cookie jika koneksi menggunakan protokol terenkripsi HTTPS", "Menghapus cookie saat browser ditutup", "Menyimpan cookie di LocalStorage", "Mencegah XSS", "Mengompres isi cookie"],
+    "correctAnswer": 0,
+    "explanation": "💡 Atribut `Secure` menjamin cookie tidak pernah terartikulasi lewat jalur HTTP plaintext."
+  },
+  {
+    "id": 60,
+    "category": "Web Dev Lanjutan",
+    "question": "Dalam standar REST API, URI endpoint yang baik harus menggunakan kata benda jamak (Plural Noun). Manakah contoh rancangan URI REST API yang PALING STANDAR?",
+    "options": ["GET /api/v1/get-all-users", "GET /api/v1/users", "POST /api/v1/createUserData", "FETCH /api/v1/userList", "GET /api/v1/getUserById?id=1"],
+    "correctAnswer": 1,
+    "explanation": "💡 REST API baku menggunakan kata benda jamak (`GET /users`) tanpa kata kerja di URL path."
+  }
+]

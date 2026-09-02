@@ -1,0 +1,55 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ags-django-app
+    restart: always
+    ports:
+      - "8080:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - DEBUG=False
+      - ALLOWED_HOSTS=*
+      - CSRF_TRUSTED_ORIGINS=http://145.241.157.243:8080,http://145.241.157.243,https://agunggumelarsaputra.com,https://www.agunggumelarsaputra.com
+      - DB_NAME=ags_db
+      - DB_USER=ags_user
+      - DB_PASSWORD=ags_password_secure2026
+      - DB_HOST=db
+      - DB_PORT=5432
+      - SECURE_SSL_REDIRECT=False
+      - SESSION_COOKIE_SECURE=False
+      - CSRF_COOKIE_SECURE=False
+    depends_on:
+      - db
+    volumes:
+      - ags_media:/app/media
+      - ags_static:/app/staticfiles
+    networks:
+      - ags-network
+
+  db:
+    image: postgres:17-alpine
+    container_name: ags-postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=ags_db
+      - POSTGRES_USER=ags_user
+      - POSTGRES_PASSWORD=ags_password_secure2026
+    volumes:
+      - ags_pgdata:/var/lib/postgresql/data
+    networks:
+      - ags-network
+
+volumes:
+  ags_pgdata:
+    name: ags_pgdata
+  ags_media:
+    name: ags_media
+  ags_static:
+    name: ags_static
+
+networks:
+  ags-network:
+    name: ags-network
+    driver: bridge

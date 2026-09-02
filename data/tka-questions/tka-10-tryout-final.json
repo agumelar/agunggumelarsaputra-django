@@ -1,0 +1,242 @@
+[
+  {
+    "id": 1,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Siklus hidup pengembangan perangkat lunak yang terstruktur mulai dari analisis, desain, pengodean, pengujian, hingga pemeliharaan dinamakan...",
+    "options": ["SDLC (Software Development Life Cycle)", "Agile Manifesto", "UML Lifecycle", "DevOps Loop", "Scrum Framework"],
+    "correctAnswer": 0,
+    "explanation": "💡 SDLC adalah kerangka kerja proses pengembangan perangkat lunak dari awal hingga akhir."
+  },
+  {
+    "id": 2,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Model SDLC klasik sekuensial linier di mana setiap fase harus selesai 100% sebelum dapat berlanjut ke fase berikutnya dinamakan...",
+    "options": ["Waterfall Model", "Agile Model", "Scrum", "Kanban", "Extreme Programming (XP)"],
+    "correctAnswer": 0,
+    "explanation": "💡 Waterfall adalah model SDLC linier sekuensial tradisional (seperti air terjun)."
+  },
+  {
+    "id": 3,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Pendekatan pengembangan perangkat lunak yang berfokus pada iterasi cepat, adaptabilitas terhadap perubahan, dan kolaborasi dinamakan...",
+    "options": ["Agile Methodology", "Waterfall Model", "V-Model", "Spiral Model", "Big Bang Model"],
+    "correctAnswer": 0,
+    "explanation": "💡 Agile menekankan fleksibilitas, pengiriman produk bertahap, dan kolaborasi erat."
+  },
+  {
+    "id": 4,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Kerangka kerja Agile paling populer yang menggunakan siklus waktu kerja pendek (Sprint) berdurasi 1-4 minggu dinamakan...",
+    "options": ["Scrum", "Waterfall", "V-Model", "Spiral", "PRINCE2"],
+    "correctAnswer": 0,
+    "explanation": "💡 Scrum adalah framework Agile iteratif berbasis time-boxed Sprint."
+  },
+  {
+    "id": 5,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Metode manajemen visual Agile yang menggunakan papan kartu (Board) untuk membatasi Work In Progress (WIP) dinamakan...",
+    "options": ["Kanban", "Scrum", "Waterfall", "XP", "RAD"],
+    "correctAnswer": 0,
+    "explanation": "💡 Kanban berfokus pada visualisasi aliran kerja papan kartu dan pembatasan WIP."
+  },
+  {
+    "id": 6,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Di dalam tim Scrum, peran yang bertanggung jawab memaksimalkan nilai produk dan mengelola daftar keinginan fitur (Product Backlog) adalah...",
+    "options": ["Product Owner (PO)", "Scrum Master (SM)", "Development Team", "Project Manager", "QA Engineer"],
+    "correctAnswer": 0,
+    "explanation": "💡 Product Owner memiliki visi produk dan mengelola skala prioritas Product Backlog."
+  },
+  {
+    "id": 7,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Di dalam tim Scrum, peran yang bertindak sebagai fasilitator, pelatih proses, dan penghilang hambatan (impediments) bagi tim adalah...",
+    "options": ["Scrum Master (SM)", "Product Owner", "Software Architect", "Tech Lead", "Client"],
+    "correctAnswer": 0,
+    "explanation": "💡 Scrum Master menjaga penerapan proses Scrum dan membantu tim mengatasi hambatan."
+  },
+  {
+    "id": 8,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Rapat harian singkat (15 menit) dalam Scrum di mana anggota tim saling berbagi apa yang dikerjakan kemarin, hari ini, dan kendala dinamakan...",
+    "options": ["Daily Standup / Daily Scrum", "Sprint Planning", "Sprint Review", "Sprint Retrospective", "Backlog Refinement"],
+    "correctAnswer": 0,
+    "explanation": "💡 Daily Standup adalah rapat sinkronisasi harian 15 menit."
+  },
+  {
+    "id": 9,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Rapat di akhir Sprint di mana tim Scrum menunjukkan demo hasil fitur teruji (Increment) kepada pemangku kepentingan dinamakan...",
+    "options": ["Sprint Review", "Sprint Retrospective", "Sprint Planning", "Daily Scrum", "Refinement"],
+    "correctAnswer": 0,
+    "explanation": "💡 Sprint Review menyajikan inspeksi demo hasil kerja Increment produk kepada stakeholder."
+  },
+  {
+    "id": 10,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Rapat di akhir Sprint di mana internal tim Scrum melakukan refleksi terhadap proses kerja mereka untuk perbaikan berkelanjutan dinamakan...",
+    "options": ["Sprint Retrospective", "Sprint Review", "Sprint Planning", "Daily Standup", "Demo"],
+    "correctAnswer": 0,
+    "explanation": "💡 Sprint Retrospective mengevaluasi proses, komunikasi, dan perbaikan tim untuk Sprint berikutnya."
+  },
+  {
+    "id": 11,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Pengujian perangkat lunak yang berfokus pada pengujian komponen fungsi terkecil (seperti fungsi atau method) secara terisolasi dinamakan...",
+    "options": ["Unit Testing", "Integration Testing", "System Testing", "Acceptance Testing", "Regression Testing"],
+    "correctAnswer": 0,
+    "explanation": "💡 Unit Testing menguji unit fungsi/class paling dasar terisolasi."
+  },
+  {
+    "id": 12,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Pengujian untuk memverifikasi bahwa beberapa modul/komponen dapat bekerja sama dengan benar saat dihubungkan dinamakan...",
+    "options": ["Integration Testing", "Unit Testing", "Smoke Testing", "Usability Testing", "Alpha Testing"],
+    "correctAnswer": 0,
+    "explanation": "💡 Integration Testing menguji antarmuka dan interaksi antar modul."
+  },
+  {
+    "id": 13,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Pengujian akhir yang dilakukan oleh pengguna akhir (End-User) atau klien untuk memastikan aplikasi memenuhi kebutuhan bisnis dinamakan...",
+    "options": ["User Acceptance Testing (UAT)", "Unit Testing", "Integration Testing", "Performance Testing", "Static Testing"],
+    "correctAnswer": 0,
+    "explanation": "💡 UAT menguji kesiapan aplikasi dari sudut pandang penerimaan pengguna bisnis."
+  },
+  {
+    "id": 14,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Pengujian ulang yang dilakukan setelah adanya perbaikan bug atau penambahan fitur baru untuk memastikan kode baru tidak merusak fitur lama dinamakan...",
+    "options": ["Regression Testing", "Unit Testing", "Stress Testing", "Usability Testing", "Penetration Testing"],
+    "correctAnswer": 0,
+    "explanation": "💡 Regression Testing mencegah munculnya efek samping (regresi) pada fitur yang sudah ada."
+  },
+  {
+    "id": 15,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Dalam pengembangan Agile, dokumen cerita singkat yang menggambarkan kebutuhan fitur dari perspektif pengguna ('As a [role], I want [goal], so that [benefit]') dinamakan...",
+    "options": ["User Story", "Use Case", "SRS Document", "Test Case", "PRD"],
+    "correctAnswer": 0,
+    "explanation": "💡 User Story mengekspresikan kebutuhan fitur dari sudut pandang pemakai."
+  },
+  {
+    "id": 16,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Grafik visual dalam Scrum yang menampilkan sisa jumlah pekerjaan (Story Points) terhadap sisa waktu dalam satu Sprint dinamakan...",
+    "options": ["Burndown Chart", "Burnup Chart", "Gantt Chart", "Control Chart", "Pareto Chart"],
+    "correctAnswer": 0,
+    "explanation": "💡 Burndown Chart melacak penurunan sisa pekerjaan menuju angka nol di akhir Sprint."
+  },
+  {
+    "id": 17,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Metrik dalam Scrum yang mengukur jumlah rata-rata unit pekerjaan (Story Points) yang berhasil diselesaikan oleh tim dalam satu Sprint dinamakan...",
+    "options": ["Team Velocity", "Cycle Time", "Lead Time", "Throughput", "Capacity"],
+    "correctAnswer": 0,
+    "explanation": "💡 Velocity mengukur kecepatan rata-rata estimasi penyelesaian Story Points tim per Sprint."
+  },
+  {
+    "id": 18,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Metodologi pengembangan di mana pengembang MENULIS TEST CASE TERLEBIH DAHULU sebelum menuliskan kode implementasi dinamakan...",
+    "options": ["Test-Driven Development (TDD)", "Behavior-Driven Development (BDD)", "Domain-Driven Design (DDD)", "Extreme Programming", "Waterfall"],
+    "correctAnswer": 0,
+    "explanation": "💡 TDD mengikuti alur: Red (Tulis Test Gagal) -> Green (Tulis Kode Lolos Test) -> Refactor."
+  },
+  {
+    "id": 19,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Siklus 3 langkah berulang dalam praktik Test-Driven Development (TDD) adalah...",
+    "options": ["Red -> Green -> Refactor", "Plan -> Code -> Test", "Design -> Build -> Deploy", "Write -> Run -> Fix", "Compile -> Test -> Ship"],
+    "correctAnswer": 0,
+    "explanation": "💡 TDD Cycle: Red (Test gagal) -> Green (Test lulus) -> Refactor (Pembersihan kode)."
+  },
+  {
+    "id": 20,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Proses merapikan dan merestrukturisasi kode internal tanpa mengubah perilaku eksternal aplikasi dinamakan...",
+    "options": ["Refactoring", "Debugging", "Re-engineering", "Re-compiling", "Deobfuscation"],
+    "correctAnswer": 0,
+    "explanation": "💡 Refactoring meningkatkan keterbacaan & struktur kode tanpa mengubah fungsionalitasnya."
+  },
+  {
+    "id": 21,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Biaya implisit jangka panjang yang muncul akibat memilih solusi koding yang cepat & kotor (*quick and dirty*) daripada solusi rapi terstruktur dinamakan...",
+    "options": ["Technical Debt (Hutang Teknis)", "Financial Loss", "Code Smells", "Software Rot", "Bug Liability"],
+    "correctAnswer": 0,
+    "explanation": "💡 Technical Debt adalah dampak akumulasi koding asal-asalan yang membebankan pemeliharaan di masa depan."
+  },
+  {
+    "id": 22,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Istilah untuk gejala-gejala pada source code yang mengindikasikan adanya masalah struktur atau keburukan desain (misal: method terlalu panjang) dinamakan...",
+    "options": ["Code Smells", "Bug", "Syntax Error", "Exception", "Technical Debt"],
+    "correctAnswer": 0,
+    "explanation": "💡 Code Smells adalah penanda keburukan desain yang membutuhkan refactoring."
+  },
+  {
+    "id": 23,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Estimasi relatif yang digunakan oleh tim Agile untuk mengukur tingkat kesulitan dan kompleksitas sebuah User Story dinamakan...",
+    "options": ["Story Points", "Man-Hours", "Function Points", "Lines of Code (LOC)", "Task Duration"],
+    "correctAnswer": 0,
+    "explanation": "💡 Story Points mengukur kompleksitas relatif (biasanya berbasis deret Fibonacci: 1, 2, 3, 5, 8...)."
+  },
+  {
+    "id": 24,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Teknik estimasi tim Agile menggunakan kartu bernomor deret Fibonacci untuk menyepakati bobot Story Points secara jujur dinamakan...",
+    "options": ["Planning Poker", "Delphi Technique", "PERT Estimasi", "Gantt Planning", "Scrum Cards"],
+    "correctAnswer": 0,
+    "explanation": "💡 Planning Poker menghindari bias pengaruh pendapat senior saat estimasi tim."
+  },
+  {
+    "id": 25,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Dalam standar kualitas perangkat lunak ISO/IEC 25010, kemampuan aplikasi untuk pulih dan berfungsi kembali saat terjadi kesalahan dinamakan...",
+    "options": ["Reliability (Keandalan)", "Maintainability", "Usability", "Portability", "Efficiency"],
+    "correctAnswer": 0,
+    "explanation": "💡 Reliability mengukur keandalan dan tingkat resiliensi aplikasi terhadap kesalahan."
+  },
+  {
+    "id": 26,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Kemampuan kode perangkat lunak untuk mudah dimodifikasi, diperbaiki, dan ditingkatkan di masa mendatang dinamakan...",
+    "options": ["Maintainability (Keterpeliharaan)", "Usability", "Portability", "Reusability", "Compatibility"],
+    "correctAnswer": 0,
+    "explanation": "💡 Maintainability adalah kemudahan kode untuk dirawat dan diperbaiki."
+  },
+  {
+    "id": 27,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Kemampuan aplikasi untuk dijalankan pada berbagai lingkungan sistem operasi dan perangkat keras yang berbeda dinamakan...",
+    "options": ["Portability (Portabilitas)", "Usability", "Efficiency", "Security", "Reliability"],
+    "correctAnswer": 0,
+    "explanation": "💡 Portability mengukur kemudahan aplikasi dipindahkan ke platform lain."
+  },
+  {
+    "id": 28,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Batas waktu kerja yang kaku dan tidak boleh diperpanjang pada siklus Sprint dalam Scrum dinamakan...",
+    "options": ["Timeboxing", "Deadline", "Milestone", "Sprint Freeze", "Grace Period"],
+    "correctAnswer": 0,
+    "explanation": "💡 Timeboxing menetapkan batas durasi maksimal yang tidak boleh molor."
+  },
+  {
+    "id": 29,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Model SDLC V-Model adalah variasi dari Waterfall di mana...",
+    "options": ["Setiap fase pengembangan di sisi kiri dipasangkan secara sejajar dengan fase pengujian (testing) yang sesuai di sisi kanan", "Pengembangan tanpa testing", "Semua fase dilakukan acak", "Khusus aplikasi AI", "Sama persis Scrum"],
+    "correctAnswer": 0,
+    "explanation": "💡 V-Model menghubungkan setiap tahap verifikasi (kiri) dengan tahap validasi testing (kanan)."
+  },
+  {
+    "id": 30,
+    "category": "SDLC & Manajemen Agile",
+    "question": "Model SDLC Spiral sangat direkomendasikan untuk proyek perangkat lunak skala raksasa yang membutuhkan...",
+    "options": ["Analisis & Manajemen Risiko (Risk Management) secara berulang di setiap iterasi spiral", "Biaya paling murah", "Waktu 1 hari tuntas", "Tanpa dokumentasi", "Hanya 1 pengembang"],
+    "correctAnswer": 0,
+    "explanation": "💡 Spiral Model sangat berfokus pada analisis dan mitigasi risiko berulang."
+  }
+]

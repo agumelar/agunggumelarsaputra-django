@@ -354,5 +354,30 @@
 
     </div>
 
+    <!-- Anti Copy-Paste Guardian Script for Form Integrity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const restrictedSelectors = [
+                'textarea[name="work_summary"]',
+                'textarea[name="additional_notes"]',
+                'textarea[name="understanding"]',
+                'textarea[name="obstacle"]',
+                'textarea[name="action_plan"]'
+            ];
+            restrictedSelectors.forEach(function(sel) {
+                const el = document.querySelector(sel);
+                if (el) {
+                    el.addEventListener('paste', function(e) {
+                        e.preventDefault();
+                        alert('⚠️ Integritas Pembelajaran: Isian analisis LKPD & Jurnal Refleksi wajib diketik secara mandiri.');
+                    });
+                    el.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                    });
+                }
+            });
+        });
+    </script>
+
 </div>
 {% endblock %}

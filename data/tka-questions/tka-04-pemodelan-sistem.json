@@ -1,0 +1,482 @@
+[
+  {
+    "id": 1,
+    "category": "Pemodelan Sistem",
+    "question": "Bahasa standar pemodelan visual yang digunakan untuk menspesifikasikan, mevisualisasikan, dan mendokumentasikan artefak sistem perangkat lunak dinamakan...",
+    "options": ["UML (Unified Modeling Language)", "ERD (Entity Relationship Diagram)", "DFD (Data Flow Diagram)", "Flowchart", "BPMN"],
+    "correctAnswer": 0,
+    "explanation": "💡 UML adalah bahasa standar internasional untuk pemodelan analisis dan desain berorientasi objek."
+  },
+  {
+    "id": 2,
+    "category": "Pemodelan Sistem",
+    "question": "Diagram UML yang digunakan untuk menggambarkan interaksi antara fungsionalitas sistem dengan aktor luar dinamakan...",
+    "options": ["Class Diagram", "Use Case Diagram", "Sequence Diagram", "Activity Diagram", "Deployment Diagram"],
+    "correctAnswer": 1,
+    "explanation": "💡 Use Case Diagram memodelkan persyaratan fungsionalitas sistem dari sudut pandang Aktor."
+  },
+  {
+    "id": 3,
+    "category": "Pemodelan Sistem",
+    "question": "Simbol manusia pada Use Case Diagram merepresentasikan...",
+    "options": ["User Interface", "Aktor (Actor)", "Database", "Server", "System Boundary"],
+    "correctAnswer": 1,
+    "explanation": "💡 Aktor merepresentasikan peran manusia atau sistem eksternal yang berinteraksi dengan Use Case."
+  },
+  {
+    "id": 4,
+    "category": "Pemodelan Sistem",
+    "question": "Relasi pada Use Case yang menandakan bahwa suatu Use Case WAJIB memanggil/menjalankan Use Case lain secara mutlak adalah...",
+    "options": ["<<extend>>", "<<include>>", "Generalization", "Association", "Dependency"],
+    "correctAnswer": 1,
+    "explanation": "💡 <<include>> menandakan bahwa Use Case target wajib (mandatory) dieksekusi oleh Use Case sumber."
+  },
+  {
+    "id": 5,
+    "category": "Pemodelan Sistem",
+    "question": "Relasi pada Use Case yang menandakan bahwa suatu Use Case OPSIONAL (tambahan/kondisional) dapat memperluas perilaku Use Case utama dinamakan...",
+    "options": ["<<include>>", "<<extend>>", "Realization", "Aggregation", "Composition"],
+    "correctAnswer": 1,
+    "explanation": "💡 <<extend>> menandakan perilaku tambahan yang opsional jika kondisi tertentu terpenuhi."
+  },
+  {
+    "id": 6,
+    "category": "Pemodelan Sistem",
+    "question": "Diagram UML struktur statis yang menggambarkan kelas-kelas dalam sistem, atribut, method, dan hubungannya dinamakan...",
+    "options": ["Sequence Diagram", "Class Diagram", "State Machine Diagram", "Component Diagram", "Package Diagram"],
+    "correctAnswer": 1,
+    "explanation": "💡 Class Diagram adalah diagram struktur statis utama dalam PBO."
+  },
+  {
+    "id": 7,
+    "category": "Pemodelan Sistem",
+    "question": "Diagram UML perilaku yang menggambarkan alur kerja (workflow) atau aktivitas bisnis langkah demi langkah dinamakan...",
+    "options": ["Activity Diagram", "Use Case Diagram", "Deployment Diagram", "Class Diagram", "Object Diagram"],
+    "correctAnswer": 0,
+    "explanation": "💡 Activity Diagram mirip flowchart yang menggambarkan alur aktivitas sistem/bisnis."
+  },
+  {
+    "id": 8,
+    "category": "Pemodelan Sistem",
+    "question": "Diagram UML yang menekankan pada urutan pesan (message sequence) berdasarkan WAKTU interaksi antar objek dinamakan...",
+    "options": ["Sequence Diagram", "Activity Diagram", "Use Case Diagram", "Component Diagram", "Deployment Diagram"],
+    "correctAnswer": 0,
+    "explanation": "💡 Sequence Diagram menggambarkan interaksi objek sepanjang garis waktu (lifeline) secara kronologis."
+  },
+  {
+    "id": 9,
+    "category": "Pemodelan Sistem",
+    "question": "Pemodelan data konseptual yang digunakan untuk menggambarkan entitas, atribut, dan relasinya di database dinamakan...",
+    "options": ["UML", "ERD (Entity Relationship Diagram)", "DFD", "Wireframe", "Mockup"],
+    "correctAnswer": 1,
+    "explanation": "💡 ERD digunakan khusus untuk merancang struktur data dan relasi basis data."
+  },
+  {
+    "id": 10,
+    "category": "Pemodelan Sistem",
+    "question": "Simbol Persegi Panjang pada ERD standar Chen merepresentasikan...",
+    "options": ["Entitas (Entity)", "Atribut", "Relasi", "Kardinalitas", "Weak Attribute"],
+    "correctAnswer": 0,
+    "explanation": "💡 Persegi panjang merepresentasikan Entitas (objek data utama seperti Siswa, Guru)."
+  },
+  {
+    "id": 11,
+    "category": "Pemodelan Sistem",
+    "question": "Simbol Elips / Oval pada ERD merepresentasikan...",
+    "options": ["Entitas", "Atribut", "Relasi", "Aktor", "Proses"],
+    "correctAnswer": 1,
+    "explanation": "💡 Oval merepresentasikan Atribut (karakteristik dari entitas seperti nama, nis)."
+  },
+  {
+    "id": 12,
+    "category": "Pemodelan Sistem",
+    "question": "Simbol Belah Ketupat (Diamond) pada ERD merepresentasikan...",
+    "options": ["Entitas", "Atribut", "Relasi (Relationship)", "Primary Key", "Foreign Key"],
+    "correctAnswer": 2,
+    "explanation": "💡 Belah Ketupat merepresentasikan Relasi (hubungan antar entitas seperti 'Mengajar')."
+  },
+  {
+    "id": 13,
+    "category": "Pemodelan Sistem",
+    "question": "Simbol Oval dengan garis bawah (underline) pada ERD menandakan atribut tersebut sebagai...",
+    "options": ["Multivalue Attribute", "Derived Attribute", "Primary Key (Key Attribute)", "Foreign Key", "Composite Attribute"],
+    "correctAnswer": 2,
+    "explanation": "💡 Garis bawah pada nama atribut ERD menandakan Key Attribute (Primary Key)."
+  },
+  {
+    "id": 14,
+    "category": "Pemodelan Sistem",
+    "question": "Derajat jumlah hubungan entitas (misal 1:1, 1:N, N:M) dalam ERD dinamakan...",
+    "options": ["Kardinalitas / Modalitas", "Normalisasi", "Enkapsulasi", "Polimorfisme", "Inheritansi"],
+    "correctAnswer": 0,
+    "explanation": "💡 Kardinalitas menentukan jumlah maksimum instansiasi entitas yang dapat terhubung ke entitas lain."
+  },
+  {
+    "id": 15,
+    "category": "Pemodelan Sistem",
+    "question": "Diagram UML yang menggambarkan arsitektur fisik perangkat keras (hardware) dan penyebaran komponen software pada node dinamakan...",
+    "options": ["Component Diagram", "Deployment Diagram", "Package Diagram", "Composite Structure", "Activity Diagram"],
+    "correctAnswer": 1,
+    "explanation": "💡 Deployment Diagram menggambarkan infrastruktur fisik tempat aplikasi dideploy."
+  },
+  {
+    "id": 16,
+    "category": "Pemodelan Sistem",
+    "question": "Pada Activity Diagram, pembagian area visual yang memisahkan tanggung jawab aktivitas berdasarkan Aktor atau Komponen sistem dinamakan...",
+    "options": ["Lifeline", "Swimlane", "Join Node", "Fork Node", "Decision Node"],
+    "correctAnswer": 1,
+    "explanation": "💡 Swimlane membagi diagram menjadi jalur-jalur vertikal/horizontal berdasarkan aktor penanggung jawab."
+  },
+  {
+    "id": 17,
+    "category": "Pemodelan Sistem",
+    "question": "Pada Sequence Diagram, garis putus-putus vertikal di bawah objek yang menggambarkan keberadaan objek seiring waktu dinamakan...",
+    "options": ["Lifeline", "Activation Bar", "Message Line", "Swimlane", "Self Call"],
+    "correctAnswer": 0,
+    "explanation": "💡 Lifeline adalah garis vertikal tempat durasi hidup dan pesan objek ditelusuri."
+  },
+  {
+    "id": 18,
+    "category": "Pemodelan Sistem",
+    "question": "Perbedaan notasi relasi Aggregation (Belah Ketupat Kosong ◊) dan Composition (Belah Ketupat Isi ♦) pada Class Diagram adalah...",
+    "options": ["Aggregation adalah hubungan kuat, Composition hubungan lemah", "Composition adalah hubungan kepemilikan kuat (jika induk dihapus anak ikut hancur), Aggregation adalah hubungan lemah", "Aggregation khusus interface", "Composition hanya untuk database", "Keduanya tidak ada perbedaan"],
+    "correctAnswer": 1,
+    "explanation": "💡 Composition (♦) menandakan bahwa bagian tidak dapat eksis tanpa keberadaan induknya."
+  },
+  {
+    "id": 19,
+    "category": "Pemodelan Sistem",
+    "question": "Simbol panah segitiga kosong (▷) yang menghubungkan Subclass ke Superclass pada Class Diagram menggambarkan relasi...",
+    "options": ["Association", "Generalization / Inheritance", "Dependency", "Realization", "Aggregation"],
+    "correctAnswer": 1,
+    "explanation": "💡 Generalization (Pewarisan/Inheritance) disimbolkan panah segitiga kosong mengarah ke kelas induk."
+  },
+  {
+    "id": 20,
+    "category": "Pemodelan Sistem",
+    "question": "Simbol panah putus-putus dengan segitiga kosong (---▷) yang menghubungkan Class ke Interface menggambarkan relasi...",
+    "options": ["Generalization", "Realization / Implementation", "Dependency", "Association", "Composition"],
+    "correctAnswer": 1,
+    "explanation": "💡 Realization menandakan kelas mengimplementasikan kontrak interface."
+  },
+  {
+    "id": 21,
+    "category": "Pemodelan Sistem",
+    "question": "Atribut turunan pada ERD yang nilainya dihitung dari atribut lain (misal `Umur` dari `TanggalLahir`) digambarkan dengan simbol...",
+    "options": ["Oval titik-titik (Dashed Ellipse)", "Oval ganda", "Oval garis bawah", "Persegi titik-titik", "Belah ketupat ganda"],
+    "correctAnswer": 0,
+    "explanation": "💡 Derived Attribute (Atribut Turunan) disimbolkan dengan oval garis putus-putus."
+  },
+  {
+    "id": 22,
+    "category": "Pemodelan Sistem",
+    "question": "Atribut yang dapat memiliki lebih dari satu nilai untuk satu entitas (misal `Hobi` atau `NoHP`) pada ERD Chen disimbolkan dengan...",
+    "options": ["Oval Ganda (Double Ellipse)", "Oval Garis Bawah", "Persegi Panjang Ganda", "Belah Ketupat Ganda", "Oval Putus-putus"],
+    "correctAnswer": 0,
+    "explanation": "💡 Multivalued Attribute disimbolkan dengan dua garis bundar (Oval Ganda)."
+  },
+  {
+    "id": 23,
+    "category": "Pemodelan Sistem",
+    "question": "Dalam notasi ERD Crow's Foot, garis cabang tiga kaki burung gagak menandakan kardinalitas...",
+    "options": ["Zero (0)", "One (1)", "Many (N)", "Optional", "Mandatory"],
+    "correctAnswer": 2,
+    "explanation": "💡 Kaki burung (Crow's foot) merepresentasikan sisi 'Many' (Banyak)."
+  },
+  {
+    "id": 24,
+    "category": "Pemodelan Sistem",
+    "question": "Pada Activity Diagram, simbol batang tebal horizontal/vertikal yang MEMBAGI satu alur menjadi beberapa alur paralel bersamaan dinamakan...",
+    "options": ["Decision Node", "Merge Node", "Fork Node", "Join Node", "Initial Node"],
+    "correctAnswer": 2,
+    "explanation": "💡 Fork Node memecah satu aliran aktivitas menjadi beberapa aliran mengeksekusi secara paralel."
+  },
+  {
+    "id": 25,
+    "category": "Pemodelan Sistem",
+    "question": "Sebaliknya, simbol yang MENGGABUNGKAN kembali beberapa alur eksekusi paralel menjadi satu alur tunggal dinamakan...",
+    "options": ["Fork Node", "Join Node", "Decision Node", "Merge Node", "Final Node"],
+    "correctAnswer": 1,
+    "explanation": "💡 Join Node menunggu seluruh cabang paralel tuntas sebelum melanjutkan aliran tunggal."
+  },
+  {
+    "id": 26,
+    "category": "Pemodelan Sistem",
+    "question": "Notasi panah putus-putus sederhana (--->) pada Class Diagram yang menandakan satu kelas menggunakan kelas lain secara sementara sebagai parameter dinamakan...",
+    "options": ["Dependency", "Association", "Aggregation", "Composition", "Generalization"],
+    "correctAnswer": 0,
+    "explanation": "💡 Dependency menandakan perubahan pada satu kelas dapat mempengaruhi kelas lain yang bergantung."
+  },
+  {
+    "id": 27,
+    "category": "Pemodelan Sistem",
+    "question": "Manakah pernyataan yang BENAR mengenai Use Case Diagram?",
+    "options": ["Memuat detail algoritma program", "Hanya menggambarkan APA yang dilakukan sistem, bukan BAGAIMANA sistem melakukannya", "Wajib dibuat setelah coding selesai", "Digunakan untuk merancang tabel database", "Hanya boleh memiliki 1 Aktor"],
+    "correctAnswer": 1,
+    "explanation": "💡 Use Case berfokus pada kebutuhan fungsional (WHAT), bukan implementasi internal (HOW)."
+  },
+  {
+    "id": 28,
+    "category": "Pemodelan Sistem",
+    "question": "Jika Aktor 'Siswa' dan Aktor 'Guru' memiliki akses login yang sama ke sistem, dalam Use Case Diagram kedua Aktor tersebut dapat dihubungkan dengan relasi...",
+    "options": ["Include", "Extend", "Generalization Aktor", "Dependency", "Association"],
+    "correctAnswer": 2,
+    "explanation": "💡 Aktor dapat memiliki relasi Generalization (misal Siswa dan Guru mewarisi Use Case Aktor Pengguna)."
+  },
+  {
+    "id": 29,
+    "category": "Pemodelan Sistem",
+    "question": "Simbol lingkaran hitam padat pada Activity Diagram menandakan...",
+    "options": ["Initial Node (Mulai)", "Final Node (Selesai)", "Decision Node", "Action State", "Fork Node"],
+    "correctAnswer": 0,
+    "explanation": "💡 Initial Node (titik awal) disimbolkan lingkaran hitam padat."
+  },
+  {
+    "id": 30,
+    "category": "Pemodelan Sistem",
+    "question": "Simbol lingkaran hitam di dalam lingkaran luar (bullseye) pada Activity Diagram menandakan...",
+    "options": ["Initial Node", "Activity Final Node (Selesai)", "Fork Node", "Join Node", "Decision Node"],
+    "correctAnswer": 1,
+    "explanation": "💡 Activity Final Node disimbolkan lingkaran berbingkai (bullseye)."
+  },
+  {
+    "id": 31,
+    "category": "Pemodelan Sistem",
+    "question": "Jika relasi ERD berkardinalitas 1:N (Satu Kelas memiliki Banyak Siswa), lokasi Foreign Key yang BENAR saat ditransformasikan ke tabel relasional adalah...",
+    "options": ["Primary Key Kelas ditaruh di Tabel Siswa sebagai Foreign Key", "Primary Key Siswa ditaruh di Tabel Kelas", "Foreign Key dibuat di tabel baru ketiga", "Tidak perlu Foreign Key", "FK ditaruh acak"],
+    "correctAnswer": 0,
+    "explanation": "💡 Pada relasi 1:N, Primary Key dari sisi '1' (Kelas) selalu dipindahkan menjadi Foreign Key di sisi 'N' (Siswa)."
+  },
+  {
+    "id": 32,
+    "category": "Pemodelan Sistem",
+    "question": "Jika relasi ERD berkardinalitas N:M (Banyak Siswa mengambil Banyak Ekstrakurikuler), bagaimana aturan transformasinya ke basis data relasional?",
+    "options": ["Cukup tambahkan Foreign Key di salah satu tabel", "Harus membuat TABEL TRANSITIF / PIVOT BARU yang berisi Primary Key kedua tabel sebagai Foreign Key", "Relasi N:M dilarang di database", "Foreign Key diganti angka 0", "Dibuat menjadi 10 kolom tambahan"],
+    "correctAnswer": 1,
+    "explanation": "💡 Relasi N:M wajib diurai menjadi tabel junction baru bertumpukan dua Foreign Key."
+  },
+  {
+    "id": 33,
+    "category": "Pemodelan Sistem",
+    "question": "Tracing Sequence Diagram: Sebuah objek `LoginForm` mengirim pesan `login(user, pass)` ke objek `AuthService`. `AuthService` lalu mengirim query ke `UserTable`. Garis pesan balasan (reply message) dari `UserTable` ke `AuthService` digambarkan dengan...",
+    "options": ["Garis lurus panah padat (——►)", "Garis putus-putus panah terbuka (- - -►)", "Garis ganda", "Garis melengkung", "Garis merah"],
+    "correctAnswer": 1,
+    "explanation": "💡 Return/Reply Message pada Sequence Diagram disimbolkan garis putus-putus berpuncak panah terbuka."
+  },
+  {
+    "id": 34,
+    "category": "Pemodelan Sistem",
+    "question": "Manakah urutan tahapan perancangan sistem yang paling terstruktur sesuai metodologi Berorientasi Objek?",
+    "options": ["Coding -> Class Diagram -> Use Case Diagram -> Deployment", "Use Case Diagram -> Activity Diagram -> Class Diagram -> Coding", "Class Diagram -> ERD -> Use Case Diagram -> Testing", "Deployment Diagram -> Use Case -> Coding", "Testing -> Coding -> Design"],
+    "correctAnswer": 1,
+    "explanation": "💡 Perancangan berawal dari pengumpulan kebutuhan (Use Case), alur kerja (Activity), struktur (Class), lalu coding."
+  },
+  {
+    "id": 35,
+    "category": "Pemodelan Sistem",
+    "question": "Pada Use Case `Transfer Uang`, terdapat Use Case `Verifikasi PIN`. Karena setiap transfer uang SELALU butuh verifikasi PIN, maka relasinya adalah...",
+    "options": ["Transfer Uang <<extend>> Verifikasi PIN", "Transfer Uang <<include>> Verifikasi PIN", "Verifikasi PIN <<include>> Transfer Uang", "Generalization", "Association"],
+    "correctAnswer": 1,
+    "explanation": "💡 Karena Verifikasi PIN mutlak wajib dijalankan saat Transfer Uang, maka `Transfer Uang <<include>> Verifikasi PIN`."
+  },
+  {
+    "id": 36,
+    "category": "Pemodelan Sistem",
+    "question": "Pada Use Case `Belanja Online`, terdapat Use Case `Masukan Kode Promo`. Kode promo HANYA diproses jika pengguna memiliki kupon. Relasi yang tepat adalah...",
+    "options": ["Masukan Kode Promo <<extend>> Belanja Online", "Belanja Online <<include>> Masukan Kode Promo", "Masukan Kode Promo <<include>> Belanja Online", "Generalization", "Association"],
+    "correctAnswer": 0,
+    "explanation": "💡 Karena masukan promo bersifat opsional/kondisional, Use Case pembantu meng-extend Use Case utama."
+  },
+  {
+    "id": 37,
+    "category": "Pemodelan Sistem",
+    "question": "Jika sebuah Class Diagram memiliki kelas `Mobil` yang tersusun atas kelas `Roda`, `Mesin`, dan `Pintu`, jenis relasi yang paling presisi adalah...",
+    "options": ["Generalization", "Composition", "Dependency", "Realization", "Association Biasa"],
+    "correctAnswer": 1,
+    "explanation": "💡 Relasi part-of yang tidak dapat berdiri sendiri jika mobil dihancurkan adalah Composition."
+  },
+  {
+    "id": 38,
+    "category": "Pemodelan Sistem",
+    "question": "Manakah notasi visibilitas atribut di Class Diagram UML yang BENAR?",
+    "options": ["+ untuk private, - untuk public, # untuk protected", "+ untuk public, - untuk private, # untuk protected", "* untuk public, & untuk private", "public untuk +, private untuk #", "tidak ada notasi visibilitas"],
+    "correctAnswer": 1,
+    "explanation": "💡 Notasi UML: `+` Public, `-` Private, `#` Protected, `~` Package/Default."
+  },
+  {
+    "id": 39,
+    "category": "Pemodelan Sistem",
+    "question": "Atribut `+ count: int` pada Class Diagram menandakan bahwa atribut `count` bersifat...",
+    "options": ["Private bertipe int", "Public bertipe int", "Protected bertipe int", "Static bertipe int", "Constant bertipe int"],
+    "correctAnswer": 1,
+    "explanation": "💡 Tanda `+` adalah visual penyimbolan modifier Public."
+  },
+  {
+    "id": 40,
+    "category": "Pemodelan Sistem",
+    "question": "Jika sebuah method pada Class Diagram digarisbawahi (underlined) contoh: `+ getCount(): int`, hal ini berarti method tersebut bersifat...",
+    "options": ["Abstract", "Static", "Private", "Final", "Virtual"],
+    "correctAnswer": 1,
+    "explanation": "💡 Garis bawah pada nama atribut/method di Class Diagram UML menandakan variabel/method `static`."
+  },
+  {
+    "id": 41,
+    "category": "Pemodelan Sistem",
+    "question": "Jika nama Class pada Class Diagram ditulis miring (*Italic*), berarti Class tersebut bersifat...",
+    "options": ["Abstract Class", "Final Class", "Public Class", "Interface", "Deprecated Class"],
+    "correctAnswer": 0,
+    "explanation": "💡 Cetak miring (*Italic*) pada nama Class atau Method di UML menandakan komponen Abstract."
+  },
+  {
+    "id": 42,
+    "category": "Pemodelan Sistem",
+    "question": "Dalam DFD (Data Flow Diagram) klasik, simbol dua garis sejajar horizontal merepresentasikan...",
+    "options": ["Data Store (Penyimpanan Data)", "External Entity", "Process", "Data Flow", "Boundary"],
+    "correctAnswer": 0,
+    "explanation": "💡 Dua garis sejajar (atau persegi tanpa tutup kanan) merepresentasikan Data Store di DFD."
+  },
+  {
+    "id": 43,
+    "category": "Pemodelan Sistem",
+    "question": "Perbedaan mendasar DFD dan UML adalah...",
+    "options": ["DFD berorientasi Aliran Data (prosedural), UML berorientasi Objek (OOP)", "DFD khusus gambar fisik server", "UML hanya untuk database", "DFD menggunakan bahasa Java", "Keduanya persis sama"],
+    "correctAnswer": 0,
+    "explanation": "💡 DFD berfokus pada aliran transformasi data sistem terstruktur, UML berfokus pada analisis PBO."
+  },
+  {
+    "id": 44,
+    "category": "Pemodelan Sistem",
+    "question": "Pada Sequence Diagram, pesan yang dikirimkan tanpa menunggu balasan (Asynchronous Message) disimbolkan panah...",
+    "options": ["Panah padat hitam (——►)", "Panah terbuka (——>", "Garis putus-putus", "Panah ganda", "Garis melingkar"],
+    "correctAnswer": 1,
+    "explanation": "💡 Asynchronous Message menggunakan garis lurus berpuncak panah terbuka (——>)."
+  },
+  {
+    "id": 45,
+    "category": "Pemodelan Sistem",
+    "question": "Entitas Lemah (Weak Entity) pada ERD adalah...",
+    "options": ["Entitas yang tidak memiliki Primary Key sendiri dan keberadaannya bergantung entitas lain", "Entitas tanpa atribut", "Entitas yang terhapus", "Entitas berukuran kecil", "Entitas bertipe varchar"],
+    "correctAnswer": 0,
+    "explanation": "💡 Weak Entity disimbolkan persegi panjang ganda dan keberadaannya bergantung pada Identifying Entity."
+  },
+  {
+    "id": 46,
+    "category": "Pemodelan Sistem",
+    "question": "Sebuah sistem memiliki Use Case `Kelola Data Siswa`. Namun pada Class Diagram tidak ada Class `Siswa` maupun `SiswaController`. Kesalahan desain ini melanggar...",
+    "options": ["Konsistensi & Traceability antar Diagram UML", "Sintaks Java", "Aturan Normalisasi", "Kardinalitas ERD", "Aturan DDL"],
+    "correctAnswer": 0,
+    "explanation": "💡 Setiap Use Case (persyaratan fungsional) harus dapat ditelusuri (traceable) ke Class pengendali di Class Diagram."
+  },
+  {
+    "id": 47,
+    "category": "Pemodelan Sistem",
+    "question": "Analisis Studi Kasus: Dalam sistem e-commerce, seorang Pembeli melakukan Checkout. Pembeli DAPAT memilih metode pembayaran Transfer Bank, E-Wallet, atau Kartu Kredit. Bagaimana model Use Case yang paling efisien?",
+    "options": ["Membuat 10 Aktor baru", "Use Case `Checkout` di-extend oleh Use Case spesifik `Bayar Transfer`, `Bayar E-Wallet`, dan `Bayar Kartu Kredit` (atau Generalization Use Case Pembayaran)", "Membuat 3 Use Case tanpa relasi", "Menghapus Use Case Checkout", "Menggabungkannya ke DFD"],
+    "correctAnswer": 1,
+    "explanation": "💡 Variasi metode pembayaran bersifat opsional/spesifik dan dihubungkan via <<extend>> atau Generalization ke Use Case Pembayaran."
+  },
+  {
+    "id": 48,
+    "category": "Pemodelan Sistem",
+    "question": "Kesalahan Pemodelan: Menghubungkan Aktor langsung ke Aktor lain dengan garis asosiasi pada Use Case Diagram. Mengapa hal ini SALAH?",
+    "options": ["Aktor tidak boleh saling berkomunikasi langsung di Use Case Diagram (Asosiasi hanya antara Aktor dan Use Case)", "Warna aktor harus beda", "Aktor harus di dalam boundary", "Aktor tidak boleh punya nama", "Aktor wajib berbentuk persegi"],
+    "correctAnswer": 0,
+    "explanation": "💡 Use Case Diagram memodelkan interaksi Aktor dengan Sistem (Use Case), bukan interaksi antar Aktor di luar sistem."
+  },
+  {
+    "id": 49,
+    "category": "Pemodelan Sistem",
+    "question": "Perhatikan diagram Activity: Terdapat Decision Node tetapi hanya ada 1 panah keluar. Apa akibat dari kesalahan pemodelan ini?",
+    "options": ["Alur aktivitas valid", "Dead-end / Invalid Flow karena Decision Node wajib memiliki minimal 2 jalur cabang bercabang (misal TRUE dan FALSE)", "Activity otomatis jalan 2 kali", "Sistem menjadi cepat", "Menjadi loop"],
+    "correctAnswer": 1,
+    "explanation": "💡 Decision Node mengevaluasi kondisi sehingga wajib menyediakan minimal 2 cabang keluaran yang diberi guard condition."
+  },
+  {
+    "id": 50,
+    "category": "Pemodelan Sistem",
+    "question": "Jika sebuah Class Diagram memiliki hubungan melingkar tanpa henti (Circular Dependency) antar 5 Class, tindakan refactoring pemodelan terbaik adalah...",
+    "options": ["Menerapkan Inversion of Control / Interface Abstraction untuk memutus ketergantungan langsung", "Menghapus kelima class", "Mengubah semua atribut jadi public", "Membuat 5 Use Case baru", "Mengabaikannya"],
+    "correctAnswer": 0,
+    "explanation": "💡 Circular dependency menyebabkan tight-coupling parah; diatasi dengan mengekstrak Interface/Abstraksi."
+  },
+  {
+    "id": 51,
+    "category": "Pemodelan Sistem",
+    "question": "Tracing ERD to Schema: Entitas `Mahasiswa` (PK: NIM) bertransaksi dengan Entitas `MataKuliah` (PK: KodeMK) dalam relasi `KRS` N:M dengan atribut `NilaiAkhir`. Bagaimana skema tabel `KRS` hasil transformasinya?",
+    "options": ["KRS (NIM, KodeMK, NilaiAkhir) dengan Composite Primary Key (NIM, KodeMK)", "KRS (NilaiAkhir)", "Mahasiswa (NIM, KodeMK, NilaiAkhir)", "MataKuliah (KodeMK, NIM)", "Tidak butuh tabel KRS"],
+    "correctAnswer": 0,
+    "explanation": "💡 Tabel perantara KRS menampung PK dari kedua belah pihak sebagai Composite PK sekaligus menampung atribut relasi `NilaiAkhir`."
+  },
+  {
+    "id": 52,
+    "category": "Pemodelan Sistem",
+    "question": "Mengapa menyimpan Atribut Multivalue (misal no_hp_1, no_hp_2, no_hp_3) dalam 1 tabel yang sama melanggar prinsip perancangan ERD ke Relasional yang baik?",
+    "options": ["Membatasi jumlah nomor HP yang bisa disimpan dan menciptakan kolom-kolom NULL yang terbuang (melanggar 1NF)", "Membuat query SELECT cepat", "Diperbolehkan dalam SQL", "Menghapus Primary Key", "Tidak melanggar apapun"],
+    "correctAnswer": 0,
+    "explanation": "💡 Kolom berulang membatasi fleksibilitas dan membuang memori dengan nilai NULL (harus dipisah jadi tabel anak 1:N)."
+  },
+  {
+    "id": 53,
+    "category": "Pemodelan Sistem",
+    "question": "Pada Sequence Diagram, jika sebuah objek memanggil method milik dirinya sendiri (Self Call / Recursive Call), gambaran panahnya adalah...",
+    "options": ["Panah melingkar kembali ke Activation Bar objek itu sendiri", "Panah ke objek lain", "Garis putus-putus ke luar layar", "Panah ganda ke Aktor", "Tidak disimbolkan"],
+    "correctAnswer": 0,
+    "explanation": "💡 Self-message digambarkan dengan garis panah melengkung yang kembali ke Activation Bar objek asal."
+  },
+  {
+    "id": 54,
+    "category": "Pemodelan Sistem",
+    "question": "Dalam perancangan perangkat lunak modern (Agile), tujuan utama pembuatan diagram UML adalah...",
+    "options": ["Sebagai dokumentasi mati yang harus setebal 500 halaman", "Sebagai alat komunikasi dan pemahaman bersama arsitektur sistem bagi tim pengembang", "Persyaratan wajib dari kompiler Java", "Menghanti tugas coding", "Menghasilkan file exe otomatis"],
+    "correctAnswer": 1,
+    "explanation": "💡 UML berfungsi sebagai cetak biru komunikasi arsitektur agar seluruh tim memiliki persepsi teknis yang seragam."
+  },
+  {
+    "id": 55,
+    "category": "Pemodelan Sistem",
+    "question": "Studi Kasus: Sistem ATM. Aktor 'Nasabah' memilih Use Case `Tarik Tunai`. Jika saldo tidak cukup, sistem menampilkan pesan error. Bagaimana model Use Case terbaik untuk kondisi saldo tidak cukup?",
+    "options": ["Use Case `Tampilkan Error Saldo` meng-<<extend>> Use Case `Tarik Tunai` dengan Extension Point 'Saldo Kurang'", "Use Case `Tarik Tunai` include `Tampilkan Error`", "Membuat Aktor Saldo baru", "Menghapus Use Case Tarik Tunai", "Menggabungkan ke Class Diagram"],
+    "correctAnswer": 0,
+    "explanation": "💡 Kondisi pengecualian/error yang opsional dimodelkan dengan <<extend>> dari extension point Use Case utama."
+  },
+  {
+    "id": 56,
+    "category": "Pemodelan Sistem",
+    "question": "Apa peran 'System Boundary' (Kotak Persegi yang membungkus Use Case) pada Use Case Diagram?",
+    "options": ["Membatasi ruang lingkup mana fungsionalitas di DALAM sistem dan mana Aktor di LUAR sistem", "Hanya hiasan visual", "Menandakan server fisik", "Membatasi jumlah baris koding", "Menyimpan data user"],
+    "correctAnswer": 0,
+    "explanation": "💡 System Boundary mendefinisikan batas lingkup (scope) aplikasi yang sedang dirancang."
+  },
+  {
+    "id": 57,
+    "category": "Pemodelan Sistem",
+    "question": "Dalam Class Diagram, relasi `Aggregation` disimbolkan dengan...",
+    "options": ["Garis dengan wajik/belah ketupat KOSONG di sisi kelas induk", "Garis dengan wajik HITAM PADAT", "Panah putus-putus", "Garis polos tanpa simbol", "Panah segitiga"],
+    "correctAnswer": 0,
+    "explanation": "💡 Belah ketupat transparan/kosong (◊) menyimbolkan relasi Aggregation."
+  },
+  {
+    "id": 58,
+    "category": "Pemodelan Sistem",
+    "question": "Sebaliknya, relasi `Composition` disimbolkan dengan...",
+    "options": ["Garis dengan wajik KOSONG", "Garis dengan wajik HITAM PADAT di sisi kelas induk", "Panah putus-putus", "Garis lengkung", "Lingkaran hitam"],
+    "correctAnswer": 1,
+    "explanation": "💡 Belah ketupat hitam padat (♦) menyimbolkan relasi Composition."
+  },
+  {
+    "id": 59,
+    "category": "Pemodelan Sistem",
+    "question": "Jika sebuah Sequence Diagram menunjukkan 50 objek saling mengirim pesan dalam satu layar secara tidak terstruktur, anti-pattern pemodelan ini menandakan...",
+    "options": ["Desain sistem sangat bagus", "Kurangnya dekomposisi modul (God Sequence / Poor Subsystem Isolation)", "Database sangat cepat", "Koding siap dideploy", "Sistem bersifat microservice"],
+    "correctAnswer": 1,
+    "explanation": "💡 Sequence yang terlalu rumit menandakan kurangnya dekomposisi tanggung jawab antar komponen."
+  },
+  {
+    "id": 60,
+    "category": "Pemodelan Sistem",
+    "question": "Pada ERD, Atribut Komposit (Composite Attribute) adalah...",
+    "options": ["Atribut yang dapat dipecah lagi menjadi beberapa sub-atribut (misal `NamaLengkap` dipecah jadi `NamaDepan` dan `NamaBelakang`)", "Atribut bertipe integer", "Atribut primary key", "Atribut berulang", "Atribut buatan"],
+    "correctAnswer": 0,
+    "explanation": "💡 Composite Attribute adalah atribut yang terdiri dari beberapa atribut pembentuk yang lebih kecil."
+  }
+]

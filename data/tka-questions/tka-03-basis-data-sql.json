@@ -1,0 +1,482 @@
+[
+  {
+    "id": 1,
+    "category": "Basis Data & SQL",
+    "question": "Sistem perangkat lunak yang digunakan untuk mengelola dan memanipulasi basis data relasional dinamakan...",
+    "options": ["DBMS / RDBMS", "Operating System", "IDE Pemrograman", "Web Server", "Compiler"],
+    "correctAnswer": 0,
+    "explanation": "💡 RDBMS (Relational Database Management System) adalah software pengelola basis data relasional."
+  },
+  {
+    "id": 2,
+    "category": "Basis Data & SQL",
+    "question": "Atribut atau kolom dalam tabel yang unik dan digunakan untuk mengidentifikasi setiap baris (record) secara spesifik dinamakan...",
+    "options": ["Foreign Key", "Primary Key", "Super Key", "Candidate Key", "Alternate Key"],
+    "correctAnswer": 1,
+    "explanation": "💡 Primary Key identik sebagai pengenal unik yang tidak boleh bernilai NULL dan tidak boleh ganda."
+  },
+  {
+    "id": 3,
+    "category": "Basis Data & SQL",
+    "question": "Atribut pada sebuah tabel yang merujuk pada Primary Key tabel lain untuk membentuk hubungan/relasi antar tabel dinamakan...",
+    "options": ["Primary Key", "Foreign Key", "Unique Key", "Composite Key", "Surrogate Key"],
+    "correctAnswer": 1,
+    "explanation": "💡 Foreign Key (Kunci Tamu) menciptakan relasi antar tabel dengan merujuk ke Primary Key tabel induk."
+  },
+  {
+    "id": 4,
+    "category": "Basis Data & SQL",
+    "question": "Kelompok perintah SQL yang digunakan untuk mendefinisikan struktur database seperti membuat, mengubah, dan menghapus tabel adalah...",
+    "options": ["DML (Data Manipulation Language)", "DDL (Data Definition Language)", "DCL (Data Control Language)", "TCL (Transaction Control Language)", "DQL (Data Query Language)"],
+    "correctAnswer": 1,
+    "explanation": "💡 DDL mencakup perintah struktur database seperti CREATE, ALTER, DROP, TRUNCATE."
+  },
+  {
+    "id": 5,
+    "category": "Basis Data & SQL",
+    "question": "Manakah yang merupakan contoh perintah SQL kategori DML (Data Manipulation Language)?",
+    "options": ["CREATE TABLE", "ALTER TABLE", "INSERT INTO", "DROP DATABASE", "GRANT ALL"],
+    "correctAnswer": 2,
+    "explanation": "💡 DML digunakan untuk manipulasi isi baris data: INSERT, UPDATE, DELETE, SELECT."
+  },
+  {
+    "id": 6,
+    "category": "Basis Data & SQL",
+    "question": "Perintah SQL yang digunakan untuk mengambil data dari satu atau beberapa tabel adalah...",
+    "options": ["GET", "FETCH", "SELECT", "READ", "EXTRACT"],
+    "correctAnswer": 2,
+    "explanation": "💡 Perintah SELECT adalah standar SQL untuk melakukan query pengambilan data."
+  },
+  {
+    "id": 7,
+    "category": "Basis Data & SQL",
+    "question": "Perintah DDL yang digunakan untuk MENULIS/MEMBUAT struktur tabel baru adalah...",
+    "options": ["ADD TABLE", "NEW TABLE", "CREATE TABLE", "MAKE TABLE", "INSERT TABLE"],
+    "correctAnswer": 2,
+    "explanation": "💡 CREATE TABLE adalah sintaks baku DDL untuk pembuatan tabel baru."
+  },
+  {
+    "id": 8,
+    "category": "Basis Data & SQL",
+    "question": "Perintah SQL yang digunakan untuk memperbarui isi data baris yang sudah ada pada tabel adalah...",
+    "options": ["CHANGE", "MODIFY", "UPDATE", "EDIT", "REPLACE"],
+    "correctAnswer": 2,
+    "explanation": "💡 UPDATE digunakan untuk mengubah isi record data yang ada di tabel."
+  },
+  {
+    "id": 9,
+    "category": "Basis Data & SQL",
+    "question": "Perintah SQL yang digunakan untuk menghapus baris data tertentu dari sebuah tabel adalah...",
+    "options": ["REMOVE", "DROP", "DELETE", "TRUNCATE", "CLEAR"],
+    "correctAnswer": 2,
+    "explanation": "💡 DELETE digunakan untuk menghapus baris data (record). DROP untuk menghapus tabel/database."
+  },
+  {
+    "id": 10,
+    "category": "Basis Data & SQL",
+    "question": "Perintah DDL yang menghapus SELURUH ISI BARIS data pada tabel seketika sekaligus me-reset auto-increment tanpa menghapus struktur tabelnya adalah...",
+    "options": ["DELETE FROM", "DROP TABLE", "TRUNCATE TABLE", "CLEAR TABLE", "REMOVE TABLE"],
+    "correctAnswer": 2,
+    "explanation": "💡 TRUNCATE menghapus seluruh baris data secara cepat dan me-reset struktur urutan id."
+  },
+  {
+    "id": 11,
+    "category": "Basis Data & SQL",
+    "question": "Proses pengorganisasian data dalam database untuk mengurangi redundansi (penumpukan data) dan ketergantungan data yang anomali dinamakan...",
+    "options": ["Denormalisasi", "Normalisasi", "Indexing", "Migrasi", "Backup"],
+    "correctAnswer": 1,
+    "explanation": "💡 Normalisasi adalah teknik perancangan database untuk menghilangkan redundansi data."
+  },
+  {
+    "id": 12,
+    "category": "Basis Data & SQL",
+    "question": "Syarat utama sebuah tabel memenuhi Bentuk Normal Pertama (1NF) adalah...",
+    "options": ["Tidak ada ketergantungan transitif", "Setiap kolom bernilai atomik (tidak ada multivalue/repeating group)", "Sudah memiliki Foreign Key", "Harus di-join dengan tabel lain", "Menggunakan tipe data integer"],
+    "correctAnswer": 1,
+    "explanation": "💡 1NF mengharuskan setiap sel data bersifat atomik (tunggal, tidak bernilai ganda dalam 1 kolom)."
+  },
+  {
+    "id": 13,
+    "category": "Basis Data & SQL",
+    "question": "Perintah DCL yang digunakan untuk memberikan hak akses database kepada pengguna tertentu adalah...",
+    "options": ["REVOKE", "GRANT", "ALLOW", "PERMIT", "GIVE"],
+    "correctAnswer": 1,
+    "explanation": "💡 GRANT memberikan izin hak akses (privileges) pengguna."
+  },
+  {
+    "id": 14,
+    "category": "Basis Data & SQL",
+    "question": "Klausul SQL yang digunakan untuk mengurutkan hasil query SELECT berdasarkan kolom tertentu adalah...",
+    "options": ["GROUP BY", "SORT BY", "ORDER BY", "ARRANGE BY", "ALIGN BY"],
+    "correctAnswer": 2,
+    "explanation": "💡 ORDER BY digunakan untuk mengurutkan data (ASC / DESC)."
+  },
+  {
+    "id": 15,
+    "category": "Basis Data & SQL",
+    "question": "Nilai penanda pada database yang berarti 'data tidak ada' atau 'belum diisi' dinamakan...",
+    "options": ["0", "EMPTY", "BLANK", "NULL", "UNDEFINED"],
+    "correctAnswer": 3,
+    "explanation": "💡 NULL menandakan ketiadaan nilai (absence of value), berbeda dari angka 0 atau string kosong."
+  },
+  {
+    "id": 16,
+    "category": "Basis Data & SQL",
+    "question": "Fungsi agregat SQL yang digunakan untuk menghitung jumlah total baris data yang memenuhi kriteria adalah...",
+    "options": ["SUM()", "COUNT()", "TOTAL()", "MAX()", "AVG()"],
+    "correctAnswer": 1,
+    "explanation": "💡 COUNT() menghitung banyaknya record/baris data."
+  },
+  {
+    "id": 17,
+    "category": "Basis Data & SQL",
+    "question": "Fungsi agregat SQL untuk menghitung rata-rata nilai numerik dalam sebuah kolom adalah...",
+    "options": ["MEAN()", "AVERAGE()", "AVG()", "SUM()", "MEDIAN()"],
+    "correctAnswer": 2,
+    "explanation": "💡 AVG() mengembalikan nilai rata-rata aritmatika dari atribut numerik."
+  },
+  {
+    "id": 18,
+    "category": "Basis Data & SQL",
+    "question": "Jenis JOIN yang mengembalikan SELURUH baris dari tabel kiri dan baris yang cocok dari tabel kanan adalah...",
+    "options": ["INNER JOIN", "LEFT (OUTER) JOIN", "RIGHT (OUTER) JOIN", "FULL OUTER JOIN", "CROSS JOIN"],
+    "correctAnswer": 1,
+    "explanation": "💡 LEFT JOIN mempertahankan seluruh baris dari tabel kiri (left table)."
+  },
+  {
+    "id": 19,
+    "category": "Basis Data & SQL",
+    "question": "Perbedaan utama klausul WHERE dan HAVING pada SQL adalah...",
+    "options": ["WHERE untuk agregat, HAVING untuk filter biasa", "WHERE memfilter baris SEBELUM pengelompokan (grouping), HAVING memfilter SETELAH pengelompokan (GROUP BY)", "WHERE hanya untuk teks, HAVING untuk angka", "WHERE digunakan di DDL, HAVING di DML", "Keduanya identik"],
+    "correctAnswer": 1,
+    "explanation": "💡 WHERE menyaring record individual sebelum agregasi, HAVING menyaring hasil dari GROUP BY."
+  },
+  {
+    "id": 20,
+    "category": "Basis Data & SQL",
+    "question": "Manakah query SQL yang benar untuk mengambil data siswa yang namanya diawali huruf 'A'?",
+    "options": ["SELECT * FROM siswa WHERE nama = 'A*';", "SELECT * FROM siswa WHERE nama LIKE 'A%';", "SELECT * FROM siswa WHERE nama LIKE '%A';", "SELECT * FROM siswa WHERE nama CONTAINS 'A';", "SELECT * FROM siswa WHERE nama STARTWITH 'A';"],
+    "correctAnswer": 1,
+    "explanation": "💡 Wildcard `LIKE 'A%'` mencocokkan string yang diawali huruf A."
+  },
+  {
+    "id": 21,
+    "category": "Basis Data & SQL",
+    "question": "Klausul SQL yang digunakan untuk mengelompokkan baris data yang memiliki nilai sama ke dalam baris ringkasan adalah...",
+    "options": ["ORDER BY", "CLUSTER BY", "GROUP BY", "COLLECT BY", "UNION BY"],
+    "correctAnswer": 2,
+    "explanation": "💡 GROUP BY sering dipadukan dengan fungsi agregat (COUNT, SUM, AVG) untuk merangkum data."
+  },
+  {
+    "id": 22,
+    "category": "Basis Data & SQL",
+    "question": "Operator SQL yang digunakan untuk mengecek apakah suatu nilai berada di dalam rentang nilai tertentu (misal 10 sampai 50) adalah...",
+    "options": ["IN", "BETWEEN", "LIKE", "RANGE", "INSIDE"],
+    "correctAnswer": 1,
+    "explanation": "💡 BETWEEN min AND max menyaring nilai dalam rentang inklusif."
+  },
+  {
+    "id": 23,
+    "category": "Basis Data & SQL",
+    "question": "Operator SQL `IN` digunakan untuk...",
+    "options": ["Mengecek apakah nilai ada di dalam daftar pilihan (list of values)", "Mencari string substring", "Menghitung total data", "Menggabungkan dua tabel", "Membuat relasi foreign key"],
+    "correctAnswer": 0,
+    "explanation": "💡 Contoh: `WHERE kelas IN ('XRPL1', 'XRPL2')` mencocokkan nilai dari daftar yang ditentukan."
+  },
+  {
+    "id": 24,
+    "category": "Basis Data & SQL",
+    "question": "Jika kita ingin menghapus seluruh baris data dari tabel `log_aktivitas` yang berumur lebih dari 30 hari, query yang benar adalah...",
+    "options": ["DROP TABLE log_aktivitas WHERE tanggal < 30;", "DELETE FROM log_aktivitas WHERE tanggal < NOW() - INTERVAL 30 DAY;", "TRUNCATE log_aktivitas WHERE tanggal < 30;", "REMOVE FROM log_aktivitas WHERE tanggal < 30;", "ALTER TABLE log_aktivitas DELETE WHERE 30;"],
+    "correctAnswer": 1,
+    "explanation": "💡 DELETE FROM digunakan dengan klausul WHERE untuk menghapus data spesifik."
+  },
+  {
+    "id": 25,
+    "category": "Basis Data & SQL",
+    "question": "Manakah sintaks yang BENAR untuk mengubah nama siswa menjadi 'Budi' pada ID 5 di tabel `siswa`?",
+    "options": ["UPDATE siswa SET nama = 'Budi' WHERE id = 5;", "CHANGE siswa SET nama = 'Budi' WHERE id = 5;", "MODIFY siswa WHERE id = 5 SET nama = 'Budi';", "UPDATE nama = 'Budi' IN siswa WHERE id = 5;", "REPLACE siswa NAMA = 'Budi' WHERE id = 5;"],
+    "correctAnswer": 0,
+    "explanation": "💡 Sintaks baku: `UPDATE nama_tabel SET nama_kolom = nilai WHERE kondisi;`."
+  },
+  {
+    "id": 26,
+    "category": "Basis Data & SQL",
+    "question": "Jenis JOIN yang HANYA mengembalikan baris yang memiliki pasangan nilai cocok di KEDUA tabel dinamakan...",
+    "options": ["LEFT JOIN", "RIGHT JOIN", "INNER JOIN", "FULL JOIN", "CROSS JOIN"],
+    "correctAnswer": 2,
+    "explanation": "💡 INNER JOIN hanya mengambil perpotongan (intersection) data yang presisi di kedua tabel."
+  },
+  {
+    "id": 27,
+    "category": "Basis Data & SQL",
+    "question": "Apa dampak tidak menyertakan klausul `WHERE` pada perintah `UPDATE` atau `DELETE`?",
+    "options": ["Error sintaks", "Seluruh baris data pada tabel akan ter-update atau terhapus!", "Perintah dibatalkan sistem", "Hanya baris pertama yang berubah", "Database terunci otomatis"],
+    "correctAnswer": 1,
+    "explanation": "💡 Tanpa WHERE, perintah UPDATE/DELETE dieksekusi secara masal pada 100% baris di tabel!"
+  },
+  {
+    "id": 28,
+    "category": "Basis Data & SQL",
+    "question": "Constraint SQL yang memastikan bahwa tidak boleh ada dua baris data yang memiliki nilai sama pada kolom tertentu dinamakan...",
+    "options": ["NOT NULL", "CHECK", "UNIQUE", "DEFAULT", "INDEX"],
+    "correctAnswer": 2,
+    "explanation": "💡 UNIQUE constraint menjamin seluruh nilai dalam kolom berbeda satu sama lain."
+  },
+  {
+    "id": 29,
+    "category": "Basis Data & SQL",
+    "question": "Syarat sebuah tabel memenuhi Bentuk Normal Kedua (2NF) adalah...",
+    "options": ["Sudah memenuhi 1NF dan tidak ada ketergantungan parsial (sebagian) terhadap Primary Key", "Harus memiliki 10 kolom", "Sudah tidak memiliki Foreign Key", "Semua kolom bertipe varchar", "Menggunakan INNER JOIN"],
+    "correctAnswer": 0,
+    "explanation": "💡 2NF mewajibkan 1NF + setiap atribut non-key bergantung penuh pada seluruh Primary Key."
+  },
+  {
+    "id": 30,
+    "category": "Basis Data & SQL",
+    "question": "Syarat Bentuk Normal Ketiga (3NF) adalah...",
+    "options": ["Memenuhi 2NF dan tidak ada ketergantungan transitif (non-key field menentukan non-key field lain)", "Harus dipisah menjadi 100 tabel", "Memiliki JSON column", "Memakai auto increment", "Dibuat dengan PostgreSQL"],
+    "correctAnswer": 0,
+    "explanation": "💡 3NF menghilangkan ketergantungan transitif (A -> B -> C)."
+  },
+  {
+    "id": 31,
+    "category": "Basis Data & SQL",
+    "question": "Empat sifat utama transaksi database yang dikenal dengan istilah ACID adalah singkatan dari...",
+    "options": ["Atomicity, Consistency, Isolation, Durability", "Accuracy, Control, Integrity, Data", "Access, Code, Index, Database", "Action, Commit, Insert, Delete", "Authentication, Crypto, Identity, Protection"],
+    "correctAnswer": 0,
+    "explanation": "💡 ACID: Atomicity (Semua atau Tidak Sama Sekali), Consistency, Isolation, Durability."
+  },
+  {
+    "id": 32,
+    "category": "Basis Data & SQL",
+    "question": "Sifat 'Atomicity' dalam transaksi database berarti...",
+    "options": ["Transaksi dilakukan dalam hitungan nanodetik", "Seluruh rangkaian perintah transaksi berhasil sepenuhnya, atau dibatalkan total jika 1 gagal", "Data disimpan di atomic RAM", "Query hanya boleh 1 baris", "Database terlindung dari peretasan"],
+    "correctAnswer": 1,
+    "explanation": "💡 Atomicity menganut prinsip All-or-Nothing (Semua tuntas atau Rollback total)."
+  },
+  {
+    "id": 33,
+    "category": "Basis Data & SQL",
+    "question": "Perintah TCL yang digunakan untuk membatalkan seluruh perubahan transaksi yang belum disimpan permanent adalah...",
+    "options": ["COMMIT", "ROLLBACK", "SAVEPOINT", "REVERT", "UNDO"],
+    "correctAnswer": 1,
+    "explanation": "💡 ROLLBACK membatalkan transaksi dan mengembalikan kondisi data ke Savepoint/State awal."
+  },
+  {
+    "id": 34,
+    "category": "Basis Data & SQL",
+    "question": "Perintah TCL yang digunakan untuk menyimpan secara permanen perubahan transaksi ke disk database adalah...",
+    "options": ["SAVE", "COMMIT", "STORE", "CHECKPOINT", "WRITE"],
+    "correctAnswer": 1,
+    "explanation": "💡 COMMIT mengunci dan menyimpan permanen seluruh perubahan transaksi."
+  },
+  {
+    "id": 35,
+    "category": "Basis Data & SQL",
+    "question": "Struktur data indeks (Indexing) pada database digunakan dengan tujuan utama untuk...",
+    "options": ["Menghemat kapasitas harddisk", "Mempercepat proses pencarian/query SELECT data", "Mencegah data terhapus", "Membuat tabel rapi", "Menyembunyikan kolom privat"],
+    "correctAnswer": 1,
+    "explanation": "💡 Database Index (seperti B-Tree) meningkatkan kecepatan query pembacaan SELECT."
+  },
+  {
+    "id": 36,
+    "category": "Basis Data & SQL",
+    "question": "Apa potensi kerugian dari membuat terlalu banyak Index pada sebuah tabel?",
+    "options": ["Ukuran file database membengkak dan memperlambat proses INSERT/UPDATE/DELETE", "Query SELECT menjadi lambat", "Primary key menjadi terhapus", "Database mengalami deadlock", "Data terenkripsi"],
+    "correctAnswer": 0,
+    "explanation": "💡 Setiap ada INSERT/UPDATE, indeks harus diperbarui ulang, membebankan performa penulisan data."
+  },
+  {
+    "id": 37,
+    "category": "Basis Data & SQL",
+    "question": "Subquery (Nested Query) adalah...",
+    "options": ["Query SELECT yang berada di dalam query SQL lain", "Dua tabel yang digabung tanpa JOIN", "Query yang gagal dieksekusi", "Fungsi JS di dalam SQL", "Database di dalam database"],
+    "correctAnswer": 0,
+    "explanation": "💡 Subquery adalah query bersarang yang hasilnya digunakan oleh query luar."
+  },
+  {
+    "id": 38,
+    "category": "Basis Data & SQL",
+    "question": "Klausul `HAVING COUNT(*) > 5` biasanya diletakkan...",
+    "options": ["Sebelum WHERE", "Setelah GROUP BY", "Sebelum SELECT", "Di dalam INSERT", "Di akhir DDL"],
+    "correctAnswer": 1,
+    "explanation": "💡 HAVING menyaring hasil grup, sehingga posisinya setelah `GROUP BY`."
+  },
+  {
+    "id": 39,
+    "category": "Basis Data & SQL",
+    "question": "Tracing Query: `SELECT kelas, COUNT(*) FROM siswa GROUP BY kelas;`. Hasil dari query ini adalah...",
+    "options": ["Daftar nama seluruh siswa", "Jumlah total siswa per kelas", "Nilai rata-rata siswa", "Nama siswa paling pintar", "Daftar kelas yang kosong"],
+    "correctAnswer": 1,
+    "explanation": "💡 Query mengelompokkan data berdasarkan kelas dan menghitung banyaknya siswa di tiap grup kelas."
+  },
+  {
+    "id": 40,
+    "category": "Basis Data & SQL",
+    "question": "Apa hasil dari query: `SELECT * FROM produk WHERE harga > 10000 AND (kategori = 'Baju' OR kategori = 'Celana');`?",
+    "options": ["Produk harga > 10000 kategori Baju, ATAU semua Celana", "Produk kategori Baju atau Celana yang harganya DI ATAS 10000", "Semua produk baju dan celana", "Produk harga di bawah 10000", "Error sintaks tanda kurung"],
+    "correctAnswer": 1,
+    "explanation": "💡 Tanda kurung mengelompokkan syarat kategori dulu, lalu di-AND-kan dengan harga > 10000."
+  },
+  {
+    "id": 41,
+    "category": "Basis Data & SQL",
+    "question": "Jenis relasi antar tabel 'Satu Guru mengajar Banyak Kelas, dan Satu Kelas diajar Banyak Guru' dinamakan...",
+    "options": ["One to One (1:1)", "One to Many (1:N)", "Many to Many (N:M)", "Parent to Child", "Self Referencing"],
+    "correctAnswer": 2,
+    "explanation": "💡 Relasi Banyak ke Banyak (Many to Many) memerlukan tabel pivot / junction table."
+  },
+  {
+    "id": 42,
+    "category": "Basis Data & SQL",
+    "question": "Untuk merelasikan dua tabel yang memiliki hubungan Many-to-Many (N:M), solusi terbaik adalah...",
+    "options": ["Menaruh 10 Foreign Key di tabel pertama", "Membuat Tabel Perantara (Pivot / Junction Table) yang berisi 2 Foreign Key", "Menyimpan data sebagai string dipisah koma", "Menggabungkan dua tabel jadi satu", "Menghapus salah satu tabel"],
+    "correctAnswer": 1,
+    "explanation": "💡 Junction table memecah relasi N:M menjadi dua relasi 1:N."
+  },
+  {
+    "id": 43,
+    "category": "Basis Data & SQL",
+    "question": "Klausul `LIMIT 5 OFFSET 10` pada PostgreSQL/MySQL berfungsi untuk...",
+    "options": ["Mengambil 5 data pertama", "Mengambil 5 baris data, dengan melompati (skip) 10 baris pertama", "Mengambil data dari id 5 sampai 10", "Membatasi kolom jadi 5", "Menampilkan 15 data"],
+    "correctAnswer": 1,
+    "explanation": "💡 LIMIT menentukan jumlah baris yang diambil, OFFSET menentukan jumlah baris awal yang dilewati (pagination)."
+  },
+  {
+    "id": 44,
+    "category": "Basis Data & SQL",
+    "question": "Objek database berupa tabel maya (virtual table) yang hasil datanya berasal dari query SELECT tersimpan dinamakan...",
+    "options": ["Stored Procedure", "Trigger", "View", "Index", "Sequence"],
+    "correctAnswer": 2,
+    "explanation": "💡 View adalah tabel virtual yang menyimpan definisi query SQL untuk menyederhanakan akses data."
+  },
+  {
+    "id": 45,
+    "category": "Basis Data & SQL",
+    "question": "Blok kode SQL yang otomatis dieksekusi saat terjadi event tertentu (INSERT/UPDATE/DELETE) pada tabel dinamakan...",
+    "options": ["Trigger", "Stored Procedure", "Function", "View", "Transaction"],
+    "correctAnswer": 0,
+    "explanation": "💡 Trigger berjalan otomatis dipicu oleh event DML pada tabel."
+  },
+  {
+    "id": 46,
+    "category": "Basis Data & SQL",
+    "question": "Teknik peretasan keamanan database di mana penyerang menyisipkan perintah SQL berbahaya lewat form input dinamakan...",
+    "options": ["Cross-Site Scripting (XSS)", "SQL Injection (SQLi)", "CSRF", "DDoS", "Buffer Overflow"],
+    "correctAnswer": 1,
+    "explanation": "💡 SQL Injection mengeksploitasi input user yang tidak di-sanitize untuk memanipulasi query DB."
+  },
+  {
+    "id": 47,
+    "category": "Basis Data & SQL",
+    "question": "Cara utama paling ampuh bagi pengembang software untuk MENCEGAH SQL Injection adalah...",
+    "options": ["Menggunakan Prepared Statement / Parameterized Queries", "Menghapus database", "Menggunakan method GET saja", "Mematikan koneksi internet", "Mengubah nama tabel"],
+    "correctAnswer": 0,
+    "explanation": "💡 Prepared Statement memisahkan struktur query dengan data parameter sehingga kode SQL tidak bisa disisipi."
+  },
+  {
+    "id": 48,
+    "category": "Basis Data & SQL",
+    "question": "Tracing Query: `SELECT p.nama, k.nama_kategori FROM produk p LEFT JOIN kategori k ON p.kategori_id = k.id;` Jika ada produk tanpa kategori_id (NULL), apa yang tampil di kolom nama_kategori?",
+    "options": ["Baris produk tidak akan muncul sama sekali", "Kolom nama_kategori bernilai NULL", "Error query gagal", "Muncul string 'Kosong'", "Program crash"],
+    "correctAnswer": 1,
+    "explanation": "💡 LEFT JOIN mempertahankan record tabel kiri (produk); jika tak berpasangan, kolom kanan bernilai NULL."
+  },
+  {
+    "id": 49,
+    "category": "Basis Data & SQL",
+    "question": "Perhatikan tabel `transaksi` dengan 1 juta baris. Query `SELECT * FROM transaksi WHERE YEAR(tanggal) = 2026;` berjalan lambat padahal kolom `tanggal` sudah di-index. Mengapa?",
+    "options": ["Indeks rusak", "Menggunakan fungsi `YEAR()` pada kolom indeks menyebabkan 'Index Scan / Loss' (sargable query terlanggar)", "Tabel terlalu kecil", "WHERE tidak mendukung angka", "Harus pakai DDL"],
+    "correctAnswer": 1,
+    "explanation": "💡 Membungkus kolom terindeks dengan fungsi mencegah database memanfaatkan indeks (Un-sargable query)."
+  },
+  {
+    "id": 50,
+    "category": "Basis Data & SQL",
+    "question": "Bagaimana cara memperbaiki query `WHERE YEAR(tanggal) = 2026` agar bisa memanfaatkan indeks tanggal secara maksimal?",
+    "options": ["`WHERE tanggal BETWEEN '2026-01-01' AND '2026-12-31'`", "`WHERE tanggal LIKE '%2026%'`", "`WHERE tanggal = 2026`", "`WHERE MONTH(tanggal) = 12`", "`WHERE tanggal IN (2026)`"],
+    "correctAnswer": 0,
+    "explanation": "💡 Menggunakan perbandingan rentang nilai murni (`BETWEEN`) membuat query bersifat sargable dan cepat."
+  },
+  {
+    "id": 51,
+    "category": "Basis Data & SQL",
+    "question": "Kondisi persaingan di mana dua transaksi saling menunggu kunci resource milik satu sama lain sehingga keduanya berhenti selamanya disebut...",
+    "options": ["Race Condition", "Deadlock", "Livelock", "Starvation", "Dirty Read"],
+    "correctAnswer": 1,
+    "explanation": "💡 Deadlock terjadi saat Transaksi A kunci X butuh Y, sementara Transaksi B kunci Y butuh X."
+  },
+  {
+    "id": 52,
+    "category": "Basis Data & SQL",
+    "question": "Dalam isolasi transaksi, membaca data yang sedang diubah oleh transaksi lain yang BELUM di-commit dinamakan...",
+    "options": ["Non-Repeatable Read", "Phantom Read", "Dirty Read", "Consistent Read", "Serial Read"],
+    "correctAnswer": 2,
+    "explanation": "💡 Dirty Read terjadi saat data uncommitted dibaca dan ternyata transaksi asal di-rollback."
+  },
+  {
+    "id": 53,
+    "category": "Basis Data & SQL",
+    "question": "Kasus Normalisasi: Tabel `Pesanan` memiliki kolom `(NoNota, Tanggal, KodeBarang, NamaBarang, HargaBarang)`. Kolom `NamaBarang` dan `HargaBarang` hanya bergantung pada `KodeBarang`, bukan `NoNota`. Tabel ini melanggar...",
+    "options": ["1NF", "2NF (Partial Dependency)", "3NF", "BCNF", "4NF"],
+    "correctAnswer": 1,
+    "explanation": "💡 Ketergantungan parsial (non-key bergantung pada sebagian composite primary key) melanggar 2NF."
+  },
+  {
+    "id": 54,
+    "category": "Basis Data & SQL",
+    "question": "Bagaimana solusi normalisasi untuk memecah tabel melanggar 2NF pada kasus pesanan di atas?",
+    "options": ["Menggabungkan semua kolom jadi satu", "Memecah menjadi 2 tabel: Tabel `Barang (KodeBarang, NamaBarang, HargaBarang)` dan Tabel `DetailPesanan (NoNota, KodeBarang)`", "Menghapus kolom NoNota", "Mengubah NoNota jadi VARCHAR", "Membuat View saja"],
+    "correctAnswer": 1,
+    "explanation": "💡 Memisahkan master barang membuang ketergantungan parsial dan memenuhi 2NF."
+  },
+  {
+    "id": 55,
+    "category": "Basis Data & SQL",
+    "question": "Tracing query agregasi bersarang:\n`SELECT id_pelanggan, SUM(total) FROM pesanan GROUP BY id_pelanggan HAVING SUM(total) > (SELECT AVG(total) FROM pesanan);` Query ini bertujuan untuk...",
+    "options": ["Mencari pelanggan dengan belanja rata-rata", "Mencari pelanggan yang total akumulasi belanjaannya melebihi nilai rata-rata per transaksi pesanan", "Mencari pesanan termahal", "Mencari total seluruh pesanan", "Query error karena ada subquery di HAVING"],
+    "correctAnswer": 1,
+    "explanation": "💡 Query menyaring grup pelanggan yang total belanjanya melampaui rata-rata transaksi umum."
+  },
+  {
+    "id": 56,
+    "category": "Basis Data & SQL",
+    "question": "Klausul `ON DELETE CASCADE` pada penentuan Foreign Key berarti...",
+    "options": ["Jika baris di tabel induk dihapus, baris terkait di tabel anak akan OTOMATIS IKUT TERHAPUS", "Dilarang menghapus data induk", "Baris di tabel anak di-set NULL", "Database akan dikunci", "Indeks terhapus"],
+    "correctAnswer": 0,
+    "explanation": "💡 CASCADE meneruskan aksi hapus dari parent record ke seluruh child records."
+  },
+  {
+    "id": 57,
+    "category": "Basis Data & SQL",
+    "question": "Perbedaan `UNION` dan `UNION ALL` saat mengabungkan hasil dua query SELECT adalah...",
+    "options": ["UNION menghapus baris duplikat, UNION ALL mempertahankan semua baris (termasuk duplikat)", "UNION ALL lebih lambat", "UNION khusus angka", "UNION ALL untuk tabel terpisah", "Tidak ada bedanya"],
+    "correctAnswer": 0,
+    "explanation": "💡 UNION melakukan deduplikasi hasil (lebih lambat), sedangkan UNION ALL menggabungkan murni (lebih cepat)."
+  },
+  {
+    "id": 58,
+    "category": "Basis Data & SQL",
+    "question": "Tracing Window Function: `SELECT nama, gaji, RANK() OVER (ORDER BY gaji DESC) as rangking FROM pegawai;`. Fungsi query ini adalah...",
+    "options": ["Mengurutkan nama pegawai secara alfabet", "Memberikan peringkat (rank) gaji pegawai dari tertinggi ke terendah tanpa meng-group baris data", "Menghapus gaji terendah", "Menghitung total gaji", "Query error karena RANK tidak valid"],
+    "correctAnswer": 1,
+    "explanation": "💡 Window function `RANK() OVER` memberikan peringkat analitis tanpa merusak baris individual."
+  },
+  {
+    "id": 59,
+    "category": "Basis Data & SQL",
+    "question": "Dalam perancangan NoSQL vs RDBMS, RDBMS lebih direkomendasikan untuk aplikasi yang membutuhkan...",
+    "options": ["Skalabilitas horizontal tanpa skema", "Integritas transaksi finansial yang ketat (ACID compliance)", "Penyimpanan dokumen JSON mentah tanpa relasi", "Streaming log suhu IoT per milidetik", "Tidak ada jawaban benar"],
+    "correctAnswer": 1,
+    "explanation": "💡 RDBMS sangat unggul untuk transaksi finansial/perbankan yang menuntut konsistensi ACID 100%."
+  },
+  {
+    "id": 60,
+    "category": "Basis Data & SQL",
+    "question": "Tracing Query: `SELECT COUNT(DISTINCT kota) FROM pelanggan;` Jika data kota berisi ['Bandung', 'Jakarta', 'Bandung', NULL, 'Jakarta'], hasilnya adalah...",
+    "options": ["5", "3", "2", "4", "Error"],
+    "correctAnswer": 2,
+    "explanation": "💡 DISTINCT mengambil nilai unik ('Bandung', 'Jakarta') dan mengabaikan NULL. COUNT hasilnya 2."
+  }
+]

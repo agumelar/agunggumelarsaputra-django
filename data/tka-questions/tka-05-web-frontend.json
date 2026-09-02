@@ -1,0 +1,482 @@
+[
+  {
+    "id": 1,
+    "category": "Web Dev Dasar",
+    "question": "Elemen semantik HTML5 yang digunakan untuk mendefinisikan bagian navigasi utama aplikasi web adalah...",
+    "options": ["<nav>", "<header>", "<section>", "<aside>", "<navigation>"],
+    "correctAnswer": 0,
+    "explanation": "💡 Tag `<nav>` adalah elemen semantik resmi HTML5 khusus blok navigasi."
+  },
+  {
+    "id": 2,
+    "category": "Web Dev Dasar",
+    "question": "Elemen HTML5 yang digunakan untuk menampilkan gambar secara dinamis via JavaScript menggunakan grafis bitmap 2D/3D dinamakan...",
+    "options": ["<picture>", "<svg>", "<canvas>", "<img>", "<figure>"],
+    "correctAnswer": 2,
+    "explanation": "💡 <canvas> menyediakan area render grafis berbasis script JavaScript."
+  },
+  {
+    "id": 3,
+    "category": "Web Dev Dasar",
+    "question": "Atribut HTML yang digunakan untuk memberikan kunci id unik pada sebuah elemen HTML dinamakan...",
+    "options": ["class", "id", "name", "key", "data-id"],
+    "correctAnswer": 1,
+    "explanation": "💡 Atribut `id` bersifat unik di seluruh dokumen (hanya 1 elemen per id)."
+  },
+  {
+    "id": 4,
+    "category": "Web Dev Dasar",
+    "question": "Properti CSS yang digunakan untuk mengubah warna latar belakang sebuah elemen adalah...",
+    "options": ["color", "background-color", "text-color", "bg", "border-color"],
+    "correctAnswer": 1,
+    "explanation": "💡 `background-color` menentukan warna Latar Belakang elemen."
+  },
+  {
+    "id": 5,
+    "category": "Web Dev Dasar",
+    "question": "Properti CSS yang digunakan untuk mengubah jarak ruang di DALAM elemen (antara konten dan border) dinamakan...",
+    "options": ["margin", "padding", "border", "spacing", "gap"],
+    "correctAnswer": 1,
+    "explanation": "💡 Padding adalah ruang interior di dalam border elemen."
+  },
+  {
+    "id": 6,
+    "category": "Web Dev Dasar",
+    "question": "Properti CSS yang digunakan untuk mengatur jarak luar di SEKITAR elemen (di luar border) dinamakan...",
+    "options": ["padding", "margin", "outline", "gap", "border-spacing"],
+    "correctAnswer": 1,
+    "explanation": "💡 Margin adalah ruang eksterior di luar border elemen."
+  },
+  {
+    "id": 7,
+    "category": "Web Dev Dasar",
+    "question": "Metode JavaScript modern yang digunakan untuk mendeklarasikan variabel ber-scope blok yang nilainya BISA diubah dinamakan...",
+    "options": ["var", "let", "const", "static", "val"],
+    "correctAnswer": 1,
+    "explanation": "💡 `let` mendeklarasikan variabel block-scoped yang nilainya mutable (dapat diubah)."
+  },
+  {
+    "id": 8,
+    "category": "Web Dev Dasar",
+    "question": "Metode JavaScript yang digunakan untuk memilih elemen HTML pertama berdasarkan selektor CSS dinamakan...",
+    "options": ["document.getElementById()", "document.querySelector()", "document.getElementsByClassName()", "document.findAll()", "document.getElement()"],
+    "correctAnswer": 1,
+    "explanation": "💡 `querySelector()` menerima string selektor CSS (seperti `.card` atau `#app`)."
+  },
+  {
+    "id": 9,
+    "category": "Web Dev Dasar",
+    "question": "Objek standar browser yang merepresentasikan struktur dokumen HTML sebagai pohon pohon objek hirarki dinamakan...",
+    "options": ["BOM (Browser Object Model)", "DOM (Document Object Model)", "JSON", "CSSOM", "API"],
+    "correctAnswer": 1,
+    "explanation": "💡 DOM (Document Object Model) adalah antarmuka representasi dokumen HTML."
+  },
+  {
+    "id": 10,
+    "category": "Web Dev Dasar",
+    "question": "Model tata letak CSS3 1-dimensi yang sangat efisien untuk merapikan dan meratakan elemen dalam sebuah baris/kolom dinamakan...",
+    "options": ["Grid", "Flexbox (Flexible Box)", "Float", "Position Fixed", "Table Layout"],
+    "correctAnswer": 1,
+    "explanation": "💡 Flexbox dirancang khusus untuk layout 1-dimensi (baris ATAU kolom)."
+  },
+  {
+    "id": 11,
+    "category": "Web Dev Dasar",
+    "question": "Model tata letak CSS3 2-dimensi yang memungkinkan pengaturan baris DAN kolom secara bersamaan dinamakan...",
+    "options": ["Flexbox", "CSS Grid", "Float", "Inline-Block", "Absolute Position"],
+    "correctAnswer": 1,
+    "explanation": "💡 CSS Grid dirancang khusus untuk layout 2-dimensi (baris DAN kolom sekaligus)."
+  },
+  {
+    "id": 12,
+    "category": "Web Dev Dasar",
+    "question": "Manakah cara menyambungkan file JavaScript eksternal `script.js` ke dokumen HTML secara tepat?",
+    "options": ["<script src=\"script.js\"></script>", "<script href=\"script.js\"></script>", "<link rel=\"script\" href=\"script.js\">", "<js file=\"script.js\">", "<import src=\"script.js\">"],
+    "correctAnswer": 0,
+    "explanation": "💡 Sintaks baku menyambung file JS eksternal adalah `<script src=\"...\"></script>`."
+  },
+  {
+    "id": 13,
+    "category": "Web Dev Dasar",
+    "question": "Manakah cara menyambungkan file CSS eksternal `style.css` di bagian `<head>` HTML?",
+    "options": ["<style src=\"style.css\">", "<link rel=\"stylesheet\" href=\"style.css\">", "<css href=\"style.css\">", "<script src=\"style.css\">", "<import css=\"style.css\">"],
+    "correctAnswer": 1,
+    "explanation": "💡 Sintaks baku menyambung stylesheet eksternal adalah `<link rel=\"stylesheet\" href=\"...\">`."
+  },
+  {
+    "id": 14,
+    "category": "Web Dev Dasar",
+    "question": "Event listener JavaScript yang dipicu saat seorang pengguna menekan tombol tetikus (mouse click) pada sebuah elemen adalah...",
+    "options": ["onhover", "onclick", "onchange", "onkeydown", "onload"],
+    "correctAnswer": 1,
+    "explanation": "💡 Event `click` / `onclick` merespon klik mouse pengguna."
+  },
+  {
+    "id": 15,
+    "category": "Web Dev Dasar",
+    "question": "Dalam CSS Box Model, urutan lapisan dari TERDALAM hingga TERLUAR adalah...",
+    "options": ["Content -> Padding -> Border -> Margin", "Content -> Margin -> Border -> Padding", "Margin -> Border -> Padding -> Content", "Border -> Padding -> Content -> Margin", "Padding -> Content -> Border -> Margin"],
+    "correctAnswer": 0,
+    "explanation": "💡 Box Model: Content (isi) -> Padding -> Border (bingkai) -> Margin (jarak luar)."
+  },
+  {
+    "id": 16,
+    "category": "Web Dev Dasar",
+    "question": "Berapakah urutan prioritas (specificity) selektor CSS dari yang TERTINGGI hingga TERENDAH?",
+    "options": ["Inline Style > ID Selector > Class/Attribute Selector > Element Selector", "Element Selector > Class Selector > ID Selector > Inline Style", "ID Selector > Inline Style > Class Selector > Element Selector", "Class Selector > ID Selector > Inline Style > Element Selector", "Semua selektor berbobot sama"],
+    "correctAnswer": 0,
+    "explanation": "💡 Specificity: Inline style (1000) > ID (100) > Class/Attribute/Pseudo (10) > Element/Pseudo-element (1)."
+  },
+  {
+    "id": 17,
+    "category": "Web Dev Dasar",
+    "question": "Apa kegunaan properti CSS `box-sizing: border-box;`?",
+    "options": ["Membuat border menjadi tebal", "Memastikan ukuran width dan height elemen sudah MEMASUKKAN padding dan border di dalamnya", "Menambahkan efek bayangan", "Mengubah elemen jadi melingkar", "Menghapus margin"],
+    "correctAnswer": 1,
+    "explanation": "💡 `border-box` membuat lebar/tinggi elemen mencakup padding dan border sehingga ukuran layout tidak membesar terluar."
+  },
+  {
+    "id": 18,
+    "category": "Web Dev Dasar",
+    "question": "Fenomena di JavaScript di mana sebuah event pada elemen anak akan merambat naik ke atas menuju elemen-elemen induknya dinamakan...",
+    "options": ["Event Capturing", "Event Bubbling", "Event Delegation", "Event Throttling", "Event Hoisting"],
+    "correctAnswer": 1,
+    "explanation": "💡 Event Bubbling adalah mekanisme perambatan event dari target terkecil ke atas hirarki DOM."
+  },
+  {
+    "id": 19,
+    "category": "Web Dev Dasar",
+    "question": "Metode event JavaScript `event.preventDefault()` berfungsi untuk...",
+    "options": ["Menghentikan event bubbling", "Membatalkan aksi bawaan (default behavior) dari browser (seperti submit form reload atau klik link)", "Menghapus elemen DOM", "Menghentikan perulangan JS", "Mematikan koneksi internet"],
+    "correctAnswer": 1,
+    "explanation": "💡 `preventDefault()` mencegah perilaku standar browser (misal mencegah form reload halaman)."
+  },
+  {
+    "id": 20,
+    "category": "Web Dev Dasar",
+    "question": "Metode event JavaScript `event.stopPropagation()` berfungsi untuk...",
+    "options": ["Mencegah aksi default link", "Mengeksplisitkan bubbling event agar tidak merambat ke elemen parent di atasnya", "Menghapus event listener", "Me-reload halaman", "Mengubah CSS elemen"],
+    "correctAnswer": 1,
+    "explanation": "💡 `stopPropagation()` menghentikan perambatan (bubbling/capturing) event ke parent DOM di atasnya."
+  },
+  {
+    "id": 21,
+    "category": "Web Dev Dasar",
+    "question": "Apa perbedaan variabel `const` dan `let` pada JavaScript modern?",
+    "options": ["`const` bersifat block-scoped tetapi nilainya TIDAK BISA di-reassign (konstan), sedangkan `let` nilainya BISA diubah", "`let` bersifat global, `const` bersifat lokal", "`const` khusus angka, `let` khusus string", "`let` tidak bisa diubah", "`const` bisa di-hoisting, `let` tidak"],
+    "correctAnswer": 0,
+    "explanation": "💡 `const` mencegah pembaruan referensi (re-assignment) variabel."
+  },
+  {
+    "id": 22,
+    "category": "Web Dev Dasar",
+    "question": "Perhatikan atribut `data-*` pada HTML5 (misal `<button data-id=\"101\">`). Bagaimana cara membaca nilai `data-id` via JavaScript DOM?",
+    "options": ["element.getAttribute('data-id') atau element.dataset.id", "element.dataId", "element.value.id", "element.readData('id')", "element.id"],
+    "correctAnswer": 0,
+    "explanation": "💡 HTML5 dataset API mengakses atribut `data-*` lewat `element.dataset.namaAtribut` atau `getAttribute()`."
+  },
+  {
+    "id": 23,
+    "category": "Web Dev Dasar",
+    "question": "Properti CSS Flexbox yang digunakan untuk mengatur perataan elemen di sepanjang SUMBU UTAMA (Main Axis) adalah...",
+    "options": ["align-items", "justify-content", "flex-direction", "align-content", "flex-wrap"],
+    "correctAnswer": 1,
+    "explanation": "💡 `justify-content` meratakan item pada Main Axis flex (horizontal secara default)."
+  },
+  {
+    "id": 24,
+    "category": "Web Dev Dasar",
+    "question": "Properti CSS Flexbox yang digunakan untuk mengatur perataan elemen di sepanjang SUMBU SILANG (Cross Axis) adalah...",
+    "options": ["justify-content", "align-items", "flex-grow", "flex-shrink", "place-content"],
+    "correctAnswer": 1,
+    "explanation": "💡 `align-items` meratakan item pada Cross Axis flex (vertikal secara default)."
+  },
+  {
+    "id": 25,
+    "category": "Web Dev Dasar",
+    "question": "Di JavaScript, tipe data dari ekspresi `typeof null` mengembalikan hasil unik yaitu...",
+    "options": ["\"null\"", "\"undefined\"", "\"object\"", "\"boolean\"", "\"number\""],
+    "correctAnswer": 2,
+    "explanation": "💡 Secara sejarah di JavaScript, `typeof null` mengembalikan string `\"object\"` (quirk khas JS)."
+  },
+  {
+    "id": 26,
+    "category": "Web Dev Dasar",
+    "question": "Hasil dari ekspresi JavaScript `[] == false` adalah...",
+    "options": ["true", "false", "TypeError", "undefined", "NaN"],
+    "correctAnswer": 0,
+    "explanation": "💡 Karena perbandingan longgar (==) melakukan type coercion, array kosong diubah ke string \"\" lalu ke angka 0, 0 == false bernilai true."
+  },
+  {
+    "id": 27,
+    "category": "Web Dev Dasar",
+    "question": "Perilaku JavaScript memindahkan deklarasi variabel `var` dan fungsi ke bagian atas lingkupnya sebelum eksekusi dinamakan...",
+    "options": ["Closure", "Hoisting", "Currying", "Debouncing", "Memoization"],
+    "correctAnswer": 1,
+    "explanation": "💡 Hoisting memindahkan deklarasi `var` dan `function` ke bagian atas (top of scope)."
+  },
+  {
+    "id": 28,
+    "category": "Web Dev Dasar",
+    "question": "Kemampuan sebuah fungsi di JavaScript untuk 'mengingat' dan mengakses variabel dari lingkup luarnya (outer scope) meskipun fungsi luar tersebut sudah selesai dieksekusi dinamakan...",
+    "options": ["Hoisting", "Closure", "Callback", "Promise", "Async/Await"],
+    "correctAnswer": 1,
+    "explanation": "💡 Closure adalah gabungan fungsi dan lingkungan leksikal tempat fungsi tersebut dideklarasikan."
+  },
+  {
+    "id": 29,
+    "category": "Web Dev Dasar",
+    "question": "Fungsi JavaScript `Array.prototype.map()` berguna untuk...",
+    "options": ["Memfilter elemen array", "Membuat array BARU yang berisi hasil transformasi dari setiap elemen array asal", "Menghitung total penjumlahan array", "Mengurutkan array", "Mencari 1 elemen pertama"],
+    "correctAnswer": 1,
+    "explanation": "💡 `map()` me-return array baru berukuran sama dengan nilai yang sudah ditransformasi."
+  },
+  {
+    "id": 30,
+    "category": "Web Dev Dasar",
+    "question": "Fungsi JavaScript `Array.prototype.filter()` berguna untuk...",
+    "options": ["Membuat array BARU yang HANYA berisi elemen-elemen yang lolos pengujian kondisi (true)", "Mengubah semua isi array", "Menghapus array", "Menggabungkan 2 array", "Mencetak isi array"],
+    "correctAnswer": 0,
+    "explanation": "💡 `filter()` menyaring elemen array berdasarkan pengujian fungsi predikat."
+  },
+  {
+    "id": 31,
+    "category": "Web Dev Dasar",
+    "question": "Perbedaan utama `localStorage` dan `sessionStorage` pada Web Storage API Browser adalah...",
+    "options": ["Data `localStorage` tetap tersimpan permanen meskipun browser ditutup, sedangkan `sessionStorage` terhapus saat tab/browser ditutup", "`localStorage` hanya muat 1KB", "`sessionStorage` disimpan di server", "`localStorage` khusus angka", "Keduanya terhapus saat reload"],
+    "correctAnswer": 0,
+    "explanation": "💡 `localStorage` bertahan tanpa waktu kedaluwarsa, `sessionStorage` hilang saat tab ditutup."
+  },
+  {
+    "id": 32,
+    "category": "Web Dev Dasar",
+    "question": "Berapa kapasitas penyimpanan maksimum rata-rata `localStorage` per domain pada browser modern?",
+    "options": ["4 KB", "100 KB", "5 MB", "1 GB", "Tidak terbatas"],
+    "correctAnswer": 2,
+    "explanation": "💡 Standard Web Storage API menyediakan kuota simpan sekitar ~5MB per origin."
+  },
+  {
+    "id": 33,
+    "category": "Web Dev Dasar",
+    "question": "Manakah sintaks yang BENAR untuk menyimpan data objek JavaScript `user = {name: 'Budi'}` ke `localStorage`?",
+    "options": ["localStorage.setItem('user', user)", "localStorage.setItem('user', JSON.stringify(user))", "localStorage.save('user', user)", "localStorage.push('user', user)", "localStorage.write('user', JSON.toCSV(user))"],
+    "correctAnswer": 1,
+    "explanation": "💡 `localStorage` hanya menerima string. Objek harus diubah ke string JSON dengan `JSON.stringify()`."
+  },
+  {
+    "id": 34,
+    "category": "Web Dev Dasar",
+    "question": "Bagaimana cara mengambil kembali objek JSON dari `localStorage` dan mengubahnya kembali menjadi Objek JavaScript?",
+    "options": ["JSON.parse(localStorage.getItem('user'))", "JSON.stringify(localStorage.getItem('user'))", "localStorage.getItem('user').toObject()", "localStorage.read('user')", "JSON.decode(localStorage.user)"],
+    "correctAnswer": 0,
+    "explanation": "💡 `localStorage.getItem()` mengambil string JSON, lalu `JSON.parse()` mengurainya kembali jadi Objek."
+  },
+  {
+    "id": 35,
+    "category": "Web Dev Dasar",
+    "question": "Tracing CSS: Sebuah elemen `<div class=\"box\">` memiliki CSS `width: 200px; padding: 20px; border: 5px solid black; box-sizing: content-box;`. Berapakah LEBAR TOTAL elemen tersebut di layar?",
+    "options": ["200px", "225px", "250px", "240px", "205px"],
+    "correctAnswer": 2,
+    "explanation": "💡 Pada `content-box`, total width = width (200) + padding kiri-kanan (40) + border kiri-kanan (10) = 250px."
+  },
+  {
+    "id": 36,
+    "category": "Web Dev Dasar",
+    "question": "Sebaliknya, jika elemen di atas menggunakan `box-sizing: border-box;`, berapakah LEBAR TOTAL elemen di layar?",
+    "options": ["250px", "200px", "225px", "175px", "240px"],
+    "correctAnswer": 1,
+    "explanation": "💡 Pada `border-box`, total width diatur pas 200px (padding dan border memakan ruang dari dalam 200px)."
+  },
+  {
+    "id": 37,
+    "category": "Web Dev Dasar",
+    "question": "Tracing JS DOM:\n`const btn = document.createElement('button'); btn.textContent = 'Klik'; document.body.appendChild(btn);` Apa yang terjadi di halaman HTML?",
+    "options": ["Elemen button baru tercetak di paling bawah tag <body>", "Button terhapus", "Halaman reload", "Muncul alert", "Error DOM tidak ditemukan"],
+    "correctAnswer": 0,
+    "explanation": "💡 `createElement` membuat node DOM baru, `appendChild` menyisipkannya ke dalam elemen body."
+  },
+  {
+    "id": 38,
+    "category": "Web Dev Dasar",
+    "question": "Apa keluaran dari ekspresi: `const numbers = [1, 2, 3]; const res = numbers.reduce((acc, curr) => acc + curr, 0);`?",
+    "options": ["6", "[1, 2, 3]", "0", "undefined", "[6]"],
+    "correctAnswer": 0,
+    "explanation": "💡 `reduce` mengakumulasi nilai elemen array: 0 + 1 + 2 + 3 = 6."
+  },
+  {
+    "id": 39,
+    "category": "Web Dev Dasar",
+    "question": "Sintaks Arrow Function JavaScript `const add = (a, b) => a + b;` merupakan bentuk ringkas dari...",
+    "options": ["function add(a, b) { return a + b; }", "function add(a, b) { a + b; }", "const add = function(a, b) { a + b; }", "class add { constructor(a, b){ return a+b; } }", "void add(a, b) { return a+b; }"],
+    "correctAnswer": 0,
+    "explanation": "💡 Arrow function dengan ekspresi tunggal tanpa kurung kurawal memiliki implicit return `return a + b`."
+  },
+  {
+    "id": 40,
+    "category": "Web Dev Dasar",
+    "question": "Manakah perbedaan penting perilaku keyword `this` di Arrow Function dibanding fungsi biasa?",
+    "options": ["Arrow Function TIDAK memiliki konteks `this` sendiri (mengikat `this` secara lexical dari outer scope)", "Arrow Function selalu membuat `this` bernilai null", "Arrow Function khusus method static", "Arrow Function membuat `this` jadi global", "Tidak ada bedanya"],
+    "correctAnswer": 0,
+    "explanation": "💡 Arrow functions memperlakuan `this` secara lexical scope (tidak me-bind `this` baru)."
+  },
+  {
+    "id": 41,
+    "category": "Web Dev Dasar",
+    "question": "Properti CSS Media Query yang digunakan untuk menerapkan gaya khusus pada perangkat layar HP (Responsive Web Design) adalah...",
+    "options": ["@media screen and (max-width: 768px)", "@responsive (phone)", "@device-width: 768px", "@screen-mobile", "@viewport (mobile)"],
+    "correctAnswer": 0,
+    "explanation": "💡 `@media screen and (max-width: 768px)` adalah sintaks baku Responsive Web Design untuk layar seluler."
+  },
+  {
+    "id": 42,
+    "category": "Web Dev Dasar",
+    "question": "Atribut HTML5 pada elemen `<input>` yang digunakan untuk memastikan form tidak bisa dikirim jika kolom masih kosong adalah...",
+    "options": ["validate", "required", "not-null", "mandatory", "check"],
+    "correctAnswer": 1,
+    "explanation": "💡 Atribut `required` mengaktifkan validasi HTML bawaan browser agar kolom wajib diisi."
+  },
+  {
+    "id": 43,
+    "category": "Web Dev Dasar",
+    "question": "Sintaks CSS Grid `grid-template-columns: repeat(3, 1fr);` berfungsi untuk...",
+    "options": ["Membuat 3 kolom dengan lebar fraksi yang sama besar", "Membuat 1 kolom berukuran 3fr", "Membuat 3 baris", "Mengulang grid 3 kali", "Membuat margin 3px"],
+    "correctAnswer": 0,
+    "explanation": "💡 `repeat(3, 1fr)` membagi container menjadi 3 kolom fleksibel sama rata (equal 1 fraction each)."
+  },
+  {
+    "id": 44,
+    "category": "Web Dev Dasar",
+    "question": "Teknik Event Delegation pada JavaScript DOM adalah...",
+    "options": ["Memasang 100 event listener pada setiap tombol anak", "Memasang 1 event listener tunggal pada elemen Parent untuk menangani event dari anak-anaknya menggunakan `event.target`", "Menghapus event listener", "Menggunakan setTimeout", "Menyimpan event di LocalStorage"],
+    "correctAnswer": 1,
+    "explanation": "💡 Event Delegation memanfaatkan Event Bubbling dengan memasang handler di parent tunggal demi efisiensi memori."
+  },
+  {
+    "id": 45,
+    "category": "Web Dev Dasar",
+    "question": "Metode JavaScript `document.cookie` memiliki keterbatasan dibanding `localStorage` yaitu...",
+    "options": ["Kapasitas sangat kecil (~4KB) dan otomatis terikut dikirim pada setiap HTTP request header ke server", "Tidak bisa dibaca via JS", "Khusus browser Internet Explorer", "Tidak didukung HTML5", "Menghapus LocalStorage"],
+    "correctAnswer": 0,
+    "explanation": "💡 Cookie berkapasitas ~4KB dan dikirim ke server pada setiap request header, membebankan lalu lintas jaringan jika terlalu banyak."
+  },
+  {
+    "id": 46,
+    "category": "Web Dev Dasar",
+    "question": "Konsep Event Loop pada JavaScript bertanggung jawab untuk...",
+    "options": ["Mengatur jalannya kode asynchronous (Callback/Promise) dengan memindahkan tugas dari Callback Queue ke Call Stack saat stack kosong", "Membuat loop FOR lebih cepat", "Menghitung fps animasi", "Mengubah CSS otomatis", "Mencegah peretasan XSS"],
+    "correctAnswer": 0,
+    "explanation": "💡 Event Loop memantau Call Stack dan Task Queue untuk mengeksekusi callback async secara non-blocking."
+  },
+  {
+    "id": 47,
+    "category": "Web Dev Dasar",
+    "question": "Tracing Event Loop JS:\n`console.log('1'); setTimeout(() => console.log('2'), 0); console.log('3');`\nUrutan keluaran di konsol adalah...",
+    "options": ["1, 2, 3", "1, 3, 2", "2, 1, 3", "3, 1, 2", "1, 2"],
+    "correctAnswer": 1,
+    "explanation": "💡 Synchronous `1` dan `3` langsung di-stack. `setTimeout` masuk Web API & Task Queue, baru dieksekusi Event Loop setelah stack bersih. Output: 1, 3, 2."
+  },
+  {
+    "id": 48,
+    "category": "Web Dev Dasar",
+    "question": "Atribut `defer` pada tag `<script src=\"app.js\" defer></script>` berfungsi untuk...",
+    "options": ["Mengunduh script secara asynchronous paralel dan mengeksekusinya SETELAH seluruh dokumen HTML selesai di-parse", "Menghentikan parsing HTML", "Menjalankan script paling awal", "Mencegah script dieksekusi", "Menyimpan script di cache"],
+    "correctAnswer": 0,
+    "explanation": "💡 `defer` mengunduh script di background dan menjamin eksekusi setelah DOM parsing selesai (DOMReady)."
+  },
+  {
+    "id": 49,
+    "category": "Web Dev Dasar",
+    "question": "Sebaliknya, atribut `async` pada tag `<script src=\"analytics.js\" async></script>` berfungsi untuk...",
+    "options": ["Mengunduh script paralel dan LANGSUNG mengeksekusinya seketika saat selesai diunduh (bisa menyela parsing HTML)", "Menunggu DOMReady", "Menghentikan pengunduhan", "Membuat script private", "Menjadikan script synchronous"],
+    "correctAnswer": 0,
+    "explanation": "💡 `async` mengeksekusi script sesegera mungkin saat file selesai diunduh tanpa menjamin urutan eksekusi."
+  },
+  {
+    "id": 50,
+    "category": "Web Dev Dasar",
+    "question": "Teknik optimasi performa JS `Debouncing` biasanya diterapkan pada event seperti `oninput` pencarian bertujuan untuk...",
+    "options": ["Menunda eksekusi fungsi hingga pengguna berhenti mengetik selama jeda waktu tertentu (mencegah spam request API)", "Membuat animasi lebih halus", "Mengacak string", "Membuat form otomatis terisi", "Menghapus event listener"],
+    "correctAnswer": 0,
+    "explanation": "💡 Debouncing menahan pemicuan panggilan fungsi sampai ada jeda hening tertentu dari aktivitas pengguna."
+  },
+  {
+    "id": 51,
+    "category": "Web Dev Dasar",
+    "question": "Penyebab utama Memory Leak (kebocoran memori) pada aplikasi Single Page Application (SPA) JavaScript adalah...",
+    "options": ["Lupa menghapus Event Listener global (`window.addEventListener`) atau setInterval yang tidak di-clear saat komponen dihancurkan", "Menggunakan CSS Flexbox", "Menggunakan tag HTML5 semantik", "Variabel const yang terlalu banyak", "Menggunakan gambar PNG"],
+    "correctAnswer": 0,
+    "explanation": "💡 Event listener / timer tak tertutup mempertahankan referensi DOM di memori, mencegah Garbage Collection."
+  },
+  {
+    "id": 52,
+    "category": "Web Dev Dasar",
+    "question": "Manakah teknik pengisian CSS yang paling buruk untuk performa halaman web skala besar?",
+    "options": ["External Stylesheet (`<link rel=\"stylesheet\">`)", "Inline CSS (`style=\"...\"`) langsung pada setiap elemen HTML", "CSS Modules", "Tailwind Utility Classes", "SASS SCSS Compiled"],
+    "correctAnswer": 1,
+    "explanation": "💡 Inline CSS menggelembungkan ukuran HTML, membatasi caching browser, dan menghancurkan prinsip pemisahan konsentrasi."
+  },
+  {
+    "id": 53,
+    "category": "Web Dev Dasar",
+    "question": "Apa dampak dari memicu 'Reflow' (Layout Thrashing) secara berlebihan di JavaScript DOM?",
+    "options": ["Browser dipaksa menghitung ulang posisi & geometris seluruh elemen halaman secara mendadak, menyebabkan tampilan patah-patah (lag)", "File HTML terhapus", "Server mengalami crash", "Database terkunci", "Warna elemen hilang"],
+    "correctAnswer": 0,
+    "explanation": "💡 Reflow membebankan CPU browser karena harus mengalkulasi ulang layout geometris DOM secara berulang."
+  },
+  {
+    "id": 54,
+    "category": "Web Dev Dasar",
+    "question": "Properti CSS yang memanfaatkan Akselerasi Perangkat Keras GPU (GPU Acceleration) untuk animasi halus (60fps) tanpa memicu Reflow adalah...",
+    "options": ["top / left", "margin-left", "transform (translate3d / scale) dan opacity", "width / height", "padding"],
+    "correctAnswer": 2,
+    "explanation": "💡 `transform` dan `opacity` ditangani oleh compositor layer di GPU tanpa memicu layout reflow."
+  },
+  {
+    "id": 55,
+    "category": "Web Dev Dasar",
+    "question": "Tracing Promise JS:\n`Promise.resolve(1).then(x => x + 1).then(x => { throw new Error('Err'); }).catch(() => 5).then(x => console.log(x));`\nOutputnya adalah...",
+    "options": ["1", "2", "5", "Error", "undefined"],
+    "correctAnswer": 2,
+    "explanation": "💡 Keluaran `x+1` (2) melempar Error, ditangkap oleh `.catch()` yang me-return `5`. Chain `.then()` berikutnya menerima 5. Output: 5."
+  },
+  {
+    "id": 56,
+    "category": "Web Dev Dasar",
+    "question": "Pernyataan yang BENAR mengenai perbedaan Microtask Queue (Promise / queueMicrotask) dan Macrotask Queue (setTimeout / setInterval) pada Event Loop JS adalah...",
+    "options": ["Microtask Queue memiliki prioritas LEBIH TINGGI dan dieksekusi SELURUHNYA sampai kosong sebelum Event Loop beralih ke Macrotask Queue", "Macrotask selalu lebih dulu", "Keduanya memiliki prioritas sama", "Microtask khusus CSS", "Macrotask khusus DOM"],
+    "correctAnswer": 0,
+    "explanation": "💡 Microtasks (Promise) selalu dihabiskan dulu oleh Event Loop di setiap akhir tick sebelum memproses Macrotask (setTimeout)."
+  },
+  {
+    "id": 57,
+    "category": "Web Dev Dasar",
+    "question": "Dalam isu keamanan web frontend, serangan Cross-Site Scripting (XSS) terjadi ketika...",
+    "options": ["Penyerang menyisipkan kode script JavaScript jahat ke dalam halaman web yang dieksekusi oleh browser pengguna lain", "Penyerang mematikan database server", "Penyerang menebak password admin", "Penyerang mengunduh file CSS", "Form dikirim tanpa HTTPS"],
+    "correctAnswer": 0,
+    "explanation": "💡 XSS menyuntikkan script liar di DOM untuk mencuri cookie session pengguna."
+  },
+  {
+    "id": 58,
+    "category": "Web Dev Dasar",
+    "question": "Bagaimana cara MENCEGAH serangan XSS saat menampilkan teks masukan pengguna di halaman HTML?",
+    "options": ["Menggunakan `element.innerHTML = userInput`", "Melakukan Sanitasi & Encoding HTML karakter khusus (seperti memetakan `<` menjadi `&lt;`) atau menggunakan `element.textContent`", "Menyimpan data di LocalStorage", "Menggunakan CSS Grid", "Mengubah variabel jadi const"],
+    "correctAnswer": 1,
+    "explanation": "💡 `textContent` secara otomatis meng-encode karakter HTML sehingga menghalangi eksekusi script jahat."
+  },
+  {
+    "id": 59,
+    "category": "Web Dev Dasar",
+    "question": "Metode JavaScript `Object.freeze(obj)` berfungsi untuk...",
+    "options": ["Membuat objek menjadi immutable (properti tidak bisa ditambah, dihapus, atau diubah nilainya)", "Menyimpan objek ke harddisk", "Mengubah objek ke JSON", "Membuat objek berukuran 0", "Menghapus objek dari RAM"],
+    "correctAnswer": 0,
+    "explanation": "💡 `Object.freeze()` membekukan objek secara dangkal (shallow freeze) dari segala bentuk mutasi."
+  },
+  {
+    "id": 60,
+    "category": "Web Dev Dasar",
+    "question": "Sintaks Destructuring Assignment JavaScript `const { name, age } = user;` berfungsi untuk...",
+    "options": ["Mengekstrak properti `name` dan `age` dari objek `user` secara langsung ke dalam variabel independen", "Menghapus properti name dan age dari user", "Menggabungkan dua objek", "Mengubah objek jadi array", "Mengecek apakah properti ada"],
+    "correctAnswer": 0,
+    "explanation": "💡 Destructuring mengekstrak nilai objek/array ke dalam variabel lokal berformat ringkas."
+  }
+]

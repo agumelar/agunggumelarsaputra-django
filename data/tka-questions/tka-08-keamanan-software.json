@@ -1,0 +1,482 @@
+[
+  {
+    "id": 1,
+    "category": "Keamanan Software",
+    "question": "Tiga pilar utama dalam prinsip dasar Keamanan Perangkat Lunak (CIA Triad) adalah...",
+    "options": ["Confidentiality, Integrity, Availability", "Control, Identity, Authentication", "Code, Infrastructure, Application", "Crypto, Inspection, Authorization", "Certificates, Isolasinya, Access"],
+    "correctAnswer": 0,
+    "explanation": "💡 CIA Triad: Kerahasiaan (Confidentiality), Integritas (Integrity), Ketersediaan (Availability)."
+  },
+  {
+    "id": 2,
+    "category": "Keamanan Software",
+    "question": "Prinsip CIA Triad yang menjamin bahwa data sensitif HANYA dapat diakses oleh pihak yang memiliki hak otorisasi dinamakan...",
+    "options": ["Confidentiality (Kerahasiaan)", "Integrity (Integritas)", "Availability (Ketersediaan)", "Authentication", "Non-Repudiation"],
+    "correctAnswer": 0,
+    "explanation": "💡 Confidentiality menjaga data agar tidak bocor ke pihak yang tidak berhak."
+  },
+  {
+    "id": 3,
+    "category": "Keamanan Software",
+    "question": "Prinsip CIA Triad yang menjamin bahwa data tetap akurat, konsisten, dan TIDAK DIUBAH secara ilegal saat disimpan atau dikirim dinamakan...",
+    "options": ["Integrity (Integritas)", "Confidentiality", "Availability", "Authorization", "Auditability"],
+    "correctAnswer": 0,
+    "explanation": "💡 Integrity menjamin data tidak mengalami modifikasi ilegal."
+  },
+  {
+    "id": 4,
+    "category": "Keamanan Software",
+    "question": "Prinsip CIA Triad yang menjamin bahwa sistem dan data dapat diakses oleh pengguna sah kapanpun dibutuhkan tanpa gangguan dinamakan...",
+    "options": ["Availability (Ketersediaan)", "Integrity", "Confidentiality", "Encryption", "Hashing"],
+    "correctAnswer": 0,
+    "explanation": "💡 Availability memastikan sistem selalu siap melayani pengguna (bebas serangan DoS)."
+  },
+  {
+    "id": 5,
+    "category": "Keamanan Software",
+    "question": "Proses memverifikasi identitas seorang pengguna (misal mengecek username dan password saat login) dinamakan...",
+    "options": ["Authentication (Autentikasi)", "Authorization (Otorisasi)", "Accounting", "Encryption", "Auditing"],
+    "correctAnswer": 0,
+    "explanation": "💡 Autentikasi adalah pembuktian 'Siapa Anda' (Who you are)."
+  },
+  {
+    "id": 6,
+    "category": "Keamanan Software",
+    "question": "Proses memverifikasi hak akses pengguna yang terautentikasi terhadap suatu resource/fitur tertentu dinamakan...",
+    "options": ["Authorization (Otorisasi)", "Authentication", "Identification", "Encryption", "Hashing"],
+    "correctAnswer": 0,
+    "explanation": "💡 Otorisasi adalah penentuan 'Apa yang boleh Anda lakukan' (What you can do)."
+  },
+  {
+    "id": 7,
+    "category": "Keamanan Software",
+    "question": "Fungsi matematika 1-arah (one-way function) yang mengubah data arbitrer menjadi string berukuran tetap (fixed length) dan TIDAK DAPAT DIDEKRIPSI kembali dinamakan...",
+    "options": ["Hash Function", "Encryption Algorithm", "Encoding", "Compression", "Obfuscation"],
+    "correctAnswer": 0,
+    "explanation": "💡 Hashing adalah operasi 1-arah (irreversible); data ter-hash tidak bisa di-decode balik."
+  },
+  {
+    "id": 8,
+    "category": "Keamanan Software",
+    "question": "Proses mengubah teks biasa (plaintext) menjadi teks terenkripsi (ciphertext) menggunakan kunci rahasia yang DAPAT DIDEKRIPSI kembali dinamakan...",
+    "options": ["Encryption (Enkripsi)", "Hashing", "Encoding", "Obfuscation", "Salting"],
+    "correctAnswer": 0,
+    "explanation": "💡 Enkripsi adalah operasi 2-arah (reversible) menggunakan kunci dekripsi."
+  },
+  {
+    "id": 9,
+    "category": "Keamanan Software",
+    "question": "Organisasi nirlaba internasional yang merilis daftar 10 kerentanan keamanan aplikasi web paling kritis secara berkala adalah...",
+    "options": ["OWASP (Open Web Application Security Project)", "ISO/IEC", "IEEE", "W3C", "ANSI"],
+    "correctAnswer": 0,
+    "explanation": "💡 OWASP merilis OWASP Top 10 sebagai acuan kerentanan keamanan web."
+  },
+  {
+    "id": 10,
+    "category": "Keamanan Software",
+    "question": "Protokol komunikasi web aman yang menggabungkan HTTP dengan enkripsi TLS/SSL dinamakan...",
+    "options": ["HTTPS", "HTTP/2", "SSH", "SFTP", "FTPS"],
+    "correctAnswer": 0,
+    "explanation": "💡 HTTPS menggunakan sertifikat TLS/SSL untuk mengenkripsi lalu lintas data HTTP."
+  },
+  {
+    "id": 11,
+    "category": "Keamanan Software",
+    "question": "Nomor port default yang digunakan untuk lalu lintas komunikasi aman HTTPS adalah...",
+    "options": ["443", "80", "8080", "22", "3306"],
+    "correctAnswer": 0,
+    "explanation": "💡 Port 443 adalah port standar protokol HTTPS (Port 80 untuk HTTP biasa)."
+  },
+  {
+    "id": 12,
+    "category": "Keamanan Software",
+    "question": "Serangan cyber yang bertujuan membuat layanan web tidak dapat diakses pengguna sah dengan cara membanjiri trafik dari banyak komputer peretas dinamakan...",
+    "options": ["DDoS (Distributed Denial of Service)", "SQL Injection", "XSS", "Phishing", "Man-in-the-Middle"],
+    "correctAnswer": 0,
+    "explanation": "💡 DDoS membanjiri server dengan paket sampah hingga server crash/unreachable."
+  },
+  {
+    "id": 13,
+    "category": "Keamanan Software",
+    "question": "Teknik penipuan dengan menyamar sebagai institusi terpercaya lewat email/situs palsu untuk mencuri kredensial pengguna dinamakan...",
+    "options": ["Phishing", "Malware", "Ransomware", "Buffer Overflow", "Brute Force"],
+    "correctAnswer": 0,
+    "explanation": "💡 Phishing adalah serangan sosial (Social Engineering) memancing data sensitif korban."
+  },
+  {
+    "id": 14,
+    "category": "Keamanan Software",
+    "question": "String acak tambahan yang digabungkan ke password sebelum dilakukan proses hashing untuk mencegah serangan Rainbow Table dinamakan...",
+    "options": ["Salt", "Pepper", "Key", "Nonce", "IV (Initialization Vector)"],
+    "correctAnswer": 0,
+    "explanation": "💡 Salting menambahkan string acak unik pada setiap hash password."
+  },
+  {
+    "id": 15,
+    "category": "Keamanan Software",
+    "question": "Serangan cyber di mana peretas menyadap komunikasi antara dua pihak tanpa sepengetahuan mereka dinamakan...",
+    "options": ["Man-in-the-Middle (MitM)", "SQL Injection", "Cross-Site Scripting", "CSRF", "Directory Traversal"],
+    "correctAnswer": 0,
+    "explanation": "💡 MitM menyadap atau memanipulasi data di tengah jalur komunikasi."
+  },
+  {
+    "id": 16,
+    "category": "Keamanan Software",
+    "question": "Perbedaan utama Enkripsi Simetris (contoh: AES) dan Enkripsi Asimetris (contoh: RSA) adalah...",
+    "options": ["Enkripsi Simetris menggunakan 1 kunci rahasia yang sama untuk enkripsi dan dekripsi, sedangkan Enkripsi Asimetris menggunakan sepasang kunci (Public Key & Private Key)", "Simetris tidak butuh kunci", "Asimetris lebih cepat", "Simetris hanya untuk angka", "Keduanya persis sama"],
+    "correctAnswer": 0,
+    "explanation": "💡 Symmetric = 1 Shared Key. Asymmetric = Public Key (Enkripsi) & Private Key (Dekripsi)."
+  },
+  {
+    "id": 17,
+    "category": "Keamanan Software",
+    "question": "Dalam Enkripsi Asimetris (Public-Private Key), kunci yang boleh disebarkan secara bebas kepada publik adalah...",
+    "options": ["Public Key", "Private Key", "Secret Key", "Master Key", "Root Key"],
+    "correctAnswer": 0,
+    "explanation": "💡 Public Key disebar bebas untuk enkripsi; Private Key disimpan rahasia untuk dekripsi."
+  },
+  {
+    "id": 18,
+    "category": "Keamanan Software",
+    "question": "Serangan web OWASP di mana peretas menyisipkan kode script JavaScript jahat yang dieksekusi di browser korban dinamakan...",
+    "options": ["Cross-Site Scripting (XSS)", "SQL Injection", "CSRF", "Broken Authentication", "SSRF"],
+    "correctAnswer": 0,
+    "explanation": "💡 XSS menyuntikkan script berbahaya di DOM browser korban."
+  },
+  {
+    "id": 19,
+    "category": "Keamanan Software",
+    "question": "Serangan web OWASP di mana peretas memaksa browser korban yang sedang terautentikasi untuk mengeksekusi aksi tak diinginkan di aplikasi web target dinamakan...",
+    "options": ["CSRF (Cross-Site Request Forgery)", "XSS", "SQL Injection", "Clickjacking", "Path Traversal"],
+    "correctAnswer": 0,
+    "explanation": "💡 CSRF mengelabui browser agar mengirimkan request berbahaya berbekal cookie session otomatis."
+  },
+  {
+    "id": 20,
+    "category": "Keamanan Software",
+    "question": "Header HTTP Security yang memerintahkan browser untuk HANYA berkomunikasi lewat koneksi terenkripsi HTTPS (mencegah downgrade attack) dinamakan...",
+    "options": ["HSTS (HTTP Strict Transport Security)", "CORS", "Content-Security-Policy", "X-Frame-Options", "X-XSS-Protection"],
+    "correctAnswer": 0,
+    "explanation": "💡 HSTS memaksa browser selalu menggunakan HTTPS."
+  },
+  {
+    "id": 21,
+    "category": "Keamanan Software",
+    "question": "Header HTTP Security yang digunakan untuk MENCEGAH situs web ditampilkan di dalam tag `<iframe>` (menangkal serangan Clickjacking) dinamakan...",
+    "options": ["X-Frame-Options (atau CSP frame-ancestors)", "Access-Control-Allow-Origin", "Strict-Transport-Security", "X-Content-Type-Options", "Referrer-Policy"],
+    "correctAnswer": 0,
+    "explanation": "💡 X-Frame-Options: DENY/SAMEORIGIN mencegah framing clickjacking."
+  },
+  {
+    "id": 22,
+    "category": "Keamanan Software",
+    "question": "Header HTTP Security yang membatasi sumber-sumber (domain) script, gambar, dan stylesheet yang boleh dimuat oleh browser dinamakan...",
+    "options": ["Content-Security-Policy (CSP)", "CORS", "Authorization", "X-XSS-Protection", "Cookie"],
+    "correctAnswer": 0,
+    "explanation": "💡 CSP adalah pertahanan ampuh pembatasan eksekusi resource penyelesai XSS."
+  },
+  {
+    "id": 23,
+    "category": "Keamanan Software",
+    "question": "Serangan OWASP di mana pengguna dapat mengakses file internal server dengan memanipulasi path URL (misal `../../etc/passwd`) dinamakan...",
+    "options": ["Path Traversal / Directory Traversal", "SQL Injection", "Command Injection", "CSRF", "XSS"],
+    "correctAnswer": 0,
+    "explanation": "💡 Path Traversal mengeksploitasi sanitasi path file yang lemah."
+  },
+  {
+    "id": 24,
+    "category": "Keamanan Software",
+    "question": "Serangan di mana penyerang mencoba seluruh kombinasi password secara terus menerus hingga menemukan yang cocok dinamakan...",
+    "options": ["Brute Force Attack", "Dictionary Attack", "Rainbow Table Attack", "Phishing", "Man-in-the-Middle"],
+    "correctAnswer": 0,
+    "explanation": "💡 Brute Force mencoba seluruh kombinasi string karakter sampai berhasil."
+  },
+  {
+    "id": 25,
+    "category": "Keamanan Software",
+    "question": "Serangan Brute Force yang lebih efisien dengan menggunakan daftar kata-kata kosa kata umum yang sering dipakai pengguna dinamakan...",
+    "options": ["Dictionary Attack", "Brute Force Murni", "Rainbow Table", "Phishing", "Zero-day"],
+    "correctAnswer": 0,
+    "explanation": "💡 Dictionary Attack menguji daftar kata kata kunci populer (wordlists)."
+  },
+  {
+    "id": 26,
+    "category": "Keamanan Software",
+    "question": "Metode hashing modern yang dilengkapi faktor kerja (work factor) yang sengaja dibuat lambat untuk menahan serangan GPU cracking adalah...",
+    "options": ["Bcrypt / Argon2", "MD5", "SHA1", "CRC32", "Base64"],
+    "correctAnswer": 0,
+    "explanation": "💡 Bcrypt dan Argon2 adalah algoritma slow-hashing berbasis kustomisasi biaya CPU/RAM."
+  },
+  {
+    "id": 27,
+    "category": "Keamanan Software",
+    "question": "Mengapa algoritma hashing MD5 dan SHA1 DILARANG digunakan lagi untuk pengamanan password modern?",
+    "options": ["Sudah rentan terhadap serangan Collision Attack dan sangat cepat dicrack menggunakan GPU / Rainbow Table modern", "MD5 terlalu panjang", "SHA1 tidak bisa disimpan di database", "MD5 hanya untuk Windows", "Keduanya berbayar"],
+    "correctAnswer": 0,
+    "explanation": "💡 MD5/SHA1 cepat dan cacat kriptografi, mudah ditembus oleh Rainbow Table modern."
+  },
+  {
+    "id": 28,
+    "category": "Keamanan Software",
+    "question": "Prinsip keamanan 'Least Privilege' menyatakan bahwa...",
+    "options": ["Setiap komponen/pengguna HANYA boleh diberi hak akses minimal yang benar-benar dibutuhkan untuk melakukan tugasnya", "Semua user diberi akses admin", "Password harus 100 karakter", "Database tidak boleh dikunci", "Semua port dibuka"],
+    "correctAnswer": 0,
+    "explanation": "💡 Least Privilege membatasi hak izin sekecil mungkin demi meminimalisasi dampak kebocoran."
+  },
+  {
+    "id": 29,
+    "category": "Keamanan Software",
+    "question": "Kerentanan OWASP 'Broken Object Level Authorization' (BOLA / IDOR) terjadi ketika...",
+    "options": ["Aplikasi tidak mengecek apakah pengguna yang terautentikasi berhak mengakses ID objek milik pengguna lain (misal mengubah URL `/api/orders/101` ke `/api/orders/102`)", "Password tidak di-hash", "Server down", "Website tidak pakai HTTPS", "HTML tidak semantik"],
+    "correctAnswer": 0,
+    "explanation": "💡 IDOR/BOLA terjadi saat otorisasi level objek tidak divalidasi di backend."
+  },
+  {
+    "id": 30,
+    "category": "Keamanan Software",
+    "question": "Serangan di mana penyerang memasukkan input yang melebihi kapasitas alokasi buffer memori di bahasa C/C++ sehingga merusak area stack dinamakan...",
+    "options": ["Buffer Overflow", "SQL Injection", "CSRF", "XSS", "Race Condition"],
+    "correctAnswer": 0,
+    "explanation": "💡 Buffer Overflow menimpa alokasi memori berdekatan di stack C/C++."
+  },
+  {
+    "id": 31,
+    "category": "Keamanan Software",
+    "question": "Tracing Kode Rentan Node.js:\n`app.get('/user', (req, res) => {\n  db.query(\"SELECT * FROM users WHERE id = \" + req.query.id);\n});` \nKode ini sangat rentan terhadap serangan...",
+    "options": ["SQL Injection (SQLi)", "Cross-Site Scripting (XSS)", "CSRF", "Buffer Overflow", "Path Traversal"],
+    "correctAnswer": 0,
+    "explanation": "💡 Penggabungan string langsung (`+ req.query.id`) tanpa sanitasi memicu SQL Injection."
+  },
+  {
+    "id": 32,
+    "category": "Keamanan Software",
+    "question": "Bagaimana cara memperbaiki kode rentan SQLi di atas?",
+    "options": ["Menggunakan Parameterized Query: `db.query(\"SELECT * FROM users WHERE id = ?\", [req.query.id])`", "Mengubah metode ke POST", "Menggunakan eval()", "Menghapus klausul WHERE", "Mengubah ke SQLite"],
+    "correctAnswer": 0,
+    "explanation": "💡 Parameterized Query (`?` placeholder) memisahkan koding SQL dan data parameter."
+  },
+  {
+    "id": 33,
+    "category": "Keamanan Software",
+    "question": "Kerentanan pada JWT di mana penyerang mengubah header menjadi `\"alg\": \"none\"` dan menghapus signature dinamakan...",
+    "options": ["JWT Signature Bypass (None Algorithm Attack)", "JWT Injection", "XSS Token", "CSRF Token", "Replay Attack"],
+    "correctAnswer": 0,
+    "explanation": "💡 Algoritma `none` pada JWT memaksa server yang ceroboh mengabaikan verifikasi signature."
+  },
+  {
+    "id": 34,
+    "category": "Keamanan Software",
+    "question": "Bagaimana cara server memverifikasi bahwa Payload JWT belum pernah dimodifikasi oleh peretas?",
+    "options": ["Server me-recalculate Signature menggunakan Header + Payload + Secret Key internal, lalu mencocokkannya dengan Signature pada token", "Server mengecek database", "Server mengirim SMS", "Server menanyakan ke browser", "Payload terenkripsi otomatis"],
+    "correctAnswer": 0,
+    "explanation": "💡 Kesesuaian Signature menjamin keutuhan data (Integrity) pada JWT."
+  },
+  {
+    "id": 35,
+    "category": "Keamanan Software",
+    "question": "Arsitektur Keamanan Perangkat Lunak 'Zero Trust Architecture' berpegang pada prinsip dasar...",
+    "options": ["'Never Trust, Always Verify' (Jangan pernah percaya siapapun, selalu verifikasi setiap request baik dari dalam maupun luar jaringan)", "Percaya penuh jaringan internal", "Matikan semua firewall", "Hapus semua password", "Semua user dianggap admin"],
+    "correctAnswer": 0,
+    "explanation": "💡 Zero-Trust mengasumsikan ancaman ada di dalam dan luar jaringan, memvalidasi tiap request."
+  },
+  {
+    "id": 36,
+    "category": "Keamanan Software",
+    "question": "Serangan di mana penyerang mencuri atau mencegat data paket sensitif pada jaringan Wi-Fi Publik yang tidak terenkripsi diatasi dengan...",
+    "options": ["Menggunakan HTTPS / VPN untuk mengenkripsi seluruh lalu lintas jaringan", "Menggunakan browser baru", "Menghapus cookie", "Menggunakan CSS Flexbox", "Mengganti nama PC"],
+    "correctAnswer": 0,
+    "explanation": "💡 Enkripsi Https/VPN mengubah paket jaringan menjadi ciphertext yang tak bisa diintip."
+  },
+  {
+    "id": 37,
+    "category": "Keamanan Software",
+    "question": "Teknik 'Input Sanitization' adalah...",
+    "options": ["Proses membersihkan dan membuang karakter berbahaya dari input pengguna sebelum diproses sistem", "Menghapus data di database", "Membuat form menjadi readonly", "Mengacak isi file", "Mematikan fitur input"],
+    "correctAnswer": 0,
+    "explanation": "💡 Sanitisasi membuang/mengalihkan tag script atau sintaks SQL liar dari masukan pengguna."
+  },
+  {
+    "id": 38,
+    "category": "Keamanan Software",
+    "question": "Teknik 'Input Validation' adalah...",
+    "options": ["Proses mengecek apakah input pengguna memenuhi kriteria tipe, format, dan panjang yang diizinkan (misal: mengecek format email valid)", "Menghapus database", "Mengenkripsi form", "Menyimpan data di cookie", "Membuat alert"],
+    "correctAnswer": 0,
+    "explanation": "💡 Validasi memastikan masukan sesuai skema aturan bisnis (whitelist validation)."
+  },
+  {
+    "id": 39,
+    "category": "Keamanan Software",
+    "question": "Di aplikasi web, pengamanan terhadap serangan Replay Attack pada transaksi keuangan dilakukan dengan menambahkan...",
+    "options": ["Nonce (Number Used Once) atau Timestamp unik pada setiap request transaksi", "Atribut required", "Metode GET", "CSS Animation", "Header Authorization"],
+    "correctAnswer": 0,
+    "explanation": "💡 Nonce menjamin request transaksi lama yang di-replay oleh peretas akan ditolak."
+  },
+  {
+    "id": 40,
+    "category": "Keamanan Software",
+    "question": "Kerentanan 'Server-Side Request Forgery' (SSRF) terjadi ketika...",
+    "options": ["Server web dipaksa oleh penyerang untuk membuat request HTTP ke sistem internal yang tidak dapat diakses langsung dari publik", "Client kena virus", "Database terhapus", "CSS rusak", "HTML tidak valid"],
+    "correctAnswer": 0,
+    "explanation": "💡 SSRF mengeksploitasi server backend sebagai proxy untuk menyerang jaringan intranet internal."
+  },
+  {
+    "id": 41,
+    "category": "Keamanan Software",
+    "question": "Teknik pertahanan 'Content Security Policy' (CSP) me-restrict eksekusi inline script dengan menyertakan atribut...",
+    "options": ["Nonce berbasis kriptografi atau Hash sha256 pada tag `<script nonce=\"...\">`", "Attribute style", "Method POST", "Tipe data String", "CORS header"],
+    "correctAnswer": 0,
+    "explanation": "💡 CSP Nonce memastikan hanya inline script dengan nonce cocok dari server yang boleh dieksekusi."
+  },
+  {
+    "id": 42,
+    "category": "Keamanan Software",
+    "question": "Apa kegunaan dari fitur Subresource Integrity (SRI) pada tag HTML `<script src=\"...\" integrity=\"sha384-...\">`?",
+    "options": ["Memastikan file library JavaScript CDN eksternal yang diunduh TIDAK PERNAH dimodifikasi/dihack oleh pihak ketiga", "Mempercepat pengunduhan script", "Menghapus iklan", "Membuat file JS terkompresi", "Mencegah CORS"],
+    "correctAnswer": 0,
+    "explanation": "💡 SRI memverifikasi hash file CDN eksternal agar aman dari pasokan pembajakan (Supply Chain Attack)."
+  },
+  {
+    "id": 43,
+    "category": "Keamanan Software",
+    "question": "Jenis kerentanan di mana peretas dapat menebak Session ID pengguna karena algoritmanya tidak acak dinamakan...",
+    "options": ["Predictable Session ID / Weak Session Fixation", "SQL Injection", "CSRF", "XSS", "DoS"],
+    "correctAnswer": 0,
+    "explanation": "💡 Session ID wajib dibuat acak dengan generator pseudo-random aman (Cryptographically Secure PRNG)."
+  },
+  {
+    "id": 44,
+    "category": "Keamanan Software",
+    "question": "Penggunaan 'Rate Limiting' pada endpoint API Login berguna untuk mencegah...",
+    "options": ["Serangan Brute Force menebak password secara masal", "Serangan XSS", "Serangan SQLi", "Kerusakan database", "Memory leak JS"],
+    "correctAnswer": 0,
+    "explanation": "💡 Rate Limiting memblokir IP yang melakukan 10x percobaan login gagal dalam 1 menit."
+  },
+  {
+    "id": 45,
+    "category": "Keamanan Software",
+    "question": "Dalam penilaian risikonya, kerentanan 'Zero-Day Vulnerability' berarti...",
+    "options": ["Kerentanan keamanan perangkat lunak yang BARU DITEMUKAN dan BELUM MEMILIKI tambalan (patch) keamanan resmi dari pembuatnya", "Kerentanan berusia 0 hari yang tidak berbahaya", "Kerentanan yang sudah diperbaiki", "Kerentanan khusus Windows 95", "Kerentanan pada database kosong"],
+    "correctAnswer": 0,
+    "explanation": "💡 Zero-day adalah cela keamanan yang belum ada obat/patch fisiknya dari vendor."
+  },
+  {
+    "id": 46,
+    "category": "Keamanan Software",
+    "question": "Tracing Kode Rentan XSS:\n`const name = new URLSearchParams(window.location.search).get('name');\ndocument.getElementById('welcome').innerHTML = 'Halo ' + name;` \nJika URL dibuka `site.com?name=<img src=x onerror=alert(1)>`, apa yang terjadi?",
+    "options": ["Skrip `alert(1)` akan dieksekusi oleh browser (Reflected XSS!)", "Tampil teks polos", "Halaman error 404", "Server down", "Teks name diabaikan"],
+    "correctAnswer": 0,
+    "explanation": "💡 Menggunakan `innerHTML` memasukkan tag img liar yang memicu event handler `onerror` JS."
+  },
+  {
+    "id": 47,
+    "category": "Keamanan Software",
+    "question": "Bagaimana perbaikan kode DOM XSS di atas agar 100% aman?",
+    "options": ["Ganti `innerHTML` dengan `textContent`: `document.getElementById('welcome').textContent = 'Halo ' + name;`", "Ganti `get` dengan `post`", "Gunakan `eval()`", "Gunakan CSS grid", "Simpan di LocalStorage"],
+    "correctAnswer": 0,
+    "explanation": "💡 `textContent` mengisolasi input sebagai teks murni tanpa mengurai tag HTML."
+  },
+  {
+    "id": 48,
+    "category": "Keamanan Software",
+    "question": "Dalam kriptografi, kesalahan fatal me-re-use 'Initialization Vector' (IV) atau Nonce pada mode enkripsi AES-CTR / AES-GCM menyebabkan...",
+    "options": ["Kerahasiaan ciphertext rusak (memungkinkan penyerang mendekripsi plaintext tanpa kunci rahasia!)", "Enkripsi makin kuat", "File terhapus", "Program lebih cepat", "Key otomatis berganti"],
+    "correctAnswer": 0,
+    "explanation": "💡 Reusing Nonce/IV pada Stream Cipher merusak jaminan kerahasiaan kriptografi."
+  },
+  {
+    "id": 49,
+    "category": "Keamanan Software",
+    "question": "Serangan 'Side-Channel Timing Attack' pada verifikasi token/password terjadi ketika...",
+    "options": ["Penyerang mengukur WAKTU EKSEKUSI perbandingan string di server untuk menebak karakter per karakter token secara bertahap!", "Penyerang mematikan server", "Penyerang mencuri Wi-Fi", "Penyerang mengubah CSS", "Penyerang memakai GPU"],
+    "correctAnswer": 0,
+    "explanation": "💡 Perbandingan string standar (`==`) berhenti saat 1 karakter beda, memberi bocoran waktu pada peretas."
+  },
+  {
+    "id": 50,
+    "category": "Keamanan Software",
+    "question": "Bagaimana cara MENCEGAH Timing Attack saat membandingkan dua string sensitif (seperti Token Hmac) di Node.js?",
+    "options": ["Menggunakan fungsi perbandingan waktu konstan: `crypto.timingSafeEqual(buf1, buf2)`", "Menggunakan operator `===`", "Menggunakan `==`", "Mengubah string ke uppercase", "Menggunakan for loop biasa"],
+    "correctAnswer": 0,
+    "explanation": "💡 `crypto.timingSafeEqual()` selalu mengeksekusi durasi perbandingan yang konstan tanpa peduli titik perbedaan string."
+  },
+  {
+    "id": 51,
+    "category": "Keamanan Software",
+    "question": "Proses pengujian keamanan perangkat lunak dengan cara mensimulasikan serangan siber nyata secara legal dinamakan...",
+    "options": ["Penetration Testing (Pen-Test)", "Unit Testing", "Integration Testing", "A/B Testing", "Stress Testing"],
+    "correctAnswer": 0,
+    "explanation": "💡 Penetration Testing mensimulasikan serangan nyata untuk mengidentifikasi celah keamanan."
+  },
+  {
+    "id": 52,
+    "category": "Keamanan Software",
+    "question": "Metode Pen-test di mana penguji TIDAK MEMILIKI INFORMASI SAMA SEKALI mengenai arsitektur internal atau source code sistem dinamakan...",
+    "options": ["Black Box Testing", "White Box Testing", "Gray Box Testing", "Unit Testing", "Glass Box Testing"],
+    "correctAnswer": 0,
+    "explanation": "💡 Black Box Testing mensimulasikan peretas luar tanpa akses informasi internal."
+  },
+  {
+    "id": 53,
+    "category": "Keamanan Software",
+    "question": "Metode Pen-test di mana penguji DIBERI AKSES PENUH ke source code dan dokumentasi arsitektur sistem dinamakan...",
+    "options": ["White Box Testing", "Black Box Testing", "Gray Box Testing", "Smoke Testing", "Blind Testing"],
+    "correctAnswer": 0,
+    "explanation": "💡 White Box Testing memeriksa kodingan langsung secara transparan."
+  },
+  {
+    "id": 54,
+    "category": "Keamanan Software",
+    "question": "Dalam analisis static code security (SAST), istilah 'False Positive' berarti...",
+    "options": ["Tool keamanan melaporkan adanya kerentanan berbahaya, padahal sebenarnya kode tersebut AMAN", "Kerentanan berbahaya tidak terdeteksi", "Kode mengalami crash", "Database terhapus", "Tool mati"],
+    "correctAnswer": 0,
+    "explanation": "💡 False Positive adalah peringatan palsu di mana kodingan sebenarnya aman."
+  },
+  {
+    "id": 55,
+    "category": "Keamanan Software",
+    "question": "Istilah 'False Negative' dalam audit keamanan berarti...",
+    "options": ["Terdapat kerentanan berbahaya di kodingan, namun TOOL GAGAL MENDETEKSI kerentanan tersebut!", "Tool mendeteksi bug palsu", "Sistem aman 100%", "Kodingan berjalan lancar", "Aplikasi lulus audit"],
+    "correctAnswer": 0,
+    "explanation": "💡 False Negative sangat berbahaya karena celah keamanan nyata lolos dari pemantauan."
+  },
+  {
+    "id": 56,
+    "category": "Keamanan Software",
+    "question": "Prinsip 'Defense in Depth' dalam arsitektur keamanan perangkat lunak berarti...",
+    "options": ["Menerapkan BEBERAPA LAPISAN pertahanan keamanan yang saling melengkapi (misal Firewall + WAF + HTTPS + Auth + Input Validation + DB Encryption)", "Hanya mengandalkan 1 password rumit", "Mengunci server di kamar rapat", "Menghapus koneksi internet", "Membuat 10 admin"],
+    "correctAnswer": 0,
+    "explanation": "💡 Defense in Depth menjamin jika 1 pertahanan jebol, masih ada lapisan keamanan berikutnya."
+  },
+  {
+    "id": 57,
+    "category": "Keamanan Software",
+    "question": "Mengapa menyimpan kunci rahasia (Secret Key / API Key) langsung di dalam repository Git public (Hardcoded Secret) dianggap kesalahan fatal?",
+    "options": ["Bot peretas otomatis memindai commit Git public dalam hitungan detik untuk mencuri kunci tersebut!", "Git tidak bisa di-commit", "File git membengkak", "Sintaks JS error", "Vercel memblokir git"],
+    "correctAnswer": 0,
+    "explanation": "💡 Automated bots di GitHub memindai hardcoded secrets secara real-time untuk mengeksploitasi API key."
+  },
+  {
+    "id": 58,
+    "category": "Keamanan Software",
+    "question": "Solusi standar pengoperasian software untuk mengelola Secret Key tanpa menaruhnya di source code adalah...",
+    "options": ["Menggunakan Environment Variables (`.env`) yang ditambahkan ke `.gitignore`", "Menulisnya di README.md", "Menyimpannya di file CSS", "Menuliskannya di komentar JS", "Mengirimnya via email"],
+    "correctAnswer": 0,
+    "explanation": "💡 Environment Variables (`.env`) memisahkan rahasia konfigurasi dari repositori koding."
+  },
+  {
+    "id": 59,
+    "category": "Keamanan Software",
+    "question": "Dalam pembuatan sistem autentikasi, teknik 'Account Lockout' bertugas untuk...",
+    "options": ["Mengunci sementara akun pengguna setelah beberapa kali percobaan password salah berturut-turut (menangkal Brute Force)", "Menghapus akun permanen", "Mengubah password pengguna", "Mengirim email spam", "Menutup browser"],
+    "correctAnswer": 0,
+    "explanation": "💡 Account Lockout memblokir akses sementara setelah N kali kegagalan login."
+  },
+  {
+    "id": 60,
+    "category": "Keamanan Software",
+    "question": "Apa yang dimaksud dengan serangan 'Dependency Confusion / Supply Chain Attack' pada ekosistem npm/pip?",
+    "options": ["Peretas mempublikasikan paket pustaka (library) berbahaya ke registry publik dengan nama yang sama seperti paket privat internal perusahaan!", "Server npm down", "Node.js terhapus", "Database crash", "Git melarang commit"],
+    "correctAnswer": 0,
+    "explanation": "💡 Supply chain attack menyuntikkan kode berbahaya via dependency pustaka pihak ketiga."
+  }
+]

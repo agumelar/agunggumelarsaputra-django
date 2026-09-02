@@ -1,0 +1,482 @@
+[
+  {
+    "id": 1,
+    "category": "Struktur Data",
+    "question": "Struktur data linier di mana elemen disimpan pada lokasi memori yang berdampingan (kontigu) dan diakses lewat indeks numerik dinamakan...",
+    "options": ["Array", "Linked List", "Tree", "Graph", "Hash Table"],
+    "correctAnswer": 0,
+    "explanation": "💡 Array menyimpan elemen secara linier pada lokasi blok memori kontigu."
+  },
+  {
+    "id": 2,
+    "category": "Struktur Data",
+    "question": "Struktur data linier di mana setiap elemen (node) memuat data dan pointer yang menunjuk ke alamat node berikutnya dinamakan...",
+    "options": ["Array", "Linked List", "Stack", "Queue", "Binary Tree"],
+    "correctAnswer": 1,
+    "explanation": "💡 Linked List terdiri dari node-node yang saling terhubung lewat pointer referensi memori."
+  },
+  {
+    "id": 3,
+    "category": "Struktur Data",
+    "question": "Prinsip kerja struktur data Stack (Tumpukan) adalah LIFO, yang merupakan singkatan dari...",
+    "options": ["Last In First Out", "Last In Fast Out", "Lead In First Out", "Long In First Out", "Low In Fast Out"],
+    "correctAnswer": 0,
+    "explanation": "💡 LIFO (Last In First Out): Elemen yang terakhir masuk akan pertama kali dikeluarkan."
+  },
+  {
+    "id": 4,
+    "category": "Struktur Data",
+    "question": "Operasi untuk MENAMBAHKAN elemen baru ke bagian paling atas (top) dari sebuah Stack dinamakan...",
+    "options": ["Pop", "Push", "Enqueue", "Dequeue", "Peek"],
+    "correctAnswer": 1,
+    "explanation": "💡 Push memasukkan elemen baru ke atas tumpukan Stack."
+  },
+  {
+    "id": 5,
+    "category": "Struktur Data",
+    "question": "Operasi untuk MENGAMBIL/MENGHAPUS elemen paling atas (top) dari sebuah Stack dinamakan...",
+    "options": ["Push", "Pop", "Enqueue", "Dequeue", "Insert"],
+    "correctAnswer": 1,
+    "explanation": "💡 Pop mengeluarkan elemen teratas dari Stack."
+  },
+  {
+    "id": 6,
+    "category": "Struktur Data",
+    "question": "Prinsip kerja struktur data Queue (Antrean) adalah FIFO, yang merupakan singkatan dari...",
+    "options": ["First In First Out", "First In Fast Out", "Fast In Fast Out", "Final In First Out", "First In Final Out"],
+    "correctAnswer": 0,
+    "explanation": "💡 FIFO (First In First Out): Elemen yang pertama masuk akan pertama kali dikeluarkan."
+  },
+  {
+    "id": 7,
+    "category": "Struktur Data",
+    "question": "Operasi untuk MENAMBAHKAN elemen baru ke bagian belakang (rear) antrean Queue dinamakan...",
+    "options": ["Enqueue", "Dequeue", "Push", "Pop", "AddRear"],
+    "correctAnswer": 0,
+    "explanation": "💡 Enqueue memasukkan elemen ke ekor (rear) antrean."
+  },
+  {
+    "id": 8,
+    "category": "Struktur Data",
+    "question": "Operasi untuk MENGAMBIL/MENGHAPUS elemen paling depan (front) dari antrean Queue dinamakan...",
+    "options": ["Enqueue", "Dequeue", "Pop", "Push", "RemoveFront"],
+    "correctAnswer": 1,
+    "explanation": "💡 Dequeue mengeluarkan elemen paling depan antrean."
+  },
+  {
+    "id": 9,
+    "category": "Struktur Data",
+    "question": "Struktur data non-linier ber-hierarki yang terdiri dari Root, Node Anak, dan Leaf (daun) dinamakan...",
+    "options": ["Tree (Pohon)", "Graph", "Linked List", "Queue", "Array"],
+    "correctAnswer": 0,
+    "explanation": "💡 Tree adalah struktur data hierarkis bercabang dari satu Root Node."
+  },
+  {
+    "id": 10,
+    "category": "Struktur Data",
+    "question": "Binary Tree adalah jenis Tree khusus di mana setiap Node induk (parent) dapat memiliki MAKSIMAL berapa banyak anak (children)?",
+    "options": ["1 anak", "2 anak", "3 anak", "Tidak terbatas", "0 anak"],
+    "correctAnswer": 1,
+    "explanation": "💡 Binary Tree membatasi maksimal 2 child node per parent (left child & right child)."
+  },
+  {
+    "id": 11,
+    "category": "Struktur Data",
+    "question": "Struktur data non-linier yang terdiri dari kumpulan simpul (Vertex / Node) yang dihubungkan oleh sisi (Edge) dinamakan...",
+    "options": ["Graph", "Tree", "Stack", "Queue", "Array 2D"],
+    "correctAnswer": 0,
+    "explanation": "💡 Graph merepresentasikan jaringan koneksi antar Vertex melalui Edge."
+  },
+  {
+    "id": 12,
+    "category": "Struktur Data",
+    "question": "Struktur data yang memetakan Kunci (Key) ke Nilai (Value) menggunakan fungsi Hash untuk pencarian pencarian konstan dinamakan...",
+    "options": ["Hash Table / Hash Map", "Linked List", "Binary Search Tree", "Stack", "Heap"],
+    "correctAnswer": 0,
+    "explanation": "💡 Hash Table mengasosiasikan Key-Value via Hash Function."
+  },
+  {
+    "id": 13,
+    "category": "Struktur Data",
+    "question": "Operasi untuk MELIHAT elemen teratas Stack atau terdepan Queue TANPA menghapusnya dinamakan...",
+    "options": ["Peek / Top", "Pop", "Dequeue", "Look", "Search"],
+    "correctAnswer": 0,
+    "explanation": "💡 Peek mengembalikan nilai teratas tanpa memodifikasi isi struktur data."
+  },
+  {
+    "id": 14,
+    "category": "Struktur Data",
+    "question": "Node pada Tree yang tidak memiliki anak sama sekali (berada di posisi paling bawah) dinamakan...",
+    "options": ["Root Node", "Leaf Node (Daun)", "Parent Node", "Internal Node", "Ancestor Node"],
+    "correctAnswer": 1,
+    "explanation": "💡 Leaf Node adalah node terminal di bagian ujung bawah hirarki Tree."
+  },
+  {
+    "id": 15,
+    "category": "Struktur Data",
+    "question": "Node paling atas yang menjadi titik awal/sumber dari sebuah Tree dinamakan...",
+    "options": ["Root Node (Akar)", "Leaf Node", "Branch Node", "Sibling Node", "Child Node"],
+    "correctAnswer": 0,
+    "explanation": "💡 Root Node adalah simpul induk tertinggi dari seluruh pohon."
+  },
+  {
+    "id": 16,
+    "category": "Struktur Data",
+    "question": "Aturan utama pada Binary Search Tree (BST) adalah...",
+    "options": ["Nilai anak KIRI selalu LEBIH KECIL dari induk, dan nilai anak KANAN selalu LEBIH BESAR dari induk", "Nilai anak kiri selalu lebih besar", "Semua anak bernilai sama", "Node acak", "Anak kanan harus selalu genap"],
+    "correctAnswer": 0,
+    "explanation": "💡 BST menjaga properti: Left Child < Parent < Right Child."
+  },
+  {
+    "id": 17,
+    "category": "Struktur Data",
+    "question": "Urutan penelusuran (Traversal) Binary Tree dengan alur: Node Induk -> Anak Kiri -> Anak Kanan dinamakan...",
+    "options": ["Pre-order Traversal", "In-order Traversal", "Post-order Traversal", "Level-order Traversal", "Breadth-First"],
+    "correctAnswer": 0,
+    "explanation": "💡 Pre-order: Root -> Left -> Right."
+  },
+  {
+    "id": 18,
+    "category": "Struktur Data",
+    "question": "Urutan penelusuran Binary Tree dengan alur: Anak Kiri -> Node Induk -> Anak Kanan dinamakan...",
+    "options": ["Pre-order Traversal", "In-order Traversal", "Post-order Traversal", "Depth-First", "Out-order"],
+    "correctAnswer": 1,
+    "explanation": "💡 In-order: Left -> Root -> Right. (Pada BST, In-order menghasilkan urutan data terurut terkecil ke terbesar!)."
+  },
+  {
+    "id": 19,
+    "category": "Struktur Data",
+    "question": "Urutan penelusuran Binary Tree dengan alur: Anak Kiri -> Anak Kanan -> Node Induk dinamakan...",
+    "options": ["Pre-order Traversal", "In-order Traversal", "Post-order Traversal", "Top-down Traversal", "Breadth-First"],
+    "correctAnswer": 2,
+    "explanation": "💡 Post-order: Left -> Right -> Root."
+  },
+  {
+    "id": 20,
+    "category": "Struktur Data",
+    "question": "Algoritma penelusuran Graph yang menjelajahi simpul sedalam mungkin sebelum melakukan backtracking dinamakan...",
+    "options": ["Depth-First Search (DFS)", "Breadth-First Search (BFS)", "Binary Search", "Dijkstra", "Linear Search"],
+    "correctAnswer": 0,
+    "explanation": "💡 DFS menelusuri satu cabang hingga ujung sebelum backtrack (menggunakan Stack/Rekursif)."
+  },
+  {
+    "id": 21,
+    "category": "Struktur Data",
+    "question": "Algoritma penelusuran Graph yang menjelajahi simpul tingkat demi tingkat (tetangga terdekat dulu) dinamakan...",
+    "options": ["Breadth-First Search (BFS)", "Depth-First Search (DFS)", "Binary Search", "A* Algorithm", "Bellman-Ford"],
+    "correctAnswer": 0,
+    "explanation": "💡 BFS menjelajahi tetangga horizontal per level (menggunakan Queue)."
+  },
+  {
+    "id": 22,
+    "category": "Struktur Data",
+    "question": "Kondisi pada Hash Table di mana dua Key berbeda menghasilkan nilai indeks hash yang SAMA dinamakan...",
+    "options": ["Hash Collision", "Hash Overflow", "Hash Failure", "Hash Corruption", "Hash Leak"],
+    "correctAnswer": 0,
+    "explanation": "💡 Hash Collision terjadi saat fungsi hash memetakan 2 key ke bucket yang sama."
+  },
+  {
+    "id": 23,
+    "category": "Struktur Data",
+    "question": "Metode penanganan Hash Collision yang menyimpan elemen-elemen berbenturan di dalam Linked List pada bucket yang sama dinamakan...",
+    "options": ["Separate Chaining", "Open Addressing", "Linear Probing", "Quadratic Probing", "Double Hashing"],
+    "correctAnswer": 0,
+    "explanation": "💡 Separate Chaining membuat linked list di setiap slot bucket."
+  },
+  {
+    "id": 24,
+    "category": "Struktur Data",
+    "question": "Metode penanganan Hash Collision dengan mencari slot kosong berikutnya secara berurutan dinamakan...",
+    "options": ["Linear Probing", "Separate Chaining", "Binary Search", "Rehashing", "Stack Overflow"],
+    "correctAnswer": 0,
+    "explanation": "💡 Linear Probing mencari slot index i+1, i+2 dst saat terjadi tabrakan."
+  },
+  {
+    "id": 25,
+    "category": "Struktur Data",
+    "question": "Kompleksitas waktu Big-O rata-rata untuk pencarian (search) dan penyisipan (insert) pada Hash Table ideal adalah...",
+    "options": ["O(1) Konstan", "O(N) Linear", "O(N^2) Kuadratik", "O(log N)", "O(N log N)"],
+    "correctAnswer": 0,
+    "explanation": "💡 Hash Table menawarkan pencarian rata-rata O(1) konstan sangat cepat."
+  },
+  {
+    "id": 26,
+    "category": "Struktur Data",
+    "question": "Manakah struktur data yang paling tepat digunakan untuk fitur 'Undo / Redo' pada aplikasi editor teks?",
+    "options": ["Stack (2 buah Stack)", "Queue", "Array 1D", "Binary Tree", "Graph"],
+    "correctAnswer": 0,
+    "explanation": "💡 Dua buah Stack (Undo stack & Redo stack) adalah struktur data standar fitur Undo/Redo (LIFO)."
+  },
+  {
+    "id": 27,
+    "category": "Struktur Data",
+    "question": "Manakah struktur data yang paling tepat digunakan untuk mengelola antrean cetak dokumen (Printer Spooling)?",
+    "options": ["Queue (FIFO)", "Stack (LIFO)", "Binary Search Tree", "Graph", "Array 2D"],
+    "correctAnswer": 0,
+    "explanation": "💡 Printer spooler mengantrekan dokumen sesuai urutan kedatangan (First In First Out)."
+  },
+  {
+    "id": 28,
+    "category": "Struktur Data",
+    "question": "Keunggulan utama Linked List dibanding Array biasa adalah...",
+    "options": ["Ukuran Linked List bersifat dinamis (dapat membesar/menteril tanpa realokasi memori raksasa) dan penyisipan di awal efisien O(1)", "Pencarian elemen acak lebih cepat", "Memakan memori lebih sedikit", "Tidak menggunakan pointer", "Bisa diakses lewat indeks"],
+    "correctAnswer": 0,
+    "explanation": "💡 Linked List dinamis dan cepat insert/delete di node head/tail O(1)."
+  },
+  {
+    "id": 29,
+    "category": "Struktur Data",
+    "question": "Kelemahan utama Linked List dibanding Array biasa adalah...",
+    "options": ["Akses acak (random access) elemen ke-N lambat O(N) karena harus ditelusuri dari node awal (head)", "Tidak bisa menyimpan data string", "Ukuran terbatas", "Proses delete tidak bisa dilakukan", "Tidak mendukung recursion"],
+    "correctAnswer": 0,
+    "explanation": "💡 Linked List harus ditelusuri bertahap (Sequential Access O(N)) untuk mencapai elemen tengah."
+  },
+  {
+    "id": 30,
+    "category": "Struktur Data",
+    "question": "Pernyataan yang BENAR mengenai Graph Berarah (Directed Graph / Digraph) adalah...",
+    "options": ["Sisi (Edge) memiliki arah tertentu dari simpul asal ke simpul tujuan", "Sisi bisa dilalui dua arah bebas", "Tidak memiliki simpul", "Hanya boleh berbentuk lingkaran", "Graph pasti berbentuk pohon"],
+    "correctAnswer": 0,
+    "explanation": "💡 Directed Graph memiliki panah penunjuk arah pada setiap Edge."
+  },
+  {
+    "id": 31,
+    "category": "Struktur Data",
+    "question": "Tracing Traversal In-Order:\nSebuah BST memiliki node: Root 10, Left Child 5, Right Child 15. Hasil Traversal In-Order-nya adalah...",
+    "options": ["5, 10, 15", "10, 5, 15", "5, 15, 10", "15, 10, 5", "10, 15, 5"],
+    "correctAnswer": 0,
+    "explanation": "💡 In-Order (Left -> Root -> Right): 5, 10, 15 (Selalu terurut naik!)."
+  },
+  {
+    "id": 32,
+    "category": "Struktur Data",
+    "question": "Tracing Traversal Pre-Order pada BST yang sama (Root 10, Left 5, Right 15) adalah...",
+    "options": ["10, 5, 15", "5, 10, 15", "5, 15, 10", "15, 10, 5", "10, 15, 5"],
+    "correctAnswer": 0,
+    "explanation": "💡 Pre-Order (Root -> Left -> Right): 10, 5, 15."
+  },
+  {
+    "id": 33,
+    "category": "Struktur Data",
+    "question": "Tracing Traversal Post-Order pada BST yang sama (Root 10, Left 5, Right 15) adalah...",
+    "options": ["5, 15, 10", "10, 5, 15", "5, 10, 15", "15, 5, 10", "10, 15, 5"],
+    "correctAnswer": 0,
+    "explanation": "💡 Post-Order (Left -> Right -> Root): 5, 15, 10."
+  },
+  {
+    "id": 34,
+    "category": "Struktur Data",
+    "question": "Struktur data Heap khusus di mana nilai setiap Parent Node SELALU LEBIH BESAR atau sama dengan anak-anaknya dinamakan...",
+    "options": ["Max-Heap", "Min-Heap", "Binary Search Tree", "AVL Tree", "B-Tree"],
+    "correctAnswer": 0,
+    "explanation": "💡 Max-Heap menjamin Root selalu memuat nilai terbesar dari seluruh pohon."
+  },
+  {
+    "id": 35,
+    "category": "Struktur Data",
+    "question": "Struktur data Max-Heap atau Min-Heap sering dimanfaatkan untuk mengimplementasikan...",
+    "options": ["Priority Queue (Antrean Berprioritas)", "Stack LIFO", "Simple Array", "Hash Table", "Doubly Linked List"],
+    "correctAnswer": 0,
+    "explanation": "💡 Priority Queue menggunakan Heap agar mengambil elemen prioritas tertinggi/terrendah berjalan O(1) atau O(log N)."
+  },
+  {
+    "id": 36,
+    "category": "Struktur Data",
+    "question": "Kondisi kesalahan 'Stack Overflow' terjadi ketika...",
+    "options": ["Memory Call Stack habis akibat rekursi tanpa henti (infinite recursion)", "Ukuran array kurang", "Queue kosong", "Database crash", "Hash collision terlalu banyak"],
+    "correctAnswer": 0,
+    "explanation": "💡 Stack Overflow terjadi saat alokasi memori Call Stack terlampaui."
+  },
+  {
+    "id": 37,
+    "category": "Struktur Data",
+    "question": "Perbedaan Doubly Linked List dibanding Singly Linked List adalah...",
+    "options": ["Setiap node pada Doubly Linked List memiliki DUA pointer: penunjuk ke node berikutnya (next) dan node sebelumnya (prev)", "Doubly Linked List berukuran ganda", "Singly tidak punya data", "Doubly khusus angka", "Doubly berbentuk melingkar"],
+    "correctAnswer": 0,
+    "explanation": "💡 Doubly Linked List menyimpan pointer `next` dan `prev` untuk navigasi dua arah."
+  },
+  {
+    "id": 38,
+    "category": "Struktur Data",
+    "question": "Circular Linked List adalah...",
+    "options": ["Linked List di mana pointer node terakhir (tail) menunjuk kembali ke node pertama (head)", "Linked List berbentuk lingkaran di layar", "Node tanpa data", "Array yang diputar", "Queue yang penuh"],
+    "correctAnswer": 0,
+    "explanation": "💡 Circular Linked List membentuk lingkaran tak terputus (tail.next = head)."
+  },
+  {
+    "id": 39,
+    "category": "Struktur Data",
+    "question": "Algoritma terpopuler untuk mencari jalur terpendek (Shortest Path) dari satu simpul ke simpul lain pada Weighted Graph berbobot positif adalah...",
+    "options": ["Algoritma Dijkstra", "Algoritma Bubble Sort", "Depth First Search", "Kruskal", "Prim"],
+    "correctAnswer": 0,
+    "explanation": "💡 Dijkstra's Algorithm menemukan rute lintasan terpendek pada weighted graph."
+  },
+  {
+    "id": 40,
+    "category": "Struktur Data",
+    "question": "Algoritma Kruskal dan Prim digunakan untuk menemukan...",
+    "options": ["Minimum Spanning Tree (MST) pada Graph", "Shortest path", "Hash collision", "Binary Search", "Sorting Array"],
+    "correctAnswer": 0,
+    "explanation": "💡 Kruskal dan Prim adalah algoritma greedy untuk membangun Minimum Spanning Tree."
+  },
+  {
+    "id": 41,
+    "category": "Struktur Data",
+    "question": "Tracing Stack Operasi: `Push(5); Push(3); Pop(); Push(8);`. Elemen teratas (top) Stack sekarang adalah...",
+    "options": ["8", "3", "5", "0", "Empty"],
+    "correctAnswer": 0,
+    "explanation": "💡 Push(5) -> [5]. Push(3) -> [5, 3]. Pop() -> [5]. Push(8) -> [5, 8]. Top = 8."
+  },
+  {
+    "id": 42,
+    "category": "Struktur Data",
+    "question": "Tracing Queue Operasi: `Enqueue(A); Enqueue(B); Dequeue(); Enqueue(C);`. Elemen paling depan (front) Queue sekarang adalah...",
+    "options": ["B", "A", "C", "Empty", "Error"],
+    "correctAnswer": 0,
+    "explanation": "💡 Enqueue(A) -> [A]. Enqueue(B) -> [A, B]. Dequeue() -> [B]. Enqueue(C) -> [B, C]. Front = B."
+  },
+  {
+    "id": 43,
+    "category": "Struktur Data",
+    "question": "Ekspresi Matematika `A + B` dinamakan notasi Infix. Bentuk notasi Postfix (Reverse Polish Notation)-nya adalah...",
+    "options": ["A B +", "+ A B", "A + B", "B A +", "+ B A"],
+    "correctAnswer": 0,
+    "explanation": "💡 Postfix menaruh operator di belakang operand: `A B +`."
+  },
+  {
+    "id": 44,
+    "category": "Struktur Data",
+    "question": "Notasi Prefix dari ekspresi `A + B` adalah...",
+    "options": ["+ A B", "A B +", "A + B", "+ B A", "B A +"],
+    "correctAnswer": 0,
+    "explanation": "💡 Prefix (Polish Notation) menaruh operator di depan operand: `+ A B`."
+  },
+  {
+    "id": 45,
+    "category": "Struktur Data",
+    "question": "Struktur data Tree seimbang di mana perbedaan tinggi cabang kiri dan kanan tidak boleh lebih dari 1 dinamakan...",
+    "options": ["AVL Tree (Self-balancing BST)", "Array Tree", "Heap", "Graph", "Simple Tree"],
+    "correctAnswer": 0,
+    "explanation": "💡 AVL Tree secara otomatis melakukan rotasi untuk menjaga keseimbangan (balance factor <= 1)."
+  },
+  {
+    "id": 46,
+    "category": "Struktur Data",
+    "question": "Mengapa sistem basis data relasional (seperti MySQL/PostgreSQL) memilih menggunakan B-Tree / B+ Tree sebagai struktur data Indeks dibanding Binary Search Tree (BST) biasa?",
+    "options": ["B-Tree memiliki cabang banyak (self-balancing multi-way tree) yang meminimalkan jumlah pembacaan disk I/O yang lambat untuk data raksasa", "B-Tree lebih sedikit memakan memori", "BST tidak bisa disimpan di harddisk", "B-Tree khusus bahasa C", "B+ Tree tidak mendukung angka"],
+    "correctAnswer": 0,
+    "explanation": "💡 B-Tree menyimpan banyak key per node, dirancang khusus meminimalkan pembacaan Disk I/O."
+  },
+  {
+    "id": 47,
+    "category": "Struktur Data",
+    "question": "Jika sebuah BST tidak seimbang dan tumbuh memanjang lurus menyerupai Linked List (Skewed Tree), kompleksitas pencarian terburuknya memburuk dari `O(log N)` menjadi...",
+    "options": ["O(N) Linear", "O(1) Konstan", "O(N^2) Kuadratik", "O(N log N)", "O(2^N)"],
+    "correctAnswer": 0,
+    "explanation": "💡 Skewed BST memburuk menjadi pencarian linear O(N) karena kehilangan sifat pembagian dua area."
+  },
+  {
+    "id": 48,
+    "category": "Struktur Data",
+    "question": "Struktur data mana yang paling ideal digunakan untuk mengimplementasikan cache LRU (Least Recently Used) dengan kecepatan O(1) untuk pencarian dan pembaruan?",
+    "options": ["Gabungan Hash Map + Doubly Linked List", "Stack biasa", "Array 2D", "Binary Search Tree", "Queue murni"],
+    "correctAnswer": 0,
+    "explanation": "💡 LRU Cache memadukan HashMap (O(1) lookup) dan DoublyLinkedList (O(1) node relocation)."
+  },
+  {
+    "id": 49,
+    "category": "Struktur Data",
+    "question": "Tracing Hash Table Worst-Case: Jika seluruh 1000 data dimasukkan ke Hash Table dan semuanya mengalami Hash Collision pada bucket yang sama (Separate Chaining), kompleksitas pencariannya menjadi...",
+    "options": ["O(N)", "O(1)", "O(log N)", "O(N^2)", "O(0)"],
+    "correctAnswer": 0,
+    "explanation": "💡 Jika seluruh data masuk ke 1 linked list di 1 bucket, pencarian berubah menjadi Linear Search O(N)."
+  },
+  {
+    "id": 50,
+    "category": "Struktur Data",
+    "question": "Struktur data mana yang paling efisien digunakan oleh Algoritma Breadth-First Search (BFS) pada Graph?",
+    "options": ["Queue (FIFO)", "Stack (LIFO)", "Array 1D", "Max-Heap", "Binary Search Tree"],
+    "correctAnswer": 0,
+    "explanation": "💡 BFS memanfaatkan Queue untuk menjelajahi simpul secara melintang per level (FIFO)."
+  },
+  {
+    "id": 51,
+    "category": "Struktur Data",
+    "question": "Struktur data mana yang paling efisien digunakan oleh Algoritma Depth-First Search (DFS) pada Graph?",
+    "options": ["Stack (LIFO) atau Rekursi", "Queue (FIFO)", "Priority Queue", "Hash Table", "Binary Heap"],
+    "correctAnswer": 0,
+    "explanation": "💡 DFS memanfaatkan Stack (atau Call Stack rekursif) untuk penelusuran mendalam LIFO."
+  },
+  {
+    "id": 52,
+    "category": "Struktur Data",
+    "question": "Tracing Evaluasi Postfix: Ekspresi Postfix `5 3 2 * +`. Berapakah hasil akhirnya jika dievaluasi menggunakan Stack?",
+    "options": ["11", "16", "10", "25", "13"],
+    "correctAnswer": 0,
+    "explanation": "💡 Operasi: Push 5, Push 3, Push 2. Ketemu `*`: Pop 2 & 3, hitung 3*2=6, Push 6. Ketemu `+`: Pop 6 & 5, hitung 5+6=11. Hasil = 11."
+  },
+  {
+    "id": 53,
+    "category": "Struktur Data",
+    "question": "Dalam analisis alokasi memori di bahasa C/C++, data variabel lokal fungsi disimpan di area memori ________, sedangkan alokasi memori dinamis (`malloc`/`new`) disimpan di area memori ________.",
+    "options": ["Stack, Heap", "Heap, Stack", "RAM, ROM", "Cache, Disk", "Register, Cache"],
+    "correctAnswer": 0,
+    "explanation": "💡 Local variables disimpan di Stack memory, dynamic allocation disimpan di Heap memory."
+  },
+  {
+    "id": 54,
+    "category": "Struktur Data",
+    "question": "Apa risiko utama dari mengalokasikan memori dinamis di Heap (misal `int* p = new int[100];`) tanpa memanggil `delete[] p;` di C++?",
+    "options": ["Memory Leak (Memori Heap tidak terbebaskan meski fungsi selesai)", "Stack Overflow", "Compile Error", "Bluescreen otomatis", "Data terenkripsi"],
+    "correctAnswer": 0,
+    "explanation": "💡 Tidak membebaskan alokasi Heap menyebabkan kebocoran memori (Memory Leak)."
+  },
+  {
+    "id": 55,
+    "category": "Struktur Data",
+    "question": "Manakah pernyataan yang BENAR mengenai perbedaan Matrix Adjasensi (Array 2D) dan List Adjasensi (Array of Linked List) untuk merepresentasikan Graph?",
+    "options": ["Matrix Adjasensi memakan memori O(V^2) cocok untuk Dense Graph, sedangkan List Adjasensi memakan memori O(V + E) efisien untuk Sparse Graph", "Matrix selalu lebih hemat memori", "List Adjasensi tidak bisa untuk graph berarah", "Matrix hanya untuk angka", "Keduanya sama persis"],
+    "correctAnswer": 0,
+    "explanation": "💡 Adjacency Matrix memakan ruang V^2; Adjacency List sangat hemat O(V+E) untuk Sparse Graph."
+  },
+  {
+    "id": 56,
+    "category": "Struktur Data",
+    "question": "Dalam implementasi Trie (Prefix Tree), kegunaan utamanya dalam aplikasi nyata adalah...",
+    "options": ["Fitur Autocomplete / Auto-suggest kata pencarian dan Spell Checker", "Penyimpanan video", "Kalkulator statistik", "Enkripsi password", "Sorting angka"],
+    "correctAnswer": 0,
+    "explanation": "💡 Trie sangat efisien untuk pencarian pencocokan awalan kata (Prefix Matching / Autocomplete)."
+  },
+  {
+    "id": 57,
+    "category": "Struktur Data",
+    "question": "Kompleksitas pencarian kata dengan panjang K karakter pada struktur data Trie adalah...",
+    "options": ["O(K) Konstan terhadap jumlah kata", "O(N) Berdasar total kata", "O(N^2)", "O(log N)", "O(2^K)"],
+    "correctAnswer": 0,
+    "explanation": "💡 Trie mencari kata hanya berdasarkan panjang string K, terlepas dari ada jutaan kata di database."
+  },
+  {
+    "id": 58,
+    "category": "Struktur Data",
+    "question": "Tracing Recursion Call Stack:\n`void printNum(int n) { if(n==0) return; printNum(n-1); console.log(n); }`\nJika dipanggil `printNum(3)`, urutan cetakannya adalah...",
+    "options": ["1, 2, 3", "3, 2, 1", "3, 3, 3", "1, 1, 1", "0, 1, 2, 3"],
+    "correctAnswer": 0,
+    "explanation": "💡 Fungsi memanggil dirinya dulu sampai n=0, lalu saat unwinding call stack mencetak dari bawah: 1, 2, 3."
+  },
+  {
+    "id": 59,
+    "category": "Struktur Data",
+    "question": "Struktur data Disjoint Set (Union-Find) digunakan secara efisien pada algoritma Graph mana?",
+    "options": ["Algoritma Kruskal (mendeteksi siklus)", "Algoritma Dijkstra", "BFS", "DFS", "Binary Search"],
+    "correctAnswer": 0,
+    "explanation": "💡 Union-Find mendeteksi siklus secara ultra cepat pada Algoritma Kruskal."
+  },
+  {
+    "id": 60,
+    "category": "Struktur Data",
+    "question": "Manakah trade-off utama dari memilih struktur data Array dibanding Linked List?",
+    "options": ["Array sangat cepat untuk pembacaan acak O(1), namun mahal/lambat untuk penyisipan/penghapusan elemen di tengah O(N)", "Array lebih fleksibel ukurannya", "Array tidak butuh memori", "Array khusus angka", "Linked list tidak punya pointer"],
+    "correctAnswer": 0,
+    "explanation": "💡 Array unggul di O(1) random access, tapi lemah di insertion/deletion O(N)."
+  }
+]

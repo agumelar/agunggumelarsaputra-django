@@ -1,0 +1,482 @@
+[
+  {
+    "id": 1,
+    "category": "PBO / OOP",
+    "question": "Rancangan atau cetak biru (blueprint) yang mendefinisikan karakteristik dan perilaku dari suatu objek dinamakan...",
+    "options": ["Object", "Class", "Method", "Variable", "Interface"],
+    "correctAnswer": 1,
+    "explanation": "💡 Class adalah cetak biru (blueprint) yang memuat definisi atribut dan method untuk membuat objek."
+  },
+  {
+    "id": 2,
+    "category": "PBO / OOP",
+    "question": "Hasil instansiasi nyata dari sebuah Class yang memiliki state dan behavior dinamakan...",
+    "options": ["Object", "Class", "Function", "Module", "Attribute"],
+    "correctAnswer": 0,
+    "explanation": "💡 Object adalah wujud nyata (instance) yang dibuat dari sebuah Class."
+  },
+  {
+    "id": 3,
+    "category": "PBO / OOP",
+    "question": "Pilar OOP yang berfungsi menyembunyikan detail penyimpan data dan hanya menyediakan akses melalui method/getter-setter adalah...",
+    "options": ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction", "Overloading"],
+    "correctAnswer": 2,
+    "explanation": "💡 Encapsulation membungkus data (private) dan melindunginya dari akses langsung luar class."
+  },
+  {
+    "id": 4,
+    "category": "PBO / OOP",
+    "question": "Modifier akses yang membuat variabel atau method HANYA dapat diakses oleh class itu sendiri adalah...",
+    "options": ["public", "protected", "private", "default", "static"],
+    "correctAnswer": 2,
+    "explanation": "💡 Private membatasi akses variabel/method hanya di dalam lingkup class deklarasinya."
+  },
+  {
+    "id": 5,
+    "category": "PBO / OOP",
+    "question": "Kemampuan suatu kelas untuk menurunkan atribut dan method kepada kelas anaknya (subclass) disebut...",
+    "options": ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction", "Overriding"],
+    "correctAnswer": 0,
+    "explanation": "💡 Inheritance (Pewarisan) memungkinkan class anak mewarisi sifat dari class induk (superclass)."
+  },
+  {
+    "id": 6,
+    "category": "PBO / OOP",
+    "question": "Keyword yang digunakan di Java atau PHP untuk menerapkan Inheritance (pewarisan class) adalah...",
+    "options": ["implements", "extends", "inherits", "using", "import"],
+    "correctAnswer": 1,
+    "explanation": "💡 Keyword `extends` digunakan untuk mewarisi superclass (misal: `class Mobil extends Kendaraan`)."
+  },
+  {
+    "id": 7,
+    "category": "PBO / OOP",
+    "question": "Pilar OOP yang memungkinkan sebuah method memiliki nama sama namun perilaku/implementasi yang berbeda dinamakan...",
+    "options": ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction", "Instantiation"],
+    "correctAnswer": 1,
+    "explanation": "💡 Polymorphism (Banyak Bentuk) memungkinkan method yang sama berprilaku beda pada objek beda."
+  },
+  {
+    "id": 8,
+    "category": "PBO / OOP",
+    "question": "Method khusus yang otomatis dipanggil saat sebuah Objek pertama kali diinstansiasi dengan keyword `new` adalah...",
+    "options": ["Destructor", "Constructor", "Getter", "Setter", "Main Method"],
+    "correctAnswer": 1,
+    "explanation": "💡 Constructor dipanggil secara otomatis saat pembuatan objek baru untuk inisialisasi state awal."
+  },
+  {
+    "id": 9,
+    "category": "PBO / OOP",
+    "question": "Dalam bahasa Java atau C#, nama method Constructor HARUS...",
+    "options": ["Diawali kata construct", "Sama persis dengan nama Class", "Memiliki return type String", "Bersifat private", "Diakhiri kata Init"],
+    "correctAnswer": 1,
+    "explanation": "💡 Pada Java/C#, nama constructor wajib sama persis dengan nama Class dan tidak punya tipe kembalian (return type)."
+  },
+  {
+    "id": 10,
+    "category": "PBO / OOP",
+    "question": "Variabel yang dideklarasikan di dalam lingkup Class tetapi di luar method dinamakan...",
+    "options": ["Local Variable", "Instance Variable / Field", "Global Variable", "Parameter Variable", "Static Constant"],
+    "correctAnswer": 1,
+    "explanation": "💡 Instance variable dideklarasikan di tingkat Class untuk menampung atribut objek."
+  },
+  {
+    "id": 11,
+    "category": "PBO / OOP",
+    "question": "Keyword yang merujuk pada objek saat ini (current instance) di dalam sebuah method dinamakan...",
+    "options": ["super", "this", "parent", "self", "base"],
+    "correctAnswer": 1,
+    "explanation": "💡 Keyword `this` merujuk pada instance objek yang sedang berjalan."
+  },
+  {
+    "id": 12,
+    "category": "PBO / OOP",
+    "question": "Modifier akses yang mengizinkan atribut diakses oleh class itu sendiri, subclass (anaknya), dan package yang sama adalah...",
+    "options": ["public", "private", "protected", "internal", "final"],
+    "correctAnswer": 2,
+    "explanation": "💡 Protected mengizinkan akses untuk class itu sendiri, keturunannya (subclass), dan satu package."
+  },
+  {
+    "id": 13,
+    "category": "PBO / OOP",
+    "question": "Konsep menyembunyikan detail kompleksitas sistem dan hanya menampilkan fungsi pentingnya saja dinamakan...",
+    "options": ["Abstraction", "Encapsulation", "Polymorphism", "Inheritance", "Aggregation"],
+    "correctAnswer": 0,
+    "explanation": "💡 Abstraction memfokuskan pada 'apa yang dilakukan' tanpa membebani pengguna dengan 'bagaimana cara kerjanya'."
+  },
+  {
+    "id": 14,
+    "category": "PBO / OOP",
+    "question": "Keyword di Java untuk membuat class tidak dapat diwarisi (dijadikan induk) lagi adalah...",
+    "options": ["static", "final", "abstract", "const", "void"],
+    "correctAnswer": 1,
+    "explanation": "💡 Class dengan keyword `final` tidak dapat di-extend oleh class manapun."
+  },
+  {
+    "id": 15,
+    "category": "PBO / OOP",
+    "question": "Method yang tidak memiliki isi (body) dan HARUS di-override oleh kelas anak non-abstrak dinamakan...",
+    "options": ["Static Method", "Abstract Method", "Final Method", "Private Method", "Default Method"],
+    "correctAnswer": 1,
+    "explanation": "💡 Abstract Method hanya berupa deklarasi tanpa body yang wajib diimplementasikan di subclass."
+  },
+  {
+    "id": 16,
+    "category": "PBO / OOP",
+    "question": "Membuat dua atau lebih method dalam SATU CLASS yang sama dengan nama persis tetapi beda parameter dinamakan...",
+    "options": ["Method Overriding", "Method Overloading", "Method Hiding", "Method Shadowing", "Method Casting"],
+    "correctAnswer": 1,
+    "explanation": "💡 Overloading terjadi di satu class dengan nama method sama namun beda jumlah/tipe parameternya."
+  },
+  {
+    "id": 17,
+    "category": "PBO / OOP",
+    "question": "Menuliskan kembali method yang sudah ada di Superclass pada Subclass dengan nama dan parameter persis dinamakan...",
+    "options": ["Method Overloading", "Method Overriding", "Method Duplication", "Method Casting", "Method Hiding"],
+    "correctAnswer": 1,
+    "explanation": "💡 Overriding menimpa implementasi method milik kelas induk pada kelas anak."
+  },
+  {
+    "id": 18,
+    "category": "PBO / OOP",
+    "question": "Keyword di Java yang digunakan untuk memanggil constructor atau method milik Superclass (kelas induk) adalah...",
+    "options": ["this", "super", "parent", "base", "root"],
+    "correctAnswer": 1,
+    "explanation": "💡 Keyword `super()` memanggil constructor atau method superclass."
+  },
+  {
+    "id": 19,
+    "category": "PBO / OOP",
+    "question": "Anggota class (variable/method) yang menggunakan modifier `static` berarti...",
+    "options": ["Milik objek individu", "Milik Class secara keseluruhan dan tidak perlu instansiasi objek", "Hanya bisa diakses sekali", "Nilainya tidak bisa diubah", "Otomatis terhapus saat app ditutup"],
+    "correctAnswer": 1,
+    "explanation": "💡 Static member bersifat class-level dan dapat diakses langsung melalui nama Class (contoh: `Math.sqrt()`)."
+  },
+  {
+    "id": 20,
+    "category": "PBO / OOP",
+    "question": "Perhatikan kode: `Siswa s1 = new Siswa();`. Manakah yang merupakan objek (instance)?",
+    "options": ["Siswa", "s1", "new", "Siswa()", "pilihan B dan D"],
+    "correctAnswer": 1,
+    "explanation": "💡 s1 adalah variabel reference yang menampung instance objek Siswa."
+  },
+  {
+    "id": 21,
+    "category": "PBO / OOP",
+    "question": "Manakah struktur penulisan Getter method yang paling tepat dalam Java?",
+    "options": ["public void getName() { return name; }", "public String getName() { return name; }", "public String setName(String n) { name = n; }", "private String getName() { return name; }", "public static void getName() { return name; }"],
+    "correctAnswer": 1,
+    "explanation": "💡 Getter bertugas mengembalikan nilai atribut, sehingga tipe kembaliannya harus sesuai tipe data variabel (bukan void)."
+  },
+  {
+    "id": 22,
+    "category": "PBO / OOP",
+    "question": "Manakah struktur penulisan Setter method yang benar untuk variabel `private int umur;`?",
+    "options": ["public int setUmur(int u) { return u; }", "public void setUmur(int u) { this.umur = u; }", "public int getUmur() { return umur; }", "private void setUmur() { umur = 10; }", "public static void setUmur(int u) { umur = u; }"],
+    "correctAnswer": 1,
+    "explanation": "💡 Setter tidak mengembalikan nilai (return void) dan bertugas mengisi atribut `this.umur = u`."
+  },
+  {
+    "id": 23,
+    "category": "PBO / OOP",
+    "question": "Sebuah Interface di pemrograman berorientasi objek memuat...",
+    "options": ["Hanya atribut konstan dan method abstrak tanpa body", "Method ber-body lengkap", "Hanya private variable", "Hanya constructor default", "Method static saja"],
+    "correctAnswer": 0,
+    "explanation": "💡 Interface berisi kontrak berupa method-method abstrak tanpa body yang wajib di-implements."
+  },
+  {
+    "id": 24,
+    "category": "PBO / OOP",
+    "question": "Keyword yang digunakan oleh sebuah Class di Java untuk menerapkan Interface adalah...",
+    "options": ["extends", "implements", "uses", "includes", "inherits"],
+    "correctAnswer": 1,
+    "explanation": "💡 Keyword `implements` digunakan untuk merealisasikan Interface."
+  },
+  {
+    "id": 25,
+    "category": "PBO / OOP",
+    "question": "Dua buah kelas berhubungan dengan prinsip 'Kucing ADALAH KORBAN/JENIS DARI Hewan'. Hubungan ini menggambarkan...",
+    "options": ["Association", "Aggregation", "Inheritance (Is-A relationship)", "Composition (Has-A relationship)", "Dependency"],
+    "correctAnswer": 2,
+    "explanation": "💡 Inheritance mencerminkan hubungan IS-A (Adalah Jenis Dari)."
+  },
+  {
+    "id": 26,
+    "category": "PBO / OOP",
+    "question": "Hubungan antara 'Mobil MEMILIKI Mesin' di mana Mesin tidak bisa berdiri sendiri tanpa Mobil dinamakan...",
+    "options": ["Inheritance", "Polymorphism", "Composition (Has-A)", "Generalization", "Realization"],
+    "correctAnswer": 2,
+    "explanation": "💡 Composition adalah bentuk asosiasi kuat (HAS-A) di mana bagian tidak bisa eksis tanpa induknya."
+  },
+  {
+    "id": 27,
+    "category": "PBO / OOP",
+    "question": "Apa fungsi penanda anotasi `@Override` pada Java?",
+    "options": ["Membuka akses private", "Memastikan kompiler mengecek bahwa method benar-benar meng-override method induk", "Mengubah method menjadi static", "Menghapus method induk", "Menghentikan perulangan"],
+    "correctAnswer": 1,
+    "explanation": "💡 Anotasi `@Override` memberi arahan kompilator untuk memvalidasi kesesuaian signature method turunan."
+  },
+  {
+    "id": 28,
+    "category": "PBO / OOP",
+    "question": "Jika sebuah Class bersifat `abstract`, maka pernyataan yang BENAR adalah...",
+    "options": ["Class tersebut dapat diinstansiasi langsung dengan `new`", "Class tersebut TIDAK DAPAT diinstansiasi secara langsung", "Class tersebut wajib memiliki minimal 10 method", "Class tersebut tidak bisa diturunkan lagi", "Class tersebut bernilai null"],
+    "correctAnswer": 1,
+    "explanation": "💡 Abstract Class tidak bisa dibuat objeknya secara langsung, melainkan harus diturunkan dulu."
+  },
+  {
+    "id": 29,
+    "category": "PBO / OOP",
+    "question": "Satu Class dapat me-implements berapa banyak Interface di bahasa Java?",
+    "options": ["Hanya 1 Interface", "Maksimal 2 Interface", "Tidak terbatas (multiple interface implementation)", "Harus sama dengan jumlah variabel", "Tidak bisa di-implements"],
+    "correctAnswer": 2,
+    "explanation": "💡 Java tidak mendukung multiple inheritance pada Class, tetapi mendukung multiple implements pada Interface."
+  },
+  {
+    "id": 30,
+    "category": "PBO / OOP",
+    "question": "Apa dampak dari penerapan Encapsulation terhadap integritas data sistem?",
+    "options": ["Data menjadi lebih lambat dibaca", "Mencegah modifikasi data sembarangan dari pihak luar", "Menghapus semua bug pada kode", "Membuat program berukuran lebih kecil", "Mencegah pembuatan objek baru"],
+    "correctAnswer": 1,
+    "explanation": "💡 Encapsulation menjaga integritas data dengan membatasi akses ilegal dan memvalidasi setter."
+  },
+  {
+    "id": 31,
+    "category": "PBO / OOP",
+    "question": "Perhatikan kode: `class A { static int count = 0; A(){ count++; } }`. Jika kita membuat 3 objek `new A()`, berapa nilai `A.count`?",
+    "options": ["0", "1", "2", "3", "Error"],
+    "correctAnswer": 3,
+    "explanation": "💡 Karena `count` bersifat static (shared), setiap constructor berjalan ia bertambah 1. 3 kali instansiasi = 3."
+  },
+  {
+    "id": 32,
+    "category": "PBO / OOP",
+    "question": "Perhatikan kode: `class Buku { private String judul; public void setJudul(String j){ judul=j; } }`. Mengapa atribut `judul` dibuat private?",
+    "options": ["Agar kode lebih panjang", "Sesuai prinsip Encapsulation agar tidak diakses bebas dari luar", "Agar variabel tidak bisa diubah nilainya", "Wajib menurut aturan kompiler Java", "Agar judul bernilai null"],
+    "correctAnswer": 1,
+    "explanation": "💡 Private pada atribut adalah penerapan Encapsulation untuk melindungi akses langsung."
+  },
+  {
+    "id": 33,
+    "category": "PBO / OOP",
+    "question": "Tracing kode Java:\n`class P { void show(){ System.print(\"P\"); } }\nclass Q extends P { void show(){ System.print(\"Q\"); } }\nP obj = new Q(); obj.show();`\nOutputnya adalah...",
+    "options": ["P", "Q", "PQ", "Error Kompilasi", "Null"],
+    "correctAnswer": 1,
+    "explanation": "💡 Karena overriding dan dynamic method dispatch, method milik objek nyata (`new Q()`) yang dieksekusi, cetak 'Q'."
+  },
+  {
+    "id": 34,
+    "category": "PBO / OOP",
+    "question": "Apa yang terjadi jika variabel `final int MAX = 100;` coba diubah nilainya menjadi `MAX = 200;`?",
+    "options": ["Nilainya berubah jadi 200", "Nilainya berubah jadi 150", "Terjadi Compile Error (cannot assign value to final variable)", "Program bluescreen", "Nilainya otomatis di-reset ke 0"],
+    "correctAnswer": 2,
+    "explanation": "💡 Variabel `final` bernilai konstan dan tidak bisa di-reassign setelah inisialisasi."
+  },
+  {
+    "id": 35,
+    "category": "PBO / OOP",
+    "question": "Di PHP, sintaks penulisan constructor di dalam Class menggunakan nama fungsi...",
+    "options": ["function Constructor()", "function __construct()", "function init()", "function ClassName()", "function _init()"],
+    "correctAnswer": 1,
+    "explanation": "💡 PHP menggunakan magic method `function __construct()` sebagai konstruktor."
+  },
+  {
+    "id": 36,
+    "category": "PBO / OOP",
+    "question": "Di C++, destruktor (method pembersih memori) ditandai dengan simbol khusus sebelum nama class, yaitu...",
+    "options": ["#ClassName()", "~ClassName()", "*ClassName()", "&ClassName()", "!ClassName()"],
+    "correctAnswer": 1,
+    "explanation": "💡 C++ menggunakan tilde (`~`) untuk penanda Destructor."
+  },
+  {
+    "id": 37,
+    "category": "PBO / OOP",
+    "question": "Manakah perbedaan utama antara Abstract Class dan Interface di Java modern?",
+    "options": ["Abstract Class bisa memiliki state/field biasa dan constructor, Interface fokus pada kontrak tanpa state", "Interface bisa diinstansiasi dengan new", "Abstract class tidak bisa memiliki method ber-body", "Interface hanya bisa dipakai di C++", "Keduanya tidak ada perbedaan"],
+    "correctAnswer": 0,
+    "explanation": "💡 Abstract class bisa menyimpan atribut biasa dan constructor, sedangkan Interface berupa murni kontrak behavior."
+  },
+  {
+    "id": 38,
+    "category": "PBO / OOP",
+    "question": "Perhatikan snippet: `class Kucing { String nama; Kucing(String nama){ this.nama = nama; } }`. Penggunaan `this.nama` bertujuan untuk...",
+    "options": ["Memanggil method nama", "Membedakan instance variable `nama` dengan parameter `nama`", "Mengubah nama menjadi static", "Menghapus nilai nama", "Membuat variabel baru"],
+    "correctAnswer": 1,
+    "explanation": "💡 `this.nama` merujuk ke instance variable untuk menghindari hambatan *shadowing* nama parameter."
+  },
+  {
+    "id": 39,
+    "category": "PBO / OOP",
+    "question": "Tracing kode Java:\n`class Test { int x = 5; void run(int x) { x = x + 10; } }\nTest t = new Test(); t.run(20); System.print(t.x);`\nHasilnya adalah...",
+    "options": ["5", "15", "20", "30", "0"],
+    "correctAnswer": 0,
+    "explanation": "💡 Di dalam method `run()`, variabel `x` yang ditambah adalah parameter lokal. Instance variable `t.x` tetap 5."
+  },
+  {
+    "id": 40,
+    "category": "PBO / OOP",
+    "question": "Apa yang dimaksud dengan Upcasting dalam PBO?",
+    "options": ["Mengubah objek kelas anak menjadi tipe kelas induknya", "Mengubah variabel int ke String", "Mengubah method private ke public", "Menghapus kelas anak", "Menggandakan instansiasi objek"],
+    "correctAnswer": 0,
+    "explanation": "💡 Upcasting mengacu pada konversi tipe reference dari subclass ke superclass (contoh: `Animal a = new Dog();`)."
+  },
+  {
+    "id": 41,
+    "category": "PBO / OOP",
+    "question": "Manakah contoh penerapan Overloading yang valid pada method `hitung`?",
+    "options": ["int hitung(int a) dan int hitung(int b)", "int hitung(int a) dan double hitung(int a)", "int hitung(int a) dan int hitung(int a, int b)", "void hitung(int a) dan int hitung(int a)", "private int hitung(int a) dan public int hitung(int a)"],
+    "correctAnswer": 2,
+    "explanation": "💡 Overloading mensyaratkan perbedaan parameter (jumlah/tipe). Menambah parameter (int a, int b) adalah valid."
+  },
+  {
+    "id": 42,
+    "category": "PBO / OOP",
+    "question": "Di Java, jika sebuah Class tidak menuliskan constructor secara manual, apa yang dilakukan compiler?",
+    "options": ["Error kompilasi", "Membuatkan default no-argument constructor secara otomatis", "Objek tidak bisa dibuat", "Menghentikan program", "Menjadikan kelas bersifat abstract"],
+    "correctAnswer": 1,
+    "explanation": "💡 Compiler Java otomatis menyediakan default constructor kosong tanpa argumen."
+  },
+  {
+    "id": 43,
+    "category": "PBO / OOP",
+    "question": "Apa fungsi dari keyword `instanceof` di Java?",
+    "options": ["Membuat instance baru", "Mengecek apakah suatu objek merupakan instance dari Class tertentu", "Menghapus instance", "Mengganti tipe data instance", "Menghitung jumlah instance"],
+    "correctAnswer": 1,
+    "explanation": "💡 Operator `instanceof` digunakan untuk menguji relasi tipe objek (misal: `obj instanceof Dog`)."
+  },
+  {
+    "id": 44,
+    "category": "PBO / OOP",
+    "question": "Sebuah class memiliki method `public static void main(String[] args)`. Mengapa method ini dibuat static?",
+    "options": ["Agar bisa di-override", "Agar runtime (JVM) dapat memanggilnya tanpa harus membuat instance objek class lebih dulu", "Agar nilainya tidak bisa diubah", "Agar menghemat memori RAM", "Agar bersifat private"],
+    "correctAnswer": 1,
+    "explanation": "💡 JVM harus memanggil `main()` sebagai entry-point sebelum objek apapun dibuat di memori."
+  },
+  {
+    "id": 45,
+    "category": "PBO / OOP",
+    "question": "Apa akibatnya jika sebuah subclass TIDAK me-override abstract method yang ada pada superclass-nya?",
+    "options": ["Program tetap sukses", "Subclass tersebut juga HARUS dideklarasikan sebagai `abstract`", "Abstract method otomatis terhapus", "Method induk otomatis hilang", "Menjadi static method"],
+    "correctAnswer": 1,
+    "explanation": "💡 Jika tak mengimplementasikan seluruh abstract method induk, subclass tersebut wajib ditandai `abstract`."
+  },
+  {
+    "id": 46,
+    "category": "PBO / OOP",
+    "question": "Design Pattern creational yang menjamin sebuah Class HANYA memiliki SATU INSTANCE saja di seluruh siklus aplikasi dinamakan...",
+    "options": ["Factory Pattern", "Singleton Pattern", "Observer Pattern", "Strategy Pattern", "MVC Pattern"],
+    "correctAnswer": 1,
+    "explanation": "💡 Singleton menjamin hanya ada satu instance (misal Database Connection Pool)."
+  },
+  {
+    "id": 47,
+    "category": "PBO / OOP",
+    "question": "Bagaimana cara mengimplementasikan Singleton Pattern secara dasar di Java?",
+    "options": ["Public constructor dan public variable", "Private constructor dan static method yang mengembalikan instance tunggal", "Abstract class tanpa method", "Interface dengan 10 method", "Public constructor dan final variable"],
+    "correctAnswer": 1,
+    "explanation": "💡 Singleton menyembunyikan constructor (private) dan menyediakan static accessor method."
+  },
+  {
+    "id": 48,
+    "category": "PBO / OOP",
+    "question": "Prinsip SOLID: 'S' singkatan dari Single Responsibility Principle yang berarti...",
+    "options": ["Satu class harus memiliki 1000 baris kode", "Satu class hanya boleh memiliki SATU alasan untuk berubah (satu fokus tanggung jawab)", "Satu method hanya boleh dipanggil satu kali", "Satu proyek hanya boleh ada satu class", "Semua variabel harus static"],
+    "correctAnswer": 1,
+    "explanation": "💡 Single Responsibility Principle menyatakan bahwa satu modul/class fokus pada satu tugas spesifik."
+  },
+  {
+    "id": 49,
+    "category": "PBO / OOP",
+    "question": "Tracing kode Polymorphism:\n`class A { void test() { System.print(\"A\"); } }\nclass B extends A { void test() { System.print(\"B\"); } }\nclass C extends B { void test() { super.test(); System.print(\"C\"); } }\nC obj = new C(); obj.test();`\nOutputnya adalah...",
+    "options": ["BC", "ABC", "AC", "C", "Error"],
+    "correctAnswer": 0,
+    "explanation": "💡 C memanggil `super.test()` (milik B) yang mencetak 'B', lalu C mencetak 'C'. Output: BC."
+  },
+  {
+    "id": 50,
+    "category": "PBO / OOP",
+    "question": "Dalam refactoring kode procedural menjadi PBO, jika kita menemukan sekumpulan data dan fungsi yang selalu bekerja bersama, tindakan terbaik adalah...",
+    "options": ["Membuat 10 fungsi global baru", "Membungkus data dan fungsi tersebut ke dalam sebuah Class baru (Encapsulation)", "Menghapus fungsi tersebut", "Menggunakan array multi-dimensi saja", "Menyimpan data di file txt"],
+    "correctAnswer": 1,
+    "explanation": "💡 Mengelompokkan data (state) dan fungsi (behavior) berdekatan adalah inti refactoring PBO."
+  },
+  {
+    "id": 51,
+    "category": "PBO / OOP",
+    "question": "Tracing kode Java:\n`class Base { Base() { System.print(\"1\"); } }\nclass Derived extends Base { Derived() { System.print(\"2\"); } }\nDerived d = new Derived();`\nOutputnya adalah...",
+    "options": ["2", "12", "21", "1", "Error"],
+    "correctAnswer": 1,
+    "explanation": "💡 Saat instansiasi `Derived`, constructor `Base` (super) dipanggil lebih dulu (mencetak 1), baru `Derived` (mencetak 2). Output: 12."
+  },
+  {
+    "id": 52,
+    "category": "PBO / OOP",
+    "question": "Apa yang terjadi jika terdapat kode: `class Parent {} class Child1 extends Parent {} class Child2 extends Parent {}` lalu kita lakukan Downcasting `Parent p = new Child1(); Child2 c2 = (Child2) p;`?",
+    "options": ["Sukses running", "Compile Error", "ClassCastException saat Runtime", "c2 bernilai null", "Terjadi infinite loop"],
+    "correctAnswer": 2,
+    "explanation": "💡 Secara sintaks lolos kompiler, tapi saat runtime terjadi ClassCastException karena `p` sejatinya objek `Child1`, bukan `Child2`."
+  },
+  {
+    "id": 53,
+    "category": "PBO / OOP",
+    "question": "Prinsip Open/Closed Principle (O dalam SOLID) menyatakan bahwa komponen software harus...",
+    "options": ["Terbuka untuk modifikasi langsung, tertutup untuk ekstensi", "Terbuka untuk ekstensi (extension), tertutup untuk modifikasi kode asal (modification)", "Terbuka untuk publik, tertutup untuk private", "Terbuka di Windows, tertutup di Linux", "Terbuka untuk pembacaan, tertutup untuk penulisan"],
+    "correctAnswer": 1,
+    "explanation": "💡 Open/Closed Principle mendorong penambahan fitur via ekstensi (misal inheritance/polymorphism) tanpa mengubah kode lama yang teruji."
+  },
+  {
+    "id": 54,
+    "category": "PBO / OOP",
+    "question": "Tracing kode Overloading:\n`class Calc { void add(int a, double b){ System.print(\"1\"); } void add(double a, int b){ System.print(\"2\"); } }\nCalc c = new Calc(); c.add(5, 5.0);`\nOutputnya adalah...",
+    "options": ["1", "2", "12", "Compile Error (Ambiguous call)", "Null"],
+    "correctAnswer": 0,
+    "explanation": "💡 Parameter (int, double) pas cocok dengan `add(5, 5.0)` sehingga mencetak '1'."
+  },
+  {
+    "id": 55,
+    "category": "PBO / OOP",
+    "question": "Desain kode buruk di mana sebuah Class mengetahui terlalu banyak detail privat dan mengatur Class lain secara berlebihan disebut anti-pattern...",
+    "options": ["God Object / Feature Envy", "Singleton", "Factory", "Encapsulation", "Polymorphism"],
+    "correctAnswer": 0,
+    "explanation": "💡 God Object / Feature Envy terjadi saat Encapsulation dilanggar dan 1 class mengontrol segalanya."
+  },
+  {
+    "id": 56,
+    "category": "PBO / OOP",
+    "question": "Bagaimana cara menangani kondisi race-condition pada method PBO yang diakses multi-thread di Java?",
+    "options": ["Menggunakan keyword `synchronized` pada method", "Mengubah variabel menjadi private", "Menggunakan loop while(true)", "Menghapus constructor", "Menggunakan abstract class"],
+    "correctAnswer": 0,
+    "explanation": "💡 Keyword `synchronized` memastikan hanya 1 thread yang mengeksekusi method tersebut dalam satu waktu."
+  },
+  {
+    "id": 57,
+    "category": "PBO / OOP",
+    "question": "Tracing static block Java:\n`class X { static { System.print(\"A\"); } X(){ System.print(\"B\"); } }\nX obj1 = new X(); X obj2 = new X();`\nOutputnya adalah...",
+    "options": ["AB", "ABAB", "AB B", "ABB", "AAB"],
+    "correctAnswer": 3,
+    "explanation": "💡 Static initializer block (`static {}`) berjalan SATU KALI saat class dimuat (mencetak A). Constructor berjalan setiap instansiasi (mencetak B 2 kali). Output: ABB."
+  },
+  {
+    "id": 58,
+    "category": "PBO / OOP",
+    "question": "Mengapa Composition lebih disarankan dibanding Deep Inheritance Tree (hirarki pewarisan yang terlalu dalam)?",
+    "options": ["Composition lebih cepat diketik", "Deep Inheritance menimbulkan masalah tight coupling dan kaku terhadap perubahan (fragile base class)", "Inheritance tidak mendukung polymorphism", "Composition tidak butuh class", "Inheritance memakan memori SSD"],
+    "correctAnswer": 1,
+    "explanation": "💡 Prinsip 'Favor Composition over Inheritance' mencegah tight coupling dan masalah fragile base class."
+  },
+  {
+    "id": 59,
+    "category": "PBO / OOP",
+    "question": "Apa dampak dari me-return referensi objek Mutable langsung dari dalam Getter method?",
+    "options": ["Enkapsulasi rusak karena pihak luar bisa mengubah isi objek internal tanpa melalui Setter", "Kode lebih aman", "Kompiler otomatis me-reject", "Objek menjadi immutable", "Memori RAM langsung bersih"],
+    "correctAnswer": 0,
+    "explanation": "💡 Returning mutable reference membocorkan data privat. Seharusnya dikembalikan defensive copy."
+  },
+  {
+    "id": 60,
+    "category": "PBO / OOP",
+    "question": "Tracing Polymorphism & Field Hiding:\n`class Parent { int x = 10; } class Child extends Parent { int x = 20; }\nParent p = new Child(); System.print(p.x);`\nOutputnya adalah...",
+    "options": ["10", "20", "30", "Compile Error", "Runtime Error"],
+    "correctAnswer": 0,
+    "explanation": "💡 Method bersifat polymorphic (dynamic dispatch), tetapi FIELD/VARIABEL TIDAK polymorphic. Karena tipe variabel reference adalah `Parent`, maka `p.x` mencetak 10."
+  }
+]
