@@ -11,8 +11,8 @@
             
             <!-- Avatar -->
             <div class="relative">
-                {% if user.avatar %}
-                    <img src="{{ user.avatar.url }}" alt="{{ user.display_name }}" class="w-24 h-24 rounded-2xl object-cover border border-outline shadow-md">
+                {% if user.avatar_display %}
+                    <img src="{{ user.avatar_display }}" alt="{{ user.display_name }}" class="w-24 h-24 rounded-2xl object-cover border border-outline shadow-md">
                 {% else %}
                     <div class="w-24 h-24 rounded-2xl bg-surface-high border border-outline flex items-center justify-center font-display font-bold text-3xl text-primary shadow-md">
                         {{ user.username|slice:":1"|upper }}

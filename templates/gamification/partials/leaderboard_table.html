@@ -10,9 +10,13 @@
             🥈 RANK #2
         </div>
         <div class="mt-2 space-y-2">
-            <div class="w-14 h-14 mx-auto rounded-full bg-surface-lowest border-2 border-slate-400 flex items-center justify-center font-display font-bold text-lg text-slate-400">
-                {{ s.first_name|first|default:"S" }}
-            </div>
+            {% if s.avatar_display %}
+                <img src="{{ s.avatar_display }}" alt="{{ s.display_name }}" class="w-14 h-14 mx-auto rounded-full object-cover border-2 border-slate-400 shadow-md">
+            {% else %}
+                <div class="w-14 h-14 mx-auto rounded-full bg-surface-lowest border-2 border-slate-400 flex items-center justify-center font-display font-bold text-lg text-slate-400">
+                    {{ s.first_name|first|default:"S" }}
+                </div>
+            {% endif %}
             <div>
                 <h3 class="font-bold text-foreground text-sm line-clamp-1">{{ s.display_name }}</h3>
                 <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ s.kelas|default:"10 RPL" }}</p>
@@ -49,9 +53,13 @@
             <span>JUARA #1</span>
         </div>
         <div class="mt-2 space-y-2">
-            <div class="w-16 h-16 mx-auto rounded-full bg-surface-lowest border-2 border-amber-400 flex items-center justify-center font-display font-extrabold text-xl text-amber-500 shadow-md">
-                {{ s.first_name|first|default:"S" }}
-            </div>
+            {% if s.avatar_display %}
+                <img src="{{ s.avatar_display }}" alt="{{ s.display_name }}" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-amber-400 shadow-md">
+            {% else %}
+                <div class="w-16 h-16 mx-auto rounded-full bg-surface-lowest border-2 border-amber-400 flex items-center justify-center font-display font-extrabold text-xl text-amber-500 shadow-md">
+                    {{ s.first_name|first|default:"S" }}
+                </div>
+            {% endif %}
             <div>
                 <h3 class="font-extrabold text-foreground text-base line-clamp-1 font-display">{{ s.display_name }}</h3>
                 <p class="text-xs text-amber-600 dark:text-amber-300 font-mono font-bold">{{ s.kelas|default:"10 RPL" }}</p>
@@ -87,9 +95,13 @@
             🥉 RANK #3
         </div>
         <div class="mt-2 space-y-2">
-            <div class="w-14 h-14 mx-auto rounded-full bg-surface-lowest border-2 border-amber-700 flex items-center justify-center font-display font-bold text-lg text-amber-600 dark:text-amber-500">
-                {{ s.first_name|first|default:"S" }}
-            </div>
+            {% if s.avatar_display %}
+                <img src="{{ s.avatar_display }}" alt="{{ s.display_name }}" class="w-14 h-14 mx-auto rounded-full object-cover border-2 border-amber-700 shadow-md">
+            {% else %}
+                <div class="w-14 h-14 mx-auto rounded-full bg-surface-lowest border-2 border-amber-700 flex items-center justify-center font-display font-bold text-lg text-amber-600 dark:text-amber-500">
+                    {{ s.first_name|first|default:"S" }}
+                </div>
+            {% endif %}
             <div>
                 <h3 class="font-bold text-foreground text-sm line-clamp-1">{{ s.display_name }}</h3>
                 <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ s.kelas|default:"10 RPL" }}</p>
@@ -156,9 +168,13 @@
                     <!-- Student Info -->
                     <td class="px-4 py-3.5">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-7 h-7 rounded-full bg-surface-lowest border border-outline flex items-center justify-center font-display font-bold text-xs text-primary shrink-0">
-                                {{ s.first_name|first|default:"S" }}
-                            </div>
+                            {% if s.avatar_display %}
+                                <img src="{{ s.avatar_display }}" alt="{{ s.display_name }}" class="w-7 h-7 rounded-full object-cover border border-outline shrink-0">
+                            {% else %}
+                                <div class="w-7 h-7 rounded-full bg-surface-lowest border border-outline flex items-center justify-center font-display font-bold text-xs text-primary shrink-0">
+                                    {{ s.first_name|first|default:"S" }}
+                                </div>
+                            {% endif %}
                             <div>
                                 <p class="font-bold text-foreground {% if user.is_authenticated and s.id == user.id %}text-primary{% endif %}">
                                     {{ s.display_name }}

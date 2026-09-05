@@ -266,6 +266,8 @@ def google_oauth_callback_view(request):
         # Deteksi otomatis apakah akun guru / admin
         is_teacher_email = email in ['agung@smkn1rongga.sch.id', 'agunggumelar@smkn1rongga.sch.id'] or 'agung' in email
 
+        google_pic = google_user.get('picture')
+
         if not user:
             # Generate username unik dari email
             base_username = email.split('@')[0]
@@ -285,6 +287,7 @@ def google_oauth_callback_view(request):
                 first_name=first_name,
                 last_name=last_name,
                 role=assigned_role,
+                avatar_url=google_pic,
                 xp=initial_xp,
                 level=1,
                 streak_count=1,
@@ -306,6 +309,11 @@ def google_oauth_callback_view(request):
                 user.role = User.ROLE_GURU
                 user.is_staff = True
                 user.save(update_fields=['role', 'is_staff'])
+
+            # Update avatar Google jika belum punya avatar lokal
+            if google_pic and not user.avatar:
+                user.avatar_url = google_pic
+                user.save(update_fields=['avatar_url'])
 
             # Update streak
             today = timezone.now().date()

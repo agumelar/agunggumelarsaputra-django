@@ -86,9 +86,13 @@
 
                     <div class="relative" x-data="{ userMenuOpen: false }">
                         <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-low border border-outline-variant hover:border-outline text-xs font-medium text-foreground focus:outline-none">
-                            <div class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold">
-                                {{ user.username|slice:":1"|upper }}
-                            </div>
+                            {% if user.avatar_display %}
+                                <img src="{{ user.avatar_display }}" alt="{{ user.display_name }}" class="w-6 h-6 rounded-full object-cover border border-outline shrink-0">
+                            {% else %}
+                                <div class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold shrink-0">
+                                    {{ user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
                             <span>{{ user.display_name }}</span>
                             <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>

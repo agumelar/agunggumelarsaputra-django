@@ -56,6 +56,11 @@ class User(AbstractUser):
         null=True,
         verbose_name='Foto Profil'
     )
+    avatar_url = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='URL Foto Profil / External Avatar'
+    )
     bio = models.TextField(
         blank=True,
         null=True,
@@ -102,6 +107,15 @@ class User(AbstractUser):
         if self.first_name or self.last_name:
             return f"{self.first_name} {self.last_name}".strip()
         return self.username
+
+    @property
+    def avatar_display(self):
+        """Mengembalikan URL foto profil aktif (file upload lokal atau external/Google URL)."""
+        if self.avatar:
+            return self.avatar.url
+        if self.avatar_url:
+            return self.avatar_url
+        return None
 
     @property
     def level_title(self):
