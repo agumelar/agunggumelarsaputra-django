@@ -12,6 +12,19 @@
          showLockToast: false 
      }"
      @checkpoint-cleared.window="hasPassedCheckpoint = true"
+     @click="
+         const btn = $event.target.closest('[data-switch-tab]');
+         if (btn) {
+             const targetTab = btn.getAttribute('data-switch-tab');
+             if (targetTab === 'lkpd' && !hasPassedCheckpoint) {
+                 showLockToast = true;
+             } else {
+                 currentTab = targetTab;
+                 showLockToast = false;
+                 window.scrollTo({ top: 0, behavior: 'smooth' });
+             }
+         }
+     "
 >
 
     <!-- Top Breadcrumb & Next/Prev Controls -->
@@ -132,9 +145,9 @@
         </div>
         {% endif %}
 
-        <!-- Interactive Material Component for Modul 01 -->
-        {% if is_modul_1 %}
-            {% include 'pembelajaran/components/interactive_material_p1.html' %}
+        <!-- Interactive Material Component for Modul 01 - 16 -->
+        {% if interactive_template %}
+            {% include interactive_template %}
         {% endif %}
 
         <!-- Collapsible Reference Material (Markdown with full curriculum docs) -->

@@ -1,0 +1,168 @@
+<div class="interactive-material-p10 space-y-8" id="interactive-p10-root">
+
+  <!-- SCENE 1: Jelajah 3 Dimensi Produk -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-transparent border border-blue-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-blue-500/20 text-blue-400 font-bold text-xs font-mono">SCENE 01</span>
+        <h3 class="text-lg font-bold text-foreground">Jelajah Tiga Dimensi Produk</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Buka tiap dimensi sebelum mengevaluasi aplikasi. Satu masalah aplikasi dapat berada di UI, UX, fungsi, atau gabungannya.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <button type="button" class="dimensi-btn text-left p-4 rounded-xl border border-border bg-card hover:border-blue-500/50 transition-all group focus-visible:outline-blue-400" data-target="ui">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">🎨</span>
+            <span class="font-bold text-sm">UI (Tampilan)</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-2">Warna, ikon, tipografi, dan tata letak layar.</p>
+        </button>
+
+        <button type="button" class="dimensi-btn text-left p-4 rounded-xl border border-border bg-card hover:border-blue-500/50 transition-all group focus-visible:outline-blue-400" data-target="ux">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">🧠</span>
+            <span class="font-bold text-sm">UX (Pengalaman)</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-2">Kelancaran alur dan rasa nyaman saat memakai.</p>
+        </button>
+
+        <button type="button" class="dimensi-btn text-left p-4 rounded-xl border border-border bg-card hover:border-blue-500/50 transition-all group focus-visible:outline-blue-400" data-target="fungsi">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">⚙️</span>
+            <span class="font-bold text-sm">Fungsi Sistem</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-2">Layanan seperti pembayaran atau penyimpanan data.</p>
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="dimensi-display" class="hidden animate-in fade-in slide-in-from-bottom-2 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20" role="status" aria-live="polite">
+        <h4 id="dimensi-title" class="font-bold text-blue-400 mb-1">...</h4>
+        <p id="dimensi-desc" class="text-sm text-foreground mb-2">...</p>
+        <p id="dimensi-feedback" class="text-xs text-muted-foreground italic border-l-2 border-blue-500/50 pl-2">...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: Evaluasi Desain Produk -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-transparent border border-emerald-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute bottom-0 right-0 w-40 h-40 bg-emerald-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-emerald-500/20 text-emerald-500 font-bold text-xs font-mono">SCENE 02</span>
+        <h3 class="text-lg font-bold text-foreground">Evaluasi Masalah Produk</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Tentukan dimensi utama dari setiap temuan komparasi berikut ini. Klik masalah untuk melihat dimensi apa yang paling terdampak.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="evaluasi-container">
+        <!-- Rute Options -->
+        <button type="button" class="evaluasi-btn text-left p-4 rounded-xl border border-border bg-card hover:border-emerald-500/50 transition-all focus-visible:outline-emerald-400" data-target="teks">
+          <div class="font-bold text-sm mb-1 text-emerald-600 dark:text-emerald-400">👀 Teks tombol sulit dibaca</div>
+          <p class="text-xs text-muted-foreground">Kontras warna tombol terlalu rendah.</p>
+        </button>
+        <button type="button" class="evaluasi-btn text-left p-4 rounded-xl border border-border bg-card hover:border-emerald-500/50 transition-all focus-visible:outline-emerald-400" data-target="batal">
+          <div class="font-bold text-sm mb-1 text-emerald-600 dark:text-emerald-400">🚫 Pesanan sulit dibatalkan</div>
+          <p class="text-xs text-muted-foreground">Pengguna tidak menemukan langkah pembatalan.</p>
+        </button>
+        <button type="button" class="evaluasi-btn text-left p-4 rounded-xl border border-border bg-card hover:border-emerald-500/50 transition-all focus-visible:outline-emerald-400" data-target="gagal">
+          <div class="font-bold text-sm mb-1 text-emerald-600 dark:text-emerald-400">💳 Pembayaran gagal diproses</div>
+          <p class="text-xs text-muted-foreground">Tombol bekerja tetapi transaksi tidak tercatat.</p>
+        </button>
+        <button type="button" class="evaluasi-btn text-left p-4 rounded-xl border border-border bg-card hover:border-emerald-500/50 transition-all focus-visible:outline-emerald-400" data-target="ikon">
+          <div class="font-bold text-sm mb-1 text-emerald-600 dark:text-emerald-400">🖼️ Ikon keranjang berbeda</div>
+          <p class="text-xs text-muted-foreground">Simbol berubah antara dua layar.</p>
+        </button>
+        <button type="button" class="evaluasi-btn md:col-span-2 text-left p-4 rounded-xl border border-border bg-card hover:border-emerald-500/50 transition-all focus-visible:outline-emerald-400" data-target="hilang">
+          <div class="font-bold text-sm mb-1 text-emerald-600 dark:text-emerald-400">🗑️ Alamat tidak tersimpan</div>
+          <p class="text-xs text-muted-foreground">Data pengguna hilang setelah aplikasi ditutup.</p>
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="evaluasi-display" class="hidden p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20" role="status" aria-live="polite">
+        <h4 class="font-bold text-emerald-600 dark:text-emerald-400 mb-1">Dimensi Teridentifikasi!</h4>
+        <p id="evaluasi-feedback" class="text-xs text-foreground italic">...</p>
+        <p class="text-xs text-muted-foreground mt-2 border-t border-emerald-500/20 pt-2">Sebutkan alasan penilaian agar komparasi tidak menjadi opini kosong.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// SCENE 1 Logic
+  const dimensiData = {
+    'ui': {
+      title: 'UI (User Interface)',
+      desc: 'Warna, ikon, tipografi, dan tata letak layar.',
+      feedback: 'UI adalah elemen yang pengguna lihat secara visual.'
+    },
+    'ux': {
+      title: 'UX (User Experience)',
+      desc: 'Kelancaran alur dan rasa nyaman saat memakai.',
+      feedback: 'UX menilai pengalaman dari awal hingga tujuan akhir.'
+    },
+    'fungsi': {
+      title: 'Fungsi Sistem',
+      desc: 'Layanan seperti pembayaran, pencarian, atau penyimpanan data.',
+      feedback: 'Fungsi memastikan produk benar-benar bekerja sesuai spesifikasi.'
+    }
+  };
+
+  const dimensiBtns = document.querySelectorAll('.dimensi-btn');
+  const dimensiDisplay = document.getElementById('dimensi-display');
+  const dimensiTitle = document.getElementById('dimensi-title');
+  const dimensiDesc = document.getElementById('dimensi-desc');
+  const dimensiFeedback = document.getElementById('dimensi-feedback');
+
+  dimensiBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      if (target && dimensiData[target]) {
+        dimensiBtns.forEach(b => b.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-500/5'));
+        btn.classList.add('ring-2', 'ring-blue-500', 'bg-blue-500/5');
+        
+        dimensiTitle.textContent = dimensiData[target].title;
+        dimensiDesc.textContent = dimensiData[target].desc;
+        dimensiFeedback.textContent = `💡 ${dimensiData[target].feedback}`;
+        
+        dimensiDisplay.classList.remove('hidden');
+      }
+    });
+  });
+
+  // SCENE 2 Logic
+  const evaluasiData = {
+    'teks': 'Ini terutama masalah UI karena berhubungan langsung dengan visual dan warna.',
+    'batal': 'Ini terutama masalah UX karena berhubungan dengan alur dan navigasi yang membingungkan.',
+    'gagal': 'Ini terutama masalah fungsi sistem di backend karena proses datanya yang gagal.',
+    'ikon': 'Inkonsistensi UI ini pada akhirnya memengaruhi UX karena pengguna harus belajar ulang.',
+    'hilang': 'Ini adalah masalah fungsi sistem (database/storage lokal) yang gagal menjaga state.'
+  };
+
+  const evaluasiBtns = document.querySelectorAll('.evaluasi-btn');
+  const evaluasiDisplay = document.getElementById('evaluasi-display');
+  const evaluasiFeedback = document.getElementById('evaluasi-feedback');
+
+  evaluasiBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      if (target && evaluasiData[target]) {
+        evaluasiBtns.forEach(b => b.classList.remove('ring-2', 'ring-emerald-500', 'bg-emerald-500/5'));
+        btn.classList.add('ring-2', 'ring-emerald-500', 'bg-emerald-500/5');
+        
+        evaluasiFeedback.textContent = evaluasiData[target];
+        evaluasiDisplay.classList.remove('hidden');
+      }
+    });
+  });
+</script>

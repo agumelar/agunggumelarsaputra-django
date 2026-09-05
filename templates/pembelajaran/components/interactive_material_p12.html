@@ -1,0 +1,167 @@
+<div class="interactive-material-p12 space-y-8" id="interactive-p12-root">
+
+  <!-- SCENE 1: Jelajah CER -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-transparent border border-blue-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-blue-500/20 text-blue-400 font-bold text-xs font-mono">SCENE 01</span>
+        <h3 class="text-lg font-bold text-foreground">Jelajah Metode CER</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Buka tiga bagian argumen ini sebelum menulis analisis screenshot. CER mengubah pendapat menjadi argumen yang dapat dipertanggungjawabkan.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <button type="button" class="cer-btn text-left p-4 rounded-xl border border-border bg-card hover:border-blue-500/50 transition-all group focus-visible:outline-blue-400" data-target="claim">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">📢</span>
+            <span class="font-bold text-sm">Claim (Klaim)</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-2">Pernyataan tentang kondisi produk.</p>
+        </button>
+
+        <button type="button" class="cer-btn text-left p-4 rounded-xl border border-border bg-card hover:border-blue-500/50 transition-all group focus-visible:outline-blue-400" data-target="evidence">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">📸</span>
+            <span class="font-bold text-sm">Evidence (Bukti)</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-2">Screenshot atau data pendukung.</p>
+        </button>
+
+        <button type="button" class="cer-btn text-left p-4 rounded-xl border border-border bg-card hover:border-blue-500/50 transition-all group focus-visible:outline-blue-400" data-target="reasoning">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">🧠</span>
+            <span class="font-bold text-sm">Reasoning (Alasan)</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-2">Penjelasan logis hubungan bukti.</p>
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="cer-display" class="hidden animate-in fade-in slide-in-from-bottom-2 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20" role="status" aria-live="polite">
+        <h4 id="cer-title" class="font-bold text-blue-400 mb-1">...</h4>
+        <p id="cer-desc" class="text-sm text-foreground mb-2">...</p>
+        <p id="cer-feedback" class="text-xs text-muted-foreground italic border-l-2 border-blue-500/50 pl-2">...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: Pilih Bukti Visual -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-rose-500/10 via-pink-500/5 to-transparent border border-rose-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute bottom-0 right-0 w-40 h-40 bg-rose-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-rose-500/20 text-rose-500 font-bold text-xs font-mono">SCENE 02</span>
+        <h3 class="text-lg font-bold text-foreground">Pilih Bukti Visual yang Tepat</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Tentukan teknik anotasi (penandaan) yang paling mendukung temuan pada layar aplikasi.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="visual-container">
+        <button type="button" class="visual-btn text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="tombol">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">🔍 Tombol tidak terlihat</div>
+          <p class="text-xs text-muted-foreground">Lingkari tombol yang menyatu dengan latar belakang.</p>
+        </button>
+        <button type="button" class="visual-btn text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="kolom">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">🏹 Kolom membingungkan</div>
+          <p class="text-xs text-muted-foreground">Beri panah pada label input yang tidak jelas maksudnya.</p>
+        </button>
+        <button type="button" class="visual-btn text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="alur">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">✅ Alur berhasil (Positif)</div>
+          <p class="text-xs text-muted-foreground">Tandai urutan layar saat tugas selesai dengan lancar.</p>
+        </button>
+        <button type="button" class="visual-btn text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="error">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">❌ Pesan error buntu</div>
+          <p class="text-xs text-muted-foreground">Kotaki pesan yang muncul tanpa memberikan arahan perbaikan.</p>
+        </button>
+        <button type="button" class="visual-btn md:col-span-2 text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="navigasi">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">🔄 Navigasi berulang</div>
+          <p class="text-xs text-muted-foreground">Nomori langkah-langkah layar yang memaksa pengguna bolak-balik.</p>
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="visual-display" class="hidden p-4 rounded-xl bg-rose-500/10 border border-rose-500/20" role="status" aria-live="polite">
+        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-1">Anotasi yang Tepat!</h4>
+        <p id="visual-feedback" class="text-xs text-foreground italic">...</p>
+        <p class="text-xs text-muted-foreground mt-2 border-t border-rose-500/20 pt-2">Anotasi pada evidence harus relevan, tajam, dan menunjuk langsung ke arah claim kita.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// SCENE 1 Logic
+  const cerData = {
+    'claim': {
+      title: 'Claim (Klaim)',
+      desc: 'Pernyataan tentang kondisi produk yang kita amati.',
+      feedback: 'Claim harus tegas dan menyebut masalah atau keunggulan yang spesifik, bukan general.'
+    },
+    'evidence': {
+      title: 'Evidence (Bukti)',
+      desc: 'Screenshot aplikasi, data metrik, atau hasil pengujian.',
+      feedback: 'Bukti visual membuat claim tidak sekadar opini pribadi, tetapi dapat diverifikasi penilai.'
+    },
+    'reasoning': {
+      title: 'Reasoning (Alasan)',
+      desc: 'Penjelasan logis yang menyambungkan bukti dengan claim.',
+      feedback: 'Reasoning menjelaskan secara konkret apa dampak masalah tersebut terhadap kenyamanan pengguna.'
+    }
+  };
+
+  const cerBtns = document.querySelectorAll('.cer-btn');
+  const cerDisplay = document.getElementById('cer-display');
+  const cerTitle = document.getElementById('cer-title');
+  const cerDesc = document.getElementById('cer-desc');
+  const cerFeedback = document.getElementById('cer-feedback');
+
+  cerBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      if (target && cerData[target]) {
+        cerBtns.forEach(b => b.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-500/5'));
+        btn.classList.add('ring-2', 'ring-blue-500', 'bg-blue-500/5');
+        
+        cerTitle.textContent = cerData[target].title;
+        cerDesc.textContent = cerData[target].desc;
+        cerFeedback.textContent = `💡 ${cerData[target].feedback}`;
+        
+        cerDisplay.classList.remove('hidden');
+      }
+    });
+  });
+
+  // SCENE 2 Logic
+  const visualData = {
+    'tombol': 'Anotasi lingkaran (circle) sangat baik untuk menyorot kontras UI yang buruk di satu titik tertentu.',
+    'kolom': 'Anotasi panah (arrow) efektif memandu mata pembaca tepat ke elemen spesifik yang membingungkan.',
+    'alur': 'Penandaan berurutan membuktikan bahwa UI dan UX aplikasi ini berhasil membimbing pengguna.',
+    'error': 'Anotasi kotak (rectangle) sangat cocok memisahkan modal/popup error dari elemen latar belakang.',
+    'navigasi': 'Urutan penomoran visual akan membuktikan claim panjangnya langkah yang harus ditempuh pengguna (UX).'
+  };
+
+  const visualBtns = document.querySelectorAll('.visual-btn');
+  const visualDisplay = document.getElementById('visual-display');
+  const visualFeedback = document.getElementById('visual-feedback');
+
+  visualBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      if (target && visualData[target]) {
+        visualBtns.forEach(b => b.classList.remove('ring-2', 'ring-rose-500', 'bg-rose-500/5'));
+        btn.classList.add('ring-2', 'ring-rose-500', 'bg-rose-500/5');
+        
+        visualFeedback.textContent = visualData[target];
+        visualDisplay.classList.remove('hidden');
+      }
+    });
+  });
+</script>

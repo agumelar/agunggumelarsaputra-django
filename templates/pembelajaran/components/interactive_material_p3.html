@@ -1,0 +1,292 @@
+<div class="interactive-material-p3 space-y-8" id="interactive-p3-root">
+
+  <!-- SCENE 1: Ecosystem Matchmaker (Personality Quiz) -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent border border-indigo-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-indigo-500/20 text-indigo-400 font-bold text-xs font-mono">SCENE 01</span>
+        <h3 class="text-lg font-bold text-foreground">Find Your Fit: Ekosistem Mana yang Cocok Untukmu?</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Jawab 3 pertanyaan singkat di bawah ini untuk melihat ekosistem kerja apa yang paling sesuai dengan kepribadian dan gaya kerjamu.
+      </p>
+
+      <!-- Quiz Container -->
+      <div id="ecosystem-quiz-container" class="bg-card border border-border rounded-xl p-4 space-y-4">
+        
+        <!-- Question 1 -->
+        <div class="quiz-step active space-y-3" data-step="1">
+          <p class="text-sm font-semibold text-foreground">1. Lingkungan kerja seperti apa yang paling kamu sukai?</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="startup">
+              🔥 Dinamis, fleksibel, tapi penuh tantangan
+            </button>
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="corporate">
+              🏢 Terstruktur, stabil, dan aturan jelas
+            </button>
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="software_house">
+              💻 Proyek berganti-ganti, tidak gampang bosan
+            </button>
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="freelance">
+              🌍 Bebas penuh, kerja dari mana saja
+            </button>
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="quiz-step hidden space-y-3" data-step="2">
+          <p class="text-sm font-semibold text-foreground">2. Bagaimana kamu menghadapi sebuah masalah pemrograman?</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="startup">
+              🛠️ Cari solusi kreatif & cepat (meski kadang kurang sempurna)
+            </button>
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="corporate">
+              📚 Ikuti prosedur standar & best practices dengan ketat
+            </button>
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="freelance">
+              🔍 Googling sendiri sampai dapat solusi mandiri
+            </button>
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="software_house">
+              🤝 Tanya ke teman tim proyek yang lebih senior
+            </button>
+          </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="quiz-step hidden space-y-3" data-step="3">
+          <p class="text-sm font-semibold text-foreground">3. Apa hal yang paling kamu prioritaskan dalam karier awal?</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="corporate">
+              💰 Gaji stabil & asuransi kesehatan yang bagus
+            </button>
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="startup">
+              🚀 Pertumbuhan skill drastis & ikut andil membesarkan produk
+            </button>
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="freelance">
+              🏖️ Work-Life Balance & kebebasan waktu
+            </button>
+            <button type="button" class="quiz-btn text-left p-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary hover:border-indigo-500/50 transition-all text-xs" data-score="software_house">
+              🏆 Membangun portofolio beragam jenis aplikasi
+            </button>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="quiz-result hidden space-y-4 text-center py-4" id="quiz-result">
+          <div class="text-4xl mb-2" id="result-emoji">🎯</div>
+          <h4 class="text-lg font-bold text-primary" id="result-title">Menghitung...</h4>
+          <p class="text-xs text-muted-foreground" id="result-desc">Memproses jawabanmu...</p>
+          <button type="button" class="mt-4 px-4 py-2 bg-secondary text-foreground text-xs font-bold rounded-lg border border-border hover:bg-secondary/80 transition-all" id="btn-reset-quiz">
+            Ulangi Kuis
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: A Day in the Life Simulator -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-transparent border border-emerald-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute bottom-0 right-0 w-40 h-40 bg-emerald-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-emerald-500/20 text-emerald-500 font-bold text-xs font-mono">SCENE 02</span>
+        <h3 class="text-lg font-bold text-foreground">Simulator "A Day in The Life"</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Pilih peran, lalu klik fase waktu untuk melihat bagaimana rutinitas harian berbeda drastis antara bekerja di Startup, Korporat, atau sebagai Freelancer.
+      </p>
+
+      <!-- Role Selector -->
+      <div class="flex flex-wrap gap-2 mb-4">
+        <button type="button" class="day-role-btn active px-3 py-1.5 rounded-lg border border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold transition-all" data-role="startup">🚀 Startup Engineer</button>
+        <button type="button" class="day-role-btn px-3 py-1.5 rounded-lg border border-border bg-secondary/50 text-muted-foreground hover:bg-secondary text-xs font-medium transition-all" data-role="corporate">🏢 Corporate IT</button>
+        <button type="button" class="day-role-btn px-3 py-1.5 rounded-lg border border-border bg-secondary/50 text-muted-foreground hover:bg-secondary text-xs font-medium transition-all" data-role="freelance">🌍 Remote Freelancer</button>
+      </div>
+
+      <!-- Timeline Navigator -->
+      <div class="bg-card border border-border rounded-xl p-1 flex">
+        <button type="button" class="time-nav-btn active flex-1 text-center py-2 rounded-lg text-xs font-bold bg-secondary text-foreground" data-time="morning">09:00 (Pagi)</button>
+        <button type="button" class="time-nav-btn flex-1 text-center py-2 rounded-lg text-xs font-medium text-muted-foreground hover:bg-secondary/50" data-time="midday">13:00 (Siang)</button>
+        <button type="button" class="time-nav-btn flex-1 text-center py-2 rounded-lg text-xs font-medium text-muted-foreground hover:bg-secondary/50" data-time="afternoon">16:00 (Sore)</button>
+        <button type="button" class="time-nav-btn flex-1 text-center py-2 rounded-lg text-xs font-medium text-muted-foreground hover:bg-secondary/50" data-time="evening">20:00 (Malam)</button>
+      </div>
+
+      <!-- Content Display -->
+      <div class="bg-black/20 border border-border rounded-xl p-4 sm:p-5 min-h-[140px] flex items-center">
+        <div class="space-y-2 w-full animate-in fade-in slide-in-from-bottom-2 duration-300" id="day-content-display">
+          <!-- Default Startup Morning -->
+          <div class="flex items-start gap-3">
+            <span class="text-2xl mt-1">☕</span>
+            <div>
+              <h4 class="text-sm font-bold text-foreground">Daily Standup Meeting</h4>
+              <p class="text-xs text-muted-foreground mt-1">Merapat bersama tim (Product, Design, Dev). Setiap orang melaporkan apa yang dikerjakan kemarin, apa yang akan dikerjakan hari ini, dan apakah ada "blocker". Suasana santai dan cepat.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// Data for Ecosystem Matchmaker
+  const ecosystemResults = {
+    startup: {
+      emoji: '🚀',
+      title: 'Jiwa Startup!',
+      desc: 'Kamu menyukai tantangan, ritme kerja cepat, dan tidak keberatan memakai "banyak topi" untuk mengembangkan produk yang berdampak luas.'
+    },
+    corporate: {
+      emoji: '🏢',
+      title: 'Karier Korporat!',
+      desc: 'Kamu menghargai stabilitas, jenjang karier yang jelas, prosedur yang terstruktur, serta keamanan finansial jangka panjang.'
+    },
+    software_house: {
+      emoji: '💻',
+      title: 'Punggawa Software House!',
+      desc: 'Kamu mudah bosan dengan satu produk dan suka belajar teknologi baru melalui berbagai proyek klien yang menantang dan berganti-ganti.'
+    },
+    freelance: {
+      emoji: '🌍',
+      title: 'Freelancer Mandiri!',
+      desc: 'Kamu menjunjung tinggi kebebasan mutlak. Bekerja di mana saja, kapan saja, dan percaya diri dengan kemampuan teknis serta negosiasimu.'
+    }
+  };
+
+  // Data for Day in the Life
+  const dayData = {
+    startup: {
+      morning: { emoji: '☕', title: 'Daily Standup Meeting', desc: 'Merapat bersama tim (Product, Design, Dev). Melaporkan progres kemarin dan target hari ini. Suasana santai dan serba cepat (agile).' },
+      midday: { emoji: '🔥', title: 'Hotfix & Sprint Work', desc: 'Coding intensif. Tiba-tiba ada bug mendesak dari CEO yang harus segera diperbaiki di server production. Kamu langsung melompat untuk memperbaikinya.' },
+      afternoon: { emoji: '🍕', title: 'Review & Ping-Pong', desc: 'Code review bersama teman. Setelah itu istirahat sejenak sambil main ping-pong atau main game konsol di area rekreasi kantor.' },
+      evening: { emoji: '🌙', title: 'Fleksibel Keluar', desc: 'Kerja selesai, tapi terkadang kamu masih memantau grup Slack di malam hari jika ada notifikasi server down (On-call).' }
+    },
+    corporate: {
+      morning: { emoji: '👔', title: 'Check-in & Email', desc: 'Masuk kantor tepat waktu. Mengecek email dari berbagai divisi. Mengikuti rapat koordinasi mingguan dengan manajer departemen IT.' },
+      midday: { emoji: '🔒', title: 'Development & Compliance', desc: 'Menulis kode dengan standar keamanan ketat. Menulis dokumentasi lengkap karena kode harus disetujui oleh tim Security & QA sebelum bisa dirilis.' },
+      afternoon: { emoji: '📊', title: 'Approval Meetings', desc: 'Rapat persetujuan rilis (Release Board). Perubahan fitur kecil pun butuh birokrasi dan tanda tangan manajer karena risiko keamanan perbankan/korporasi.' },
+      evening: { emoji: '🚪', title: 'Log Off', desc: 'Jam kerja selesai dengan jelas. Kamu pulang ke rumah dan sepenuhnya lepas dari urusan kantor sampai besok pagi. Work-life balance yang sangat terprediksi.' }
+    },
+    freelance: {
+      morning: { emoji: '🛌', title: 'Bangun Santai & Cek Klien', desc: 'Bekerja dari rumah (atau kafe/pantai). Memulai hari siang jam 10. Mengecek pesan Upwork dari klien yang berada di zona waktu Amerika Serikat.' },
+      midday: { emoji: '💻', title: 'Deep Work Session', desc: 'Mengerjakan tugas coding tanpa interupsi meeting. Mengatur jadwal sendiri agar fitur selesai sebelum deadline akhir minggu.' },
+      afternoon: { emoji: '💸', title: 'Marketing & Invoicing', desc: 'Mengirim email tagihan (invoice) ke klien. Mencari proyek baru dan melakukan penawaran harga (bidding) untuk bulan depan agar pendapatan tetap aman.' },
+      evening: { emoji: '🦉', title: 'Meeting Zona Waktu Berbeda', desc: 'Karena klien berada di benua lain, kamu terkadang harus meeting via Zoom pada jam 9 malam. Setelah itu lanjut coding jika kamu tipe "Night Owl".' }
+    }
+  };
+
+  // State
+  let scores = { startup: 0, corporate: 0, software_house: 0, freelance: 0 };
+  let currentStep = 1;
+  let currentRole = 'startup';
+  let currentTime = 'morning';
+
+  // Event Delegation for Interactive Elements
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+
+    // --- Quiz Logic ---
+    const quizBtn = target.closest('.quiz-btn');
+    if (quizBtn) {
+      const scoreKey = quizBtn.getAttribute('data-score');
+      if (scoreKey && scores[scoreKey] !== undefined) {
+        scores[scoreKey]++;
+      }
+      
+      const currentStepEl = document.querySelector(`.quiz-step[data-step="${currentStep}"]`);
+      if (currentStepEl) currentStepEl.classList.add('hidden');
+      
+      currentStep++;
+      const nextStepEl = document.querySelector(`.quiz-step[data-step="${currentStep}"]`);
+      
+      if (nextStepEl) {
+        nextStepEl.classList.remove('hidden');
+      } else {
+        // Show Result
+        const resultEl = document.getElementById('quiz-result');
+        const rTitle = document.getElementById('result-title');
+        const rDesc = document.getElementById('result-desc');
+        const rEmoji = document.getElementById('result-emoji');
+        
+        let maxScore = -1;
+        let winningEcosystem = 'startup';
+        for (const [key, val] of Object.entries(scores)) {
+          if (val > maxScore) {
+            maxScore = val;
+            winningEcosystem = key;
+          }
+        }
+        
+        const resData = ecosystemResults[winningEcosystem];
+        if (resultEl && rTitle && rDesc && rEmoji && resData) {
+          resultEl.classList.remove('hidden');
+          rEmoji.textContent = resData.emoji;
+          rTitle.textContent = resData.title;
+          rDesc.textContent = resData.desc;
+        }
+      }
+    }
+
+    const resetBtn = target.closest('#btn-reset-quiz');
+    if (resetBtn) {
+      scores = { startup: 0, corporate: 0, software_house: 0, freelance: 0 };
+      currentStep = 1;
+      document.getElementById('quiz-result')?.classList.add('hidden');
+      document.querySelectorAll('.quiz-step').forEach(el => el.classList.add('hidden'));
+      document.querySelector('.quiz-step[data-step="1"]')?.classList.remove('hidden');
+    }
+
+    // --- Simulator Logic ---
+    const roleBtn = target.closest('.day-role-btn');
+    if (roleBtn) {
+      document.querySelectorAll('.day-role-btn').forEach(el => {
+        el.classList.remove('active', 'border-emerald-500/50', 'bg-emerald-500/10', 'text-emerald-600', 'dark:text-emerald-400', 'font-bold');
+        el.classList.add('border-border', 'bg-secondary/50', 'text-muted-foreground', 'font-medium');
+      });
+      roleBtn.classList.add('active', 'border-emerald-500/50', 'bg-emerald-500/10', 'text-emerald-600', 'dark:text-emerald-400', 'font-bold');
+      roleBtn.classList.remove('border-border', 'bg-secondary/50', 'text-muted-foreground', 'font-medium');
+      currentRole = roleBtn.getAttribute('data-role') || 'startup';
+      updateSimulatorContent();
+    }
+
+    const timeBtn = target.closest('.time-nav-btn');
+    if (timeBtn) {
+      document.querySelectorAll('.time-nav-btn').forEach(el => {
+        el.classList.remove('active', 'bg-secondary', 'text-foreground', 'font-bold');
+        el.classList.add('text-muted-foreground', 'font-medium');
+      });
+      timeBtn.classList.add('active', 'bg-secondary', 'text-foreground', 'font-bold');
+      timeBtn.classList.remove('text-muted-foreground', 'font-medium');
+      currentTime = timeBtn.getAttribute('data-time') || 'morning';
+      updateSimulatorContent();
+    }
+  });
+
+  function updateSimulatorContent() {
+    const display = document.getElementById('day-content-display');
+    const data = dayData[currentRole]?.[currentTime];
+    if (display && data) {
+      // Re-trigger animation
+      display.classList.remove('animate-in', 'fade-in', 'slide-in-from-bottom-2');
+      void display.offsetWidth; // Force reflow
+      display.classList.add('animate-in', 'fade-in', 'slide-in-from-bottom-2');
+      
+      display.innerHTML = `
+        <div class="flex items-start gap-3">
+          <span class="text-2xl mt-1">${data.emoji}</span>
+          <div>
+            <h4 class="text-sm font-bold text-foreground">${data.title}</h4>
+            <p class="text-xs text-muted-foreground mt-1">${data.desc}</p>
+          </div>
+        </div>
+      `;
+    }
+  }
+</script>

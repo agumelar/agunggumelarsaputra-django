@@ -1,0 +1,194 @@
+<div class="interactive-material-p16 space-y-8" id="interactive-p16-root">
+
+  <!-- SCENE 1: Jelajah Peta Pencapaian -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent border border-indigo-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-indigo-500/20 text-indigo-400 font-bold text-xs font-mono">SCENE 01</span>
+        <h3 class="text-lg font-bold text-foreground">Jelajah Peta Pencapaian</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Lihat kembali perjalananmu! Hubungkan evidence semester yang sudah kamu kumpulkan dengan level Skill Passport PPLG.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <button type="button" class="peta-btn text-left p-4 rounded-xl border border-border bg-card hover:border-indigo-500/50 transition-all group focus-visible:outline-indigo-400" data-target="or01">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">🗺️</span>
+            <span class="font-bold text-sm">Portofolio OR-01</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Mind map profesi & rencana minat diri.</p>
+        </button>
+
+        <button type="button" class="peta-btn text-left p-4 rounded-xl border border-border bg-card hover:border-indigo-500/50 transition-all group focus-visible:outline-indigo-400" data-target="or02">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">📱</span>
+            <span class="font-bold text-sm">Portofolio OR-02</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Laporan review aplikasi & anotasi UI/UX.</p>
+        </button>
+
+        <button type="button" class="peta-btn text-left p-4 rounded-xl border border-border bg-card hover:border-indigo-500/50 transition-all group focus-visible:outline-indigo-400" data-target="level2">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">⭐</span>
+            <span class="font-bold text-sm">Capaian Level 2</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Target "Mencoba" sebagai capaian awal.</p>
+        </button>
+
+        <button type="button" class="peta-btn text-left p-4 rounded-xl border border-border bg-card hover:border-indigo-500/50 transition-all group focus-visible:outline-indigo-400" data-target="clinic">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">🏥</span>
+            <span class="font-bold text-sm">Skill Clinic</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Ruang evaluasi kekuatan & area latihan.</p>
+        </button>
+
+        <button type="button" class="peta-btn text-left p-4 rounded-xl border border-border bg-card hover:border-indigo-500/50 transition-all group lg:col-span-2 focus-visible:outline-indigo-400" data-target="genap">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">🚀</span>
+            <span class="font-bold text-sm">Semester Genap</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Tahap berikutnya menuju dunia coding.</p>
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="peta-display" class="hidden animate-in fade-in slide-in-from-bottom-2 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20" role="status" aria-live="polite">
+        <h4 id="peta-title" class="font-bold text-indigo-400 mb-1">...</h4>
+        <p id="peta-desc" class="text-sm text-foreground mb-2">...</p>
+        <p id="peta-feedback" class="text-xs text-muted-foreground italic border-l-2 border-indigo-500/50 pl-2">...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: Tentukan Komitmen Berikutnya (Scenario) -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-fuchsia-500/10 via-pink-500/5 to-transparent border border-fuchsia-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute bottom-0 right-0 w-40 h-40 bg-fuchsia-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-fuchsia-500/20 text-fuchsia-500 font-bold text-xs font-mono">SCENE 02</span>
+        <h3 class="text-lg font-bold text-foreground">Tentukan Komitmen Berikutnya</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Pilih tindak lanjut berdasarkan hasil evidence dan refleksimu. Komitmen terbaik berangkat dari evaluasi diri.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="komitmen-container">
+        <!-- Rute Options -->
+        <button type="button" class="komitmen-btn text-left p-4 rounded-xl border border-border bg-card hover:border-fuchsia-500/50 transition-all focus-visible:outline-fuchsia-400" data-target="rapi">
+          <div class="font-bold text-sm mb-1 text-fuchsia-600 dark:text-fuchsia-400">✏️ Mind map belum rapi</div>
+          <p class="text-xs text-muted-foreground">Perbaiki hierarki dan keterbacaan evidence OR-01.</p>
+        </button>
+        <button type="button" class="komitmen-btn text-left p-4 rounded-xl border border-border bg-card hover:border-fuchsia-500/50 transition-all focus-visible:outline-fuchsia-400" data-target="cer">
+          <div class="font-bold text-sm mb-1 text-fuchsia-600 dark:text-fuchsia-400">🏋️ CER masih lemah</div>
+          <p class="text-xs text-muted-foreground">Latih satu claim dengan screenshot & reasoning tiap minggu.</p>
+        </button>
+        <button type="button" class="komitmen-btn text-left p-4 rounded-xl border border-border bg-card hover:border-fuchsia-500/50 transition-all focus-visible:outline-fuchsia-400" data-target="frontend">
+          <div class="font-bold text-sm mb-1 text-fuchsia-600 dark:text-fuchsia-400">💻 Minat frontend kuat</div>
+          <p class="text-xs text-muted-foreground">Bangun mini proyek HTML/CSS di semester genap.</p>
+        </button>
+        <button type="button" class="komitmen-btn text-left p-4 rounded-xl border border-border bg-card hover:border-fuchsia-500/50 transition-all focus-visible:outline-fuchsia-400" data-target="feedback">
+          <div class="font-bold text-sm mb-1 text-fuchsia-600 dark:text-fuchsia-400">🗣️ Butuh banyak feedback</div>
+          <p class="text-xs text-muted-foreground">Minta teman meninjau portofolio sebelum dinilai guru.</p>
+        </button>
+        <button type="button" class="komitmen-btn md:col-span-2 text-left p-4 rounded-xl border border-border bg-card hover:border-fuchsia-500/50 transition-all focus-visible:outline-fuchsia-400" data-target="targetbaru">
+          <div class="font-bold text-sm mb-1 text-fuchsia-600 dark:text-fuchsia-400">🎯 Buat target baru</div>
+          <p class="text-xs text-muted-foreground">Tetapkan skill spesifik & bukti capaian dengan tenggat waktu.</p>
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="komitmen-display" class="hidden p-4 rounded-xl bg-fuchsia-500/10 border border-fuchsia-500/20" role="status" aria-live="polite">
+        <h4 class="font-bold text-fuchsia-600 dark:text-fuchsia-400 mb-1">Aksi Nyata!</h4>
+        <p id="komitmen-feedback" class="text-xs text-foreground italic">...</p>
+        <p class="text-xs text-muted-foreground mt-2 border-t border-fuchsia-500/20 pt-2">Refleksi tanpa komitmen tindakan hanyalah lamunan.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// SCENE 1 Logic
+  const petaData = {
+    'or01': {
+      title: 'Portofolio OR-01',
+      desc: 'Mind map profesi dan rencana minat diri.',
+      feedback: 'Evidence ini merekam wawasan dunia kerja PPLG yang sudah kamu pahami.'
+    },
+    'or02': {
+      title: 'Portofolio OR-02',
+      desc: 'Laporan review enam komponen dan screenshot anotasi.',
+      feedback: 'Evidence ini menunjukkan kemampuan analisis dan pemecahan masalah (CER).'
+    },
+    'level2': {
+      title: 'Level 2 (Mencoba)',
+      desc: 'Mencoba berbagai praktik sebagai target capaian awal.',
+      feedback: 'Di tahap ini, membuat kesalahan adalah bagian dari proses mencoba tools baru.'
+    },
+    'clinic': {
+      title: 'Skill Clinic',
+      desc: 'Ruang untuk melihat kekuatan dan area latihan secara jujur.',
+      feedback: 'Refleksi di Skill Clinic membantu menentukan prioritas perbaikan semester depan.'
+    },
+    'genap': {
+      title: 'Semester Genap',
+      desc: 'Tahap berikutnya menuju dunia coding dan rekayasa.',
+      feedback: 'Capaian awal semester ganjil menjadi fondasi kuat untuk pemrograman.'
+    }
+  };
+
+  const petaBtns = document.querySelectorAll('.peta-btn');
+  const petaDisplay = document.getElementById('peta-display');
+  const petaTitle = document.getElementById('peta-title');
+  const petaDesc = document.getElementById('peta-desc');
+  const petaFeedback = document.getElementById('peta-feedback');
+
+  petaBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      if (target && petaData[target]) {
+        petaBtns.forEach(b => b.classList.remove('ring-2', 'ring-indigo-500', 'bg-indigo-500/5'));
+        btn.classList.add('ring-2', 'ring-indigo-500', 'bg-indigo-500/5');
+        
+        petaTitle.textContent = petaData[target].title;
+        petaDesc.textContent = petaData[target].desc;
+        petaFeedback.textContent = `💡 ${petaData[target].feedback}`;
+        
+        petaDisplay.classList.remove('hidden');
+      }
+    });
+  });
+
+  // SCENE 2 Logic
+  const komitmenData = {
+    'rapi': 'Aksi: Revisi dokumen OR-01. Komitmen yang baik harus menunjuk karya mana yang akan diperbaiki secara spesifik.',
+    'cer': 'Aksi: Latihan rutin. Membangun argumen yang logis (reasoning) butuh pengulangan, bukan bakat instan.',
+    'frontend': 'Aksi: Buat karya. Hubungkan minatmu dengan produk digital yang bisa kamu tunjukkan ke orang lain.',
+    'feedback': 'Aksi: Minta review. Kolaborasi dan berani menerima kritik dari teman akan mempercepat perbaikan hasil karyamu.',
+    'targetbaru': 'Aksi: Buat timeline. Target yang terukur dengan deadline lebih mudah diwujudkan dan tidak sekadar wacana.'
+  };
+
+  const komitmenBtns = document.querySelectorAll('.komitmen-btn');
+  const komitmenDisplay = document.getElementById('komitmen-display');
+  const komitmenFeedback = document.getElementById('komitmen-feedback');
+
+  komitmenBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      if (target && komitmenData[target]) {
+        komitmenBtns.forEach(b => b.classList.remove('ring-2', 'ring-fuchsia-500', 'bg-fuchsia-500/5'));
+        btn.classList.add('ring-2', 'ring-fuchsia-500', 'bg-fuchsia-500/5');
+        
+        komitmenFeedback.textContent = komitmenData[target];
+        komitmenDisplay.classList.remove('hidden');
+      }
+    });
+  });
+</script>

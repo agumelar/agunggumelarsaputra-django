@@ -1,0 +1,194 @@
+<div class="interactive-material-p9 space-y-8" id="interactive-p9-root">
+
+  <!-- SCENE 1: Explore Lensa Audit -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-sky-500/10 via-blue-500/5 to-transparent border border-sky-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-sky-500/20 text-sky-500 font-bold text-xs font-mono">SCENE 01</span>
+        <h3 class="text-lg font-bold text-foreground">Jelajah Lensa Audit</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Gunakan setiap lensa ini untuk mengamati aplikasi pilihan. Audit yang baik menimbang fungsi, pengalaman, serta peluang perbaikan secara obyektif.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <button type="button" class="lensa-btn text-left p-4 rounded-xl border border-border bg-card hover:border-sky-500/50 transition-all group focus-visible:outline-sky-400" data-target="fungsi">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">⚙️</span>
+            <span class="font-bold text-sm">Fungsi Utama</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Identifikasi masalah yang diselesaikan aplikasi.</p>
+        </button>
+
+        <button type="button" class="lensa-btn text-left p-4 rounded-xl border border-border bg-card hover:border-sky-500/50 transition-all group focus-visible:outline-sky-400" data-target="keunggulan">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">🌟</span>
+            <span class="font-bold text-sm">Keunggulan</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Catat bagian yang sangat membantu pengguna.</p>
+        </button>
+
+        <button type="button" class="lensa-btn text-left p-4 rounded-xl border border-border bg-card hover:border-sky-500/50 transition-all group focus-visible:outline-sky-400" data-target="kekurangan">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">📉</span>
+            <span class="font-bold text-sm">Kekurangan</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Temukan hambatan atau bagian yang membingungkan.</p>
+        </button>
+
+        <button type="button" class="lensa-btn text-left p-4 rounded-xl border border-border bg-card hover:border-sky-500/50 transition-all group focus-visible:outline-sky-400" data-target="kepuasan">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">😊</span>
+            <span class="font-bold text-sm">Kepuasan Pengguna</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Amati alasan pengguna kembali memakai aplikasi.</p>
+        </button>
+
+        <button type="button" class="lensa-btn text-left p-4 rounded-xl border border-border bg-card hover:border-sky-500/50 transition-all group lg:col-span-2 focus-visible:outline-sky-400" data-target="profesi">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl group-hover:scale-110 transition-transform">👥</span>
+            <span class="font-bold text-sm">Profesi di Balik Fitur</span>
+          </div>
+          <p class="text-xs text-muted-foreground line-clamp-1">Hubungkan fitur dengan spesialisasi PPLG (Frontend, UI/UX, dll).</p>
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="lensa-display" class="hidden animate-in fade-in slide-in-from-bottom-2 p-4 rounded-xl bg-sky-500/10 border border-sky-500/20" role="status" aria-live="polite">
+        <h4 id="lensa-title" class="font-bold text-sky-500 mb-1">...</h4>
+        <p id="lensa-desc" class="text-sm text-foreground mb-2">...</p>
+        <p id="lensa-feedback" class="text-xs text-muted-foreground italic border-l-2 border-sky-500/50 pl-2">...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: Temukan Masalah User Journey -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-rose-500/10 via-pink-500/5 to-transparent border border-rose-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute bottom-0 right-0 w-40 h-40 bg-rose-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-rose-500/20 text-rose-500 font-bold text-xs font-mono">SCENE 02</span>
+        <h3 class="text-lg font-bold text-foreground">Temukan Masalah User Journey</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Pilih masalah mana yang paling mengganggu alur pengguna (user journey). Audit yang kuat mencatat hal yang konkret!
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="journey-container">
+        <!-- Rute Options -->
+        <button type="button" class="journey-btn text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="registrasi">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">🛑 Registrasi Berhenti</div>
+          <p class="text-xs text-muted-foreground">Pengguna bingung karena tombol lanjut tidak terlihat.</p>
+        </button>
+        <button type="button" class="journey-btn text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="pencarian">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">⏳ Pencarian Lambat</div>
+          <p class="text-xs text-muted-foreground">Hasil baru muncul setelah waktu lama.</p>
+        </button>
+        <button type="button" class="journey-btn text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="checkout">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">🛒 Checkout Berulang</div>
+          <p class="text-xs text-muted-foreground">Alamat harus diisi kembali saat membeli produk kedua.</p>
+        </button>
+        <button type="button" class="journey-btn text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="notifikasi">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">🔔 Notifikasi Berlebih</div>
+          <p class="text-xs text-muted-foreground">Pengguna menerima 10 pesan yang tidak relevan tiap hari.</p>
+        </button>
+        <button type="button" class="journey-btn md:col-span-2 text-left p-4 rounded-xl border border-border bg-card hover:border-rose-500/50 transition-all focus-visible:outline-rose-400" data-target="menu">
+          <div class="font-bold text-sm mb-1 text-rose-600 dark:text-rose-400">🔄 Menu Tidak Konsisten</div>
+          <p class="text-xs text-muted-foreground">Ikon yang sama memiliki arti berbeda pada layar lain.</p>
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="journey-display" class="hidden p-4 rounded-xl bg-rose-500/10 border border-rose-500/20" role="status" aria-live="polite">
+        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-1">Dampak Terukur!</h4>
+        <p id="journey-feedback" class="text-xs text-foreground italic">...</p>
+        <p class="text-xs text-muted-foreground mt-2 border-t border-rose-500/20 pt-2">Temuan audit perlu menunjuk momen spesifik pengguna, masalah, dan dampaknya.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// SCENE 1 Logic
+  const lensaData = {
+    'fungsi': {
+      title: 'Fungsi Utama',
+      desc: 'Identifikasi masalah yang diselesaikan aplikasi.',
+      feedback: 'Fungsi menjelaskan alasan utama aplikasi diunduh dan digunakan.'
+    },
+    'keunggulan': {
+      title: 'Keunggulan',
+      desc: 'Catat bagian yang sangat membantu pengguna.',
+      feedback: 'Keunggulan perlu contoh yang nyata dan bisa ditunjukkan ke orang lain.'
+    },
+    'kekurangan': {
+      title: 'Kekurangan',
+      desc: 'Temukan hambatan atau bagian yang membingungkan.',
+      feedback: 'Kritik harus spesifik, bukan sekadar opini suka/tidak suka.'
+    },
+    'kepuasan': {
+      title: 'Kepuasan Pengguna',
+      desc: 'Amati alasan pengguna ingin kembali memakai aplikasi.',
+      feedback: 'Retensi sangat berkaitan dengan manfaat jangka panjang dan kenyamanan navigasi.'
+    },
+    'profesi': {
+      title: 'Profesi di Balik Fitur',
+      desc: 'Hubungkan fitur dengan spesialisasi PPLG (Frontend, UI/UX, dll).',
+      feedback: 'Setiap produk digital yang hebat adalah hasil orkestrasi dan kolaborasi tim.'
+    }
+  };
+
+  const lensaBtns = document.querySelectorAll('.lensa-btn');
+  const lensaDisplay = document.getElementById('lensa-display');
+  const lensaTitle = document.getElementById('lensa-title');
+  const lensaDesc = document.getElementById('lensa-desc');
+  const lensaFeedback = document.getElementById('lensa-feedback');
+
+  lensaBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      if (target && lensaData[target]) {
+        lensaBtns.forEach(b => b.classList.remove('ring-2', 'ring-sky-500', 'bg-sky-500/5'));
+        btn.classList.add('ring-2', 'ring-sky-500', 'bg-sky-500/5');
+        
+        lensaTitle.textContent = lensaData[target].title;
+        lensaDesc.textContent = lensaData[target].desc;
+        lensaFeedback.textContent = `💡 ${lensaData[target].feedback}`;
+        
+        lensaDisplay.classList.remove('hidden');
+      }
+    });
+  });
+
+  // SCENE 2 Logic
+  const journeyData = {
+    'registrasi': 'Masalah ini fatal karena menghambat pengguna baru untuk masuk ke dalam aplikasi (drop-off awal).',
+    'pencarian': 'Kelambatan sistem (latency) secara drastis menurunkan kepuasan pengguna (UX), bahkan meski UI-nya bagus.',
+    'checkout': 'Friksi ini berpotensi menggagalkan transaksi penjualan karena langkah ekstra mengganggu kenyamanan.',
+    'notifikasi': 'Spam notifikasi membuat pengguna jengkel dan seringkali berakhir dengan uninstall aplikasi.',
+    'menu': 'Inkonsistensi merusak kebiasaan (mental model) pengguna dan membuat mereka sering melakukan kesalahan saat menekan tombol.'
+  };
+
+  const journeyBtns = document.querySelectorAll('.journey-btn');
+  const journeyDisplay = document.getElementById('journey-display');
+  const journeyFeedback = document.getElementById('journey-feedback');
+
+  journeyBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      if (target && journeyData[target]) {
+        journeyBtns.forEach(b => b.classList.remove('ring-2', 'ring-rose-500', 'bg-rose-500/5'));
+        btn.classList.add('ring-2', 'ring-rose-500', 'bg-rose-500/5');
+        
+        journeyFeedback.textContent = journeyData[target];
+        journeyDisplay.classList.remove('hidden');
+      }
+    });
+  });
+</script>

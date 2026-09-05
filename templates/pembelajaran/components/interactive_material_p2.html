@@ -1,0 +1,1063 @@
+<div class="space-y-8" id="interactive-material-p2">
+  
+  <!-- Hero Banner Visual Modul 02 -->
+  <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-border p-6 md:p-8 text-foreground shadow-lg">
+    <div class="absolute -right-10 -top-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 text-xs font-mono font-bold uppercase">
+          🚀 Modul 02 • Sprint 1
+        </span>
+        <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs font-mono font-semibold">
+          Fase E (Kelas 10 RPL)
+        </span>
+        <span class="px-2.5 py-0.5 rounded-full bg-secondary text-muted-foreground border border-border text-xs font-mono">
+          ⏱️ 2 JP (90 Menit)
+        </span>
+        <span class="px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 text-xs font-mono font-bold">
+          Kode Skill: OR-01
+        </span>
+      </div>
+
+      <h1 class="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
+        8 Profesi Utama & Sinergi Tim Industri PPLG
+      </h1>
+
+      <p class="text-sm md:text-base text-slate-300 max-w-3xl leading-relaxed">
+        Di balik satu aplikasi canggih seperti <em>Tokopedia</em>, <em>Gojek</em>, atau <em>Mobile Legends</em>, tidak pernah ada yang dibuat oleh satu orang sendirian. Di modul ini, kalian akan mengeksplorasi <strong>8 profesi utama software engineer</strong>, analogi perannya, kisaran prospek gaji, serta simulasi bagaimana mereka berkolaborasi dalam satu kesatuan <strong>Tim Produk Digital</strong>.
+      </p>
+
+      <div class="pt-1 flex flex-wrap items-center gap-3">
+        <button 
+          type="button" 
+          data-switch-tab="kktp"
+          class="btn btn-secondary text-xs font-semibold px-4 py-2 rounded-xl border border-border bg-slate-800/80 hover:bg-slate-700 text-slate-200"
+        >
+          🎯 Cek Target Penilaian (KKTP)
+        </button>
+        <a 
+          href="#section-role-explorer"
+          class="btn btn-primary text-xs font-bold px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
+        >
+          🎴 Jelajahi 8 Profesi
+        </a>
+        <a 
+          href="#section-team-synergy"
+          class="btn btn-secondary text-xs font-semibold px-4 py-2 rounded-xl border border-border bg-slate-800/80 hover:bg-slate-700 text-slate-200"
+        >
+          🔄 Simulasi Sinergi Tim
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 1: Apersepsi & Warm-Up Kuis Interaktif (3 Riddle Siapakah Aku?) -->
+  <div class="card p-6 md:p-8 rounded-2xl border-border bg-card shadow-sm space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-4">
+      <div>
+        <span class="text-xs font-mono text-primary font-bold uppercase tracking-wider">Apersepsi & Mindful Thinking</span>
+        <h2 class="text-xl md:text-2xl font-extrabold text-foreground tracking-tight">
+          Warm-Up Kuis: Tebak Siapakah Aku? 🧩
+        </h2>
+      </div>
+      <span class="text-xs px-2.5 py-1 bg-secondary rounded-lg border border-border text-muted-foreground font-mono">
+        3 Teka-Teki Profesi
+      </span>
+    </div>
+
+    <div class="p-4 rounded-xl bg-primary/5 border border-primary/20 space-y-2">
+      <div class="flex items-center gap-2 text-primary font-bold text-xs font-mono">
+        <span>💡 PERTANYAAN PEMANTIK KELAS:</span>
+      </div>
+      <p class="text-xs sm:text-sm text-foreground italic leading-relaxed">
+        "Jika kamu membayangkan bekerja di industri teknologi 3 tahun dari sekarang setelah lulus dari RPL SMKN 1 Rongga, profesi mana yang paling membuatmu penasaran dan mengapa?"
+      </p>
+    </div>
+
+    <!-- 3 Interactive Riddles -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Riddle 1 -->
+      <div class="riddle-card p-5 rounded-xl bg-secondary/30 border border-border flex flex-col justify-between space-y-4 hover:border-border transition-all">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">Teka-Teki 1</span>
+            <span class="text-lg">🎨</span>
+          </div>
+          <p class="text-xs text-foreground font-medium leading-relaxed">
+            "Aku yang merancang perpaduan warna, bentuk tombol, dan tata letak alur aplikasi agar pengguna merasa nyaman dan betah berlama-lama."
+          </p>
+        </div>
+        <div>
+          <button 
+            type="button" 
+            class="riddle-toggle-btn w-full py-2.5 px-3 rounded-lg bg-card border border-border text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all flex items-center justify-between cursor-pointer"
+            data-target="riddle-answer-1"
+            data-riddle-btn="1"
+            aria-expanded="false"
+          >
+            <span class="riddle-btn-label">👉 Buka Jawaban</span>
+            <span class="riddle-icon font-mono text-primary font-bold">▼</span>
+          </button>
+          <div id="riddle-answer-1" class="riddle-answer hidden pt-3 border-t border-border mt-2 space-y-1">
+            <div class="text-xs font-extrabold text-blue-500 font-mono">UI/UX Designer</div>
+            <p class="text-[11px] text-muted-foreground">Fokus pada kenyamanan mata (UI) dan kelancaran pengalaman pengguna (UX) menggunakan Figma.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Riddle 2 -->
+      <div class="riddle-card p-5 rounded-xl bg-secondary/30 border border-border flex flex-col justify-between space-y-4 hover:border-border transition-all">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">Teka-Teki 2</span>
+            <span class="text-lg">⚙️</span>
+          </div>
+          <p class="text-xs text-foreground font-medium leading-relaxed">
+            "Aku yang mengurus database saldo, enkripsi password, dan instalasi pipa logika di belakang layar server agar data aman dari peretas."
+          </p>
+        </div>
+        <div>
+          <button 
+            type="button" 
+            class="riddle-toggle-btn w-full py-2.5 px-3 rounded-lg bg-card border border-border text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all flex items-center justify-between cursor-pointer"
+            data-target="riddle-answer-2"
+            data-riddle-btn="2"
+            aria-expanded="false"
+          >
+            <span class="riddle-btn-label">👉 Buka Jawaban</span>
+            <span class="riddle-icon font-mono text-primary font-bold">▼</span>
+          </button>
+          <div id="riddle-answer-2" class="riddle-answer hidden pt-3 border-t border-border mt-2 space-y-1">
+            <div class="text-xs font-extrabold text-emerald-500 font-mono">Backend Developer</div>
+            <p class="text-[11px] text-muted-foreground">Mengelola API, database SQL/NoSQL, dan keamanan otentikasi server.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Riddle 3 -->
+      <div class="riddle-card p-5 rounded-xl bg-secondary/30 border border-border flex flex-col justify-between space-y-4 hover:border-border transition-all">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400">Teka-Teki 3</span>
+            <span class="text-lg">👔</span>
+          </div>
+          <p class="text-xs text-foreground font-medium leading-relaxed">
+            "Aku yang mengatur jadwal rilis fitur, memimpin rapat koordinasi lintas tim, dan menjadi kapten penentu arah kesuksesan produk digital."
+          </p>
+        </div>
+        <div>
+          <button 
+            type="button" 
+            class="riddle-toggle-btn w-full py-2.5 px-3 rounded-lg bg-card border border-border text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all flex items-center justify-between cursor-pointer"
+            data-target="riddle-answer-3"
+            data-riddle-btn="3"
+            aria-expanded="false"
+          >
+            <span class="riddle-btn-label">👉 Buka Jawaban</span>
+            <span class="riddle-icon font-mono text-primary font-bold">▼</span>
+          </button>
+          <div id="riddle-answer-3" class="riddle-answer hidden pt-3 border-t border-border mt-2 space-y-1">
+            <div class="text-xs font-extrabold text-amber-500 font-mono">Product Manager</div>
+            <p class="text-[11px] text-muted-foreground">Menghubungkan tujuan bisnis, kebutuhan pengguna, dan kemampuan teknis tim engineer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Eksplorasi 8 Profesi Utama PPLG (Interactive Grid & Live Inspector) -->
+  <div id="section-role-explorer" class="card p-6 md:p-8 rounded-2xl border-border bg-card shadow-sm space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-4">
+      <div>
+        <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">Eksplorasi Mendalam</span>
+        <h2 class="text-xl md:text-2xl font-extrabold text-foreground tracking-tight">
+          8 Profesi Utama di Industri PPLG 🎴
+        </h2>
+      </div>
+      <span class="text-xs text-muted-foreground font-mono">Klik kartu untuk inspeksi rincian:</span>
+    </div>
+
+    <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
+      Setiap peran memiliki spesialisasi tugas, bahasa pemrograman, tools kerja, dan estimasi prospek pendapatan di industri. <strong>Klik salah satu dari 8 kartu di bawah</strong> untuk membuka detail lengkapnya:
+    </p>
+
+    <!-- 8 Role Selector Cards Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <!-- 1. Frontend -->
+      <button 
+        type="button" 
+        class="role-card active p-3.5 rounded-xl border border-primary bg-primary/10 text-left transition-all space-y-1 hover:scale-[1.02] shadow-sm"
+        data-role="frontend"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">🌐</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-500 font-bold">Web UI</span>
+        </div>
+        <div class="text-xs font-bold text-foreground">Frontend Dev</div>
+        <div class="text-[10px] text-muted-foreground">Antarmuka Visual Web</div>
+      </button>
+
+      <!-- 2. Backend -->
+      <button 
+        type="button" 
+        class="role-card p-3.5 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-role="backend"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">⚙️</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-500 font-bold">Server</span>
+        </div>
+        <div class="text-xs font-bold text-foreground">Backend Dev</div>
+        <div class="text-[10px] text-muted-foreground">Logika Server & API</div>
+      </button>
+
+      <!-- 3. Mobile -->
+      <button 
+        type="button" 
+        class="role-card p-3.5 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-role="mobile"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">📱</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-500 font-bold">Apps</span>
+        </div>
+        <div class="text-xs font-bold text-foreground">Mobile Dev</div>
+        <div class="text-[10px] text-muted-foreground">Android & iOS Apps</div>
+      </button>
+
+      <!-- 4. UI/UX -->
+      <button 
+        type="button" 
+        class="role-card p-3.5 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-role="uiux"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">🎨</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-500 font-bold">Design</span>
+        </div>
+        <div class="text-xs font-bold text-foreground">UI/UX Designer</div>
+        <div class="text-[10px] text-muted-foreground">Desain & Alur Pengguna</div>
+      </button>
+
+      <!-- 5. Game Dev -->
+      <button 
+        type="button" 
+        class="role-card p-3.5 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-role="gamedev"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">🎮</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 font-bold">Games</span>
+        </div>
+        <div class="text-xs font-bold text-foreground">Game Developer</div>
+        <div class="text-[10px] text-muted-foreground">Mekanik & Dunia Gim</div>
+      </button>
+
+      <!-- 6. Data Analyst -->
+      <button 
+        type="button" 
+        class="role-card p-3.5 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-role="data"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">📊</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-500 font-bold">Insight</span>
+        </div>
+        <div class="text-xs font-bold text-foreground">Data Analyst</div>
+        <div class="text-[10px] text-muted-foreground">Pengolah Data Bisnis</div>
+      </button>
+
+      <!-- 7. DevOps -->
+      <button 
+        type="button" 
+        class="role-card p-3.5 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-role="devops"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">☁️</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-500 font-bold">Cloud</span>
+        </div>
+        <div class="text-xs font-bold text-foreground">DevOps Engineer</div>
+        <div class="text-[10px] text-muted-foreground">Infrastruktur & Server</div>
+      </button>
+
+      <!-- 8. Product Manager -->
+      <button 
+        type="button" 
+        class="role-card p-3.5 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-role="pm"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">👔</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-500 font-bold">Leader</span>
+        </div>
+        <div class="text-xs font-bold text-foreground">Product Manager</div>
+        <div class="text-[10px] text-muted-foreground">Nakhoda & Strategi Tim</div>
+      </button>
+    </div>
+
+    <!-- Role Inspector Detail View -->
+    <div id="role-inspector-container" class="p-5 sm:p-6 rounded-2xl bg-secondary/20 border border-border space-y-5 shadow-inner">
+      
+      <!-- 1. Frontend Detail -->
+      <div id="role-content-frontend" class="role-panel space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20">🌐</span>
+            <div>
+              <h3 class="font-extrabold text-base sm:text-lg text-foreground">1. Frontend Developer (Pengembang Antarmuka Web)</h3>
+              <p class="text-xs text-blue-500 font-mono font-medium">Membangun tampilan depan web yang interaktif & responsif</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20">
+              💰 Rp 6 - 15 Juta/bln
+            </span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-blue-500/5 border border-blue-500/20 text-xs sm:text-sm text-foreground">
+          <strong>💡 Analogi Sederhana:</strong> <em>Arsitek & Desainer Interior Rumah</em> — Menyiapkan dan menata bagian ruangan yang dilihat, disentuh, dan diinteraksikan langsung oleh para penghuni.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>📌</span> <span>Tanggung Jawab Utama:</span>
+            </div>
+            <ul class="list-disc list-inside text-muted-foreground space-y-1 leading-relaxed">
+              <li>Menerjemahkan rancangan desain Figma/Adobe XD menjadi kode web interaktif.</li>
+              <li>Memastikan tampilan responsif di layar HP, tablet, maupun monitor laptop.</li>
+              <li>Mengatur animasi tombol, form masukan, dan validasi data pengguna.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>🛠️</span> <span>Tools & Stack Teknologi:</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">HTML5</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">CSS3</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">JavaScript</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">TypeScript</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">React.js</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Tailwind CSS</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Vue.js</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">VS Code</span>
+            </div>
+            <div class="pt-2 text-[11px] text-muted-foreground">
+              <strong>📁 Contoh Karya:</strong> Halaman katalog beranda Shopee, tombol checkout Tokopedia, formulir pendaftaran akun.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Backend Detail -->
+      <div id="role-content-backend" class="role-panel hidden space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">⚙️</span>
+            <div>
+              <h3 class="font-extrabold text-base sm:text-lg text-foreground">2. Backend Developer (Pengembang Logika & Sistem Server)</h3>
+              <p class="text-xs text-emerald-500 font-mono font-medium">Mengelola basis data, API, otentikasi login, dan transaksi</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20">
+              💰 Rp 7 - 17 Juta/bln
+            </span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 text-xs sm:text-sm text-foreground">
+          <strong>💡 Analogi Sederhana:</strong> <em>Koki Dapur, Pipa Air & Instalasi Listrik Belakang Dinding</em> — Bekerja di balik layar yang tidak terlihat pengunjung, namun memproses pesanan, mengalirkan daya, dan mengamankan brankas.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>📌</span> <span>Tanggung Jawab Utama:</span>
+            </div>
+            <ul class="list-disc list-inside text-muted-foreground space-y-1 leading-relaxed">
+              <li>Merancang arsitektur database untuk menyimpan ribuan data user dan transaksi.</li>
+              <li>Membangun REST API untuk menghubungkan aplikasi HP/web ke server pusat.</li>
+              <li>Menjaga keamanan data, enkripsi password, dan verifikasi saldo e-wallet.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>🛠️</span> <span>Tools & Stack Teknologi:</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Node.js</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Python</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">PHP (Laravel)</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">PostgreSQL</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">MySQL</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Redis</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Postman</span>
+            </div>
+            <div class="pt-2 text-[11px] text-muted-foreground">
+              <strong>📁 Contoh Karya:</strong> Sistem pemotongan saldo GoPay, algoritma ongkir Gojek, sistem verifikasi password.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Mobile Detail -->
+      <div id="role-content-mobile" class="role-panel hidden space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20">📱</span>
+            <div>
+              <h3 class="font-extrabold text-base sm:text-lg text-foreground">3. Mobile App Developer (Pengembang Aplikasi HP)</h3>
+              <p class="text-xs text-purple-500 font-mono font-medium">Aplikasi Android & iOS yang hemat baterai dan responsif</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20">
+              💰 Rp 6.5 - 16 Juta/bln
+            </span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-purple-500/5 border border-purple-500/20 text-xs sm:text-sm text-foreground">
+          <strong>💡 Analogi Sederhana:</strong> <em>Teknisi Khusus Kendaraan Listrik Portabel</em> — Membangun kendaraan mini berdaya tinggi yang siap melaju mulus di sasis smartphone genggam.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>📌</span> <span>Tanggung Jawab Utama:</span>
+            </div>
+            <ul class="list-disc list-inside text-muted-foreground space-y-1 leading-relaxed">
+              <li>Membangun aplikasi mobile Android dan iOS yang lancar tanpa lag.</li>
+              <li>Integrasi sensor HP: Kamera, GPS peta, Biometrik sidik jari, dan notifikasi push.</li>
+              <li>Optimasi konsumsi baterai dan manajemen penyimpanan memori lokal HP.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>🛠️</span> <span>Tools & Stack Teknologi:</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Kotlin</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Flutter (Dart)</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">React Native</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Swift (iOS)</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Android Studio</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Xcode</span>
+            </div>
+            <div class="pt-2 text-[11px] text-muted-foreground">
+              <strong>📁 Contoh Karya:</strong> Aplikasi WhatsApp di PlayStore, Aplikasi Livin Mandiri / BCA Mobile, Aplikasi Instagram.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. UI/UX Detail -->
+      <div id="role-content-uiux" class="role-panel hidden space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20">🎨</span>
+            <div>
+              <h3 class="font-extrabold text-base sm:text-lg text-foreground">4. UI/UX Designer (Perancang Pengalaman Pengguna)</h3>
+              <p class="text-xs text-rose-500 font-mono font-medium">Meriset kenyamanan, alur navigasi, dan estetika antarmuka</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20">
+              💰 Rp 6 - 15 Juta/bln
+            </span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-rose-500/5 border border-rose-500/20 text-xs sm:text-sm text-foreground">
+          <strong>💡 Analogi Sederhana:</strong> <em>Arsitek & Psikolog Tata Letak Swalayan</em> — Merancang posisi lorong dan rak barang agar pembeli merasa nyaman, mudah menemukan barang, dan betah berbelanja.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>📌</span> <span>Tanggung Jawab Utama:</span>
+            </div>
+            <ul class="list-disc list-inside text-muted-foreground space-y-1 leading-relaxed">
+              <li>Melakukan riset pengguna (user research) dan wawancara kebutuhan target user.</li>
+              <li>Membuat sketsa wireframe, user flow, dan prototipe interaktif yang bisa diklik.</li>
+              <li>Menyusun Design System (standar palet warna, tipografi, dan ikon aplikasi).</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>🛠️</span> <span>Tools & Stack Teknologi:</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Figma</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Adobe XD</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">FigJam</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Miro</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Maze Testing</span>
+            </div>
+            <div class="pt-2 text-[11px] text-muted-foreground">
+              <strong>📁 Contoh Karya:</strong> Prototipe alur transaksi Gojek yang mudah dipahami kakek-nenek hingga anak muda.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Game Dev Detail -->
+      <div id="role-content-gamedev" class="role-panel hidden space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20">🎮</span>
+            <div>
+              <h3 class="font-extrabold text-base sm:text-lg text-foreground">5. Game Developer (Pengembang Gim Interaktif)</h3>
+              <p class="text-xs text-amber-500 font-mono font-medium">Memprogram mekanik gameplay, fisika, dan dunia virtual</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20">
+              💰 Rp 5.5 - 15 Juta/bln
+            </span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs sm:text-sm text-foreground">
+          <strong>💡 Analogi Sederhana:</strong> <em>Sutradara Film Interaktif & Pencipta Taman Hiburan Virtual</em> — Menciptakan dunia khayalan lengkap dengan hukum fisika, kecerdasan buatan musuh, dan jalan cerita seru.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>📌</span> <span>Tanggung Jawab Utama:</span>
+            </div>
+            <ul class="list-disc list-inside text-muted-foreground space-y-1 leading-relaxed">
+              <li>Mengodekan logika mekanik permainan (pergerakan karakter, skill hero, sistem skor).</li>
+              <li>Integrasi aset visual 2D/3D, animasi, collision hitbox, dan audio sound effect.</li>
+              <li>Optimasi Frame Per Second (FPS) agar gim berjalan mulus tanpa patah-patah.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>🛠️</span> <span>Tools & Stack Teknologi:</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Unity (C#)</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Unreal Engine (C++)</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Godot Engine</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Blender 3D</span>
+            </div>
+            <div class="pt-2 text-[11px] text-muted-foreground">
+              <strong>📁 Contoh Karya:</strong> Gim Mobile Legends, PUBG Mobile, DreadOut (gim horor karya developer Indonesia).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Data Analyst Detail -->
+      <div id="role-content-data" class="role-panel hidden space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20">📊</span>
+            <div>
+              <h3 class="font-extrabold text-base sm:text-lg text-foreground">6. Data Analyst & Engineer (Pakar Pengolah Data)</h3>
+              <p class="text-xs text-cyan-500 font-mono font-medium">Menyuling jutaan data mentah menjadi insight bisnis berharga</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20">
+              💰 Rp 6.5 - 16 Juta/bln
+            </span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-xs sm:text-sm text-foreground">
+          <strong>💡 Analogi Sederhana:</strong> <em>Detektif Data & Ahli Navigasi Kapal Bisnis</em> — Menggali jutaan data transaksi pengguna, lalu menyajikan peta insight bagi pimpinan perusahaan.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>📌</span> <span>Tanggung Jawab Utama:</span>
+            </div>
+            <ul class="list-disc list-inside text-muted-foreground space-y-1 leading-relaxed">
+              <li>Menarik data transaksi menggunakan kueri SQL dari database pusat.</li>
+              <li>Membuat dashboard visual grafik pemantauan tren performa penjualan.</li>
+              <li>Menganalisis kebiasaan belanja pengguna untuk membuat sistem rekomendasi.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>🛠️</span> <span>Tools & Stack Teknologi:</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">SQL</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Python (Pandas)</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Tableau</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Power BI</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Excel Advanced</span>
+            </div>
+            <div class="pt-2 text-[11px] text-muted-foreground">
+              <strong>📁 Contoh Karya:</strong> Algoritma FYP TikTok, Rekomendasi Film Netflix, Dashboard Tren Belanja Tokopedia.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. DevOps Detail -->
+      <div id="role-content-devops" class="role-panel hidden space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl p-2.5 rounded-xl bg-orange-500/10 border border-orange-500/20">☁️</span>
+            <div>
+              <h3 class="font-extrabold text-base sm:text-lg text-foreground">7. DevOps & Cloud Engineer (Insinyur Otomasi Server)</h3>
+              <p class="text-xs text-orange-500 font-mono font-medium">Menjamin server cloud aktif 24/7 nonstop & otomatisasi CI/CD</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20">
+              💰 Rp 8 - 20 Juta/bln
+            </span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-orange-500/5 border border-orange-500/20 text-xs sm:text-sm text-foreground">
+          <strong>💡 Analogi Sederhana:</strong> <em>Tim Pit Stop Balap F1 & Pengelola Jalan Tol Otomatis</em> — Memastikan rilis kode secepat kilat dan jalan tol server tidak pernah macet (*zero downtime*) saat diserbu jutaan pengguna.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>📌</span> <span>Tanggung Jawab Utama:</span>
+            </div>
+            <ul class="list-disc list-inside text-muted-foreground space-y-1 leading-relaxed">
+              <li>Membangun alur CI/CD otomatis agar update kode langsung rilis ke server.</li>
+              <li>Mengelola infrastruktur cloud (AWS, GCP, Docker, Kubernetes).</li>
+              <li>Menangani lonjakan pengunjung (high traffic auto-scaling) saat promo besar.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>🛠️</span> <span>Tools & Stack Teknologi:</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Linux CLI</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Docker</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Kubernetes</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">GitHub Actions</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">AWS / GCP</span>
+            </div>
+            <div class="pt-2 text-[11px] text-muted-foreground">
+              <strong>📁 Contoh Karya:</strong> Sistem server auto-scale yang membuat website tiket konser tidak roboh saat war ticket.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Product Manager Detail -->
+      <div id="role-content-pm" class="role-panel hidden space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20">👔</span>
+            <div>
+              <h3 class="font-extrabold text-base sm:text-lg text-foreground">8. Product Manager (Nakhoda & Strategi Produk Digital)</h3>
+              <p class="text-xs text-indigo-500 font-mono font-medium">Menentukan roadmap, prioritas fitur, dan memimpin tim</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20">
+              💰 Rp 8 - 22 Juta/bln
+            </span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-indigo-500/5 border border-indigo-500/20 text-xs sm:text-sm text-foreground">
+          <strong>💡 Analogi Sederhana:</strong> <em>Kapten Kapal & Konduktor Orkestra Musik</em> — Menentukan arah tujuan pelayaran, memadukan nada dari berbagai alat musik pemain agar menghasilkan simfoni lagu yang merdu.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>📌</span> <span>Tanggung Jawab Utama:</span>
+            </div>
+            <ul class="list-disc list-inside text-muted-foreground space-y-1 leading-relaxed">
+              <li>Menyusun roadmap pengembangan produk dan menentukan prioritas fitur.</li>
+              <li>Menjadi jembatan antara tim bisnis, tim desainer, dan tim engineer.</li>
+              <li>Mengukur kesuksesan produk berdasarkan respon pasar dan kepuasan pengguna.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="font-bold text-foreground font-mono flex items-center gap-1.5">
+              <span>🛠️</span> <span>Tools & Stack Teknologi:</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Jira</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Trello</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Notion</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Slack</span>
+              <span class="px-2 py-0.5 rounded bg-secondary text-foreground text-[11px] font-mono border border-border">Google Analytics</span>
+            </div>
+            <div class="pt-2 text-[11px] text-muted-foreground">
+              <strong>📁 Contoh Karya:</strong> Dokumen spesifikasi PRD fitur baru Gojek Hemat, peluncuran fitur PayLater.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Section 3: Simulator Sinergi Tim (Studi Kasus: Flash Sale 12.12 & War Tiket Konser) -->
+  <div id="section-team-synergy" class="card p-6 md:p-8 rounded-2xl border-border bg-card shadow-sm space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-4">
+      <div>
+        <span class="text-xs font-mono text-purple-500 font-bold uppercase tracking-wider">Simulasi Sinergi Industri</span>
+        <h2 class="text-xl md:text-2xl font-extrabold text-foreground tracking-tight">
+          Studi Kasus: Membangun Fitur "Flash Sale 12.12" 🛒
+        </h2>
+      </div>
+      <span class="text-xs px-2.5 py-1 rounded bg-purple-500/10 text-purple-600 dark:text-purple-400 font-mono font-bold border border-purple-500/20">
+        Alur Kerja 6 Tahap
+      </span>
+    </div>
+
+    <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">
+      Bagaimana 8 profesi bekerja sama membuat satu fitur besar dari nol sampai sukses dirilis? Klik setiap tahapan alur di bawah untuk melihat peran mereka:
+    </p>
+
+    <!-- 6 Stage Workflow Steps -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+      <button 
+        type="button" 
+        class="synergy-step-btn active p-3 rounded-xl border border-primary bg-primary/10 text-left transition-all space-y-1 hover:scale-[1.02]"
+        data-step="1"
+      >
+        <span class="text-[10px] font-mono font-bold text-primary">TAHAP 1</span>
+        <div class="text-xs font-bold text-foreground">Ide & Target</div>
+        <div class="text-[10px] text-muted-foreground">Product Manager</div>
+      </button>
+
+      <button 
+        type="button" 
+        class="synergy-step-btn p-3 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-step="2"
+      >
+        <span class="text-[10px] font-mono font-bold text-rose-500">TAHAP 2</span>
+        <div class="text-xs font-bold text-foreground">Desain UI/UX</div>
+        <div class="text-[10px] text-muted-foreground">UI/UX Designer</div>
+      </button>
+
+      <button 
+        type="button" 
+        class="synergy-step-btn p-3 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-step="3"
+      >
+        <span class="text-[10px] font-mono font-bold text-blue-500">TAHAP 3</span>
+        <div class="text-xs font-bold text-foreground">Koding UI</div>
+        <div class="text-[10px] text-muted-foreground">Frontend & Mobile</div>
+      </button>
+
+      <button 
+        type="button" 
+        class="synergy-step-btn p-3 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-step="4"
+      >
+        <span class="text-[10px] font-mono font-bold text-emerald-500">TAHAP 4</span>
+        <div class="text-xs font-bold text-foreground">Stok & Transaksi</div>
+        <div class="text-[10px] text-muted-foreground">Backend Developer</div>
+      </button>
+
+      <button 
+        type="button" 
+        class="synergy-step-btn p-3 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-step="5"
+      >
+        <span class="text-[10px] font-mono font-bold text-orange-500">TAHAP 5</span>
+        <div class="text-xs font-bold text-foreground">Auto-Scale Cloud</div>
+        <div class="text-[10px] text-muted-foreground">DevOps Engineer</div>
+      </button>
+
+      <button 
+        type="button" 
+        class="synergy-step-btn p-3 rounded-xl border border-border bg-secondary/30 text-left transition-all space-y-1 hover:border-primary/40 hover:scale-[1.02]"
+        data-step="6"
+      >
+        <span class="text-[10px] font-mono font-bold text-cyan-500">TAHAP 6</span>
+        <div class="text-xs font-bold text-foreground">Evaluasi Omzet</div>
+        <div class="text-[10px] text-muted-foreground">Data Analyst</div>
+      </button>
+    </div>
+
+    <!-- Step Details Display Panel -->
+    <div id="synergy-step-detail" class="p-5 sm:p-6 rounded-xl bg-secondary/20 border border-border space-y-3">
+      <!-- Step 1 Detail -->
+      <div id="step-content-1" class="synergy-panel space-y-2">
+        <div class="flex items-center justify-between border-b border-border/50 pb-2">
+          <span class="text-xs font-bold text-primary font-mono">1. Tahap Inisiasi Bisnis & Roadmap</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-primary/20 text-primary font-mono">Peran: Product Manager</span>
+        </div>
+        <p class="text-xs sm:text-sm text-foreground leading-relaxed">
+          Product Manager menentukan target bisnis: <em>"Kita harus meluncurkan fitur Flash Sale 12.12 dengan diskon hingga 90% pada pukul 00.00 WIB untuk 50.000 pembeli pertama."</em> PM membuat dokumen spesifikasi kebutuhan produk (PRD) dan membagikan jadwal sprint kepada seluruh anggota tim.
+        </p>
+      </div>
+
+      <!-- Step 2 Detail -->
+      <div id="step-content-2" class="synergy-panel hidden space-y-2">
+        <div class="flex items-center justify-between border-b border-border/50 pb-2">
+          <span class="text-xs font-bold text-rose-500 font-mono">2. Tahap Desain Antarmuka & Prototipe</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-500 font-mono">Peran: UI/UX Designer</span>
+        </div>
+        <p class="text-xs sm:text-sm text-foreground leading-relaxed">
+          UI/UX Designer merancang banner promo merah menyala yang menggugah selera, tata letak kartu produk diskon, dan animasi countdown timer (hitungan mundur jam, menit, detik) di Figma agar pembeli merasa antusias dan mudah menekan tombol beli.
+        </p>
+      </div>
+
+      <!-- Step 3 Detail -->
+      <div id="step-content-3" class="synergy-panel hidden space-y-2">
+        <div class="flex items-center justify-between border-b border-border/50 pb-2">
+          <span class="text-xs font-bold text-blue-500 font-mono">3. Tahap Implementasi Antarmuka Web & HP</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-blue-500/20 text-blue-500 font-mono">Peran: Frontend & Mobile Dev</span>
+        </div>
+        <p class="text-xs sm:text-sm text-foreground leading-relaxed">
+          Frontend & Mobile Developer mengubah rancangan Figma menjadi kode program React / Flutter. Mereka memastikan animasi countdown timer berjalan mulus di ribuan tipe smartphone Android dan browser web tanpa patah-patah.
+        </p>
+      </div>
+
+      <!-- Step 4 Detail -->
+      <div id="step-content-4" class="synergy-panel hidden space-y-2">
+        <div class="flex items-center justify-between border-b border-border/50 pb-2">
+          <span class="text-xs font-bold text-emerald-500 font-mono">4. Tahap Logika Stok & Pemrosesan Transaksi</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-500 font-mono">Peran: Backend Developer</span>
+        </div>
+        <p class="text-xs sm:text-sm text-foreground leading-relaxed">
+          Backend Developer membangun sistem <em>concurrency lock</em> di database. Ketika ada 10.000 orang mengklik tombol beli barang yang stoknya cuma 10 unit secara bersamaan dalam detik ke-0, backend mengunci stok agar tidak terjadi *overselling* (barang terjual lebih banyak dari stok aslinya).
+        </p>
+      </div>
+
+      <!-- Step 5 Detail -->
+      <div id="step-content-5" class="synergy-panel hidden space-y-2">
+        <div class="flex items-center justify-between border-b border-border/50 pb-2">
+          <span class="text-xs font-bold text-orange-500 font-mono">5. Tahap Kesiapan Server & Skalabilitas Cloud</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-orange-500/20 text-orange-500 font-mono">Peran: DevOps Engineer</span>
+        </div>
+        <p class="text-xs sm:text-sm text-foreground leading-relaxed">
+          DevOps Engineer mengatur *auto-scaling server* di cloud (AWS/Google Cloud). Ketika pukul 23.59 trafik melonjak dari 1.000 pengguna menjadi 100.000 pengguna serentak, server secara otomatis menggandakan kekuatannya sehingga website tidak tumbang (Error 502 Bad Gateway).
+        </p>
+      </div>
+
+      <!-- Step 6 Detail -->
+      <div id="step-content-6" class="synergy-panel hidden space-y-2">
+        <div class="flex items-center justify-between border-b border-border/50 pb-2">
+          <span class="text-xs font-bold text-cyan-500 font-mono">6. Tahap Analisis Omzet & Evaluasi Penjualan</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-500 font-mono">Peran: Data Analyst</span>
+        </div>
+        <p class="text-xs sm:text-sm text-foreground leading-relaxed">
+          Setelah event Flash Sale selesai, Data Analyst menarik data transaksi, menghitung total omzet miliaran rupiah yang masuk, produk kategori mana yang paling cepat habis, dan mempresentasikan laporan grafik ke pimpinan perusahaan untuk strategi tahun depan.
+        </p>
+      </div>
+    </div>
+
+    <!-- What-If Crisis Simulator -->
+    <div class="p-5 rounded-2xl bg-secondary/30 border border-border space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">🚨</span>
+        <h3 class="text-xs sm:text-sm font-bold text-foreground">
+          What-If Simulator: Apa yang Terjadi Jika Salah Satu Profesi Absen?
+        </h3>
+      </div>
+      <p class="text-xs text-muted-foreground">
+        Klik salah satu tombol simulasi krisis di bawah untuk melihat dampaknya pada produk:
+      </p>
+
+      <div class="flex flex-wrap gap-2">
+        <button 
+          type="button" 
+          class="whatif-btn px-3 py-1.5 rounded-lg bg-card border border-rose-500/30 text-rose-500 hover:bg-rose-500/10 text-xs font-semibold transition-all"
+          data-crisis="uiux"
+        >
+          ❌ Tanpa UI/UX Designer?
+        </button>
+        <button 
+          type="button" 
+          class="whatif-btn px-3 py-1.5 rounded-lg bg-card border border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10 text-xs font-semibold transition-all"
+          data-crisis="backend"
+        >
+          ❌ Tanpa Backend Developer?
+        </button>
+        <button 
+          type="button" 
+          class="whatif-btn px-3 py-1.5 rounded-lg bg-card border border-orange-500/30 text-orange-500 hover:bg-orange-500/10 text-xs font-semibold transition-all"
+          data-crisis="devops"
+        >
+          ❌ Tanpa DevOps Engineer?
+        </button>
+        <button 
+          type="button" 
+          class="whatif-btn px-3 py-1.5 rounded-lg bg-card border border-cyan-500/30 text-cyan-500 hover:bg-cyan-500/10 text-xs font-semibold transition-all"
+          data-crisis="data"
+        >
+          ❌ Tanpa Data Analyst?
+        </button>
+      </div>
+
+      <div id="whatif-output-box" class="p-4 rounded-xl bg-card border border-border text-xs leading-relaxed space-y-1">
+        <div class="font-bold text-foreground font-mono" id="whatif-title">💡 Pilih salah satu tombol krisis di atas untuk melihat simulasi.</div>
+        <p class="text-muted-foreground" id="whatif-desc">Setiap profesi memiliki fungsi vital. Tidak ada aplikasi sukses yang dibangun tanpa kerja sama tim.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Panduan Penugasan LKPD Tabel Eksplorasi 3 Profesi -->
+  <div class="card p-6 md:p-8 rounded-2xl border-border bg-card shadow-sm space-y-4">
+    <div class="flex items-center justify-between border-b border-border pb-3">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">📝</span>
+        <h3 class="text-base font-extrabold text-foreground">Siap Mengisi LKPD Pertemuan 2? (Tab 2)</h3>
+      </div>
+      <span class="px-2.5 py-1 rounded bg-primary/20 text-primary font-mono text-xs font-bold">
+        Reward: +25 XP
+      </span>
+    </div>
+    <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+      Setelah memahami materi di atas dan menuntaskan <strong>Quest Checkpoint 3 Ronde di bawah</strong>, buka <strong>Tab 2 (Form LKPD)</strong> untuk memilih <strong>3 Profesi Pilihan Minat Awalmu</strong>, mencatat analogi, tugas utama, dan tools yang ingin kamu pelajari.
+    </p>
+  </div>
+
+</div>
+
+<!-- Client Interactive Behavior Script -->
+<script>
+// Robust delegated event handler for all Interactive Material P2 controls
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (!target) return;
+
+    // 1. Setup Warm-Up Riddles Toggle
+    const riddleBtn = target.closest<HTMLElement>('.riddle-toggle-btn, [data-riddle-btn]');
+    if (riddleBtn) {
+      e.preventDefault();
+      const targetId = riddleBtn.getAttribute('data-target');
+      if (!targetId) return;
+      const answer = document.getElementById(targetId);
+      const icon = riddleBtn.querySelector('.riddle-icon');
+      const label = riddleBtn.querySelector('.riddle-btn-label');
+      
+      if (answer) {
+        const isHidden = answer.classList.contains('hidden');
+        if (isHidden) {
+          answer.classList.remove('hidden');
+          riddleBtn.classList.add('border-primary', 'text-foreground', 'bg-primary/5');
+          riddleBtn.setAttribute('aria-expanded', 'true');
+          if (icon) icon.textContent = '▲';
+          if (label) label.textContent = '🙈 Tutup Jawaban';
+        } else {
+          answer.classList.add('hidden');
+          riddleBtn.classList.remove('border-primary', 'text-foreground', 'bg-primary/5');
+          riddleBtn.setAttribute('aria-expanded', 'false');
+          if (icon) icon.textContent = '▼';
+          if (label) label.textContent = '👉 Buka Jawaban';
+        }
+      }
+      return;
+    }
+
+    // 2. Setup 8 Roles Inspector
+    const roleCard = target.closest<HTMLElement>('.role-card');
+    if (roleCard) {
+      e.preventDefault();
+      const role = roleCard.getAttribute('data-role');
+      if (!role) return;
+
+      document.querySelectorAll('.role-card').forEach((c) => {
+        c.classList.remove('active', 'border-primary', 'bg-primary/10', 'shadow-sm');
+        c.classList.add('border-border', 'bg-secondary/30');
+      });
+      roleCard.classList.remove('border-border', 'bg-secondary/30');
+      roleCard.classList.add('active', 'border-primary', 'bg-primary/10', 'shadow-sm');
+
+      document.querySelectorAll('.role-panel').forEach((panel) => {
+        panel.classList.add('hidden');
+      });
+      const targetPanel = document.getElementById(`role-content-${role}`);
+      if (targetPanel) {
+        targetPanel.classList.remove('hidden');
+      }
+      return;
+    }
+
+    // 3. Setup Synergy 6-Steps Workflow
+    const stepBtn = target.closest<HTMLElement>('.synergy-step-btn');
+    if (stepBtn) {
+      e.preventDefault();
+      const step = stepBtn.getAttribute('data-step');
+      if (!step) return;
+
+      document.querySelectorAll('.synergy-step-btn').forEach((b) => {
+        b.classList.remove('active', 'border-primary', 'bg-primary/10');
+        b.classList.add('border-border', 'bg-secondary/30');
+      });
+      stepBtn.classList.remove('border-border', 'bg-secondary/30');
+      stepBtn.classList.add('active', 'border-primary', 'bg-primary/10');
+
+      document.querySelectorAll('.synergy-panel').forEach((panel) => {
+        panel.classList.add('hidden');
+      });
+      const targetPanel = document.getElementById(`step-content-${step}`);
+      if (targetPanel) {
+        targetPanel.classList.remove('hidden');
+      }
+      return;
+    }
+
+    // 4. Setup What-If Crisis Simulator
+    const whatifBtn = target.closest<HTMLElement>('.whatif-btn');
+    if (whatifBtn) {
+      e.preventDefault();
+      const crisis = whatifBtn.getAttribute('data-crisis');
+      if (!crisis) return;
+
+      const crisisData = {
+        uiux: {
+          title: '🚨 Krisis: Aplikasi Canggih tapi Bikin Pusing (Tanpa UI/UX)',
+          desc: 'Fitur backend dan database sangat cepat, tetapi letak tombol checkout tersembunyi, warna teks bertabrakan, dan formulir membingungkan. Akibatnya, 80% calon pembeli menutup aplikasi dan membatalkan pesanan karena frustrasi.',
+          color: 'border-rose-500/40'
+        },
+        backend: {
+          title: '🚨 Krisis: Tombol Ada tapi Tidak Berfungsi (Tanpa Backend)',
+          desc: 'Tampilan antarmuka sangat estetik dan animasi tombol berjalan indah, tetapi ketika tombol "Beli Sekarang" ditekan, saldo tidak berkurang, data pesanan tidak tersimpan, dan barang tidak pernah dikirim karena tidak ada server pengolah transaksi.',
+          color: 'border-emerald-500/40'
+        },
+        devops: {
+          title: '🚨 Krisis: Server Jebol Error 502 Bad Gateway (Tanpa DevOps)',
+          desc: 'Tepat pukul 00.00 saat 100.000 pengunjung menyerbu Flash Sale secara serentak, server tunggal kehabisan memori dan langsung mati total (crash). Calon pembeli marah di media sosial dan reputasi perusahaan hancur seketika.',
+          color: 'border-orange-500/40'
+        },
+        data: {
+          title: '🚨 Krisis: Buta Arah Bisnis & Stok Menumpuk (Tanpa Data Analyst)',
+          desc: 'Perusahaan tidak tahu barang mana yang paling diminati pembeli dan jam berapa mereka paling sering belanja. Akibatnya, jutaan stok barang yang tidak laku menumpuk di gudang dan perusahaan menderita kerugian besar.',
+          color: 'border-cyan-500/40'
+        }
+      };
+
+      const data = crisisData[crisis];
+      const whatifTitle = document.getElementById('whatif-title');
+      const whatifDesc = document.getElementById('whatif-desc');
+      const whatifContainer = document.getElementById('whatif-output-box');
+      if (data && whatifTitle && whatifDesc && whatifContainer) {
+        whatifTitle.textContent = data.title;
+        whatifDesc.textContent = data.desc;
+        whatifContainer.className = `p-4 rounded-xl bg-card border ${data.color} text-xs leading-relaxed space-y-1 transition-all`;
+      }
+      return;
+    }
+  });
+</script>

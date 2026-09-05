@@ -146,3 +146,27 @@ class PembelajaranModuleTestCase(TestCase):
         self.assertEqual(submission.teacher_level, 'Level 3')
         self.assertEqual(submission.teacher_score, 90)
         self.assertEqual(submission.graded_by, self.teacher)
+
+    def test_all_interactive_modules_render(self):
+        """Memverifikasi bahwa seluruh modul 1 s/d 16 dapat me-render template interaktifnya tanpa error."""
+        self.client.login(username='guru_agung', password='password123')
+        for i in range(1, 17):
+            m, _ = Modul.objects.get_or_create(
+                urutan=i,
+                defaults={
+                    'kode': f'OR-{i:02d}',
+                    'judul': f'Modul Pembelajaran {i:02d}',
+                    'slug': f'orientasi-pplg-{i:02d}-test',
+                    'kategori': f'Orientasi PPLG (OR-{i:02d})',
+                    'level': 'Pemula',
+                    'durasi': '2 JP (90 Menit)',
+                    'deskripsi': f'Deskripsi modul {i}',
+                    'content_materi': f'## Materi Modul {i}',
+                    'teacher_tip': f'Tip Guru untuk Modul {i}',
+                    'is_published': True,
+                }
+            )
+            response = self.client.get(reverse('pembelajaran:modul_detail', kwargs={'slug': m.slug}))
+            self.assertEqual(response.status_code, 200, f"Modul {i} failed to render")
+            self.assertContains(response, 'checkpoint-challenge-area')
+

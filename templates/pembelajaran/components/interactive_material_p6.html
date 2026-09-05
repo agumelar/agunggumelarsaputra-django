@@ -1,0 +1,178 @@
+<div class="interactive-material-p6 space-y-8" id="interactive-p6-root">
+
+  <!-- SCENE 1: SMART Goal Checklist -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-fuchsia-500/10 via-purple-500/5 to-transparent border border-fuchsia-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-fuchsia-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-fuchsia-500/20 text-fuchsia-500 font-bold text-xs font-mono">SCENE 01</span>
+        <h3 class="text-lg font-bold text-foreground">Validasi Target SMART</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Uji rencana kariermu dengan mencentang 5 elemen penting dalam metode SMART. Rencana yang baik harus memenuhi semua kriteria ini.
+      </p>
+
+      <div class="space-y-3" id="smart-checklist">
+        <!-- Checklist items -->
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-fuchsia-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="smart-cb mt-1 h-5 w-5 rounded border-border text-fuchsia-600 focus:ring-fuchsia-500" data-index="0" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400 transition-colors">🎯 Specific (Spesifik)</div>
+            <p class="text-xs text-muted-foreground mt-1">Sebutkan profesi atau skill teknis yang jelas. Hindari kata-kata yang terlalu umum seperti "orang sukses di IT".</p>
+          </div>
+        </label>
+        
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-fuchsia-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="smart-cb mt-1 h-5 w-5 rounded border-border text-fuchsia-600 focus:ring-fuchsia-500" data-index="1" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400 transition-colors">📏 Measurable (Terukur)</div>
+            <p class="text-xs text-muted-foreground mt-1">Tentukan bukti kemajuan yang dapat dihitung. Misalnya: "Membuat 3 halaman web" atau "Mengerjakan 10 soal algoritma".</p>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-fuchsia-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="smart-cb mt-1 h-5 w-5 rounded border-border text-fuchsia-600 focus:ring-fuchsia-500" data-index="2" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400 transition-colors">✅ Achievable (Dapat Dicapai)</div>
+            <p class="text-xs text-muted-foreground mt-1">Sesuaikan target dengan kemampuan dan waktu yang tersedia. Target harus tetap realistis namun cukup menantang.</p>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-fuchsia-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="smart-cb mt-1 h-5 w-5 rounded border-border text-fuchsia-600 focus:ring-fuchsia-500" data-index="3" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400 transition-colors">🔗 Relevant (Relevan)</div>
+            <p class="text-xs text-muted-foreground mt-1">Hubungkan target dengan minat utamamu dan prospek kurikulum PPLG. Alasan yang kuat menjaga motivasi belajar.</p>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-fuchsia-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="smart-cb mt-1 h-5 w-5 rounded border-border text-fuchsia-600 focus:ring-fuchsia-500" data-index="4" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400 transition-colors">⏱️ Time-bound (Batas Waktu)</div>
+            <p class="text-xs text-muted-foreground mt-1">Tetapkan batas waktu penyelesaian per semester atau per tahun. Tenggat waktu mengubah niat menjadi tindakan nyata.</p>
+          </div>
+        </label>
+      </div>
+
+      <!-- Feedback Area -->
+      <div id="smart-progress-container" class="mt-4">
+        <div class="flex justify-between text-xs font-medium text-muted-foreground mb-2">
+          <span>Kesiapan SMART</span>
+          <span id="smart-percent">0%</span>
+        </div>
+        <div class="w-full bg-secondary h-2.5 rounded-full overflow-hidden">
+          <div id="smart-bar" class="bg-fuchsia-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div id="smart-success" class="hidden mt-4 p-4 rounded-xl bg-fuchsia-500/10 border border-fuchsia-500/30 text-center animate-in fade-in" role="status" aria-live="polite">
+        <h4 class="font-bold text-fuchsia-500">Hebat! Rencanamu SMART 🎯</h4>
+        <p class="text-xs text-muted-foreground mt-1">Formula SMART membuat rencana minat awal dapat diperiksa, direvisi, dan dijalankan dengan jelas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: Langkah Pertama Terukur -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-transparent border border-cyan-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute bottom-0 right-0 w-40 h-40 bg-cyan-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-cyan-500/20 text-cyan-500 font-bold text-xs font-mono">SCENE 02</span>
+        <h3 class="text-lg font-bold text-foreground">Pilih Langkah Awal Terukur</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Pilih tindakan awal yang paling realistis sesuai dengan profil keahlian yang ingin kamu tuju.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="step-container">
+        <!-- Rute Options -->
+        <button type="button" class="step-btn text-left p-4 rounded-xl border border-border bg-card hover:border-cyan-500/50 transition-all focus-visible:outline-cyan-400" data-step="frontend">
+          <div class="font-bold text-sm mb-1 text-cyan-600 dark:text-cyan-400">🎨 Minat Frontend</div>
+          <p class="text-xs text-muted-foreground">Buat satu halaman profil responsif statis bulan ini.</p>
+        </button>
+        <button type="button" class="step-btn text-left p-4 rounded-xl border border-border bg-card hover:border-cyan-500/50 transition-all focus-visible:outline-cyan-400" data-step="data">
+          <div class="font-bold text-sm mb-1 text-cyan-600 dark:text-cyan-400">📊 Minat Data</div>
+          <p class="text-xs text-muted-foreground">Selesaikan 5 latihan kueri dasar SQL minggu ini.</p>
+        </button>
+        <button type="button" class="step-btn text-left p-4 rounded-xl border border-border bg-card hover:border-cyan-500/50 transition-all focus-visible:outline-cyan-400" data-step="uiux">
+          <div class="font-bold text-sm mb-1 text-cyan-600 dark:text-cyan-400">✨ Minat UI/UX</div>
+          <p class="text-xs text-muted-foreground">Rancang ulang (redesign) satu layar aplikasi di Figma.</p>
+        </button>
+        <button type="button" class="step-btn text-left p-4 rounded-xl border border-border bg-card hover:border-cyan-500/50 transition-all focus-visible:outline-cyan-400" data-step="game">
+          <div class="font-bold text-sm mb-1 text-cyan-600 dark:text-cyan-400">🎮 Minat Game</div>
+          <p class="text-xs text-muted-foreground">Buat satu mekanik pergerakan karakter sederhana (WASD) di game engine.</p>
+        </button>
+        <button type="button" class="step-btn md:col-span-2 text-left p-4 rounded-xl border border-border bg-card hover:border-cyan-500/50 transition-all focus-visible:outline-cyan-400" data-step="qa">
+          <div class="font-bold text-sm mb-1 text-cyan-600 dark:text-cyan-400">🔍 Minat QA / Testing</div>
+          <p class="text-xs text-muted-foreground">Tuliskan lima skenario uji (test cases) untuk fitur login aplikasi sekolah.</p>
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="step-display" class="hidden p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20" role="status" aria-live="polite">
+        <h4 class="font-bold text-cyan-600 dark:text-cyan-400 mb-1">Aksi Realistis!</h4>
+        <p id="step-feedback" class="text-xs text-foreground italic">...</p>
+        <p class="text-xs text-muted-foreground mt-2 border-t border-cyan-500/20 pt-2">Langkah pertama yang paling baik selalu memiliki karya atau hasil kerja yang dapat dilihat dan dievaluasi dengan tenggat waktu jelas.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// SCENE 1 Logic (SMART Checklist)
+  const smartCheckboxes = document.querySelectorAll<HTMLInputElement>('.smart-cb');
+  const smartBar = document.getElementById('smart-bar');
+  const smartPercent = document.getElementById('smart-percent');
+  const smartSuccess = document.getElementById('smart-success');
+
+  function updateSmartProgress() {
+    const total = smartCheckboxes.length;
+    const checked = Array.from(smartCheckboxes).filter(cb => cb.checked).length;
+    const percentage = Math.round((checked / total) * 100);
+
+    smartBar.style.width = `${percentage}%`;
+    smartPercent.textContent = `${percentage}%`;
+
+    if (percentage === 100) {
+      smartSuccess.classList.remove('hidden');
+    } else {
+      smartSuccess.classList.add('hidden');
+    }
+  }
+
+  smartCheckboxes.forEach(cb => {
+    cb.addEventListener('change', updateSmartProgress);
+  });
+
+  // SCENE 2 Logic
+  const stepData = {
+    'frontend': 'Karya web portofolio kecil ini menjadi bukti awal pemahaman dasar HTML, CSS, dan tata letak responsif.',
+    'data': 'Latihan SQL dasar sangat efektif untuk melatih logika berpikir tabel relasional sebelum masuk ke bahasa backend yang lebih rumit.',
+    'uiux': 'Redesign membantu mengasah empati pengguna dan ketajaman mata (visual sense) terhadap ruang dan warna tanpa perlu coding.',
+    'game': 'Mekanik dasar ini membuktikan kemampuan menggabungkan logika matematika, vektor, dan script di engine game nyata.',
+    'qa': 'Dokumen skenario uji melatih pola pikir preventif; QA yang baik memikirkan berbagai kasus ekstrem yang mungkin terjadi pada pengguna sesungguhnya.'
+  };
+
+  const stepBtns = document.querySelectorAll('.step-btn');
+  const stepDisplay = document.getElementById('step-display');
+  const stepFeedback = document.getElementById('step-feedback');
+
+  stepBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-step');
+      if (target && stepData[target]) {
+        stepBtns.forEach(b => b.classList.remove('ring-2', 'ring-cyan-500', 'bg-cyan-500/5'));
+        btn.classList.add('ring-2', 'ring-cyan-500', 'bg-cyan-500/5');
+        
+        stepFeedback.textContent = stepData[target];
+        stepDisplay.classList.remove('hidden');
+      }
+    });
+  });
+</script>

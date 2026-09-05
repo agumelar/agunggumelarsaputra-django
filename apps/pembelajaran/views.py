@@ -5,6 +5,8 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.utils import timezone
 from django.http import HttpResponse, JsonResponse
+from django.template.loader import get_template
+from django.template.exceptions import TemplateDoesNotExist
 
 from .models import Modul, UserSubmission, UserProgress
 from .forms import LkpdSubmissionForm, ReflectionSubmissionForm
@@ -124,6 +126,12 @@ def modul_detail_view(request, slug):
     lkpd_guide = get_lkpd_guide_for_module(modul.slug, modul.judul)
 
     is_modul_1 = (modul.urutan == 1 or modul.slug == 'orientasi-pplg-01-pengantar-skill-passport')
+    interactive_template = f"pembelajaran/components/interactive_material_p{modul.urutan}.html"
+    try:
+        get_template(interactive_template)
+    except TemplateDoesNotExist:
+        interactive_template = None
+
     lkpd_audit_rows = []
     if lkpd_submission and isinstance(lkpd_submission.form_data, dict):
         lkpd_audit_rows = lkpd_submission.form_data.get('audit_table', [])
@@ -140,6 +148,7 @@ def modul_detail_view(request, slug):
         'quest_json': quest_json,
         'lkpd_guide': lkpd_guide,
         'is_modul_1': is_modul_1,
+        'interactive_template': interactive_template,
         'lkpd_audit_rows_json': lkpd_audit_rows_json,
         'lkpd_submission': lkpd_submission,
         'reflection_submission': reflection_submission,

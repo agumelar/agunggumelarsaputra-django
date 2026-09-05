@@ -1,0 +1,190 @@
+<div class="interactive-material-p15 space-y-8" id="interactive-p15-root">
+
+  <!-- SCENE 1: Cek Kesiapan Portofolio (Checklist) -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-green-500/5 to-transparent border border-emerald-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold text-xs font-mono">SCENE 01</span>
+        <h3 class="text-lg font-bold text-foreground">Cek Kesiapan Portofolio</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Audit evidence portofolio review aplikasimu sebelum pengumpulan akhir Sprint 2. Kesiapan portofolio berarti isi, bukti, dan format sudah tervalidasi.
+      </p>
+
+      <div class="space-y-3" id="porto-checklist">
+        <!-- Checklist items -->
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-emerald-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="porto-cb mt-1 h-5 w-5 rounded border-border text-emerald-600 focus:ring-emerald-500" data-index="0" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Enam Komponen Lengkap</div>
+            <p class="text-xs text-muted-foreground mt-1">Review mencakup identitas hingga rekomendasi. Kelengkapan menjadi dasar penilaian.</p>
+          </div>
+        </label>
+        
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-emerald-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="porto-cb mt-1 h-5 w-5 rounded border-border text-emerald-600 focus:ring-emerald-500" data-index="1" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Analisis Fungsi</div>
+            <p class="text-xs text-muted-foreground mt-1">Jelaskan alur fungsi utama produk. Tambahkan kasus nyata bila memungkinkan.</p>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-emerald-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="porto-cb mt-1 h-5 w-5 rounded border-border text-emerald-600 focus:ring-emerald-500" data-index="2" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Bukti UI/UX</div>
+            <p class="text-xs text-muted-foreground mt-1">Sertakan screenshot beranotasi. Bukti visual menguatkan observasi.</p>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-emerald-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="porto-cb mt-1 h-5 w-5 rounded border-border text-emerald-600 focus:ring-emerald-500" data-index="3" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Rekomendasi Solutif</div>
+            <p class="text-xs text-muted-foreground mt-1">Berikan saran yang logis dan dapat diterapkan. Hindari saran yang terlalu umum.</p>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:bg-emerald-500/5 cursor-pointer transition-all group">
+          <input type="checkbox" class="porto-cb mt-1 h-5 w-5 rounded border-border text-emerald-600 focus:ring-emerald-500" data-index="4" />
+          <div>
+            <div class="font-bold text-sm group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">PDF Final</div>
+            <p class="text-xs text-muted-foreground mt-1">Siapkan satu file laporan yang siap unggah. Pastikan file dapat dibuka sebelum dikirim.</p>
+          </div>
+        </label>
+      </div>
+
+      <!-- Feedback Area -->
+      <div id="porto-progress-container" class="mt-4">
+        <div class="flex justify-between text-xs font-medium text-muted-foreground mb-2">
+          <span>Kesiapan Pengumpulan</span>
+          <span id="porto-percent">0%</span>
+        </div>
+        <div class="w-full bg-secondary h-2.5 rounded-full overflow-hidden">
+          <div id="porto-bar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div id="porto-success" class="hidden mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center animate-in fade-in" role="status" aria-live="polite">
+        <h4 class="font-bold text-emerald-600 dark:text-emerald-400">Portofolio Tervalidasi! 📁</h4>
+        <p class="text-xs text-muted-foreground mt-1">Kesiapan portofolio berarti isi, bukti, dan format sudah tervalidasi.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: Urutkan Pengiriman Evidence (Sequence) -->
+  <section class="p-5 rounded-2xl bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-transparent border border-amber-500/20 shadow-sm relative overflow-hidden">
+    <div class="absolute bottom-0 right-0 w-40 h-40 bg-amber-500/10 blur-3xl rounded-full"></div>
+    
+    <div class="relative z-10 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="p-2 rounded-lg bg-amber-500/20 text-amber-500 font-bold text-xs font-mono">SCENE 02</span>
+        <h3 class="text-lg font-bold text-foreground">Urutkan Pengiriman Evidence</h3>
+      </div>
+      
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Susun prosedur pengumpulan secara berurutan agar portofoliomu valid dan dapat dinilai oleh guru.
+      </p>
+
+      <div class="space-y-2" id="val-container">
+        <!-- Buttons will be generated by script -->
+      </div>
+      
+      <div id="val-success" class="hidden p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-center animate-in zoom-in" role="status" aria-live="polite">
+        <div class="text-3xl mb-2">🚀</div>
+        <h4 class="font-bold text-green-500">Urutan Pengiriman Tepat!</h4>
+        <p class="text-xs text-muted-foreground mt-1">Validasi akses adalah langkah penting sebelum menyatakan evidence terkumpul.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// SCENE 1 Logic (Checklist)
+  const portoCheckboxes = document.querySelectorAll<HTMLInputElement>('.porto-cb');
+  const portoBar = document.getElementById('porto-bar');
+  const portoPercent = document.getElementById('porto-percent');
+  const portoSuccess = document.getElementById('porto-success');
+
+  function updatePortoProgress() {
+    const total = portoCheckboxes.length;
+    const checked = Array.from(portoCheckboxes).filter(cb => cb.checked).length;
+    const percentage = Math.round((checked / total) * 100);
+
+    portoBar.style.width = `${percentage}%`;
+    portoPercent.textContent = `${percentage}%`;
+
+    if (percentage === 100) {
+      portoSuccess.classList.remove('hidden');
+    } else {
+      portoSuccess.classList.add('hidden');
+    }
+  }
+
+  portoCheckboxes.forEach(cb => {
+    cb.addEventListener('change', updatePortoProgress);
+  });
+
+  // SCENE 2 Logic (Sequence)
+  const valSteps = [
+    { id: 'step-1', label: '1. Periksa nama file', detail: 'Gunakan format [NIS]_[Nama]_OR-02_ReviewAplikasi.pdf.' },
+    { id: 'step-2', label: '2. Unggah PDF', detail: 'Masukkan file ke folder Drive portofoliomu.' },
+    { id: 'step-3', label: '3. Atur akses file', detail: 'Pilih "Anyone with the link can view".' },
+    { id: 'step-4', label: '4. Salin link', detail: 'Ambil tautan file yang sudah diatur hak akses publiknya.' },
+    { id: 'step-5', label: '5. Klaim penyelesaian', detail: 'Masukkan link pada form modul ini sebagai bukti penyelesaian.' }
+  ];
+
+  let currentValIndex = 0;
+  const valContainer = document.getElementById('val-container');
+  const valSuccess = document.getElementById('val-success');
+
+  function renderValSteps() {
+    valContainer.innerHTML = '';
+    valSteps.forEach((step, index) => {
+      const isLocked = index > currentValIndex;
+      const isCompleted = index < currentValIndex;
+      const isCurrent = index === currentValIndex;
+      
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `w-full text-left p-3 sm:p-4 rounded-xl border flex items-center justify-between transition-all focus-visible:outline-amber-400 ${
+        isCompleted ? 'bg-amber-500/20 border-amber-500/50 text-foreground opacity-70' :
+        isCurrent ? 'bg-amber-500 text-amber-950 font-bold border-amber-600 shadow-md transform hover:-translate-y-1' :
+        'bg-secondary/30 border-border text-muted-foreground opacity-50 cursor-not-allowed'
+      }`;
+      
+      btn.innerHTML = `
+        <div class="flex items-center gap-3">
+          <div class="${isCompleted ? 'text-amber-500' : isCurrent ? 'text-amber-950' : 'text-muted-foreground'} font-bold">
+            ${isCompleted ? '✓' : isCurrent ? '▶' : '🔒'}
+          </div>
+          <div>
+            <div class="text-sm ${isCurrent ? 'font-bold' : 'font-semibold'}">${step.label}</div>
+            ${isCompleted || isCurrent ? `<div class="text-xs ${isCurrent ? 'text-amber-900/80' : 'text-muted-foreground'} mt-1">${step.detail}</div>` : ''}
+          </div>
+        </div>
+      `;
+
+      if (isCurrent) {
+        btn.addEventListener('click', () => {
+          currentValIndex++;
+          renderValSteps();
+          if (currentValIndex >= valSteps.length) {
+            setTimeout(() => {
+              valSuccess.classList.remove('hidden');
+            }, 300);
+          }
+        });
+      }
+
+      valContainer.appendChild(btn);
+    });
+  }
+
+  // Initialize
+  renderValSteps();
+</script>
