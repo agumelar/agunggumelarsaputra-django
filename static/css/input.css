@@ -87,6 +87,11 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--md-sys-color-surface-container-highest);
   }
+
+  /* Prevent Alpine.js layout shift / FOUC */
+  [x-cloak] {
+    display: none !important;
+  }
 }
 
 @layer components {
@@ -140,4 +145,17 @@
     background-color: var(--md-sys-color-surface-container-high);
     color: var(--foreground);
   }
+}
+
+/* Anti Copy-Paste Guardian Field Shake Animation */
+@keyframes field-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.shake-warning {
+  animation: field-shake 0.4s ease-in-out !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important;
 }

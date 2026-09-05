@@ -206,7 +206,7 @@
         <div class="m3-surface p-6 sm:p-8 space-y-4 rounded-3xl">
             <h3 class="text-base font-bold font-display text-foreground">Form Jurnal Refleksi 3 Pertanyaan</h3>
 
-            <form hx-post="{% url 'pembelajaran:submit_refleksi' modul.slug %}" hx-target="#reflection-response-container" class="space-y-4 text-xs">
+            <form id="form-reflection" data-no-paste="true" hx-post="{% url 'pembelajaran:submit_refleksi' modul.slug %}" hx-target="#reflection-response-container" class="space-y-4 text-xs">
                 {% csrf_token %}
 
                 <div class="space-y-1.5">
@@ -329,29 +329,168 @@
 
     </div>
 
+    <!-- Anti-Copy-Paste Notification Toast (M3 High Craft) -->
+    <div
+        id="anti-paste-toast"
+        class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 pointer-events-none transition-all duration-300 flex items-start gap-3 p-4 rounded-2xl bg-[#090d16]/95 dark:bg-[#090d16]/95 border border-amber-500/40 shadow-2xl text-foreground font-sans max-w-sm sm:max-w-md backdrop-blur-md"
+        role="alert"
+        aria-live="assertive"
+    >
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 dark:text-amber-400 border border-amber-500/30 flex items-center justify-center text-xl shrink-0 shadow-inner">
+            ✍️
+        </div>
+        <div class="space-y-1 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-foreground text-sm tracking-tight">Wajib Diketik Mandiri</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold uppercase">
+                    No Paste
+                </span>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-xs">
+                Untuk mengasah pemahaman konsep dan integritas belajar, isian lembar kerja / refleksi ini <strong>wajib diketik sendiri</strong> secara mandiri.
+            </p>
+            <div class="text-[11px] text-amber-600 dark:text-amber-400/90 font-mono pt-1">
+                💡 <em>Fitur copy-paste hanya aktif pada kolom identitas siswa dan URL evidence.</em>
+            </div>
+        </div>
+    </div>
+
     <!-- Anti Copy-Paste Guardian Script for Form Integrity -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const restrictedSelectors = [
-                'textarea[name="work_summary"]',
-                'textarea[name="additional_notes"]',
-                'textarea[name="understanding"]',
-                'textarea[name="obstacle"]',
-                'textarea[name="action_plan"]'
-            ];
-            restrictedSelectors.forEach(function(sel) {
-                const el = document.querySelector(sel);
-                if (el) {
-                    el.addEventListener('paste', function(e) {
-                        e.preventDefault();
-                        alert('⚠️ Integritas Pembelajaran: Isian analisis LKPD & Jurnal Refleksi wajib diketik secara mandiri.');
-                    });
-                    el.addEventListener('drop', function(e) {
-                        e.preventDefault();
-                    });
+        (function initAntiCopyPaste() {
+            let toastTimeout = null;
+
+            function showToast() {
+                const toast = document.getElementById('anti-paste-toast');
+                if (!toast) return;
+
+                toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+                toast.classList.add('translate-y-0', 'opacity-100');
+
+                if (toastTimeout) {
+                    clearTimeout(toastTimeout);
                 }
-            });
-        });
+
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+                }, 4000);
+            }
+
+            function flashField(element) {
+                element.classList.add('shake-warning');
+                setTimeout(() => {
+                    element.classList.remove('shake-warning');
+                }, 600);
+            }
+
+            const PASTE_ALLOWED_FIELD_NAMES = new Set([
+                'student_name',
+                'student_nis',
+                'student_class',
+                'submission_date',
+                'studentname',
+                'studentnis',
+                'studentclass',
+                'submissiondate',
+                'drive_url',
+                'driveurl',
+                'evidencedriveurl',
+                'vacancyevidenceurl',
+                'positivescreenshoturl',
+                'negativescreenshoturl',
+                'gen_studentname',
+                'gen_studentnis',
+                'gen_studentclass',
+                'gen_submissiondate',
+                'gen_driveurl',
+                'gen_vacancyevidenceurl',
+                'gen_positivescreenshoturl',
+                'gen_negativescreenshoturl'
+            ]);
+
+            function isPasteAllowed(el) {
+                if (el.dataset && el.dataset.allowPaste === 'true') {
+                    return true;
+                }
+                if (el.classList && el.classList.contains('allow-paste')) {
+                    return true;
+                }
+
+                const name = (el.getAttribute('name') || '').toLowerCase();
+                const id = (el.getAttribute('id') || '').toLowerCase();
+
+                if (PASTE_ALLOWED_FIELD_NAMES.has(name) || PASTE_ALLOWED_FIELD_NAMES.has(id)) {
+                    return true;
+                }
+
+                if (el.getAttribute('type') === 'url') {
+                    return true;
+                }
+
+                const isLearningTask = el.closest('#form-lkpd-p1') ||
+                                       el.closest('#form-general-lkpd') ||
+                                       el.closest('#form-reflection') ||
+                                       el.closest('.lkpd-form-content') ||
+                                       el.closest('[data-no-paste="true"]');
+
+                if (!isLearningTask) {
+                    return true;
+                }
+
+                return false;
+            }
+
+            document.addEventListener('paste', function(e) {
+                const target = e.target;
+                if (!target) return;
+
+                const isTextEntry = target.tagName === 'TEXTAREA' ||
+                                    (target.tagName === 'INPUT' && !['checkbox', 'radio', 'button', 'submit', 'range', 'color'].includes(target.type));
+
+                if (isTextEntry && !isPasteAllowed(target)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    flashField(target);
+                    showToast();
+                }
+            }, true);
+
+            document.addEventListener('drop', function(e) {
+                const target = e.target;
+                if (!target) return;
+
+                const isTextEntry = target.tagName === 'TEXTAREA' ||
+                                    (target.tagName === 'INPUT' && !['checkbox', 'radio', 'button', 'submit', 'range', 'color'].includes(target.type));
+
+                if (isTextEntry && !isPasteAllowed(target)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    flashField(target);
+                    showToast();
+                }
+            }, true);
+
+            document.addEventListener('keydown', function(e) {
+                const target = e.target;
+                if (!target) return;
+
+                const isTextEntry = target.tagName === 'TEXTAREA' ||
+                                    (target.tagName === 'INPUT' && !['checkbox', 'radio', 'button', 'submit', 'range', 'color'].includes(target.type));
+
+                if (!isTextEntry) return;
+
+                const isPasteCombo = ((e.ctrlKey || e.metaKey) && e.key && e.key.toLowerCase() === 'v') ||
+                                     (e.shiftKey && e.key === 'Insert');
+
+                if (isPasteCombo && !isPasteAllowed(target)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    flashField(target);
+                    showToast();
+                }
+            }, true);
+        })();
     </script>
 
 </div>

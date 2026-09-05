@@ -265,6 +265,13 @@ def submit_lkpd_view(request, slug):
         return render(request, 'pembelajaran/partials/lkpd_status.html', context)
 
     drive_url = request.POST.get('drive_url', '').strip()
+    if not drive_url:
+        # Fallback ke field evidence URL lain dari skema jika ada (misal: vacancyEvidenceUrl, positiveScreenshotUrl)
+        for k, v in request.POST.items():
+            if 'url' in k.lower() and isinstance(v, str) and v.strip().startswith('http'):
+                drive_url = v.strip()
+                break
+
     work_summary = request.POST.get('work_summary', '').strip()
     additional_notes = request.POST.get('additional_notes', '').strip()
 
@@ -272,7 +279,7 @@ def submit_lkpd_view(request, slug):
         return render(request, 'pembelajaran/partials/lkpd_status.html', {
             'modul': modul,
             'success': False,
-            'message': 'Link folder Google Drive Evidence wajib diisi.',
+            'message': 'Link folder Google Drive / evidence portofolio wajib diisi.',
         })
 
     is_modul_1 = (modul.urutan == 1 or modul.slug == 'orientasi-pplg-01-pengantar-skill-passport')

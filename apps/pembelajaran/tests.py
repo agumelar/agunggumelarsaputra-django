@@ -210,4 +210,66 @@ class PembelajaranModuleTestCase(TestCase):
         self.assertEqual(sub.form_data['priorityProfession'], 'Backend Developer')
         self.assertEqual(sub.form_data['schema_answers']['profession1Tools'], 'Python, Django, PostgreSQL')
 
+    def test_lkpd_anti_copy_paste_and_evidence_fallback(self):
+        """Memverifikasi kehadiran AntiCopyPasteGuardian toast dan fallback URL evidence."""
+        self.client.login(username='siswa_fauzi', password='password123')
+        
+        # 1. Verifikasi halaman modul memuat AntiCopyPasteGuardian toast dan tidak ada alert() lama
+        response = self.client.get(reverse('pembelajaran:modul_detail', kwargs={'slug': self.modul.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'anti-paste-toast')
+        self.assertContains(response, 'initAntiCopyPaste')
+        self.assertNotContains(response, "alert('⚠️ Integritas Pembelajaran")
+
+        # 2. Test fallback URL evidence (drive_url kosong, tetapi vacancyEvidenceUrl terisi)
+        modul4, _ = Modul.objects.get_or_create(
+            urutan=4,
+            defaults={
+                'kode': 'OR-04',
+                'judul': 'Matriks Kebutuhan Skill & Lowongan Kerja Nyata',
+                'slug': 'orientasi-pplg-04-matriks-skill-jenjang-karier',
+                'kategori': 'Orientasi PPLG (OR-04)',
+                'level': 'Pemula',
+                'durasi': '2 JP (90 Menit)',
+                'is_published': True,
+            }
+        )
+        post_data = {
+            'vacancyRole': 'Frontend Developer - PT Teknologi Nusantara',
+            'vacancyRequirements': 'Menguasai HTML, CSS, JavaScript, Tailwind, dan Git.',
+            'vacancyEvidenceUrl': 'https://drive.google.com/file/d/test_vacancy_evidence/view',
+            'currentSkills': 'Dasar HTML & CSS.',
+            'skillGaps': 'Tailwind CSS & JavaScript framework.',
+            'gapActionPlan': 'Mengerjakan studi kasus DATH Stack.',
+        }
+        res = self.client.post(reverse('pembelajaran:submit_lkpd', kwargs={'slug': modul4.slug}), post_data)
+        self.assertEqual(res.status_code, 200)
+        
+        sub4 = UserSubmission.objects.filter(user=self.student, modul=modul4, submission_type='lkpd').first()
+        self.assertIsNotNone(sub4)
+        self.assertEqual(sub4.drive_url, 'https://drive.google.com/file/d/test_vacancy_evidence/view')
+
+        # 3. Verifikasi rendering status ribbon saat sudah dinilai guru
+        sub4.status = 'graded'
+        sub4.teacher_score = 88
+        sub4.teacher_level = 'Level 3 (Mandiri)'
+        sub4.teacher_feedback = 'Analisis lowongan kerja sangat komprehensif.'
+        sub4.save()
+        # Pastikan modul 4 tidak terkunci dengan menyelesaikan modul 3
+        modul3, _ = Modul.objects.get_or_create(
+            urutan=3,
+            defaults={
+                'kode': 'OR-03',
+                'judul': 'Peta Ekosistem Industri PPLG',
+                'slug': 'orientasi-pplg-03-ekosistem-industri-pplg',
+                'is_published': True,
+            }
+        )
+        UserProgress.objects.get_or_create(user=self.student, modul=modul3)
+
+        res_detail = self.client.get(reverse('pembelajaran:modul_detail', kwargs={'slug': modul4.slug}))
+        self.assertEqual(res_detail.status_code, 200)
+        self.assertContains(res_detail, 'Telah Dinilai Tuntas')
+        self.assertContains(res_detail, 'HASIL PENILAIAN RESMI GURU PENGAMPU')
+
 
