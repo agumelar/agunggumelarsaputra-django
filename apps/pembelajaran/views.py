@@ -1,12 +1,15 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.utils import timezone
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from .models import Modul, UserSubmission, UserProgress
 from .forms import LkpdSubmissionForm, ReflectionSubmissionForm
+from .checkpoints import get_gamified_quest_for_module
+from .lkpd_guides import get_lkpd_guide_for_module
 from apps.gamification.models import XPHistory
 
 
@@ -107,12 +110,37 @@ def modul_detail_view(request, slug):
     prev_modul = Modul.objects.filter(urutan__lt=modul.urutan, is_published=True).order_by('-urutan').first()
     next_modul = Modul.objects.filter(urutan__gt=modul.urutan, is_published=True).order_by('urutan').first()
 
+    # Checkpoint Gamifikasi State
+    has_passed_checkpoint = False
+    if is_teacher or is_completed or (lkpd_submission is not None):
+        has_passed_checkpoint = True
+    elif request.user.is_authenticated:
+        has_passed_checkpoint = UserSubmission.objects.filter(
+            user=request.user, modul=modul, submission_type='checkpoint'
+        ).exists()
+
+    quest = get_gamified_quest_for_module(modul.slug, modul.judul)
+    quest_json = json.dumps(quest)
+    lkpd_guide = get_lkpd_guide_for_module(modul.slug, modul.judul)
+
+    is_modul_1 = (modul.urutan == 1 or modul.slug == 'orientasi-pplg-01-pengantar-skill-passport')
+    lkpd_audit_rows = []
+    if lkpd_submission and isinstance(lkpd_submission.form_data, dict):
+        lkpd_audit_rows = lkpd_submission.form_data.get('audit_table', [])
+    lkpd_audit_rows_json = json.dumps(lkpd_audit_rows)
+
     context = {
         'modul': modul,
         'all_modules': all_modules,
         'prev_modul': prev_modul,
         'next_modul': next_modul,
         'is_completed': is_completed,
+        'has_passed_checkpoint': has_passed_checkpoint,
+        'quest': quest,
+        'quest_json': quest_json,
+        'lkpd_guide': lkpd_guide,
+        'is_modul_1': is_modul_1,
+        'lkpd_audit_rows_json': lkpd_audit_rows_json,
         'lkpd_submission': lkpd_submission,
         'reflection_submission': reflection_submission,
         'lkpd_form': lkpd_form,
@@ -154,72 +182,140 @@ def mark_material_read_view(request, slug):
 
 @login_required
 @require_POST
+def claim_checkpoint_view(request, slug):
+    """
+    Endpoint saat siswa menyelesaikan Mini-Game Checkpoint 3 Ronde (+15 XP).
+    Membuka gerbang akses ke Form LKPD.
+    """
+    modul = get_object_or_404(Modul, slug=slug, is_published=True)
+    quest = get_gamified_quest_for_module(modul.slug, modul.judul)
+    xp_reward = quest.get('xpReward', 15)
+
+    sub, created = UserSubmission.objects.get_or_create(
+        user=request.user,
+        modul=modul,
+        submission_type='checkpoint',
+        defaults={
+            'score': 100,
+            'status': 'submitted',
+            'form_data': {
+                'completed_at': timezone.now().isoformat(),
+                'quest_id': quest.get('id', '')
+            }
+        }
+    )
+
+    if created:
+        request.user.xp += xp_reward
+        request.user.recalculate_level()
+        request.user.save(update_fields=['xp', 'level'])
+
+        XPHistory.objects.create(
+            user=request.user,
+            amount=xp_reward,
+            category='modul',
+            description=f'Menyelesaikan Mini-Game Checkpoint {modul.kode}: {modul.judul}'
+        )
+
+    return JsonResponse({
+        'success': True,
+        'just_claimed': created,
+        'xp_earned': xp_reward if created else 0,
+        'total_xp': request.user.xp,
+        'message': f'Gerbang Checkpoint {modul.kode} berhasil ditaklukkan! Tab LKPD telah terbuka.'
+    })
+
+
+@login_required
+@require_POST
 def submit_lkpd_view(request, slug):
     """
     HTMX Endpoint: Submisi LKPD & Google Drive Link evidence oleh siswa (+25 XP).
-    KKM Guard (75): Jika sudah dinilai dan tuntas (>= 75), terkunci dari resubmission.
+    Mendukung formulir LKPD Dinamis (Modul 01 Tabel Audit) dan Standar (Modul 02-16).
+    KKM Guard (73): Jika sudah dinilai dan tuntas (>= 73), terkunci dari resubmission.
     """
     modul = get_object_or_404(Modul, slug=slug, is_published=True)
 
-    # Cek apakah sudah dinilai tuntas KKM 75
+    # Cek apakah sudah dinilai tuntas KKM 73
     existing = UserSubmission.objects.filter(user=request.user, modul=modul, submission_type='lkpd').first()
-    if existing and existing.status == 'graded' and existing.teacher_score is not None and existing.teacher_score >= 75:
+    if existing and existing.status == 'graded' and existing.teacher_score is not None and existing.teacher_score >= 73:
         context = {
             'modul': modul,
             'lkpd_submission': existing,
             'success': False,
-            'message': 'LKPD Anda telah dinilai TUNTAS oleh Guru dan telah terkunci permanen.',
+            'message': 'LKPD Anda telah dinilai TUNTAS oleh Guru (KKM >= 73) dan telah terkunci.',
         }
         return render(request, 'pembelajaran/partials/lkpd_status.html', context)
 
-    form = LkpdSubmissionForm(request.POST)
+    drive_url = request.POST.get('drive_url', '').strip()
+    work_summary = request.POST.get('work_summary', '').strip()
+    additional_notes = request.POST.get('additional_notes', '').strip()
 
-    if form.is_valid():
-        drive_url = form.cleaned_data['drive_url']
-        work_summary = form.cleaned_data['work_summary']
-        additional_notes = form.cleaned_data['additional_notes']
+    if not drive_url:
+        return render(request, 'pembelajaran/partials/lkpd_status.html', {
+            'modul': modul,
+            'success': False,
+            'message': 'Link folder Google Drive Evidence wajib diisi.',
+        })
 
-        submission, created = UserSubmission.objects.update_or_create(
+    is_modul_1 = (modul.urutan == 1 or modul.slug == 'orientasi-pplg-01-pengantar-skill-passport')
+    form_payload = {
+        'work_summary': work_summary,
+        'additional_notes': additional_notes,
+    }
+
+    if is_modul_1:
+        # Ekstrak baris tabel audit dinamis
+        audit_table = []
+        for key in sorted(request.POST.keys()):
+            if key.startswith('app_name_'):
+                idx = key.split('_')[-1]
+                aname = request.POST.get(f'app_name_{idx}', '').strip()
+                afeat = request.POST.get(f'app_feature_{idx}', '').strip()
+                aroles = request.POST.get(f'app_roles_{idx}', '').strip()
+                if aname:
+                    audit_table.append({
+                        'app_name': aname,
+                        'feature': afeat,
+                        'roles': aroles
+                    })
+
+        form_payload['student_name'] = request.POST.get('student_name', request.user.display_name)
+        form_payload['student_nis'] = request.POST.get('student_nis', getattr(request.user, 'nis', '') or '')
+        form_payload['student_class'] = request.POST.get('student_class', getattr(request.user, 'kelas', '') or '')
+        form_payload['submission_date'] = request.POST.get('submission_date', timezone.now().strftime('%Y-%m-%d'))
+        form_payload['audit_table'] = audit_table
+
+    submission, created = UserSubmission.objects.update_or_create(
+        user=request.user,
+        modul=modul,
+        submission_type='lkpd',
+        defaults={
+            'drive_url': drive_url,
+            'form_data': form_payload,
+            'status': 'submitted',
+        }
+    )
+
+    if created:
+        request.user.xp += modul.xp_lkpd
+        request.user.recalculate_level()
+        request.user.save(update_fields=['xp', 'level'])
+
+        XPHistory.objects.create(
             user=request.user,
-            modul=modul,
-            submission_type='lkpd',
-            defaults={
-                'drive_url': drive_url,
-                'form_data': {
-                    'work_summary': work_summary,
-                    'additional_notes': additional_notes,
-                },
-                'status': 'submitted',
-            }
+            amount=modul.xp_lkpd,
+            category='lkpd',
+            description=f'Submisi LKPD Modul {modul.kode}: {modul.judul}'
         )
 
-        if created:
-            request.user.xp += modul.xp_lkpd
-            request.user.recalculate_level()
-            request.user.save(update_fields=['xp', 'level'])
-
-            XPHistory.objects.create(
-                user=request.user,
-                amount=modul.xp_lkpd,
-                category='lkpd',
-                description=f'Submisi LKPD Modul {modul.kode}: {modul.judul}'
-            )
-
-        context = {
-            'modul': modul,
-            'lkpd_submission': submission,
-            'success': True,
-            'message': 'LKPD & Link Google Drive Evidence berhasil dikirim!',
-            'just_claimed': created,
-        }
-    else:
-        context = {
-            'modul': modul,
-            'lkpd_form': form,
-            'success': False,
-            'message': 'Harap periksa isian form LKPD Anda.',
-        }
-
+    context = {
+        'modul': modul,
+        'lkpd_submission': submission,
+        'success': True,
+        'message': f'LKPD {modul.kode} & Link Google Drive Evidence berhasil dikirim!',
+        'just_claimed': created,
+    }
     return render(request, 'pembelajaran/partials/lkpd_status.html', context)
 
 

@@ -1,0 +1,235 @@
+{% load static %}
+
+<div class="m3-surface p-6 sm:p-8 space-y-6 rounded-3xl" id="general-lkpd-card">
+  
+  <!-- Header LKPD -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant pb-5">
+    <div class="space-y-1">
+      <div class="inline-flex items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-[11px] font-mono font-bold uppercase">
+          LEMBAR KERJA PESERTA DIDIK (LKPD)
+        </span>
+        <span class="px-2.5 py-0.5 rounded-full bg-surface-low text-foreground text-[11px] font-mono font-semibold border border-outline-variant">
+          {{ modul.kode }}
+        </span>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight font-display">
+        Lembar Kerja: {{ modul.judul }}
+      </h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400 font-sans">
+        Kerjakan aktivitas pembelajaran ini secara langsung. Jawaban Anda akan tersimpan otomatis ke database portofolio kejuruan RPL.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2 self-start sm:self-auto">
+      <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+        ✨ Reward: +25 XP
+      </span>
+      <span class="text-[11px] font-mono px-2.5 py-1 rounded-lg border border-outline-variant {% if lkpd_submission %}bg-emerald-500/10 text-emerald-600 border-emerald-500/30 font-bold{% else %}bg-surface-low text-gray-400{% endif %}">
+        {% if lkpd_submission %}
+          {% if lkpd_submission.status == 'graded' %}🏆 Dinilai Guru{% else %}✅ Terkirim{% endif %}
+        {% else %}
+          Belum Disimpan
+        {% endif %}
+      </span>
+    </div>
+  </div>
+
+  <!-- Dynamic Teacher Grade & Feedback Card (Jika Sudah Dinilai Guru) -->
+  {% if lkpd_submission and lkpd_submission.status == 'graded' %}
+  <div class="p-6 rounded-2xl bg-surface-lowest border-2 border-emerald-500/40 space-y-4 animate-fadeIn">
+    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant pb-3">
+      <div class="flex items-center gap-2.5">
+        <span class="text-2xl">🏆</span>
+        <div>
+          <span class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Hasil Penilaian Guru</span>
+          <h3 class="text-base font-extrabold text-foreground font-display">Evaluasi Lembar Kerja LKPD {{ modul.kode }}</h3>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 font-mono">
+        <span class="px-2.5 py-1 rounded-lg bg-primary text-primary-on-primary text-xs font-bold">
+          {{ lkpd_submission.teacher_level|default:"Level 2 (Mencoba ★)" }}
+        </span>
+        <span class="px-3 py-1 rounded-lg bg-surface-high border border-outline-variant text-xs font-extrabold text-foreground">
+          Nilai: {{ lkpd_submission.teacher_score|default:"85" }} / 100
+        </span>
+      </div>
+    </div>
+
+    <div class="space-y-1.5 text-xs font-sans">
+      <div class="text-gray-500 dark:text-gray-400 font-semibold flex items-center gap-1.5">
+        <span>👨‍🏫 Catatan & Masukan Evaluasi Guru:</span>
+      </div>
+      <div class="p-4 rounded-xl bg-surface-high border border-outline-variant text-foreground leading-relaxed italic">
+        "{{ lkpd_submission.teacher_feedback|default:'Analisis telah memenuhi standar ketercapaian kompetensi pembelajaran.' }}"
+      </div>
+      <div class="text-[11px] text-gray-500 font-mono flex items-center justify-between pt-1">
+        <span>🕒 Dinilai pada: {{ lkpd_submission.graded_at|date:"d M Y, H:i" }}</span>
+        <span class="text-primary font-semibold">Pengampu: Agung Gumelar Saputra, S.Tr.T.</span>
+      </div>
+    </div>
+
+    {% if lkpd_submission.teacher_score >= 73 %}
+    <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium flex items-center gap-2.5">
+      <span class="text-lg">🔒</span>
+      <div>
+        <strong class="font-bold">Lembar Kerja Terkunci:</strong> Nilai Anda telah memenuhi KKM (Minimal 73). Isian lembar kerja ini telah dikunci sebagai bukti portofolio pembelajaran resmi.
+      </div>
+    </div>
+    {% else %}
+    <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-medium space-y-1">
+      <div class="font-bold flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
+        <span class="text-base">⚠️</span>
+        <span>Perlu Perbaikan / Remedial LKPD (Nilai di bawah KKM 73)</span>
+      </div>
+      <p class="leading-relaxed">
+        Pelajari catatan evaluasi guru di atas, perbaiki uraian pada formulir di bawah ini, kemudian kirim ulang hasil perbaikan.
+      </p>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Response / Alert Feedback Container -->
+  <div id="lkpd-response-container">
+    {% if lkpd_submission and lkpd_submission.status != 'graded' %}
+      <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span>✅</span>
+          <span><strong>LKPD {{ modul.kode }} telah tersimpan.</strong> Menunggu peninjauan & validasi dari Guru Pengampu RPL.</span>
+        </div>
+        <span class="font-mono text-[11px]">{{ lkpd_submission.submitted_at|date:"d M Y, H:i" }}</span>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if user.is_authenticated %}
+  <form 
+    hx-post="{% url 'pembelajaran:submit_lkpd' modul.slug %}" 
+    hx-target="#lkpd-response-container"
+    class="space-y-6"
+  >
+    {% csrf_token %}
+
+    <!-- Bagian A: Identitas Peserta Didik -->
+    <div class="space-y-4 p-5 rounded-2xl bg-surface-lowest border border-outline-variant">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <h3 class="text-sm font-bold text-foreground font-mono flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">A</span>
+          IDENTITAS PESERTA DIDIK
+        </h3>
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-medium">
+          📋 Data Profil Terverifikasi
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+        <div class="space-y-1">
+          <label class="block font-semibold text-foreground font-mono">Nama Siswa</label>
+          <input 
+            type="text" 
+            name="student_name" 
+            value="{{ user.display_name }}"
+            readonly 
+            class="w-full px-3 py-2 rounded-xl bg-surface-high/60 border border-outline-variant text-foreground font-medium"
+          />
+        </div>
+
+        <div class="space-y-1">
+          <label class="block font-semibold text-foreground font-mono">NIS / NISN</label>
+          <input 
+            type="text" 
+            name="student_nis" 
+            value="{{ user.nis|default:'-' }}"
+            readonly 
+            class="w-full px-3 py-2 rounded-xl bg-surface-high/60 border border-outline-variant text-foreground font-mono"
+          />
+        </div>
+
+        <div class="space-y-1">
+          <label class="block font-semibold text-foreground font-mono">Kelas</label>
+          <input 
+            type="text" 
+            name="student_class" 
+            value="{{ user.kelas|default:'-' }}"
+            readonly 
+            class="w-full px-3 py-2 rounded-xl bg-surface-high/60 border border-outline-variant text-foreground font-mono font-bold text-primary"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Bagian B: Uraian Tugas & Soal Analisis Spesifik Modul -->
+    <div class="space-y-3 p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs font-sans">
+      <div class="flex items-center justify-between">
+        <label class="block font-bold text-foreground font-mono text-sm">
+          {{ lkpd_guide.prompt }}
+        </label>
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-bold">
+          ✍️ Wajib Diketik Mandiri
+        </span>
+      </div>
+
+      {% if lkpd_guide.tip %}
+      <p class="text-[11px] text-amber-600 dark:text-amber-400 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">
+        {{ lkpd_guide.tip }}
+      </p>
+      {% endif %}
+
+      <textarea 
+        name="work_summary" 
+        rows="6" 
+        required 
+        placeholder="{{ lkpd_guide.placeholder }}"
+        class="w-full px-4 py-3 rounded-2xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary text-xs leading-relaxed"
+      >{{ lkpd_submission.form_data.work_summary|default:'' }}</textarea>
+    </div>
+
+    <!-- Bagian C: Link Google Drive Evidence & Catatan -->
+    <div class="space-y-4 p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs">
+      <h3 class="text-sm font-bold text-foreground font-mono flex items-center gap-2">
+        <span class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">C</span>
+        REPOSITORI GOOGLE DRIVE EVIDENCE *
+      </h3>
+
+      <div class="space-y-1.5">
+        <label class="block font-semibold text-foreground font-mono">LINK FOLDER / BERKAS EVIDENCE *</label>
+        <input 
+          type="url" 
+          name="drive_url" 
+          value="{{ lkpd_submission.drive_url|default:'' }}"
+          required 
+          placeholder="https://drive.google.com/..."
+          class="w-full px-3.5 py-2.5 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary font-mono text-xs"
+        />
+        <p class="text-[11px] text-gray-500 dark:text-gray-400">Pastikan izin akses disetel ke "Anyone with the link can view".</p>
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block font-semibold text-foreground font-mono">CATATAN TAMBAHAN UNTUK GURU (OPSIONAL)</label>
+        <textarea 
+          name="additional_notes" 
+          rows="2" 
+          placeholder="Tuliskan catatan khusus atau pesan untuk Pak Agung..."
+          class="w-full px-3.5 py-2 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary text-xs"
+        >{{ lkpd_submission.form_data.additional_notes|default:'' }}</textarea>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button 
+      type="submit" 
+      {% if lkpd_submission and lkpd_submission.status == 'graded' and lkpd_submission.teacher_score >= 73 %}disabled{% endif %}
+      class="m3-btn-secondary w-full py-3.5 font-bold text-xs sm:text-sm rounded-2xl shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <span>{% if lkpd_submission %}Kirim Ulang Pembaruan LKPD {{ modul.kode }} ➔{% else %}Kirim LKPD & Klaim +25 XP ➔{% endif %}</span>
+    </button>
+  </form>
+  {% else %}
+  <div class="p-8 text-center space-y-3 rounded-2xl bg-surface-lowest border border-outline-variant">
+    <p class="text-sm text-gray-300">Harap masuk (login) terlebih dahulu untuk mengisi formulir LKPD dan mengklaim XP.</p>
+    <a href="{% url 'accounts:login' %}" class="m3-btn-primary inline-flex text-xs px-5 py-2.5 rounded-xl">Masuk Sekarang</a>
+  </div>
+  {% endif %}
+
+</div>

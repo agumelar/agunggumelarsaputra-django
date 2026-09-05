@@ -1,0 +1,363 @@
+{% load static %}
+
+<div class="m3-surface p-6 sm:p-8 space-y-6 rounded-3xl" id="lkpd-p1-card">
+  
+  <!-- Header LKPD -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant pb-5">
+    <div class="space-y-1">
+      <div class="inline-flex items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-[11px] font-mono font-bold uppercase">
+          LEMBAR KERJA PESERTA DIDIK (LKPD)
+        </span>
+        <span class="px-2.5 py-0.5 rounded-full bg-surface-low text-foreground text-[11px] font-mono font-semibold border border-outline-variant">
+          PERTEMUAN 1 (OR-01)
+        </span>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight font-display">
+        Formulir Eksplorasi Digital & Setup Skill Passport
+      </h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400 font-sans">
+        Isi seluruh aktivitas lembar kerja di bawah ini langsung melalui form web. Jawaban akan tersimpan otomatis ke portofolio kalian.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2 self-start sm:self-auto">
+      <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+        ✨ Reward: +25 XP
+      </span>
+      <span class="text-[11px] font-mono px-2.5 py-1 rounded-lg border border-outline-variant {% if lkpd_submission %}bg-emerald-500/10 text-emerald-600 border-emerald-500/30 font-bold{% else %}bg-surface-low text-gray-400{% endif %}">
+        {% if lkpd_submission %}
+          {% if lkpd_submission.status == 'graded' %}🏆 Dinilai Guru{% else %}✅ Terkirim{% endif %}
+        {% else %}
+          Belum Disimpan
+        {% endif %}
+      </span>
+    </div>
+  </div>
+
+  <!-- Dynamic Teacher Grade & Feedback Card (Jika Sudah Dinilai Guru) -->
+  {% if lkpd_submission and lkpd_submission.status == 'graded' %}
+  <div class="p-6 rounded-2xl bg-surface-lowest border-2 border-emerald-500/40 space-y-4 animate-fadeIn">
+    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant pb-3">
+      <div class="flex items-center gap-2.5">
+        <span class="text-2xl">🏆</span>
+        <div>
+          <span class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Hasil Penilaian Guru</span>
+          <h3 class="text-base font-extrabold text-foreground font-display">Evaluasi Lembar Kerja LKPD P1</h3>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 font-mono">
+        <span class="px-2.5 py-1 rounded-lg bg-primary text-primary-on-primary text-xs font-bold">
+          {{ lkpd_submission.teacher_level|default:"Level 2 (Mencoba ★)" }}
+        </span>
+        <span class="px-3 py-1 rounded-lg bg-surface-high border border-outline-variant text-xs font-extrabold text-foreground">
+          Nilai: {{ lkpd_submission.teacher_score|default:"85" }} / 100
+        </span>
+      </div>
+    </div>
+
+    <div class="space-y-1.5 text-xs font-sans">
+      <div class="text-gray-500 dark:text-gray-400 font-semibold flex items-center gap-1.5">
+        <span>👨‍🏫 Catatan & Masukan Evaluasi Guru:</span>
+      </div>
+      <div class="p-4 rounded-xl bg-surface-high border border-outline-variant text-foreground leading-relaxed italic">
+        "{{ lkpd_submission.teacher_feedback|default:'Kerja bagus! Seluruh aplikasi telah diidentifikasi perannya dengan tepat.' }}"
+      </div>
+      <div class="text-[11px] text-gray-500 font-mono flex items-center justify-between pt-1">
+        <span>🕒 Dinilai pada: {{ lkpd_submission.graded_at|date:"d M Y, H:i" }}</span>
+        <span class="text-primary font-semibold">Pengampu: Agung Gumelar Saputra, S.Tr.T.</span>
+      </div>
+    </div>
+
+    {% if lkpd_submission.teacher_score >= 73 %}
+    <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium flex items-center gap-2.5">
+      <span class="text-lg">🔒</span>
+      <div>
+        <strong class="font-bold">Lembar Kerja Terkunci:</strong> Nilai Anda telah memenuhi KKM (Minimal 73). Isian lembar kerja ini telah dikunci sebagai bukti portofolio pembelajaran resmi.
+      </div>
+    </div>
+    {% else %}
+    <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-medium space-y-1">
+      <div class="font-bold flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
+        <span class="text-base">⚠️</span>
+        <span>Perlu Perbaikan / Remedial LKPD (Nilai di bawah KKM 73)</span>
+      </div>
+      <p class="leading-relaxed">
+        Pelajari catatan evaluasi guru di atas, perbaiki data atau uraian pada formulir di bawah ini, kemudian kirim ulang hasil perbaikan.
+      </p>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Response / Alert Feedback Container -->
+  <div id="lkpd-response-container">
+    {% if lkpd_submission and lkpd_submission.status != 'graded' %}
+      <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span>✅</span>
+          <span><strong>LKPD P1 telah tersimpan.</strong> Menunggu peninjauan & validasi dari Guru Pengampu RPL.</span>
+        </div>
+        <span class="font-mono text-[11px]">{{ lkpd_submission.submitted_at|date:"d M Y, H:i" }}</span>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if user.is_authenticated %}
+  <form 
+    hx-post="{% url 'pembelajaran:submit_lkpd' modul.slug %}" 
+    hx-target="#lkpd-response-container"
+    class="space-y-8"
+    x-data="{
+      rows: {{ lkpd_audit_rows_json|default:'[]'|safe }},
+      init() {
+        if (!this.rows || this.rows.length === 0) {
+          this.rows = [
+            { app_name: 'WhatsApp', feature: 'Pesan terenkripsi, panggilan video, status', roles: 'Mobile Dev (UI), Backend Dev (Server), Security Engineer (E2EE)' },
+            { app_name: 'Tokopedia', feature: 'Katalog produk, checkout keranjang, QRIS', roles: 'Frontend Web Dev, Payment Gateway Backend, QA Tester' },
+            { app_name: 'Gojek / Grab', feature: 'Peta rute perjalanan, pesan driver', roles: 'Geospatial Map Engineer, Dispatching Backend, Mobile Dev' }
+          ];
+        }
+      },
+      addRow() {
+        this.rows.push({ app_name: '', feature: '', roles: '' });
+      },
+      removeRow(idx) {
+        if (this.rows.length > 1) {
+          this.rows.splice(idx, 1);
+        } else {
+          alert('Minimal 1 baris aplikasi untuk audit!');
+        }
+      }
+    }"
+  >
+    {% csrf_token %}
+
+    <!-- Bagian A: Identitas Peserta Didik -->
+    <div class="space-y-4 p-5 rounded-2xl bg-surface-lowest border border-outline-variant">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <h3 class="text-sm font-bold text-foreground font-mono flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">A</span>
+          IDENTITAS PESERTA DIDIK
+        </h3>
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-medium">
+          📋 Data Profil Terverifikasi
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+        <div class="space-y-1">
+          <label class="block font-semibold text-foreground font-mono">Nama Lengkap</label>
+          <input 
+            type="text" 
+            name="student_name" 
+            value="{{ user.display_name }}"
+            required 
+            placeholder="Nama lengkap siswa"
+            class="w-full px-3 py-2 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary"
+          />
+        </div>
+
+        <div class="space-y-1">
+          <label class="block font-semibold text-foreground font-mono">NIS / NISN</label>
+          <input 
+            type="text" 
+            name="student_nis" 
+            value="{{ user.nis|default:'' }}"
+            required 
+            placeholder="Contoh: 262710001"
+            class="w-full px-3 py-2 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary font-mono"
+          />
+        </div>
+
+        <div class="space-y-1">
+          <label class="block font-semibold text-foreground font-mono">Kelas Rombel</label>
+          <select 
+            name="student_class" 
+            required 
+            class="w-full px-3 py-2 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary"
+          >
+            <option value="10 RPL 1" {% if user.kelas == '10 RPL 1' %}selected{% endif %}>10 RPL 1</option>
+            <option value="10 RPL 2" {% if user.kelas == '10 RPL 2' %}selected{% endif %}>10 RPL 2</option>
+            <option value="10 RPL 3" {% if user.kelas == '10 RPL 3' %}selected{% endif %}>10 RPL 3</option>
+            <option value="10 RPL 4" {% if user.kelas == '10 RPL 4' %}selected{% endif %}>10 RPL 4</option>
+            <option value="11 RPL 1" {% if user.kelas == '11 RPL 1' %}selected{% endif %}>11 RPL 1</option>
+            <option value="11 RPL 2" {% if user.kelas == '11 RPL 2' %}selected{% endif %}>11 RPL 2</option>
+            <option value="11 RPL 3" {% if user.kelas == '11 RPL 3' %}selected{% endif %}>11 RPL 3</option>
+            <option value="11 RPL 4" {% if user.kelas == '11 RPL 4' %}selected{% endif %}>11 RPL 4</option>
+            <option value="12 RPL 1" {% if user.kelas == '12 RPL 1' %}selected{% endif %}>12 RPL 1</option>
+            <option value="12 RPL 2" {% if user.kelas == '12 RPL 2' %}selected{% endif %}>12 RPL 2</option>
+            <option value="12 RPL 3" {% if user.kelas == '12 RPL 3' %}selected{% endif %}>12 RPL 3</option>
+            <option value="12 RPL 4" {% if user.kelas == '12 RPL 4' %}selected{% endif %}>12 RPL 4</option>
+          </select>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block font-semibold text-foreground font-mono">Tanggal Pengerjaan</label>
+          <input 
+            type="date" 
+            name="submission_date" 
+            value="{% now 'Y-m-d' %}"
+            required 
+            class="w-full px-3 py-2 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary font-mono"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Bagian B: Petunjuk Pengerjaan -->
+    <div class="p-4 rounded-2xl bg-surface-lowest border border-amber-500/30 space-y-1.5 text-xs font-sans">
+      <div class="font-bold text-foreground flex items-center justify-between">
+        <span class="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-mono">📌 Petunjuk Pengisian:</span>
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-bold">
+          ✍️ Wajib Diketik Mandiri (No Copy-Paste)
+        </span>
+      </div>
+      <ol class="list-decimal list-inside space-y-1 text-gray-600 dark:text-gray-300 leading-relaxed">
+        <li>Amati minimal <strong>3 aplikasi digital</strong> yang sering kalian gunakan di HP atau laptop.</li>
+        <li>Tuliskan fitur utama dan perkiraan peran profesi pengembang software di balik aplikasi tersebut secara mandiri.</li>
+        <li>Kalian bisa menambahkan baris baru dengan tombol <em>"+ Tambah Baris Aplikasi"</em>.</li>
+        <li>Lampirkan link folder Google Drive portofolio kalian dan klik <strong>"Kirim LKPD P1"</strong> untuk klaim reward +25 XP!</li>
+      </ol>
+    </div>
+
+    <!-- Bagian C: Tabel Audit Profesi & Produk Digital (Interaktif) -->
+    <div class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <h3 class="text-sm font-bold text-foreground font-mono flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">B</span>
+            AUDIT PRODUK DIGITAL & PERAN PROFESI TI
+          </h3>
+        </div>
+
+        <button 
+          type="button" 
+          @click="addRow()"
+          class="m3-btn-outlined text-xs font-semibold px-3 py-1.5 rounded-xl flex items-center gap-1 self-start sm:self-auto cursor-pointer"
+        >
+          <span>➕ Tambah Baris Aplikasi</span>
+        </button>
+      </div>
+
+      <div class="overflow-x-auto border border-outline-variant rounded-2xl">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-surface-low border-b border-outline-variant text-foreground font-mono">
+              <th class="py-3 px-3 w-12 text-center">No</th>
+              <th class="py-3 px-3 min-w-[160px]">Nama Produk / Aplikasi</th>
+              <th class="py-3 px-3 min-w-[220px]">Fitur Utama</th>
+              <th class="py-3 px-3 min-w-[280px]">Peran Pengembang di Balik Fitur</th>
+              <th class="py-3 px-2 w-12 text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-outline-variant">
+            <template x-for="(row, index) in rows" :key="index">
+              <tr class="bg-surface-lowest hover:bg-surface-high/50 transition-colors">
+                <td class="py-3 px-3 text-center font-mono text-gray-400 font-bold" x-text="index + 1"></td>
+                <td class="py-2.5 px-3">
+                  <input 
+                    type="text" 
+                    :name="'app_name_' + (index + 1)" 
+                    x-model="row.app_name"
+                    placeholder="Misal: WhatsApp"
+                    required
+                    class="w-full px-2.5 py-1.5 rounded-lg bg-surface-high border border-outline-variant text-xs text-foreground focus:outline-none focus:border-primary"
+                  />
+                </td>
+                <td class="py-2.5 px-3">
+                  <input 
+                    type="text" 
+                    :name="'app_feature_' + (index + 1)" 
+                    x-model="row.feature"
+                    placeholder="Misal: Kirim pesan suara & panggilan video"
+                    required
+                    class="w-full px-2.5 py-1.5 rounded-lg bg-surface-high border border-outline-variant text-xs text-foreground focus:outline-none focus:border-primary"
+                  />
+                </td>
+                <td class="py-2.5 px-3">
+                  <input 
+                    type="text" 
+                    :name="'app_roles_' + (index + 1)" 
+                    x-model="row.roles"
+                    placeholder="Misal: Mobile Dev (UI), Backend Dev (Server), Security (E2EE)"
+                    required
+                    class="w-full px-2.5 py-1.5 rounded-lg bg-surface-high border border-outline-variant text-xs text-foreground focus:outline-none focus:border-primary"
+                  />
+                </td>
+                <td class="py-2.5 px-2 text-center">
+                  <button 
+                    type="button" 
+                    @click="removeRow(index)"
+                    class="text-gray-400 hover:text-rose-500 p-1 text-sm transition-colors cursor-pointer" 
+                    title="Hapus baris"
+                  >
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bagian D: Google Drive Evidence & Catatan -->
+    <div class="space-y-4 p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs">
+      <h3 class="text-sm font-bold text-foreground font-mono flex items-center gap-2">
+        <span class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">C</span>
+        LINK REPOSITORI GOOGLE DRIVE EVIDENCE *
+      </h3>
+
+      <div class="space-y-1.5">
+        <label class="block font-semibold text-foreground font-mono">LINK FOLDER GOOGLE DRIVE EVIDENCE *</label>
+        <input 
+          type="url" 
+          name="drive_url" 
+          value="{{ lkpd_submission.drive_url|default:'' }}"
+          required 
+          placeholder="https://drive.google.com/drive/folders/..."
+          class="w-full px-3.5 py-2.5 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary font-mono text-xs"
+        />
+        <p class="text-[11px] text-gray-500 dark:text-gray-400">Pastikan link folder disetel publik: "Anyone with the link can view".</p>
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block font-semibold text-foreground font-mono">RINGKASAN PEKERJAAN / REFLEKSI SINGKAT SISWA *</label>
+        <textarea 
+          name="work_summary" 
+          rows="3" 
+          required 
+          placeholder="Tuliskan ringkasan singkat hasil audit ekosistem aplikasi yang telah kalian kerjakan..."
+          class="w-full px-3.5 py-2 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary text-xs"
+        >{{ lkpd_submission.form_data.work_summary|default:'' }}</textarea>
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block font-semibold text-foreground font-mono">CATATAN TAMBAHAN UNTUK GURU PENGAMPU (OPSIONAL)</label>
+        <textarea 
+          name="additional_notes" 
+          rows="2" 
+          placeholder="Tuliskan catatan khusus atau kendala yang dihadapi jika ada..."
+          class="w-full px-3.5 py-2 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary text-xs"
+        >{{ lkpd_submission.form_data.additional_notes|default:'' }}</textarea>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button 
+      type="submit" 
+      {% if lkpd_submission and lkpd_submission.status == 'graded' and lkpd_submission.teacher_score >= 73 %}disabled{% endif %}
+      class="m3-btn-secondary w-full py-3.5 font-bold text-xs sm:text-sm rounded-2xl shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <span>{% if lkpd_submission %}Kirim Ulang Pembaruan LKPD P1 ➔{% else %}Kirim LKPD P1 & Klaim +25 XP ➔{% endif %}</span>
+    </button>
+  </form>
+  {% else %}
+  <div class="p-8 text-center space-y-3 rounded-2xl bg-surface-lowest border border-outline-variant">
+    <p class="text-sm text-gray-300">Harap masuk (login) terlebih dahulu untuk mengisi formulir LKPD dan mengklaim XP.</p>
+    <a href="{% url 'accounts:login' %}" class="m3-btn-primary inline-flex text-xs px-5 py-2.5 rounded-xl">Masuk Sekarang</a>
+  </div>
+  {% endif %}
+
+</div>

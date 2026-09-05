@@ -1,0 +1,712 @@
+{% load static %}
+
+<div 
+  id="checkpoint-game-{{ modul.slug }}"
+  data-slug="{{ modul.slug }}"
+  data-xp="{{ quest.xpReward|default:15 }}"
+  data-completed="{% if has_passed_checkpoint %}true{% else %}false{% endif %}"
+  class="my-8 rounded-3xl bg-[#0b0f19] border border-amber-500/30 overflow-hidden shadow-2xl transition-all duration-300 relative font-sans text-gray-200"
+>
+  <!-- Game HUD Header -->
+  <div class="px-5 py-4 bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-purple-500/15 border-b border-white/10 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-xl shadow-inner">
+        🎮
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
+            {{ quest.badge }}
+          </span>
+          <span id="game-status-badge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-white/5 text-gray-400 border border-white/10">
+            {% if has_passed_checkpoint %}✅ TUNTAS{% else %}⚡ AKTIF{% endif %}
+          </span>
+        </div>
+        <h4 class="text-sm sm:text-base font-bold text-white mt-0.5 tracking-tight">
+          {{ quest.moduleTitle }}
+        </h4>
+      </div>
+    </div>
+
+    <!-- HUD Stats: Lives, Stage, XP -->
+    <div class="flex items-center gap-3 sm:gap-4 text-xs font-mono">
+      <!-- Lives Hearts -->
+      <div class="flex items-center gap-1 bg-black/40 px-3 py-1.5 rounded-lg border border-white/10" title="Sisa Nyawa Game">
+        <span class="text-xs text-gray-400 mr-1">NYAWA:</span>
+        <span id="hud-hearts" class="flex items-center gap-0.5 text-base tracking-widest">
+          ❤️❤️❤️
+        </span>
+      </div>
+
+      <!-- Combo Streak -->
+      <div id="hud-combo-badge" class="hidden sm:flex items-center gap-1 bg-orange-500/20 border border-orange-500/40 text-orange-400 font-bold px-2.5 py-1.5 rounded-lg text-xs animate-pulse">
+        <span>🔥</span>
+        <span id="hud-combo-text">COMBO x1</span>
+      </div>
+
+      <!-- XP Reward Badge -->
+      <div class="px-3 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-bold flex items-center gap-1 shadow-sm">
+        <span>+{{ quest.xpReward|default:15 }} XP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage Progress Stepper Bar -->
+  <div class="w-full bg-black/60 h-2 flex">
+    <div id="stage-bar-1" class="h-full w-1/3 bg-amber-500 transition-all duration-500"></div>
+    <div id="stage-bar-2" class="h-full w-1/3 bg-white/10 transition-all duration-500"></div>
+    <div id="stage-bar-3" class="h-full w-1/3 bg-white/10 transition-all duration-500"></div>
+  </div>
+
+  <!-- Game Arena Body -->
+  <div class="p-5 sm:p-7 space-y-6">
+
+    <!-- ==================== ALREADY COMPLETED STATE ==================== -->
+    <div id="view-completed-banner" class="{% if has_passed_checkpoint %}block{% else %}hidden{% endif %} text-center py-6 space-y-4">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-3xl shadow-lg">
+        🏆
+      </div>
+      <div class="space-y-1">
+        <h3 class="text-xl font-extrabold text-white tracking-tight">
+          Gerbang Checkpoint Telah Selesai Ditaklukkan!
+        </h3>
+        <p class="text-xs sm:text-sm text-gray-300 max-w-md mx-auto">
+          Tantangan konsep modul ini telah berhasil kamu selesaikan. Tab LKPD & Jurnal Refleksi sudah terbuka dan siap kamu kerjakan.
+        </p>
+      </div>
+      <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+        <button 
+          type="button"
+          @click="currentTab = 'lkpd'; hasPassedCheckpoint = true;"
+          class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-md transition-transform hover:scale-105 flex items-center gap-2 cursor-pointer"
+        >
+          <span>📝 Buka Tab Lembar Kerja (LKPD)</span>
+          <span>➔</span>
+        </button>
+        <button 
+          type="button" 
+          id="btn-replay-game"
+          class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-200 text-xs font-semibold border border-white/10 transition-colors flex items-center gap-1.5"
+        >
+          <span>🔄 Mainkan Ulang Quest</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== GAME PLAYING VIEW ==================== -->
+    <div id="view-game-arena" class="{% if has_passed_checkpoint %}hidden{% else %}block{% endif %} space-y-6">
+      
+      <!-- Current Stage Header Indicator -->
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <span id="stage-icon" class="text-lg">🧩</span>
+          <span id="stage-title-text" class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-400 font-mono">
+            Ronde 1/3: Puzzle Pencocokan Konsep
+          </span>
+        </div>
+      </div>
+
+      <!-- ==================== STAGE 1: CARD PAIR MATCHING PUZZLE ==================== -->
+      <div id="stage-1-container" class="space-y-4">
+        <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs sm:text-sm text-amber-300 flex items-start gap-2.5">
+          <span class="text-base flex-shrink-0">💡</span>
+          <p class="leading-relaxed">
+            {{ quest.stage1Match.instruction }}
+          </p>
+        </div>
+
+        <!-- 2 Columns: Left Concepts, Right Definitions -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Left Column -->
+          <div class="space-y-2.5" id="match-left-column">
+            {% for p in quest.stage1Match.pairs %}
+              <button
+                type="button"
+                data-pair-id="{{ p.id }}"
+                data-side="left"
+                class="match-card match-card-left w-full p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border-2 border-white/10 text-left font-medium text-xs sm:text-sm text-white transition-all duration-200 flex items-center justify-between group cursor-pointer shadow-sm hover:border-amber-400/60"
+              >
+                <span class="font-bold">{{ p.left }}</span>
+                <span class="w-5 h-5 rounded-full border border-white/20 group-hover:border-amber-400 flex items-center justify-center text-[10px] text-gray-400 group-hover:text-amber-400 font-mono">
+                  ➔
+                </span>
+              </button>
+            {% endfor %}
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-2.5" id="match-right-column">
+            {% for p in quest.stage1Match.pairs %}
+              <button
+                type="button"
+                data-pair-id="{{ p.id }}"
+                data-side="right"
+                class="match-card match-card-right w-full p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border-2 border-white/10 text-left text-xs sm:text-sm text-gray-300 transition-all duration-200 flex items-center justify-between group cursor-pointer shadow-sm hover:border-amber-400/60"
+              >
+                <span class="leading-relaxed">{{ p.right }}</span>
+                <span class="w-5 h-5 rounded-full border border-white/20 group-hover:border-amber-400 flex items-center justify-center text-[10px] text-gray-400 group-hover:text-amber-400 font-mono">
+                  ✓
+                </span>
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div id="match-feedback-msg" class="hidden p-3 rounded-lg text-xs font-mono font-semibold text-center"></div>
+      </div>
+
+      <!-- ==================== STAGE 2: DETECTIVE FACT OR MYTH ==================== -->
+      <div id="stage-2-container" class="hidden space-y-5">
+        <div class="p-5 rounded-2xl bg-gradient-to-br from-indigo-950/40 via-purple-950/20 to-black border border-purple-500/30 space-y-3">
+          <div class="flex items-center gap-2 text-purple-400 text-xs font-mono font-bold uppercase tracking-wider">
+            <span>🕵️ Analisis Klaim Skenario Industri</span>
+          </div>
+          <blockquote class="text-sm sm:text-base text-white font-medium italic leading-relaxed pl-3 border-l-2 border-purple-500">
+            {{ quest.stage2Detective.statement }}
+          </blockquote>
+        </div>
+
+        <!-- 2 Big Detective Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            type="button"
+            id="btn-detective-fact"
+            class="p-4 rounded-xl bg-gradient-to-r from-emerald-950/60 to-emerald-900/40 hover:from-emerald-900/80 hover:to-emerald-800/60 border-2 border-emerald-500/40 text-emerald-300 font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer"
+          >
+            <span>{{ quest.stage2Detective.factLabel }}</span>
+          </button>
+          <button
+            type="button"
+            id="btn-detective-myth"
+            class="p-4 rounded-xl bg-gradient-to-r from-red-950/60 to-rose-900/40 hover:from-red-900/80 hover:to-rose-800/60 border-2 border-rose-500/40 text-rose-300 font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer"
+          >
+            <span>{{ quest.stage2Detective.mythLabel }}</span>
+          </button>
+        </div>
+
+        <div id="detective-explanation" class="hidden p-4 rounded-xl text-xs sm:text-sm leading-relaxed border space-y-2"></div>
+      </div>
+
+      <!-- ==================== STAGE 3: SPEED SCENARIO CHALLENGE ==================== -->
+      <div id="stage-3-container" class="hidden space-y-5">
+        <div class="p-4 rounded-xl bg-cyan-950/30 border border-cyan-500/30 space-y-2">
+          <div class="flex items-center gap-2 text-cyan-400 text-xs font-mono font-bold uppercase">
+            <span>🚀 Tantangan Skenario Cepat</span>
+          </div>
+          <p class="text-sm sm:text-base font-bold text-white leading-snug">
+            {{ quest.stage3Speed.question }}
+          </p>
+        </div>
+
+        <div class="space-y-2.5" id="speed-options-container">
+          {% for opt in quest.stage3Speed.options %}
+            <button
+              type="button"
+              data-speed-idx="{{ forloop.counter0 }}"
+              data-is-correct="{% if opt.isCorrect %}true{% else %}false{% endif %}"
+              data-explanation="{{ opt.explanation }}"
+              class="speed-option-btn w-full p-4 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border-2 border-white/10 text-left text-xs sm:text-sm text-gray-200 transition-all duration-200 flex items-start gap-3 group cursor-pointer shadow-sm hover:border-cyan-400/60"
+            >
+              <span class="w-6 h-6 rounded-lg bg-slate-800 border border-white/10 group-hover:border-cyan-400 group-hover:bg-cyan-500/20 text-gray-400 group-hover:text-cyan-400 font-mono font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+                {{ forloop.counter0|stringformat:"c"|slice:":1" }}
+              </span>
+              <span class="leading-relaxed flex-grow">{{ opt.label }}</span>
+            </button>
+          {% endfor %}
+        </div>
+
+        <div id="speed-explanation" class="hidden p-4 rounded-xl text-xs sm:text-sm leading-relaxed border space-y-2"></div>
+      </div>
+
+    </div>
+
+    <!-- ==================== VICTORY CELEBRATION VIEW ==================== -->
+    <div id="view-victory" class="hidden text-center py-8 space-y-5">
+      <div class="relative inline-block">
+        <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-yellow-400 flex items-center justify-center text-4xl shadow-2xl animate-bounce">
+          👑
+        </div>
+        <div class="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-black font-extrabold text-[10px] font-mono">
+          +{{ quest.xpReward|default:15 }} XP
+        </div>
+      </div>
+
+      <div class="space-y-1.5">
+        <span class="text-xs font-mono font-bold uppercase tracking-widest text-amber-400">
+          🎉 QUEST COMPLETE! STAGE CLEARED!
+        </span>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          Selamat! Checkpoint Modul Selesai!
+        </h3>
+        <p class="text-xs sm:text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
+          Kamu telah membuktikan pemahaman konsep materi ini dengan gemilang. Poin XP telah ditambahkan ke profil belajarmu.
+        </p>
+      </div>
+
+      <!-- Action Button to Open LKPD -->
+      <div class="pt-3 flex flex-wrap items-center justify-center gap-3">
+        <button 
+          type="button"
+          @click="currentTab = 'lkpd'; hasPassedCheckpoint = true;"
+          class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-extrabold text-sm sm:text-base shadow-xl transition-transform hover:scale-105 flex items-center gap-2 animate-pulse cursor-pointer"
+        >
+          <span>🔓 Gembok Terbuka! Lanjut Mengerjakan LKPD</span>
+          <span>➔</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== GAME OVER VIEW (OUT OF LIVES) ==================== -->
+    <div id="view-game-over" class="hidden text-center py-8 space-y-5">
+      <div class="w-16 h-16 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-400 text-3xl flex items-center justify-center mx-auto">
+        💥
+      </div>
+      <div class="space-y-1">
+        <h3 class="text-xl font-bold text-white">
+          Nyawa Habis! Jangan Menyerah!
+        </h3>
+        <p class="text-xs sm:text-sm text-gray-300 max-w-md mx-auto">
+          Materi software engineering memang menuntut ketelitian. Baca kembali ringkasan materi di atas dan coba lagi tantangannya!
+        </p>
+      </div>
+      <div>
+        <button
+          type="button"
+          id="btn-retry-game"
+          class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs sm:text-sm shadow-md transition-transform hover:scale-105 flex items-center gap-2 mx-auto cursor-pointer"
+        >
+          <span>🔄 Coba Lagi (Isi Ulang 3 Nyawa)</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function() {
+    const slug = "{{ modul.slug }}";
+    const questData = {{ quest_json|safe }};
+    const isInitialDone = {% if has_passed_checkpoint %}true{% else %}false{% endif %};
+    const csrfToken = "{{ csrf_token }}";
+
+    // Web Audio Synthesizer
+    function playAudio(type) {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'match') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.15);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.25);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.25);
+        } else if (type === 'victory') {
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+          notes.forEach((freq, index) => {
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.frequency.value = freq;
+            g.gain.setValueAtTime(0.15, ctx.currentTime + index * 0.1);
+            g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + index * 0.1 + 0.25);
+            o.start(ctx.currentTime + index * 0.1);
+            o.stop(ctx.currentTime + index * 0.1 + 0.25);
+          });
+        }
+      } catch (e) {
+        // Ignored
+      }
+    }
+
+    function initGame() {
+      const container = document.getElementById('checkpoint-game-' + slug);
+      if (!container) return;
+
+      let currentStage = 1;
+      let lives = 3;
+      let comboStreak = 0;
+      let selectedLeftCard = null;
+      let matchedPairsCount = 0;
+      let activeTimeouts = [];
+      const totalPairs = (questData.stage1Match && questData.stage1Match.pairs) ? questData.stage1Match.pairs.length : 3;
+
+      function setGameTimeout(fn, delay) {
+        const t = setTimeout(fn, delay);
+        activeTimeouts.push(t);
+        return t;
+      }
+
+      function clearAllTimeouts() {
+        activeTimeouts.forEach(t => clearTimeout(t));
+        activeTimeouts = [];
+      }
+
+      const hudHearts = container.querySelector('#hud-hearts');
+      const hudComboBadge = container.querySelector('#hud-combo-badge');
+      const hudComboText = container.querySelector('#hud-combo-text');
+      const stageBar1 = container.querySelector('#stage-bar-1');
+      const stageBar2 = container.querySelector('#stage-bar-2');
+      const stageBar3 = container.querySelector('#stage-bar-3');
+      const stageIcon = container.querySelector('#stage-icon');
+      const stageTitleText = container.querySelector('#stage-title-text');
+
+      const viewArena = container.querySelector('#view-game-arena');
+      const viewCompleted = container.querySelector('#view-completed-banner');
+      const viewVictory = container.querySelector('#view-victory');
+      const viewGameOver = container.querySelector('#view-game-over');
+
+      const stage1Container = container.querySelector('#stage-1-container');
+      const stage2Container = container.querySelector('#stage-2-container');
+      const stage3Container = container.querySelector('#stage-3-container');
+
+      const btnFact = container.querySelector('#btn-detective-fact');
+      const btnMyth = container.querySelector('#btn-detective-myth');
+      const detectiveExpl = container.querySelector('#detective-explanation');
+
+      const speedButtons = container.querySelectorAll('.speed-option-btn');
+      const speedExpl = container.querySelector('#speed-explanation');
+
+      // Shuffle right column
+      function shuffleRightColumn() {
+        const rightCol = container.querySelector('#match-right-column');
+        if (!rightCol) return;
+        const cards = Array.from(rightCol.children);
+        for (let i = cards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          rightCol.appendChild(cards[j]);
+        }
+      }
+      shuffleRightColumn();
+
+      function updateHUD() {
+        if (hudHearts) {
+          hudHearts.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, 3 - lives));
+        }
+        if (hudComboBadge && hudComboText) {
+          if (comboStreak >= 2) {
+            hudComboBadge.classList.remove('hidden');
+            hudComboBadge.classList.add('flex');
+            hudComboText.textContent = `COMBO x${comboStreak} 🔥`;
+          } else {
+            hudComboBadge.classList.add('hidden');
+            hudComboBadge.classList.remove('flex');
+          }
+        }
+      }
+
+      function deductLife() {
+        lives--;
+        comboStreak = 0;
+        updateHUD();
+        playAudio('wrong');
+
+        if (lives <= 0) {
+          clearAllTimeouts();
+          if (viewArena) viewArena.classList.add('hidden');
+          if (viewGameOver) viewGameOver.classList.remove('hidden');
+        }
+      }
+
+      function resetGame() {
+        clearAllTimeouts();
+        lives = 3;
+        comboStreak = 0;
+        currentStage = 1;
+        matchedPairsCount = 0;
+        selectedLeftCard = null;
+        updateHUD();
+
+        if (viewGameOver) viewGameOver.classList.add('hidden');
+        if (viewVictory) viewVictory.classList.add('hidden');
+        if (viewCompleted) viewCompleted.classList.add('hidden');
+        if (viewArena) viewArena.classList.remove('hidden');
+
+        if (stage1Container) stage1Container.classList.remove('hidden');
+        if (stage2Container) stage2Container.classList.add('hidden');
+        if (stage3Container) stage3Container.classList.add('hidden');
+
+        if (stageBar1) stageBar1.className = 'h-full w-1/3 bg-amber-500 transition-all duration-500';
+        if (stageBar2) stageBar2.className = 'h-full w-1/3 bg-white/10 transition-all duration-500';
+        if (stageBar3) stageBar3.className = 'h-full w-1/3 bg-white/10 transition-all duration-500';
+
+        if (stageIcon) stageIcon.textContent = '🧩';
+        if (stageTitleText) stageTitleText.textContent = 'Ronde 1/3: Puzzle Pencocokan Konsep';
+
+        container.querySelectorAll('.match-card').forEach(c => {
+          c.disabled = false;
+          const isLeft = c.dataset.side === 'left';
+          c.className = `match-card ${isLeft ? 'match-card-left' : 'match-card-right'} w-full p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border-2 border-white/10 text-left ${isLeft ? 'font-medium text-white' : 'text-gray-300'} text-xs sm:text-sm transition-all duration-200 flex items-center justify-between group cursor-pointer shadow-sm hover:border-amber-400/60`;
+          const lastSpan = c.querySelector('span:last-child');
+          if (lastSpan) {
+            lastSpan.textContent = isLeft ? '➔' : '✓';
+            lastSpan.className = 'w-5 h-5 rounded-full border border-white/20 group-hover:border-amber-400 flex items-center justify-center text-[10px] text-gray-400 group-hover:text-amber-400 font-mono';
+          }
+        });
+        const matchFeedback = container.querySelector('#match-feedback-msg');
+        if (matchFeedback) {
+          matchFeedback.className = 'hidden p-3 rounded-lg text-xs font-mono font-semibold text-center';
+          matchFeedback.textContent = '';
+        }
+        shuffleRightColumn();
+
+        if (btnFact) {
+          btnFact.disabled = false;
+          btnFact.className = 'p-4 rounded-xl bg-gradient-to-r from-emerald-950/60 to-emerald-900/40 hover:from-emerald-900/80 hover:to-emerald-800/60 border-2 border-emerald-500/40 text-emerald-300 font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer';
+        }
+        if (btnMyth) {
+          btnMyth.disabled = false;
+          btnMyth.className = 'p-4 rounded-xl bg-gradient-to-r from-red-950/60 to-rose-900/40 hover:from-red-900/80 hover:to-rose-800/60 border-2 border-rose-500/40 text-rose-300 font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer';
+        }
+        if (detectiveExpl) {
+          detectiveExpl.className = 'hidden p-4 rounded-xl text-xs sm:text-sm leading-relaxed border space-y-2';
+          detectiveExpl.innerHTML = '';
+        }
+
+        speedButtons.forEach((btn, idx) => {
+          btn.disabled = false;
+          btn.className = 'speed-option-btn w-full p-4 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border-2 border-white/10 text-left text-xs sm:text-sm text-gray-200 transition-all duration-200 flex items-start gap-3 group cursor-pointer shadow-sm hover:border-cyan-400/60';
+        });
+        if (speedExpl) {
+          speedExpl.className = 'hidden p-4 rounded-xl text-xs sm:text-sm leading-relaxed border space-y-2';
+          speedExpl.innerHTML = '';
+        }
+      }
+
+      // STAGE 1: CARD PAIR MATCHING
+      const leftCards = container.querySelectorAll('.match-card-left');
+      const rightCards = container.querySelectorAll('.match-card-right');
+
+      leftCards.forEach(card => {
+        card.addEventListener('click', () => {
+          if (card.disabled || lives <= 0) return;
+          leftCards.forEach(c => {
+            if (!c.disabled) {
+              c.classList.remove('border-amber-400', 'bg-amber-500/20', 'ring-2', 'ring-amber-400/50');
+              c.classList.add('border-white/10');
+            }
+          });
+
+          selectedLeftCard = card;
+          card.classList.remove('border-white/10');
+          card.classList.add('border-amber-400', 'bg-amber-500/20', 'ring-2', 'ring-amber-400/50');
+        });
+      });
+
+      rightCards.forEach(card => {
+        card.addEventListener('click', () => {
+          if (card.disabled || lives <= 0) return;
+
+          if (!selectedLeftCard) {
+            const feedbackMsg = container.querySelector('#match-feedback-msg');
+            if (feedbackMsg) {
+              feedbackMsg.className = 'p-3 rounded-lg text-xs font-mono font-semibold text-center bg-amber-500/15 text-amber-300 border border-amber-500/30 block animate-bounce';
+              feedbackMsg.textContent = '👆 Klik dulu salah satu kartu konsep di sebelah KIRI!';
+            }
+            return;
+          }
+
+          const leftPairId = selectedLeftCard.dataset.pairId;
+          const rightPairId = card.dataset.pairId;
+
+          if (leftPairId === rightPairId) {
+            playAudio('match');
+            comboStreak++;
+            updateHUD();
+
+            selectedLeftCard.disabled = true;
+            card.disabled = true;
+
+            selectedLeftCard.className = 'match-card match-card-left w-full p-3.5 rounded-xl bg-emerald-500/20 border-2 border-emerald-500 text-emerald-300 text-left text-xs sm:text-sm font-bold flex items-center justify-between shadow-sm';
+            const leftLast = selectedLeftCard.querySelector('span:last-child');
+            if (leftLast) leftLast.textContent = '✅';
+
+            card.className = 'match-card match-card-right w-full p-3.5 rounded-xl bg-emerald-500/20 border-2 border-emerald-500 text-emerald-300 text-left text-xs sm:text-sm font-medium flex items-center justify-between shadow-sm';
+            const rightLast = card.querySelector('span:last-child');
+            if (rightLast) rightLast.textContent = '✅';
+
+            selectedLeftCard = null;
+            matchedPairsCount++;
+
+            const feedbackMsg = container.querySelector('#match-feedback-msg');
+            if (feedbackMsg) {
+              feedbackMsg.className = 'p-2.5 rounded-lg text-xs font-mono font-semibold text-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 block';
+              feedbackMsg.textContent = `🎉 Cocok! (${matchedPairsCount}/${totalPairs})`;
+            }
+
+            if (matchedPairsCount >= totalPairs) {
+              setGameTimeout(() => {
+                if (currentStage !== 1 || lives <= 0) return;
+                currentStage = 2;
+                if (stage1Container) stage1Container.classList.add('hidden');
+                if (stage2Container) stage2Container.classList.remove('hidden');
+                if (stageBar2) stageBar2.className = 'h-full w-1/3 bg-purple-500 transition-all duration-500';
+                if (stageIcon) stageIcon.textContent = '🕵️';
+                if (stageTitleText) stageTitleText.textContent = 'Ronde 2/3: Detektif Skenario Industri';
+              }, 800);
+            }
+          } else {
+            deductLife();
+            const leftRef = selectedLeftCard;
+            leftRef.classList.add('animate-shake', 'border-rose-500', 'bg-rose-500/20');
+            card.classList.add('animate-shake', 'border-rose-500', 'bg-rose-500/20');
+
+            setGameTimeout(() => {
+              leftRef.classList.remove('animate-shake', 'border-rose-500', 'bg-rose-500/20', 'border-amber-400', 'bg-amber-500/20', 'ring-2', 'ring-amber-400/50');
+              leftRef.classList.add('border-white/10');
+              card.classList.remove('animate-shake', 'border-rose-500', 'bg-rose-500/20');
+              selectedLeftCard = null;
+            }, 600);
+          }
+        });
+      });
+
+      // STAGE 2: DETECTIVE FACT OR MYTH
+      function handleDetectiveChoice(userChoseFact) {
+        if (lives <= 0) return;
+        const isFact = questData.stage2Detective.isFact;
+        const isCorrect = userChoseFact === isFact;
+
+        if (isCorrect) {
+          playAudio('match');
+          comboStreak++;
+          updateHUD();
+
+          if (detectiveExpl) {
+            detectiveExpl.className = 'p-4 rounded-xl text-xs sm:text-sm leading-relaxed border bg-emerald-500/15 border-emerald-500/40 text-emerald-300 block space-y-1';
+            detectiveExpl.innerHTML = `
+              <div class="font-bold font-mono text-emerald-400">✅ JAWABAN TEPAT!</div>
+              <p>${questData.stage2Detective.explanation}</p>
+            `;
+          }
+
+          if (btnFact) btnFact.disabled = true;
+          if (btnMyth) btnMyth.disabled = true;
+
+          setGameTimeout(() => {
+            if (currentStage !== 2 || lives <= 0) return;
+            currentStage = 3;
+            if (stage2Container) stage2Container.classList.add('hidden');
+            if (stage3Container) stage3Container.classList.remove('hidden');
+            if (stageBar3) stageBar3.className = 'h-full w-1/3 bg-cyan-500 transition-all duration-500';
+            if (stageIcon) stageIcon.textContent = '🚀';
+            if (stageTitleText) stageTitleText.textContent = 'Ronde 3/3: Tantangan Skenario Cepat';
+          }, 1400);
+        } else {
+          deductLife();
+          if (detectiveExpl) {
+            detectiveExpl.className = 'p-4 rounded-xl text-xs sm:text-sm leading-relaxed border bg-rose-500/15 border-rose-500/40 text-rose-300 block space-y-1 animate-shake';
+            detectiveExpl.innerHTML = `
+              <div class="font-bold font-mono text-rose-400">❌ KURANG TEPAT!</div>
+              <p>${questData.stage2Detective.explanation}</p>
+            `;
+          }
+        }
+      }
+
+      btnFact?.addEventListener('click', () => handleDetectiveChoice(true));
+      btnMyth?.addEventListener('click', () => handleDetectiveChoice(false));
+
+      // STAGE 3: SPEED SCENARIO CHALLENGE
+      speedButtons.forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (btn.disabled || lives <= 0) return;
+          const isCorrect = btn.dataset.isCorrect === 'true';
+          const explanation = btn.dataset.explanation;
+
+          if (isCorrect) {
+            playAudio('victory');
+            comboStreak++;
+            updateHUD();
+
+            btn.className = 'speed-option-btn w-full p-4 rounded-xl bg-emerald-500/20 border-2 border-emerald-500 text-emerald-300 text-left text-xs sm:text-sm font-bold flex items-start gap-3 shadow-md';
+            speedButtons.forEach(b => b.disabled = true);
+
+            if (speedExpl) {
+              speedExpl.className = 'p-4 rounded-xl text-xs sm:text-sm leading-relaxed border bg-emerald-500/15 border-emerald-500/40 text-emerald-300 block space-y-1';
+              speedExpl.innerHTML = `
+                <div class="font-bold font-mono text-emerald-400">🎉 TEPAT SEKALI!</div>
+                <p>${explanation}</p>
+              `;
+            }
+
+            // Claim XP and complete checkpoint automatically via endpoint
+            try {
+              const res = await fetch(`/pembelajaran/${slug}/checkpoint/`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': csrfToken
+                }
+              });
+              const data = await res.json();
+              if (data.success) {
+                // Dispatch event to unlock LKPD tab in Alpine.js
+                window.dispatchEvent(new CustomEvent('checkpoint-cleared', { detail: { slug: slug } }));
+              }
+            } catch (e) {
+              console.error('Error claiming checkpoint:', e);
+            }
+
+            // Show Victory Screen
+            setGameTimeout(() => {
+              if (lives <= 0) return;
+              if (viewArena) viewArena.classList.add('hidden');
+              if (viewVictory) viewVictory.classList.remove('hidden');
+            }, 1200);
+          } else {
+            deductLife();
+            btn.classList.add('animate-shake', 'border-rose-500', 'bg-rose-500/20');
+            if (speedExpl) {
+              speedExpl.className = 'p-4 rounded-xl text-xs sm:text-sm leading-relaxed border bg-rose-500/15 border-rose-500/40 text-rose-300 block space-y-1 animate-shake';
+              speedExpl.innerHTML = `
+                <div class="font-bold font-mono text-rose-400">❌ KURANG TEPAT!</div>
+                <p>${explanation}</p>
+              `;
+            }
+            setGameTimeout(() => {
+              btn.classList.remove('animate-shake', 'border-rose-500', 'bg-rose-500/20');
+            }, 600);
+          }
+        });
+      });
+
+      container.querySelector('#btn-retry-game')?.addEventListener('click', resetGame);
+      container.querySelector('#btn-replay-game')?.addEventListener('click', resetGame);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGame);
+    } else {
+      initGame();
+    }
+  })();
+</script>
+
+<style>
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+  }
+  .animate-shake {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+  }
+</style>

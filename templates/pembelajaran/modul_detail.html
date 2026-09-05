@@ -1,23 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load pembelajaran_tags %}
 
 {% block title %}[{{ modul.kode }}] {{ modul.judul }} | {{ SITE_TITLE }}{% endblock %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto space-y-6 py-6" x-data="{ currentTab: 'materi' }">
+<div class="max-w-5xl mx-auto space-y-6 py-6" 
+     x-data="{ 
+         currentTab: 'materi', 
+         hasPassedCheckpoint: {% if has_passed_checkpoint %}true{% else %}false{% endif %}, 
+         showLockToast: false 
+     }"
+     @checkpoint-cleared.window="hasPassedCheckpoint = true"
+>
 
     <!-- Top Breadcrumb & Next/Prev Controls -->
     <div class="flex items-center justify-between text-xs font-mono">
         <a href="{% url 'pembelajaran:modul_list' %}" class="inline-flex items-center gap-1.5 text-primary hover:underline">
-            ← Kembali ke Daftar 16 Modul
+            ← Kembali ke Silabus 16 Modul
         </a>
         <div class="flex items-center gap-2">
             {% if prev_modul %}
-            <a href="{% url 'pembelajaran:modul_detail' prev_modul.slug %}" class="px-2.5 py-1 rounded bg-surface-low border border-outline-variant hover:border-outline text-foreground">
+            <a href="{% url 'pembelajaran:modul_detail' prev_modul.slug %}" class="px-2.5 py-1 rounded-lg bg-surface-low border border-outline-variant hover:border-outline text-foreground transition-colors">
                 ← {{ prev_modul.kode }}
             </a>
             {% endif %}
             {% if next_modul %}
-            <a href="{% url 'pembelajaran:modul_detail' next_modul.slug %}" class="px-2.5 py-1 rounded bg-surface-low border border-outline-variant hover:border-outline text-foreground">
+            <a href="{% url 'pembelajaran:modul_detail' next_modul.slug %}" class="px-2.5 py-1 rounded-lg bg-surface-low border border-outline-variant hover:border-outline text-foreground transition-colors">
                 {{ next_modul.kode }} →
             </a>
             {% endif %}
@@ -25,10 +34,10 @@
     </div>
 
     <!-- Module Header Card -->
-    <div class="m3-surface p-6 sm:p-8 space-y-4">
+    <div class="m3-surface p-6 sm:p-8 space-y-4 rounded-3xl">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-2">
-                <span class="px-3 py-1 bg-surface-lowest border border-outline-variant rounded-lg font-mono font-bold text-sm text-primary">
+                <span class="px-3 py-1 bg-surface-lowest border border-outline-variant rounded-xl font-mono font-bold text-sm text-primary">
                     {{ modul.kode }}
                 </span>
                 <span class="text-xs text-gray-500 dark:text-gray-400 font-mono">{{ modul.kategori }} &bull; {{ modul.durasi }}</span>
@@ -36,9 +45,9 @@
 
             <!-- XP Breakdown Badges -->
             <div class="flex items-center gap-2 text-xs font-mono">
-                <span class="px-2 py-0.5 rounded bg-sky-500/10 border border-sky-500/20 text-primary">Materi: +10 XP</span>
-                <span class="px-2 py-0.5 rounded bg-teal-500/10 border border-teal-500/20 text-secondary">LKPD: +25 XP</span>
-                <span class="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400">Refleksi: +15 XP</span>
+                <span class="px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-primary">Kuis Checkpoint: +{{ quest.xpReward|default:15 }} XP</span>
+                <span class="px-2.5 py-1 rounded-lg bg-teal-500/10 border border-teal-500/20 text-secondary">LKPD: +25 XP</span>
+                <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400">Refleksi: +15 XP</span>
             </div>
         </div>
 
@@ -55,36 +64,41 @@
     <!-- 4-Tab Reader Navigation Bar -->
     <div class="flex items-center gap-2 border-b border-outline-variant pb-2 overflow-x-auto font-mono text-xs">
         <button 
-            @click="currentTab = 'materi'" 
+            type="button"
+            @click="currentTab = 'materi'; showLockToast = false;" 
             :class="currentTab === 'materi' ? 'bg-primary text-primary-on-primary font-bold border-primary shadow-sm' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
-            class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
+            class="px-4 py-2 rounded-xl border whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer"
         >
             <span>📖 1. Materi & Konsep</span>
             {% if is_completed %}<span class="text-emerald-500 font-bold">✓</span>{% endif %}
         </button>
 
         <button 
-            @click="currentTab = 'lkpd'" 
-            :class="currentTab === 'lkpd' ? 'bg-secondary text-secondary-on-secondary font-bold border-secondary shadow-sm' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
-            class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
+            type="button"
+            @click="if (hasPassedCheckpoint) { currentTab = 'lkpd'; showLockToast = false; } else { showLockToast = true; }" 
+            :class="currentTab === 'lkpd' ? 'bg-secondary text-secondary-on-secondary font-bold border-secondary shadow-sm' : (hasPassedCheckpoint ? 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant' : 'bg-surface-low text-gray-400 border-outline-variant opacity-75')"
+            class="px-4 py-2 rounded-xl border whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer"
         >
-            <span>📝 2. Form LKPD (+25 XP)</span>
+            <span x-text="hasPassedCheckpoint ? '📝' : '🔒'"></span>
+            <span>2. Form LKPD (+25 XP)</span>
             {% if lkpd_submission %}<span class="text-emerald-500 font-bold">✓</span>{% endif %}
         </button>
 
         <button 
-            @click="currentTab = 'reflection'" 
+            type="button"
+            @click="currentTab = 'reflection'; showLockToast = false;" 
             :class="currentTab === 'reflection' ? 'bg-amber-400 text-amber-950 font-bold border-amber-400 shadow-sm' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
-            class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
+            class="px-4 py-2 rounded-xl border whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer"
         >
             <span>💭 3. Jurnal Refleksi (+15 XP)</span>
             {% if reflection_submission %}<span class="text-emerald-500 font-bold">✓</span>{% endif %}
         </button>
 
         <button 
-            @click="currentTab = 'kktp'" 
+            type="button"
+            @click="currentTab = 'kktp'; showLockToast = false;" 
             :class="currentTab === 'kktp' ? 'bg-surface-high text-foreground font-bold border-outline shadow-sm' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
-            class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
+            class="px-4 py-2 rounded-xl border whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer"
         >
             <span>🎯 4. Panduan KKTP & Rubrik</span>
             {% if lkpd_submission and lkpd_submission.status == 'graded' %}
@@ -93,12 +107,21 @@
         </button>
     </div>
 
-    <!-- Tab 1: Materi & Konsep -->
+    <!-- Locked Warning Toast / Alert Bar -->
+    <div x-show="showLockToast" x-cloak class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-medium flex items-center justify-between animate-shake shadow-sm">
+        <div class="flex items-center gap-2.5">
+            <span class="text-base">🔒</span>
+            <span>Selesaikan tantangan <strong>Mini-Game Checkpoint</strong> di bawah materi terlebih dahulu untuk membuka formulir LKPD!</span>
+        </div>
+        <button type="button" @click="showLockToast = false" class="text-xs font-bold px-2 py-0.5 rounded hover:bg-amber-500/20 cursor-pointer">✕</button>
+    </div>
+
+    <!-- ==================== TAB 1: MATERI & KONSEP ==================== -->
     <div x-show="currentTab === 'materi'" class="space-y-6">
         
-        <!-- Teacher Message Card -->
+        <!-- Teacher Tip & Directive -->
         {% if modul.teacher_tip %}
-        <div class="p-5 rounded-2xl bg-surface-lowest border border-amber-500/30 space-y-2">
+        <div class="p-5 rounded-3xl bg-surface-lowest border border-amber-500/30 space-y-2">
             <div class="flex items-center gap-2 text-xs font-mono font-bold text-amber-600 dark:text-amber-400">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
@@ -109,113 +132,52 @@
         </div>
         {% endif %}
 
-        <!-- Markdown / HTML Content Body -->
-        <div class="m3-surface p-6 sm:p-10 space-y-6">
-            <article class="prose dark:prose-invert max-w-none text-foreground text-sm leading-relaxed font-sans">
-                {{ modul.content_materi|linebreaks }}
-            </article>
-        </div>
-
-        <!-- Mark as Read / Complete Button -->
-        <div id="progress-container" class="m3-surface p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            {% if is_completed %}
-                {% include 'pembelajaran/partials/progress_status.html' with is_completed=True just_claimed=False %}
-            {% else %}
-                <div class="space-y-0.5 text-center sm:text-left">
-                    <h3 class="text-sm font-bold font-display text-foreground">Selesai Mempelajari Materi Ini?</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">Tandai telah membaca materi untuk mengklaim +10 XP dan melanjutkan ke LKPD.</p>
-                </div>
-                {% if user.is_authenticated %}
-                <button 
-                    hx-post="{% url 'pembelajaran:mark_read' modul.slug %}" 
-                    hx-target="#progress-container" 
-                    hx-swap="outerHTML" 
-                    class="m3-btn-primary text-xs whitespace-nowrap shrink-0"
-                >
-                    <span>Tandai Selesai (+10 XP) ➔</span>
-                </button>
-                {% else %}
-                <a href="{% url 'accounts:login' %}" class="m3-btn-outlined text-xs">
-                    Masuk untuk Klaim +10 XP
-                </a>
-                {% endif %}
-            {% endif %}
-        </div>
-
-    </div>
-
-    <!-- Tab 2: Form LKPD Interaktif -->
-    <div x-show="currentTab === 'lkpd'" x-cloak class="space-y-6">
-        
-        <!-- LKPD Instructions Card -->
-        <div class="m3-surface p-6 space-y-3">
-            <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded bg-teal-500/10 border border-teal-500/20 text-secondary text-xs font-mono font-bold">
-                    Lembar Kerja Peserta Didik (LKPD) &bull; +25 XP
-                </span>
-            </div>
-            <h2 class="text-lg font-bold font-display text-foreground">Instruksi Pengumpulan Portofolio Evidence</h2>
-            <div class="text-xs text-gray-700 dark:text-gray-300 space-y-2 leading-relaxed font-sans">
-                <p>1. Buat folder portofolio praktikum pada Google Drive akun belajar Anda sesuai standar penamaan: <code class="text-primary font-mono font-bold">RPL_SkillPassport_2026-2027 / 10_RPL_X / [NIS]_[Nama] / {{ modul.kode }}</code>.</p>
-                <p>2. Pastikan hak akses folder disetel ke <strong class="text-foreground">"Anyone with the link can view" (Siapa saja yang memiliki link)</strong>.</p>
-                <p>3. Masukkan link URL folder tersebut dan ketik ringkasan hasil pekerjaan praktikum kalian pada form di bawah ini.</p>
-            </div>
-        </div>
-
-        <div id="lkpd-response-container">
-            {% if lkpd_submission %}
-                {% include 'pembelajaran/partials/lkpd_status.html' with success=True message="LKPD telah terkirim ke Guru Pengampu." lkpd_submission=lkpd_submission just_claimed=False %}
-            {% endif %}
-        </div>
-
-        <!-- LKPD Submission Form -->
-        {% if user.is_authenticated %}
-        <div class="m3-surface p-6 sm:p-8 space-y-4">
-            <h3 class="text-base font-bold font-display text-foreground">Form Pengumpulan LKPD</h3>
-
-            <form hx-post="{% url 'pembelajaran:submit_lkpd' modul.slug %}" hx-target="#lkpd-response-container" class="space-y-4 text-xs">
-                {% csrf_token %}
-
-                <div class="space-y-1.5">
-                    <label class="block font-semibold text-foreground font-mono">LINK FOLDER GOOGLE DRIVE EVIDENCE *</label>
-                    {{ lkpd_form.drive_url }}
-                    <p class="text-[11px] text-gray-500 dark:text-gray-400">{{ lkpd_form.drive_url.help_text }}</p>
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="block font-semibold text-foreground font-mono">RINGKASAN PEKERJAAN / AUDIT PRAKTIKUM *</label>
-                    {{ lkpd_form.work_summary }}
-                    <p class="text-[11px] text-gray-500 dark:text-gray-400">{{ lkpd_form.work_summary.help_text }}</p>
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="block font-semibold text-foreground font-mono">CATATAN TAMBAHAN UNTUK GURU (OPSIONAL)</label>
-                    {{ lkpd_form.additional_notes }}
-                </div>
-
-                <button type="submit" class="m3-btn-secondary w-full py-3 font-bold text-xs sm:text-sm">
-                    Kirim LKPD & Klaim +25 XP ➔
-                </button>
-            </form>
-        </div>
-        {% else %}
-        <div class="m3-surface p-8 text-center space-y-3">
-            <p class="text-sm text-gray-700 dark:text-gray-300">Harap masuk (login) terlebih dahulu untuk mengumpulkan LKPD dan mengklaim XP.</p>
-            <a href="{% url 'accounts:login' %}" class="m3-btn-primary inline-flex text-xs">Masuk Sekarang</a>
-        </div>
+        <!-- Interactive Material Component for Modul 01 -->
+        {% if is_modul_1 %}
+            {% include 'pembelajaran/components/interactive_material_p1.html' %}
         {% endif %}
 
+        <!-- Collapsible Reference Material (Markdown with full curriculum docs) -->
+        <details class="group p-5 rounded-3xl bg-surface-lowest border border-outline-variant transition-all shadow-sm">
+            <summary class="cursor-pointer font-bold text-xs sm:text-sm text-foreground flex items-center justify-between select-none">
+                <span class="flex items-center gap-2.5">
+                    <span class="text-base">📜</span>
+                    <span class="font-display">Rujukan Silabus & Catatan Kurikulum Lengkap</span>
+                </span>
+                <span class="group-open:rotate-180 transition-transform text-gray-400 font-mono text-xs">▼</span>
+            </summary>
+            <div class="pt-4 border-t border-outline-variant mt-4">
+                <article class="prose dark:prose-invert max-w-none text-xs sm:text-sm leading-relaxed font-sans text-foreground">
+                    {{ modul.content_materi|markdownify }}
+                </article>
+            </div>
+        </details>
+
+        <!-- GAMIFIKASI CHECKPOINT TEPAT SETELAH MATERI -->
+        <div id="checkpoint-challenge-area">
+            {% include 'pembelajaran/components/interactive_knowledge_check.html' %}
+        </div>
+
     </div>
 
-    <!-- Tab 3: Jurnal Refleksi -->
+    <!-- ==================== TAB 2: FORM LKPD INTERAKTIF ==================== -->
+    <div x-show="currentTab === 'lkpd'" x-cloak class="space-y-6">
+        {% if is_modul_1 %}
+            {% include 'pembelajaran/components/interactive_lkpd_p1.html' %}
+        {% else %}
+            {% include 'pembelajaran/components/general_interactive_lkpd.html' %}
+        {% endif %}
+    </div>
+
+    <!-- ==================== TAB 3: JURNAL REFLEKSI ==================== -->
     <div x-show="currentTab === 'reflection'" x-cloak class="space-y-6">
         
-        <div class="m3-surface p-6 space-y-2">
-            <span class="px-2.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-mono font-bold">
+        <div class="m3-surface p-6 sm:p-8 space-y-2 rounded-3xl">
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-mono font-bold">
                 Jurnal Refleksi Pembelajaran &bull; +15 XP
             </span>
             <h2 class="text-lg font-bold font-display text-foreground">Refleksi Pembelajaran Mandiri</h2>
-            <p class="text-xs text-gray-600 dark:text-gray-400">
+            <p class="text-xs text-gray-600 dark:text-gray-400 font-sans">
                 Tuliskan respon dan evaluasi diri Anda secara jujur untuk mengasah metakognisi dan keterampilan pemecahan masalah.
             </p>
         </div>
@@ -228,7 +190,7 @@
 
         <!-- Reflection Form -->
         {% if user.is_authenticated %}
-        <div class="m3-surface p-6 sm:p-8 space-y-4">
+        <div class="m3-surface p-6 sm:p-8 space-y-4 rounded-3xl">
             <h3 class="text-base font-bold font-display text-foreground">Form Jurnal Refleksi 3 Pertanyaan</h3>
 
             <form hx-post="{% url 'pembelajaran:submit_refleksi' modul.slug %}" hx-target="#reflection-response-container" class="space-y-4 text-xs">
@@ -249,26 +211,26 @@
                     {{ reflection_form.action_plan }}
                 </div>
 
-                <button type="submit" class="m3-btn-primary w-full py-3 font-bold text-xs sm:text-sm">
-                    Simpan Refleksi & Klaim +15 XP ➔
+                <button type="submit" class="m3-btn-primary w-full py-3.5 font-bold text-xs sm:text-sm rounded-2xl shadow-lg cursor-pointer">
+                    Simpan Refleksi & Tandai Tuntas (+15 XP) ➔
                 </button>
             </form>
         </div>
         {% else %}
-        <div class="m3-surface p-8 text-center space-y-3">
+        <div class="m3-surface p-8 text-center space-y-3 rounded-3xl">
             <p class="text-sm text-gray-700 dark:text-gray-300">Harap masuk (login) terlebih dahulu untuk mengisi jurnal refleksi.</p>
-            <a href="{% url 'accounts:login' %}" class="m3-btn-primary inline-flex text-xs">Masuk Sekarang</a>
+            <a href="{% url 'accounts:login' %}" class="m3-btn-primary inline-flex text-xs px-5 py-2.5 rounded-xl">Masuk Sekarang</a>
         </div>
         {% endif %}
 
     </div>
 
-    <!-- Tab 4: Panduan KKTP & Rubrik Guru -->
+    <!-- ==================== TAB 4: PANDUAN KKTP & RUBRIK GURU ==================== -->
     <div x-show="currentTab === 'kktp'" x-cloak class="space-y-6">
         
         <!-- Live Teacher Assessment Card (If graded) -->
         {% if lkpd_submission and lkpd_submission.status == 'graded' %}
-        <div class="p-6 rounded-2xl bg-surface-lowest border border-emerald-500/40 space-y-4 animate-fadeIn">
+        <div class="p-6 rounded-3xl bg-surface-lowest border border-emerald-500/40 space-y-4 animate-fadeIn">
             <div class="flex items-center justify-between">
                 <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-xs">
                     ✓ HASIL PENILAIAN RESMI GURU PENGAMPU
@@ -277,11 +239,11 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="p-4 rounded-xl bg-surface-high border border-outline-variant space-y-1">
+                <div class="p-4 rounded-2xl bg-surface-high border border-outline-variant space-y-1">
                     <p class="text-[11px] font-mono text-gray-500 dark:text-gray-400">Level Capaian KKTP</p>
                     <p class="text-base font-bold font-display text-emerald-600 dark:text-emerald-400">{{ lkpd_submission.teacher_level|default:"Level 2" }}</p>
                 </div>
-                <div class="p-4 rounded-xl bg-surface-high border border-outline-variant space-y-1">
+                <div class="p-4 rounded-2xl bg-surface-high border border-outline-variant space-y-1">
                     <p class="text-[11px] font-mono text-gray-500 dark:text-gray-400">Nilai Angka</p>
                     <p class="text-2xl font-bold font-mono text-foreground">{{ lkpd_submission.teacher_score|default:"85" }} <span class="text-xs font-normal text-gray-500 dark:text-gray-400">/ 100</span></p>
                 </div>
@@ -290,7 +252,7 @@
             {% if lkpd_submission.teacher_feedback %}
             <div class="space-y-1 pt-2 border-t border-outline-variant">
                 <p class="text-[11px] font-mono font-bold text-gray-600 dark:text-gray-300">Catatan Masukan Pak Agung:</p>
-                <p class="text-xs text-foreground leading-relaxed font-sans bg-surface-high p-3 rounded-lg border border-outline-variant">
+                <p class="text-xs text-foreground leading-relaxed font-sans bg-surface-high p-4 rounded-xl border border-outline-variant">
                     "{{ lkpd_submission.teacher_feedback }}"
                 </p>
             </div>
@@ -299,7 +261,7 @@
         {% endif %}
 
         <!-- Rubrik KKTP Tangga Level Kompetensi -->
-        <div class="m3-surface p-6 sm:p-8 space-y-6">
+        <div class="m3-surface p-6 sm:p-8 space-y-6 rounded-3xl">
             <div class="space-y-1">
                 <h2 class="text-lg font-bold font-display text-foreground">Tangga Level Kompetensi Skill Passport (Level 0 - 4)</h2>
                 <p class="text-xs text-gray-600 dark:text-gray-400 font-sans">
@@ -309,40 +271,40 @@
 
             <div class="grid grid-cols-1 gap-3 text-xs font-sans">
                 
-                <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant flex items-start gap-4">
-                    <span class="px-2.5 py-1 rounded bg-gray-500/20 text-gray-600 dark:text-gray-400 font-mono font-bold shrink-0">Level 0</span>
+                <div class="p-4 rounded-2xl bg-surface-lowest border border-outline-variant flex items-start gap-4">
+                    <span class="px-2.5 py-1 rounded-xl bg-gray-500/20 text-gray-600 dark:text-gray-400 font-mono font-bold shrink-0">Level 0</span>
                     <div>
                         <h4 class="font-bold text-foreground">Belum Terlihat</h4>
                         <p class="text-gray-500 dark:text-gray-400 mt-0.5">Siswa belum mengumpulkan berkas atau link Google Drive evidence masih terkunci/tidak valid.</p>
                     </div>
                 </div>
 
-                <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant flex items-start gap-4">
-                    <span class="px-2.5 py-1 rounded bg-sky-500/20 text-sky-600 dark:text-sky-400 font-mono font-bold shrink-0">Level 1</span>
+                <div class="p-4 rounded-2xl bg-surface-lowest border border-outline-variant flex items-start gap-4">
+                    <span class="px-2.5 py-1 rounded-xl bg-sky-500/20 text-sky-600 dark:text-sky-400 font-mono font-bold shrink-0">Level 1</span>
                     <div>
                         <h4 class="font-bold text-sky-600 dark:text-sky-300">Mengenal</h4>
                         <p class="text-gray-500 dark:text-gray-400 mt-0.5">Evidence terkumpul namun sekadar meniru contoh tanpa analisis mandiri yang memadai.</p>
                     </div>
                 </div>
 
-                <div class="p-4 rounded-xl bg-surface-lowest border border-emerald-500/30 flex items-start gap-4">
-                    <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono font-bold shrink-0">Level 2 ★</span>
+                <div class="p-4 rounded-2xl bg-surface-lowest border border-emerald-500/30 flex items-start gap-4">
+                    <span class="px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono font-bold shrink-0">Level 2 ★</span>
                     <div>
                         <h4 class="font-bold text-emerald-600 dark:text-emerald-300">Mencoba (Target Minimal Semester 1)</h4>
                         <p class="text-gray-600 dark:text-gray-300 mt-0.5">Evidence lengkap, struktur hierarki folder rapi, link Google Drive valid dan dapat diverifikasi.</p>
                     </div>
                 </div>
 
-                <div class="p-4 rounded-xl bg-surface-lowest border border-outline-variant flex items-start gap-4">
-                    <span class="px-2.5 py-1 rounded bg-teal-500/20 text-teal-600 dark:text-teal-400 font-mono font-bold shrink-0">Level 3</span>
+                <div class="p-4 rounded-2xl bg-surface-lowest border border-outline-variant flex items-start gap-4">
+                    <span class="px-2.5 py-1 rounded-xl bg-teal-500/20 text-teal-600 dark:text-teal-400 font-mono font-bold shrink-0">Level 3</span>
                     <div>
                         <h4 class="font-bold text-teal-600 dark:text-teal-300">Mandiri</h4>
                         <p class="text-gray-500 dark:text-gray-400 mt-0.5">Analisis mendalam, orisinal, serta mampu menjelaskan logika struktur karya dengan percaya diri.</p>
                     </div>
                 </div>
 
-                <div class="p-4 rounded-xl bg-surface-lowest border border-amber-500/30 flex items-start gap-4">
-                    <span class="px-2.5 py-1 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-mono font-bold shrink-0">Level 4 👑</span>
+                <div class="p-4 rounded-2xl bg-surface-lowest border border-amber-500/30 flex items-start gap-4">
+                    <span class="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 font-mono font-bold shrink-0">Level 4 👑</span>
                     <div>
                         <h4 class="font-bold text-amber-600 dark:text-amber-300">Mahir / Standar Industri</h4>
                         <p class="text-gray-500 dark:text-gray-400 mt-0.5">Karya bernilai estetika dan kualitas rekayasa tinggi, komprehensif, dan layak menjadi portofolio unggulan.</p>
