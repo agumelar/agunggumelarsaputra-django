@@ -21,3 +21,13 @@ def markdownify(value):
         ]
     )
     return mark_safe(html)
+
+@register.filter(name='get_item')
+def get_item(dictionary, key):
+    """
+    Retrieves an item from a dictionary or object using variable key.
+    """
+    if isinstance(dictionary, dict):
+        return dictionary.get(key, '')
+    return ''
+

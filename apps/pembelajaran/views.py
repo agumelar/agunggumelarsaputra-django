@@ -12,6 +12,7 @@ from .models import Modul, UserSubmission, UserProgress
 from .forms import LkpdSubmissionForm, ReflectionSubmissionForm
 from .checkpoints import get_gamified_quest_for_module
 from .lkpd_guides import get_lkpd_guide_for_module
+from .lkpd_schemas import get_lkpd_schema_for_module
 from apps.gamification.models import XPHistory
 
 
@@ -132,8 +133,13 @@ def modul_detail_view(request, slug):
     except TemplateDoesNotExist:
         interactive_template = None
 
+    lkpd_schema = get_lkpd_schema_for_module(modul.slug, modul.judul)
+    lkpd_saved_fields = {}
     lkpd_audit_rows = []
     if lkpd_submission and isinstance(lkpd_submission.form_data, dict):
+        lkpd_saved_fields = lkpd_submission.form_data.get('schema_answers', {})
+        if not lkpd_saved_fields:
+            lkpd_saved_fields = lkpd_submission.form_data
         lkpd_audit_rows = lkpd_submission.form_data.get('audit_table', [])
     lkpd_audit_rows_json = json.dumps(lkpd_audit_rows)
 
@@ -147,6 +153,8 @@ def modul_detail_view(request, slug):
         'quest': quest,
         'quest_json': quest_json,
         'lkpd_guide': lkpd_guide,
+        'lkpd_schema': lkpd_schema,
+        'lkpd_saved_fields': lkpd_saved_fields,
         'is_modul_1': is_modul_1,
         'interactive_template': interactive_template,
         'lkpd_audit_rows_json': lkpd_audit_rows_json,
@@ -294,6 +302,27 @@ def submit_lkpd_view(request, slug):
         form_payload['student_class'] = request.POST.get('student_class', getattr(request.user, 'kelas', '') or '')
         form_payload['submission_date'] = request.POST.get('submission_date', timezone.now().strftime('%Y-%m-%d'))
         form_payload['audit_table'] = audit_table
+    else:
+        # Ekstrak field skema LKPD Modul 02 - 16
+        lkpd_schema = get_lkpd_schema_for_module(modul.slug, modul.judul)
+        schema_answers = {}
+        summary_snippets = []
+        if lkpd_schema:
+            for section in lkpd_schema.get('sections', []):
+                for field in section.get('fields', []):
+                    fname = field['name']
+                    fval = request.POST.get(fname, '').strip()
+                    schema_answers[fname] = fval
+                    form_payload[fname] = fval
+                    if fval and field.get('type') != 'url' and len(summary_snippets) < 3:
+                        summary_snippets.append(f"{field['label']}: {fval[:70]}")
+        form_payload['schema_answers'] = schema_answers
+        form_payload['student_name'] = request.POST.get('student_name', request.user.display_name)
+        form_payload['student_nis'] = request.POST.get('student_nis', getattr(request.user, 'nis', '') or '')
+        form_payload['student_class'] = request.POST.get('student_class', getattr(request.user, 'kelas', '') or '')
+        form_payload['submission_date'] = request.POST.get('submission_date', timezone.now().strftime('%Y-%m-%d'))
+        if not work_summary and summary_snippets:
+            form_payload['work_summary'] = " \n".join(summary_snippets)
 
     submission, created = UserSubmission.objects.update_or_create(
         user=request.user,

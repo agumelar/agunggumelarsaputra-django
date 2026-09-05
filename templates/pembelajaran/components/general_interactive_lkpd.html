@@ -1,4 +1,5 @@
 {% load static %}
+{% load pembelajaran_tags %}
 
 <div class="m3-surface p-6 sm:p-8 space-y-6 rounded-3xl" id="general-lkpd-card">
   
@@ -159,31 +160,98 @@
       </div>
     </div>
 
-    <!-- Bagian B: Uraian Tugas & Soal Analisis Spesifik Modul -->
-    <div class="space-y-3 p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs font-sans">
-      <div class="flex items-center justify-between">
-        <label class="block font-bold text-foreground font-mono text-sm">
-          {{ lkpd_guide.prompt }}
-        </label>
-        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-bold">
-          ✍️ Wajib Diketik Mandiri
-        </span>
+    <!-- Bagian B: Aktivitas & Analisis LKPD Berdasarkan Skema Kurikulum -->
+    {% if lkpd_schema %}
+      <div class="space-y-6">
+        <!-- Evidence Wajib Box -->
+        {% if lkpd_schema.evidence %}
+        <div class="p-4 rounded-2xl bg-primary/10 border border-primary/20 text-xs text-foreground flex items-center gap-3">
+          <span class="text-xl">📁</span>
+          <div>
+            <strong class="text-primary font-mono font-bold">Evidence Wajib Portofolio:</strong>
+            <span class="text-gray-300 ml-1">{{ lkpd_schema.evidence }}</span>
+          </div>
+        </div>
+        {% endif %}
+
+        {% for section in lkpd_schema.sections %}
+        <fieldset class="space-y-4 p-5 rounded-2xl bg-surface-lowest border border-outline-variant">
+          <legend class="px-2 text-sm font-bold text-foreground font-mono">{{ section.title }}</legend>
+          {% if section.description %}
+          <p class="text-xs text-gray-500 dark:text-gray-400 font-sans">{{ section.description }}</p>
+          {% endif %}
+
+          <div class="space-y-4">
+            {% for field in section.fields %}
+            <div class="space-y-1.5 text-xs">
+              <label for="gen_{{ field.name }}" class="block font-semibold text-foreground font-sans">
+                {{ field.label }} {% if field.required %}<span class="text-rose-500">*</span>{% endif %}
+              </label>
+
+              {% if field.type == 'textarea' %}
+              <textarea 
+                name="{{ field.name }}" 
+                id="gen_{{ field.name }}" 
+                rows="3" 
+                {% if field.required %}required{% endif %}
+                placeholder="{{ field.placeholder|default:'' }}"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary text-xs leading-relaxed"
+              >{{ lkpd_saved_fields|get_item:field.name }}</textarea>
+              {% elif field.type == 'url' %}
+              <input 
+                type="url" 
+                name="{{ field.name }}" 
+                id="gen_{{ field.name }}" 
+                value="{{ lkpd_saved_fields|get_item:field.name }}"
+                data-allow-paste="true"
+                {% if field.required %}required{% endif %}
+                placeholder="{{ field.placeholder|default:'https://drive.google.com/...' }}"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary font-mono text-xs allow-paste"
+              />
+              {% else %}
+              <input 
+                type="text" 
+                name="{{ field.name }}" 
+                id="gen_{{ field.name }}" 
+                value="{{ lkpd_saved_fields|get_item:field.name }}"
+                {% if field.required %}required{% endif %}
+                placeholder="{{ field.placeholder|default:'' }}"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary text-xs"
+              />
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </fieldset>
+        {% endfor %}
       </div>
+    {% else %}
+      <!-- Fallback Prompt Sederhana -->
+      <div class="space-y-3 p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs font-sans">
+        <div class="flex items-center justify-between">
+          <label class="block font-bold text-foreground font-mono text-sm">
+            {{ lkpd_guide.prompt }}
+          </label>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-bold">
+            ✍️ Wajib Diketik Mandiri
+          </span>
+        </div>
 
-      {% if lkpd_guide.tip %}
-      <p class="text-[11px] text-amber-600 dark:text-amber-400 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">
-        {{ lkpd_guide.tip }}
-      </p>
-      {% endif %}
+        {% if lkpd_guide.tip %}
+        <p class="text-[11px] text-amber-600 dark:text-amber-400 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">
+          {{ lkpd_guide.tip }}
+        </p>
+        {% endif %}
 
-      <textarea 
-        name="work_summary" 
-        rows="6" 
-        required 
-        placeholder="{{ lkpd_guide.placeholder }}"
-        class="w-full px-4 py-3 rounded-2xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary text-xs leading-relaxed"
-      >{{ lkpd_submission.form_data.work_summary|default:'' }}</textarea>
-    </div>
+        <textarea 
+          name="work_summary" 
+          rows="6" 
+          required 
+          placeholder="{{ lkpd_guide.placeholder }}"
+          class="w-full px-4 py-3 rounded-2xl bg-surface-high border border-outline-variant text-foreground focus:outline-none focus:border-primary text-xs leading-relaxed"
+        >{{ lkpd_submission.form_data.work_summary|default:'' }}</textarea>
+      </div>
+    {% endif %}
 
     <!-- Bagian C: Link Google Drive Evidence & Catatan -->
     <div class="space-y-4 p-5 rounded-2xl bg-surface-lowest border border-outline-variant text-xs">

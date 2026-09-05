@@ -170,3 +170,44 @@ class PembelajaranModuleTestCase(TestCase):
             self.assertEqual(response.status_code, 200, f"Modul {i} failed to render")
             self.assertContains(response, 'checkpoint-challenge-area')
 
+    def test_structured_lkpd_submission_module_2(self):
+        """Memverifikasi pengisian formulir LKPD terstruktur untuk Modul 02."""
+        self.client.login(username='siswa_fauzi', password='password123')
+        modul2, _ = Modul.objects.get_or_create(
+            urutan=2,
+            defaults={
+                'kode': 'OR-02',
+                'judul': '8 Profesi Utama & Sinergi Tim Industri PPLG',
+                'slug': 'orientasi-pplg-02-profesi-peluang-karier',
+                'kategori': 'Orientasi PPLG (OR-02)',
+                'level': 'Pemula',
+                'durasi': '2 JP (90 Menit)',
+                'deskripsi': 'Analisis profesi TI',
+                'content_materi': '## Profesi PPLG',
+                'teacher_tip': 'Pilih 3 profesi yang paling diminati.',
+                'is_published': True,
+            }
+        )
+        post_data = {
+            'drive_url': 'https://drive.google.com/drive/folders/test_evidence_modul2',
+            'profession1Name': 'Backend Developer',
+            'profession1Responsibilities': 'Membuat REST API dan mengelola basis data.',
+            'profession1Tools': 'Python, Django, PostgreSQL',
+            'profession1Reason': 'Tertarik dengan arsitektur data dan logika server.',
+            'priorityProfession': 'Backend Developer',
+            'actionStep1': 'Mempelajari Django ORM.',
+            'actionStep2': 'Membuat CRUD API sederhana.',
+            'additional_notes': 'Mohon reviewnya Pak Agung.',
+        }
+        response = self.client.post(reverse('pembelajaran:submit_lkpd', kwargs={'slug': modul2.slug}), post_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'LKPD OR-02 &amp; Link Google Drive Evidence berhasil dikirim!')
+
+        sub = UserSubmission.objects.filter(user=self.student, modul=modul2, submission_type='lkpd').first()
+        self.assertIsNotNone(sub)
+        self.assertEqual(sub.drive_url, 'https://drive.google.com/drive/folders/test_evidence_modul2')
+        self.assertEqual(sub.form_data['profession1Name'], 'Backend Developer')
+        self.assertEqual(sub.form_data['priorityProfession'], 'Backend Developer')
+        self.assertEqual(sub.form_data['schema_answers']['profession1Tools'], 'Python, Django, PostgreSQL')
+
+
