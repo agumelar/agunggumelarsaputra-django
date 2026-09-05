@@ -19,36 +19,90 @@
             </p>
         </div>
 
-        <div class="flex flex-wrap items-center gap-3">
-            <a href="{% url 'admin_panel:submission_list' %}" class="m3-btn-secondary text-xs">
-                <span>Penilaian LKPD & KKTP</span>
-                {% if pending_submissions > 0 %}
-                <span class="px-1.5 py-0.2 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-[10px]">{{ pending_submissions }}</span>
-                {% endif %}
-            </a>
-            <a href="{% url 'admin_panel:literasi_list' %}" class="m3-btn-outlined text-xs">
-                <span>Evaluasi Literasi RESIK</span>
-                {% if pending_literasi > 0 %}
-                <span class="px-1.5 py-0.2 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-[10px]">{{ pending_literasi }}</span>
-                {% endif %}
-            </a>
-            <a href="{% url 'admin_panel:tka_results' %}" class="m3-btn-outlined text-xs">
-                <span>Hasil CBT TKA</span>
-                <span class="px-1.5 py-0.2 rounded-full bg-primary/20 text-primary font-bold font-mono text-[10px]">{{ total_tka_attempts }}</span>
-            </a>
-            <a href="{% url 'gamification:projector_leaderboard' %}" target="_blank" class="m3-btn-outlined text-xs">
-                <span>📺 Layar Proyektor</span>
-            </a>
-            <a href="{% url 'admin_panel:token_create' %}" class="m3-btn-primary text-xs">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex flex-wrap items-center gap-2.5">
+            <a href="{% url 'admin_panel:token_create' %}" class="m3-btn-primary text-xs py-2 px-3.5 shadow-sm">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
                 <span>+ Buat Token Sesi</span>
             </a>
-            <a href="{% url 'admin_panel:token_list' %}" class="m3-btn-outlined text-xs">
-                <span>Kelola Token</span>
+            <a href="{% url 'gamification:projector_leaderboard' %}" target="_blank" class="m3-btn-outlined text-xs py-2 px-3.5">
+                <span>📺 Mode Proyektor</span>
+            </a>
+            <a href="/admin/" target="_blank" class="m3-btn-outlined text-xs py-2 px-3.5 text-primary hover:border-primary">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span>Django Admin</span>
             </a>
         </div>
+    </div>
+
+    <!-- Workspace Action Cards (Interactive Hub Navigation) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Card 1: Penilaian LKPD -->
+        <a href="{% url 'admin_panel:submission_list' %}" class="m3-surface p-5 hover:border-primary transition-all group flex flex-col justify-between shadow-sm">
+            <div class="flex items-center justify-between">
+                <div class="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                </div>
+                {% if pending_submissions > 0 %}
+                <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-xs shadow-sm">{{ pending_submissions }} Perlu Dinilai</span>
+                {% else %}
+                <span class="px-2.5 py-0.5 rounded-full bg-surface-high text-gray-400 font-mono text-xs">Tuntas</span>
+                {% endif %}
+            </div>
+            <div class="mt-4 space-y-1">
+                <h3 class="font-bold text-foreground group-hover:text-primary transition-colors text-sm font-display">Penilaian LKPD & KKTP</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">Evaluasi portofolio praktikum dan rubrik capaian pembelajaran siswa.</p>
+            </div>
+        </a>
+
+        <!-- Card 2: Rabu Literasi -->
+        <a href="{% url 'admin_panel:literasi_list' %}" class="m3-surface p-5 hover:border-secondary transition-all group flex flex-col justify-between shadow-sm">
+            <div class="flex items-center justify-between">
+                <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                {% if pending_literasi > 0 %}
+                <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-xs shadow-sm">{{ pending_literasi }} Menunggu</span>
+                {% else %}
+                <span class="px-2.5 py-0.5 rounded-full bg-surface-high text-gray-400 font-mono text-xs">Tuntas</span>
+                {% endif %}
+            </div>
+            <div class="mt-4 space-y-1">
+                <h3 class="font-bold text-foreground group-hover:text-secondary transition-colors text-sm font-display">Evaluasi Rabu Literasi</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">Review rangkuman buku, pesan moral, dan validasi RESIK mingguan.</p>
+            </div>
+        </a>
+
+        <!-- Card 3: Hasil CBT TKA -->
+        <a href="{% url 'admin_panel:tka_results' %}" class="m3-surface p-5 hover:border-amber-400 transition-all group flex flex-col justify-between shadow-sm">
+            <div class="flex items-center justify-between">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full bg-surface-lowest border border-outline-variant font-mono text-xs font-bold text-primary">{{ total_tka_attempts }} Sesi</span>
+            </div>
+            <div class="mt-4 space-y-1">
+                <h3 class="font-bold text-foreground group-hover:text-amber-500 transition-colors text-sm font-display">Hasil CBT TKA Siswa</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">Analisis skor kelulusan KKM 75 dan statistik jawaban benar/salah.</p>
+            </div>
+        </a>
+
+        <!-- Card 4: Kelola Token Sesi -->
+        <a href="{% url 'admin_panel:token_list' %}" class="m3-surface p-5 hover:border-outline transition-all group flex flex-col justify-between shadow-sm">
+            <div class="flex items-center justify-between">
+                <div class="w-10 h-10 rounded-xl bg-surface-high border border-outline-variant text-foreground flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full bg-surface-lowest border border-outline-variant font-mono text-xs font-semibold text-foreground">{{ total_tokens }} Token</span>
+            </div>
+            <div class="mt-4 space-y-1">
+                <h3 class="font-bold text-foreground group-hover:text-primary transition-colors text-sm font-display">Kelola Token Sesi Rombel</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">Atur masa berlaku token, batas kuota siswa, dan status aktif KBM.</p>
+            </div>
+        </a>
+
     </div>
 
     <!-- Quick Stat Cards -->

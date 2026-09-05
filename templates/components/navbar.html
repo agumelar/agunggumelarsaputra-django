@@ -1,3 +1,4 @@
+{% load static %}
 <header class="sticky top-0 z-40 w-full border-b border-outline-variant bg-surface/90 backdrop-blur-md transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -5,8 +6,8 @@
             <!-- Left: Brand / Logo -->
             <div class="flex items-center gap-3">
                 <a href="{% url 'core:home' %}" class="flex items-center gap-3 group focus:outline-none">
-                    <div class="w-10 h-10 rounded-xl bg-surface-high border border-outline flex items-center justify-center font-display font-bold text-primary group-hover:border-primary transition-all">
-                        AGS
+                    <div class="w-10 h-10 rounded-xl overflow-hidden bg-black border border-outline group-hover:border-primary transition-all shrink-0 flex items-center justify-center p-1">
+                        <img src="{% static 'images/logo-icon.png' %}" alt="Logo AGS" class="w-full h-full object-contain">
                     </div>
                     <div class="flex flex-col">
                         <span class="font-display font-bold text-sm tracking-tight text-foreground group-hover:text-primary transition-colors">
@@ -105,11 +106,22 @@
                              x-cloak
                              class="absolute right-0 mt-2 w-48 bg-surface-low border border-outline rounded-xl shadow-xl py-1 z-50">
                             <div class="px-4 py-2 border-b border-outline-variant">
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Masuk sebagai:</p>
-                                <p class="text-sm font-semibold text-foreground truncate">{{ user.get_role_display }}</p>
+                                <p class="text-[11px] font-mono text-gray-500 dark:text-gray-400">Masuk sebagai:</p>
+                                <p class="text-xs font-bold text-foreground truncate">{{ user.get_role_display }}</p>
                             </div>
-                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-surface-high hover:text-foreground">Profil Saya</a>
-                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-red-500 dark:text-red-400 hover:bg-red-500/10">Keluar</a>
+                            {% if user.is_guru or user.is_staff %}
+                            <a href="{% url 'admin_panel:dashboard' %}" class="flex items-center gap-2 px-4 py-2 text-xs text-amber-600 dark:text-amber-400 hover:bg-surface-high font-semibold transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                                <span>Teacher Hub (KBM)</span>
+                            </a>
+                            <a href="/admin/" target="_blank" class="flex items-center gap-2 px-4 py-2 text-xs text-primary hover:bg-surface-high font-semibold transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span>Django Admin Portal</span>
+                            </a>
+                            <div class="border-t border-outline-variant my-1"></div>
+                            {% endif %}
+                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-surface-high hover:text-foreground transition-colors">Profil Saya</a>
+                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-red-500 dark:text-red-400 hover:bg-red-500/10 transition-colors">Keluar</a>
                         </div>
                     </div>
                 {% else %}
