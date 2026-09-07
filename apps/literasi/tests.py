@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -45,6 +46,8 @@ class LiterasiModuleTestCase(TestCase):
 
         # 105 words sample summary text
         self.valid_summary = " ".join(["kata"] * 105)
+        # 33 words sample moral message
+        self.valid_moral = "Amanat penting dari bacaan ini adalah kejujuran dan ketekunan dalam menulis kode program. Seorang pengembang perangkat lunak profesional harus senantiasa memperhatikan kualitas, arsitektur, dan kemudahan pemeliharaan sistem demi kemaslahatan pengguna dan masyarakat."
 
     def test_literasi_hub_view(self):
         """Test literasi_hub_view returns 200 and renders RESIK branding."""
@@ -63,11 +66,28 @@ class LiterasiModuleTestCase(TestCase):
             'author': 'Robert C. Martin',
             'source_type': 'Buku Fisik',
             'summary': 'Ini ringkasan yang terlalu pendek hanya beberapa kata saja.',
-            'moral_message': 'Pentingnya menulis kode bersih.',
+            'moral_message': self.valid_moral,
         }
         response = self.client.post(reverse('literasi:submit_literasi'), data)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Syarat minimal laporan RESIK adalah 100 kata')
+        self.assertEqual(LiterasiReport.objects.count(), 0)
+
+    def test_submit_literasi_fails_under_30_words_moral(self):
+        """Test submitting report with less than 30 words moral message fails validation."""
+        self.client.login(username='siswa_fauzi', password='password123')
+        data = {
+            'week_number': 1,
+            'report_date': '2026-08-26',
+            'book_title': 'Clean Code',
+            'author': 'Robert C. Martin',
+            'source_type': 'Buku Fisik',
+            'summary': self.valid_summary,
+            'moral_message': 'Terlalu pendek satu baris.',
+        }
+        response = self.client.post(reverse('literasi:submit_literasi'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Syarat minimal adalah 30 kata')
         self.assertEqual(LiterasiReport.objects.count(), 0)
 
     def test_submit_literasi_success_and_awards_xp(self):
@@ -86,7 +106,11 @@ class LiterasiModuleTestCase(TestCase):
             'page_count': '1-50',
             'source_type': 'Buku Fisik',
             'summary': self.valid_summary,
-            'moral_message': 'Arsitektur perangkat lunak yang bersih memisahkan bisnis logic dari framework.',
+            'moral_message': self.valid_moral,
+            'check_tata_bahasa': 'on',
+            'check_tanda_baca': 'on',
+            'check_kalimat_efektif': 'on',
+            'check_bahasa_baku': 'on',
         }
         response = self.client.post(reverse('literasi:submit_literasi'), data)
         self.assertEqual(response.status_code, 200)
@@ -100,6 +124,7 @@ class LiterasiModuleTestCase(TestCase):
         self.assertEqual(report.book_title, 'Clean Architecture')
         self.assertEqual(report.word_count, 105)
         self.assertEqual(report.status, 'submitted')
+        self.assertTrue(report.self_checklist.get('tata_bahasa'))
 
     def test_submit_peer_review_success_and_awards_xp(self):
         """Test peer review from classmate awards +5 XP for reviewer."""
@@ -110,7 +135,7 @@ class LiterasiModuleTestCase(TestCase):
             author='Uncle Bob',
             source_type='Buku Fisik',
             summary=self.valid_summary,
-            moral_message='Pemisahan domain layer.',
+            moral_message=self.valid_moral,
             word_count=105,
             status='submitted'
         )
@@ -142,7 +167,7 @@ class LiterasiModuleTestCase(TestCase):
             author='Uncle Bob',
             source_type='Buku Fisik',
             summary=self.valid_summary,
-            moral_message='Pemisahan domain layer.',
+            moral_message=self.valid_moral,
             word_count=105
         )
 
@@ -152,8 +177,8 @@ class LiterasiModuleTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Anda tidak dapat mereview laporan Anda sendiri')
 
-    def test_teacher_grading_literasi(self):
-        """Test teacher can view and grade student literasi report."""
+    def test_grade_literasi_by_teacher_9_aspects(self):
+        """Test teacher evaluating student report using 9-aspect rubric formula."""
         report = LiterasiReport.objects.create(
             user=self.student1,
             week_number=1,
@@ -161,30 +186,86 @@ class LiterasiModuleTestCase(TestCase):
             author='Uncle Bob',
             source_type='Buku Fisik',
             summary=self.valid_summary,
-            moral_message='Pemisahan domain layer.',
+            moral_message=self.valid_moral,
             word_count=105,
             status='submitted'
         )
 
         self.client.login(username='guru_agung', password='password123')
-        
-        # Access list
-        response_list = self.client.get(reverse('admin_panel:literasi_list'))
-        self.assertEqual(response_list.status_code, 200)
-        self.assertContains(response_list, 'Clean Architecture')
 
-        # Grade report
-        grade_data = {
-            'writing_score': 90,
-            'presentation_score': 88,
-            'teacher_feedback': 'Rangkuman RESIK sangat komprehensif. Pertahankan konsistensinya!',
+        payload = {
+            'reportId': report.id,
+            'w1': 4, 'w2': 4, 'w3': 3, 'w4': 4, # Total writing = 15/16
+            'p1': 4, 'p2': 4, 'p3': 3, 'p4': 4, 'p5': 4, # Total presentation = 19/20
+            # Total score = 34 / 36 * 100 = 94
+            'teacherFeedback': 'Analisis buku dan pesan moral sangat tajam!'
         }
-        response_grade = self.client.post(reverse('admin_panel:literasi_grade', kwargs={'report_id': report.id}), grade_data)
-        self.assertRedirects(response_grade, reverse('admin_panel:literasi_list'))
+        response = self.client.post(
+            reverse('literasi:grade_literasi'),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data['success'])
+        self.assertEqual(data['writing_score'], 15)
+        self.assertEqual(data['presentation_score'], 19)
+        self.assertEqual(data['final_score'], 94)
 
         report.refresh_from_db()
         self.assertEqual(report.status, 'graded')
-        self.assertEqual(report.writing_score, 90)
-        self.assertEqual(report.presentation_score, 88)
-        self.assertEqual(report.final_score, 89.0)
+        self.assertEqual(report.writing_score, 15)
+        self.assertEqual(report.presentation_score, 19)
+        self.assertEqual(report.final_score, 94.0)
         self.assertEqual(report.graded_by, self.teacher)
+
+    def test_grade_literasi_by_student_forbidden(self):
+        """Test student cannot access teacher grading endpoint."""
+        report = LiterasiReport.objects.create(
+            user=self.student1,
+            week_number=1,
+            book_title='Clean Architecture',
+            author='Uncle Bob',
+            source_type='Buku Fisik',
+            summary=self.valid_summary,
+            moral_message=self.valid_moral,
+            word_count=105,
+            status='submitted'
+        )
+        self.client.login(username='siswa_budi', password='password123')
+        payload = {'reportId': report.id, 'w1': 4, 'w2': 4, 'w3': 4, 'w4': 4, 'p1': 4, 'p2': 4, 'p3': 4, 'p4': 4, 'p5': 4}
+        response = self.client.post(
+            reverse('literasi:grade_literasi'),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_export_rekap_by_teacher(self):
+        """Test teacher can export literasi recap to CSV."""
+        LiterasiReport.objects.create(
+            user=self.student1,
+            week_number=1,
+            book_title='Clean Architecture',
+            author='Uncle Bob',
+            source_type='Buku Fisik',
+            summary=self.valid_summary,
+            moral_message=self.valid_moral,
+            word_count=105,
+            status='graded',
+            final_score=94.0
+        )
+        self.client.login(username='guru_agung', password='password123')
+        response = self.client.get(reverse('literasi:export_rekap'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/csv; charset=utf-8-sig')
+        self.assertIn('Rekap_Rabu_Literasi_RESIK_SMKN1Rongga.csv', response['Content-Disposition'])
+        self.assertContains(response, 'Ahmad Fauzi')
+        self.assertContains(response, 'Clean Architecture')
+
+    def test_export_rekap_by_student_forbidden(self):
+        """Test student cannot export literasi recap."""
+        self.client.login(username='siswa_fauzi', password='password123')
+        response = self.client.get(reverse('literasi:export_rekap'))
+        self.assertEqual(response.status_code, 403)
+

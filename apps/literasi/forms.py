@@ -27,13 +27,22 @@ class LiterasiReportForm(forms.ModelForm):
             'summary': forms.Textarea(attrs={
                 'class': 'm3-input text-xs leading-relaxed',
                 'rows': 8,
-                'placeholder': 'Tuliskan rangkuman dan poin-poin penting isi bacaan Anda secara sistematis dan kritis (Minimal 100 kata)...',
+                'placeholder': 'Paragraf 1 (Awal): Kenalkan tokoh utama, latar tempat/waktu, dan situasi pembuka...\n\nParagraf 2 (Tengah): Uraikan inti konflik, alur peristiwa penting, atau gagasan utama...\n\nParagraf 3 (Akhir): Jelaskan penyelesaian masalah, klimaks cerita, dan simpulan akhir...',
                 'x-model': 'summaryText',
+                'onpaste': 'return false;',
+                'ondrop': 'return false;',
+                'oncontextmenu': 'return false;',
+                'data-no-paste': 'true',
             }),
             'moral_message': forms.Textarea(attrs={
                 'class': 'm3-input text-xs leading-relaxed',
                 'rows': 4,
-                'placeholder': 'Apa inspirasi, nilai moral, atau relevansi materi bacaan ini dengan bidang Rekayasa Perangkat Lunak?...',
+                'placeholder': 'Tuliskan amanat, nilai moral, atau relevansi materi bacaan ini dengan pembentukan etika dan keterampilan di Rekayasa Perangkat Lunak (Minimal 30 kata)...',
+                'x-model': 'moralText',
+                'onpaste': 'return false;',
+                'ondrop': 'return false;',
+                'oncontextmenu': 'return false;',
+                'data-no-paste': 'true',
             }),
         }
 
@@ -44,6 +53,14 @@ class LiterasiReportForm(forms.ModelForm):
         if word_count < 100:
             raise forms.ValidationError(f"Rangkuman Anda baru berisi {word_count} kata. Syarat minimal laporan RESIK adalah 100 kata.")
         return summary
+
+    def clean_moral_message(self):
+        moral = self.cleaned_data.get('moral_message', '').strip()
+        words = moral.split()
+        word_count = len(words)
+        if word_count < 30:
+            raise forms.ValidationError(f"Amanat/pesan moral Anda baru berisi {word_count} kata. Syarat minimal adalah 30 kata.")
+        return moral
 
 
 class PeerReviewForm(forms.ModelForm):
