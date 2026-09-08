@@ -101,11 +101,16 @@ def modul_detail_view(request, slug):
     lkpd_form = LkpdSubmissionForm(initial=initial_lkpd)
 
     initial_reflection = {}
-    if reflection_submission:
+    if reflection_submission and isinstance(reflection_submission.form_data, dict):
+        fd = reflection_submission.form_data
         initial_reflection = {
-            'understanding': reflection_submission.form_data.get('understanding', ''),
-            'obstacle': reflection_submission.form_data.get('obstacle', ''),
-            'action_plan': reflection_submission.form_data.get('action_plan', ''),
+            'q1': fd.get('q1') or fd.get('understanding', ''),
+            'q2': fd.get('q2', ''),
+            'q3': fd.get('q3') or fd.get('obstacle', ''),
+            'q4': fd.get('q4') or fd.get('action_plan', ''),
+            'understanding': fd.get('q1') or fd.get('understanding', ''),
+            'obstacle': fd.get('q3') or fd.get('obstacle', ''),
+            'action_plan': fd.get('q4') or fd.get('action_plan', ''),
         }
     reflection_form = ReflectionSubmissionForm(initial=initial_reflection)
 
@@ -374,9 +379,10 @@ def submit_reflection_view(request, slug):
     form = ReflectionSubmissionForm(request.POST)
 
     if form.is_valid():
-        understanding = form.cleaned_data['understanding']
-        obstacle = form.cleaned_data['obstacle']
-        action_plan = form.cleaned_data['action_plan']
+        q1 = form.cleaned_data['q1']
+        q2 = form.cleaned_data['q2']
+        q3 = form.cleaned_data['q3']
+        q4 = form.cleaned_data['q4']
 
         submission, created = UserSubmission.objects.update_or_create(
             user=request.user,
@@ -384,9 +390,13 @@ def submit_reflection_view(request, slug):
             submission_type='reflection',
             defaults={
                 'form_data': {
-                    'understanding': understanding,
-                    'obstacle': obstacle,
-                    'action_plan': action_plan,
+                    'q1': q1,
+                    'q2': q2,
+                    'q3': q3,
+                    'q4': q4,
+                    'understanding': q1,
+                    'obstacle': q3,
+                    'action_plan': q4,
                 },
                 'status': 'submitted',
             }
@@ -424,3 +434,27 @@ def submit_reflection_view(request, slug):
         }
 
     return render(request, 'pembelajaran/partials/reflection_status.html', context)
+
+
+@login_required
+def complete_modul_view(request, slug):
+    """
+    Endpoint untuk menandai modul selesai secara eksplisit dan membuka modul berikutnya.
+    """
+    modul = get_object_or_404(Modul, slug=slug, is_published=True)
+    progress, created = UserProgress.objects.get_or_create(user=request.user, modul=modul)
+    next_modul = Modul.objects.filter(urutan__gt=modul.urutan, is_published=True).order_by('urutan').first()
+
+    if request.headers.get('HX-Request'):
+        return render(request, 'pembelajaran/partials/module_completion_status.html', {
+            'modul': modul,
+            'next_modul': next_modul,
+            'is_completed': True,
+            'success': True,
+            'message': 'Modul telah berhasil dituntaskan!',
+        })
+
+    if next_modul:
+        return redirect('pembelajaran:modul_detail', slug=next_modul.slug)
+    return redirect('pembelajaran:modul_list')
+

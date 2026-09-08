@@ -73,7 +73,7 @@
                 </thead>
                 <tbody class="divide-y divide-outline-variant">
                     {% for item in enrollments %}
-                    <tr class="hover:bg-surface-high/30 transition-colors">
+                    <tr class="hover:bg-surface-low transition-colors">
                         <td class="px-5 py-3.5 font-mono text-gray-500">{{ forloop.counter }}</td>
                         <td class="px-5 py-3.5 font-bold text-foreground">{{ item.user.display_name }}</td>
                         <td class="px-5 py-3.5 font-mono text-gray-700 dark:text-gray-300">{{ item.user.email }}</td>

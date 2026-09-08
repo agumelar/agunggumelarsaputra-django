@@ -1,0 +1,174 @@
+{% load static %}
+
+<div class="p-6 md:p-8 rounded-3xl border border-outline-variant bg-surface-lowest shadow-sm space-y-6" id="reflection-form-card" data-slug="{{ modul.slug }}">
+  
+  <!-- Header Refleksi -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant pb-5">
+    <div class="space-y-1.5">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 text-[11px] font-mono font-bold uppercase">
+          LAMPIRAN REFLEKSI SISWA
+        </span>
+        <span class="px-2.5 py-0.5 rounded bg-surface-low text-foreground text-[11px] font-mono font-semibold border border-outline-variant">
+          JURNAL REFLEKSI MANDIRI
+        </span>
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-bold">
+          ✍️ Wajib Diketik Mandiri (No Copy-Paste)
+        </span>
+      </div>
+      <h2 class="text-xl md:text-2xl font-extrabold text-foreground tracking-tight font-display">
+        Jurnal Refleksi Pembelajaran: {{ modul.judul }}
+      </h2>
+      <p class="text-xs text-gray-600 dark:text-gray-400 font-sans leading-relaxed">
+        Tuliskan refleksi pemahaman dan pengalaman belajar kalian secara jujur (diketik sendiri) untuk mengukur perkembangan diri dan memberi masukan bagi Guru.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
+      <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+        ✨ Reward: +15 XP
+      </span>
+      {% if reflection_submission %}
+        {% if reflection_submission.status == 'graded' or reflection_submission.teacher_feedback %}
+          <span id="reflection-save-status" class="text-[11px] font-mono px-2.5 py-1.5 bg-purple-500/15 text-purple-600 dark:text-purple-400 rounded-xl border border-purple-500/30 font-bold">
+            ✓ Telah Ditinjau Guru
+          </span>
+        {% else %}
+          <span id="reflection-save-status" class="text-[11px] font-mono px-2.5 py-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl border border-emerald-500/20 font-semibold">
+            ✅ Refleksi Tersimpan (+15 XP)
+          </span>
+        {% endif %}
+      {% else %}
+        <span id="reflection-save-status" class="text-[11px] font-mono text-gray-500 dark:text-gray-400 px-2.5 py-1.5 bg-surface-low rounded-xl border border-outline-variant">
+          Belum Disimpan
+        </span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Banner Tanggapan & Apresiasi Guru (Jika sudah ditinjau) -->
+  {% if reflection_submission and reflection_submission.teacher_feedback %}
+  <div id="teacher-review-banner" class="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/25 space-y-2">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-base">💬</span>
+        <span class="text-xs font-bold text-purple-600 dark:text-purple-400 font-mono">Tanggapan & Apresiasi Guru:</span>
+      </div>
+      {% if reflection_submission.graded_at %}
+      <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400">{{ reflection_submission.graded_at|date:"d M Y, H:i" }}</span>
+      {% endif %}
+    </div>
+    <p class="text-xs text-foreground bg-surface-low/80 p-3.5 rounded-xl border border-purple-500/20 leading-relaxed font-sans italic">
+      "{{ reflection_submission.teacher_feedback }}"
+    </p>
+  </div>
+  {% endif %}
+
+  <!-- Response Container for HTMX Swaps -->
+  <div id="reflection-response-container">
+    {% if reflection_submission and not reflection_submission.teacher_feedback %}
+      {% include 'pembelajaran/partials/reflection_status.html' with success=True message="Jurnal Refleksi telah berhasil disimpan dan tercatat di portofolio." just_claimed=False %}
+    {% endif %}
+  </div>
+
+  <!-- Form Jurnal Refleksi (4 Pertanyaan Standar) -->
+  {% if user.is_authenticated %}
+  <form 
+    id="form-reflection" 
+    class="space-y-6" 
+    data-no-paste="true"
+    hx-post="{% url 'pembelajaran:submit_refleksi' modul.slug %}" 
+    hx-target="#reflection-response-container"
+    hx-indicator="#reflection-submitting-indicator"
+  >
+    {% csrf_token %}
+    
+    <!-- Question 1 -->
+    <div class="space-y-2">
+      <label for="refl_q1" class="block text-xs font-bold text-foreground leading-relaxed font-mono">
+        1. Hal baru atau wawasan paling berkesan apa yang kalian pelajari hari ini pada materi <span class="text-primary font-bold">{{ modul.judul }}</span>?
+      </label>
+      <textarea 
+        name="q1" 
+        id="refl_q1" 
+        rows="3" 
+        required
+        placeholder="Contoh: Pada sesi ini saya baru memahami bahwa..."
+        class="w-full px-3.5 py-2.5 rounded-xl bg-surface-low border border-outline-variant text-xs text-foreground focus:outline-none focus:border-primary leading-relaxed"
+      >{{ reflection_form.q1.value|default:'' }}</textarea>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="space-y-2">
+      <label for="refl_q2" class="block text-xs font-bold text-foreground leading-relaxed font-mono">
+        2. Bagaimana konsep materi ini dapat diterapkan dalam proyek nyata software development atau persiapan karier kalian ke depan?
+      </label>
+      <textarea 
+        name="q2" 
+        id="refl_q2" 
+        rows="3" 
+        required
+        placeholder="Contoh: Konsep ini sangat berguna saat merancang arsitektur aplikasi dan bekerja sama dalam tim..."
+        class="w-full px-3.5 py-2.5 rounded-xl bg-surface-low border border-outline-variant text-xs text-foreground focus:outline-none focus:border-primary leading-relaxed"
+      >{{ reflection_form.q2.value|default:'' }}</textarea>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="space-y-2">
+      <label for="refl_q3" class="block text-xs font-bold text-foreground leading-relaxed font-mono">
+        3. Apa kendala, tantangan teknis, atau bagian materi yang masih perlu kalian perdalam dari pembelajaran hari ini?
+      </label>
+      <textarea 
+        name="q3" 
+        id="refl_q3" 
+        rows="2" 
+        required
+        placeholder="Contoh: Saya masih perlu berlatih lebih banyak pada bagian..."
+        class="w-full px-3.5 py-2.5 rounded-xl bg-surface-low border border-outline-variant text-xs text-foreground focus:outline-none focus:border-primary leading-relaxed"
+      >{{ reflection_form.q3.value|default:'' }}</textarea>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="space-y-2">
+      <label for="refl_q4" class="block text-xs font-bold text-foreground leading-relaxed font-mono">
+        4. Tuliskan satu komitmen belajar atau langkah konkrit kalian untuk sesi pertemuan berikutnya:
+      </label>
+      <textarea 
+        name="q4" 
+        id="refl_q4" 
+        rows="2" 
+        required
+        placeholder="Contoh: Saya akan membaca kembali referensi materi dan menyelesaikan kelengkapan portofolio sebelum kelas dimulai..."
+        class="w-full px-3.5 py-2.5 rounded-xl bg-surface-low border border-outline-variant text-xs text-foreground focus:outline-none focus:border-primary leading-relaxed"
+      >{{ reflection_form.q4.value|default:'' }}</textarea>
+    </div>
+
+    <!-- Footer Aksi Simpan Refleksi -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-outline-variant">
+      <div class="text-xs text-gray-500 dark:text-gray-400">
+        💭 <em>Refleksi ini dibaca oleh Guru untuk mendengarkan saran dan kendala belajarmu secara langsung.</em>
+      </div>
+
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <span id="reflection-submitting-indicator" class="htmx-indicator text-xs text-primary font-mono animate-pulse">
+          Menyimpan...
+        </span>
+        <button 
+          type="submit" 
+          id="btn-submit-reflection" 
+          class="m3-btn-primary text-xs font-semibold px-6 py-2.5 rounded-xl w-full sm:w-auto flex items-center justify-center gap-2 cursor-pointer shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
+        >
+          <span>🚀 Simpan Refleksi (+15 XP)</span>
+        </button>
+      </div>
+    </div>
+
+  </form>
+  {% else %}
+  <div class="p-8 text-center space-y-3 rounded-2xl bg-surface-low border border-outline-variant">
+    <p class="text-sm text-gray-700 dark:text-gray-300">Harap masuk (login) terlebih dahulu untuk mengisi jurnal refleksi.</p>
+    <a href="{% url 'accounts:login' %}" class="m3-btn-primary inline-flex text-xs px-5 py-2.5 rounded-xl">Masuk Sekarang</a>
+  </div>
+  {% endif %}
+
+</div>

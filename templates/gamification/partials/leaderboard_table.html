@@ -151,7 +151,7 @@
             </thead>
             <tbody class="divide-y divide-outline-variant">
                 {% for s in leaderboard %}
-                <tr class="hover:bg-surface-high/30 transition-colors {% if user.is_authenticated and s.id == user.id %}bg-primary/10 border-l-4 border-l-primary font-medium{% endif %}">
+                <tr class="hover:bg-surface-low transition-colors {% if user.is_authenticated and s.id == user.id %}bg-primary/10 border-l-4 border-l-primary font-medium{% endif %}">
                     <!-- Rank Badge -->
                     <td class="px-4 py-3.5 text-center font-mono font-extrabold">
                         {% if s.rank == 1 %}

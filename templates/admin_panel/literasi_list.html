@@ -50,7 +50,7 @@
                 </thead>
                 <tbody class="divide-y divide-outline-variant">
                     {% for rep in reports %}
-                    <tr class="hover:bg-surface-high/30 transition-colors">
+                    <tr class="hover:bg-surface-low transition-colors">
                         <td class="px-5 py-4">
                             <p class="font-bold text-foreground">{{ rep.user.display_name }}</p>
                             <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ rep.user.kelas|default:"10 RPL" }} &bull; {{ rep.user.email }}</p>

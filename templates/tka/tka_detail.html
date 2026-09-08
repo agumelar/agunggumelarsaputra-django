@@ -117,7 +117,7 @@
                 </thead>
                 <tbody class="divide-y divide-outline-variant font-mono">
                     {% for att in attempts %}
-                    <tr class="hover:bg-surface-high/30 transition-colors">
+                    <tr class="hover:bg-surface-low transition-colors">
                         <td class="px-4 py-3 font-bold text-foreground">#{{ att.attempt_number }}</td>
                         <td class="px-4 py-3 font-bold text-base {% if att.is_passed %}text-emerald-600 dark:text-emerald-400{% else %}text-amber-600 dark:text-amber-400{% endif %}">
                             {{ att.score }}%

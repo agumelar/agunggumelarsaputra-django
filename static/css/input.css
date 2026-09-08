@@ -92,6 +92,41 @@
   [x-cloak] {
     display: none !important;
   }
+
+  /* Material Design 3 Form Inputs Reset - Overrides @tailwindcss/forms white background */
+  input[type='text'],
+  input[type='email'],
+  input[type='url'],
+  input[type='password'],
+  input[type='number'],
+  input[type='date'],
+  input[type='datetime-local'],
+  input[type='month'],
+  input[type='search'],
+  input[type='tel'],
+  input[type='time'],
+  input[type='week'],
+  textarea,
+  select {
+    background-color: var(--md-sys-color-surface-container-low);
+    color: var(--foreground);
+    border-color: var(--md-sys-color-outline-variant);
+  }
+
+  input[type='text']:focus,
+  input[type='email']:focus,
+  input[type='url']:focus,
+  input[type='password']:focus,
+  input[type='number']:focus,
+  input[type='date']:focus,
+  input[type='datetime-local']:focus,
+  input[type='search']:focus,
+  input[type='tel']:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--md-sys-color-primary);
+    --tw-ring-color: var(--md-sys-color-primary);
+  }
 }
 
 @layer components {

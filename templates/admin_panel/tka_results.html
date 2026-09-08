@@ -50,7 +50,7 @@
                 </thead>
                 <tbody class="divide-y divide-outline-variant">
                     {% for att in attempts %}
-                    <tr class="hover:bg-surface-high/30 transition-colors">
+                    <tr class="hover:bg-surface-low transition-colors">
                         <td class="px-5 py-4">
                             <p class="font-bold text-foreground">{{ att.user.display_name }}</p>
                             <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ att.user.kelas|default:"Umum" }} &bull; {{ att.user.email }}</p>

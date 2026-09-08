@@ -12,6 +12,12 @@
     </span>
     {% endif %}
 </div>
+
+<!-- Out-Of-Band Swap to update save status badge in real time -->
+<span id="reflection-save-status" hx-swap-oob="true" class="text-[11px] font-mono px-2.5 py-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl border border-emerald-500/20 font-semibold">
+    ✅ Refleksi Tersimpan (+15 XP)
+</span>
+
 {% else %}
 <div class="p-4 rounded-2xl bg-rose-500/10 dark:bg-rose-950/40 border border-rose-500/25 text-rose-800 dark:text-rose-200 text-xs font-medium flex items-center gap-2.5">
     <svg class="w-5 h-5 text-rose-500 dark:text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

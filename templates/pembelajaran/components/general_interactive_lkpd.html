@@ -67,7 +67,7 @@
         </div>
       </div>
       {% if lkpd_submission.teacher_feedback %}
-      <div class="p-3 rounded-xl bg-surface-high/60 border border-outline-variant text-foreground italic text-xs">
+      <div class="p-3 rounded-xl bg-surface-high border border-outline-variant text-foreground italic text-xs">
         "{{ lkpd_submission.teacher_feedback }}"
       </div>
       {% endif %}
@@ -122,7 +122,7 @@
             value="{{ user.display_name }}"
             readonly 
             data-allow-paste="true"
-            class="w-full px-3 py-2 rounded-xl bg-surface-high/60 border border-outline-variant text-foreground font-medium allow-paste"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-surface-low border border-outline-variant text-foreground font-medium cursor-default select-none opacity-90 allow-paste"
           />
         </div>
 
@@ -134,7 +134,7 @@
             value="{{ user.nis|default:'-' }}"
             readonly 
             data-allow-paste="true"
-            class="w-full px-3 py-2 rounded-xl bg-surface-high/60 border border-outline-variant text-foreground font-mono allow-paste"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-surface-low border border-outline-variant text-foreground font-mono cursor-default select-none opacity-90 allow-paste"
           />
         </div>
 
@@ -146,7 +146,7 @@
             value="{{ user.kelas|default:'-' }}"
             readonly 
             data-allow-paste="true"
-            class="w-full px-3 py-2 rounded-xl bg-surface-high/60 border border-outline-variant text-foreground font-mono font-bold text-primary allow-paste"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-surface-low border border-outline-variant text-primary font-mono font-bold cursor-default select-none opacity-90 allow-paste"
           />
         </div>
       </div>
@@ -286,6 +286,21 @@
     >
       <span>{% if lkpd_submission %}Kirim Ulang Pembaruan LKPD {{ modul.kode }} ➔{% else %}Kirim LKPD & Klaim +25 XP ➔{% endif %}</span>
     </button>
+
+    <!-- Card Navigasi Lanjut ke Tab 3 (Jurnal Refleksi) -->
+    <div class="p-5 rounded-2xl bg-surface-lowest border border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="space-y-0.5 text-center sm:text-left">
+        <h3 class="text-sm font-bold text-foreground font-mono">Selesai Mengisi LKPD?</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 font-sans">Kirim formulir LKPD di atas, kemudian lanjutkan ke Tab 3 untuk mengisi Jurnal Refleksi (+15 XP).</p>
+      </div>
+      <button 
+        type="button" 
+        @click="currentTab = 'reflection'"
+        class="m3-btn-primary text-xs font-semibold px-5 py-2.5 rounded-xl shrink-0 cursor-pointer shadow-sm"
+      >
+        Lanjut ke Jurnal Refleksi →
+      </button>
+    </div>
   </form>
   {% else %}
   <div class="p-8 text-center space-y-3 rounded-2xl bg-surface-lowest border border-outline-variant">

@@ -1,0 +1,17 @@
+<div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-800 dark:text-emerald-200 text-xs font-medium flex flex-col sm:flex-row items-center justify-between gap-3 animate-fadeIn">
+  <div class="flex items-center gap-2.5 text-center sm:text-left">
+    <span class="text-xl">🎉</span>
+    <div>
+      <p class="font-bold font-sans">{{ message }}</p>
+      <p class="text-[11px] text-gray-500 dark:text-gray-400">Progres Anda telah tersimpan dan modul pembelajaran berikutnya telah resmi terbuka.</p>
+    </div>
+  </div>
+  {% if next_modul %}
+  <a 
+    href="{% url 'pembelajaran:modul_detail' next_modul.slug %}" 
+    class="m3-btn-primary text-xs px-4 py-2 rounded-xl font-bold shrink-0 shadow-sm"
+  >
+    Lanjut ke {{ next_modul.kode }} ➔
+  </a>
+  {% endif %}
+</div>

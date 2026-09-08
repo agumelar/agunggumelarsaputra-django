@@ -118,6 +118,27 @@ class PembelajaranModuleTestCase(TestCase):
         self.student.refresh_from_db()
         self.assertEqual(self.student.xp, initial_xp + 15)
 
+    def test_submit_reflection_with_4_standard_questions(self):
+        """Test siswa mengirim 4 isian pertanyaan refleksi standar (q1-q4) dan mendapatkan +15 XP."""
+        self.client.login(username='siswa_fauzi', password='password123')
+        initial_xp = self.student.xp
+
+        data = {
+            'q1': 'Wawasan penting mengenai Git branching dan testing.',
+            'q2': 'Dapat diterapkan langsung pada proyek kolaborasi capstone.',
+            'q3': 'Masih perlu latihan resolusi merge conflict.',
+            'q4': 'Akan membuat 3 repository latihan minggu ini.',
+        }
+        response = self.client.post(reverse('pembelajaran:submit_refleksi', kwargs={'slug': self.modul.slug}), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Jurnal Refleksi berhasil disimpan!')
+
+        sub = UserSubmission.objects.get(user=self.student, modul=self.modul, submission_type='reflection')
+        self.assertEqual(sub.form_data['q1'], data['q1'])
+        self.assertEqual(sub.form_data['q2'], data['q2'])
+        self.assertEqual(sub.form_data['q3'], data['q3'])
+        self.assertEqual(sub.form_data['q4'], data['q4'])
+
     def test_teacher_grading_workflow(self):
         """Test alur penilaian LKPD oleh guru pengampu."""
         # Student submits LKPD

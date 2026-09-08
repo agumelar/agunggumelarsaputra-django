@@ -6,339 +6,7 @@
 {% block content %}
 <div 
     class="space-y-8 py-6"
-    x-data="{
-        currentTab: 'write',
-        summaryText: '',
-        moralText: '',
-        checkTataBahasa: false,
-        checkTandaBaca: false,
-        checkKalimatEfektif: false,
-        checkBahasaBaku: false,
-        searchQuery: '',
-        copyWarning: false,
-
-        triggerPasteWarning() {
-            this.copyWarning = true;
-            setTimeout(() => { this.copyWarning = false; }, 4500);
-        },
-
-        get summaryWords() {
-            const clean = this.summaryText.trim();
-            if (!clean) return 0;
-            return clean.split(/\s+/).length;
-        },
-
-        get moralWords() {
-            const clean = this.moralText.trim();
-            if (!clean) return 0;
-            return clean.split(/\s+/).length;
-        },
-
-        get isAllChecklistChecked() {
-            return this.checkTataBahasa && this.checkTandaBaca && this.checkKalimatEfektif && this.checkBahasaBaku;
-        },
-
-        get isFormValid() {
-            return this.summaryWords >= 100 && this.moralWords >= 30 && this.isAllChecklistChecked;
-        },
-
-        // Peer Review Modal State
-        peerModalOpen: false,
-        peerReportId: null,
-        peerStudentName: '',
-        peerStudentClass: '',
-        peerBookTitle: '',
-        peerSummary: '',
-        peerRating: 5,
-        peerComment: '',
-        peerSubmitting: false,
-        peerSuccessMessage: '',
-        peerErrorMessage: '',
-
-        openPeerModal(rep) {
-            this.peerReportId = rep.id;
-            this.peerStudentName = rep.studentName;
-            this.peerStudentClass = rep.studentClass || '10 RPL';
-            this.peerBookTitle = rep.bookTitle;
-            this.peerSummary = rep.summary;
-            this.peerRating = 5;
-            this.peerComment = '';
-            this.peerSuccessMessage = '';
-            this.peerErrorMessage = '';
-            this.peerModalOpen = true;
-        },
-
-        async submitPeerReview() {
-            if (!this.peerComment.trim()) {
-                this.peerErrorMessage = 'Harap isi ulasan tanggapan atau apresiasi Anda.';
-                return;
-            }
-            this.peerSubmitting = true;
-            this.peerErrorMessage = '';
-            try {
-                const url = '{% url 'literasi:submit_peer_review' 0 %}'.replace('0', this.peerReportId);
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({
-                        rating: this.peerRating,
-                        comment: this.peerComment
-                    })
-                });
-                const data = await res.json();
-                if (res.ok && data.success) {
-                    this.peerSuccessMessage = data.message;
-                    setTimeout(() => {
-                        this.peerModalOpen = false;
-                        window.location.reload();
-                    }, 1200);
-                } else {
-                    this.peerErrorMessage = data.error || data.message || 'Gagal mengirim ulasan peer review.';
-                }
-            } catch (e) {
-                this.peerErrorMessage = 'Terjadi kesalahan jaringan saat mengirim review.';
-            } finally {
-                this.peerSubmitting = false;
-            }
-        },
-
-        // Teacher Evaluation Modal State
-        gradeModalOpen: false,
-        gradeReportId: null,
-        gradeStudentName: '',
-        gradeStudentClass: '',
-        gradeWeekNumber: 1,
-        gradeBookTitle: '',
-        gradeAuthor: '',
-        gradeSummary: '',
-        gradeMoral: '',
-        gradeFeedback: '',
-        gradeSubmitting: false,
-        gradeSuccessMessage: '',
-        gradeErrorMessage: '',
-
-        // 4 Aspek Menulis (@1-4, max 16)
-        w1: 4, w2: 4, w3: 4, w4: 4,
-        // 5 Aspek Presentasi (@1-4, max 20)
-        p1: 4, p2: 4, p3: 4, p4: 4, p5: 4,
-
-        get totalWriting() {
-            return Number(this.w1) + Number(this.w2) + Number(this.w3) + Number(this.w4);
-        },
-
-        get totalPresentation() {
-            return Number(this.p1) + Number(this.p2) + Number(this.p3) + Number(this.p4) + Number(this.p5);
-        },
-
-        get calcFinalScore() {
-            return Math.round(((this.totalWriting + this.totalPresentation) / 36) * 100);
-        },
-
-        openGradeModal(rep) {
-            this.gradeReportId = rep.id;
-            this.gradeStudentName = rep.studentName;
-            this.gradeStudentClass = rep.studentClass || '10 RPL';
-            this.gradeWeekNumber = rep.weekNumber;
-            this.gradeBookTitle = rep.bookTitle;
-            this.gradeAuthor = rep.author;
-            this.gradeSummary = rep.summary;
-            this.gradeMoral = rep.moralMessage;
-            this.gradeFeedback = rep.teacherFeedback || '';
-            this.gradeSuccessMessage = '';
-            this.gradeErrorMessage = '';
-
-            this.w1 = rep.w1 || 4;
-            this.w2 = rep.w2 || 4;
-            this.w3 = rep.w3 || 4;
-            this.w4 = rep.w4 || 4;
-            this.p1 = rep.p1 || 4;
-            this.p2 = rep.p2 || 4;
-            this.p3 = rep.p3 || 4;
-            this.p4 = rep.p4 || 4;
-            this.p5 = rep.p5 || 4;
-
-            this.gradeModalOpen = true;
-        },
-
-        async submitTeacherGrade() {
-            this.gradeSubmitting = true;
-            this.gradeErrorMessage = '';
-            try {
-                const res = await fetch('{% url 'literasi:grade_literasi' %}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({
-                        reportId: this.gradeReportId,
-                        w1: this.w1, w2: this.w2, w3: this.w3, w4: this.w4,
-                        p1: this.p1, p2: this.p2, p3: this.p3, p4: this.p4, p5: this.p5,
-                        teacherFeedback: this.gradeFeedback
-                    })
-                });
-                const data = await res.json();
-                if (res.ok && data.success) {
-                    this.gradeSuccessMessage = data.message;
-                    setTimeout(() => {
-                        this.gradeModalOpen = false;
-                        window.location.reload();
-                    }, 1200);
-                } else {
-                    this.gradeErrorMessage = data.error || 'Gagal menyimpan evaluasi nilai.';
-                }
-            } catch (e) {
-                this.gradeErrorMessage = 'Terjadi gangguan koneksi server.';
-            } finally {
-                this.gradeSubmitting = false;
-            }
-        },
-
-        // Print PDF Standar Resmi Sekolah SMKN 1 Rongga
-        printResensi(reportData, userData) {
-            const printWindow = window.open('', '_blank');
-            if (!printWindow) {
-                alert('Pop-up terblokir oleh browser. Harap izinkan pop-up untuk mencetak dokumen.');
-                return;
-            }
-
-            const logoUrl = window.location.origin + '{% static "images/logo-smkn1rongga.png" %}';
-
-            const printHtml = [
-                '<!DOCTYPE html>',
-                '<html lang="id">',
-                '<head>',
-                '  <meta charset="UTF-8">',
-                '  <title>LAPORAN_RESIK_' + (userData.name || 'SISWA').replace(/\s+/g, '_') + '_MINGGU_' + reportData.weekNumber + '</title>',
-                '  <style>',
-                '    @page { size: A4 portrait; margin: 12mm 15mm 15mm 15mm; }',
-                '    * { box-sizing: border-box; }',
-                '    body { font-family: "Times New Roman", Times, serif; margin: 0; color: #000; line-height: 1.35; font-size: 11pt; background: #fff; }',
-                '    .kop-container { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 8px; margin-bottom: 2px; }',
-                '    .kop-logo { width: 85px; height: 95px; object-fit: contain; flex-shrink: 0; }',
-                '    .kop-text { text-align: center; flex: 1; line-height: 1.2; }',
-                '    .kop-text h4 { margin: 0; font-size: 10.5pt; font-weight: normal; text-transform: uppercase; letter-spacing: 0.5px; }',
-                '    .kop-text h3 { margin: 2px 0; font-size: 11.5pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }',
-                '    .kop-text h2 { margin: 2px 0; font-size: 14.5pt; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }',
-                '    .kop-text p.meta-sub { margin: 2px 0 0 0; font-size: 9.5pt; font-weight: bold; text-transform: uppercase; }',
-                '    .kop-text p.address { margin: 2px 0 0 0; font-size: 8.5pt; font-style: italic; line-height: 1.2; }',
-                '    .kop-line-thick { border-top: 3px solid #000; margin-top: 4px; }',
-                '    .kop-line-thin { border-top: 1px solid #000; margin-top: 2px; margin-bottom: 14px; }',
-                '    .doc-title { text-align: center; margin-bottom: 14px; }',
-                '    .doc-title h3 { margin: 0; font-size: 12pt; font-weight: bold; text-decoration: underline; text-transform: uppercase; letter-spacing: 0.5px; }',
-                '    .doc-title p { margin: 2px 0 0 0; font-size: 9.5pt; font-family: monospace; font-weight: bold; }',
-                '    .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10pt; }',
-                '    .meta-table td { padding: 2.5px 4px; vertical-align: top; }',
-                '    .section-header { font-weight: bold; font-size: 10.5pt; margin-top: 10px; margin-bottom: 4px; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 2px; }',
-                '    .content-box { border: 1px solid #444; padding: 8px 10px; background: #fff; margin-bottom: 10px; text-align: justify; font-size: 10pt; line-height: 1.4; }',
-                '    .score-box { border: 1.5px solid #000; padding: 8px 10px; margin-top: 12px; page-break-inside: avoid; }',
-                '    .score-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 9.5pt; margin-top: 4px; }',
-                '    .score-table th, .score-table td { border: 1px solid #000; padding: 4px 6px; }',
-                '    .score-table th { background: #f2f2f2; font-weight: bold; }',
-                '    .footer-signature { margin-top: 24px; width: 100%; page-break-inside: avoid; }',
-                '    .footer-signature td { text-align: center; width: 50%; vertical-align: top; font-size: 10pt; }',
-                '    @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }',
-                '  </style>',
-                '</head>',
-                '<body>',
-                '  <div class="kop-container">',
-                '    <img src="' + logoUrl + '" class="kop-logo" alt="Logo SMKN 1 Rongga" />',
-                '    <div class="kop-text">',
-                '      <h4>PEMERINTAH DAERAH PROVINSI JAWA BARAT</h4>',
-                '      <h4>DINAS PENDIDIKAN</h4>',
-                '      <h4>CABANG DINAS PENDIDIKAN WILAYAH VI</h4>',
-                '      <h2>SMK NEGERI 1 RONGGA</h2>',
-                '      <p class="meta-sub">PROGRAM KEAHLIAN PENGEMBANGAN PERANGKAT LUNAK DAN GIM (PPLG)</p>',
-                '      <p class="address">Jl. Raya Rongga, Desa. Cibedug Kec. Rongga Kab. Bandung Barat Prov. Jawa Barat Telp. 022-6950350</p>',
-                '      <p class="address"><u>Website :</u> smkn1rongga.sch.id Email : mail@smkn1rongga.sch.id</p>',
-                '      <p class="address">Bandung Barat 40565</p>',
-                '    </div>',
-                '    <div style="width: 85px; flex-shrink: 0;"></div>',
-                '  </div>',
-                '  <div class="kop-line-thick"></div>',
-                '  <div class="kop-line-thin"></div>',
-                '  <div class="doc-title">',
-                '    <h3>LEMBAR LAPORAN RESENSI BUKU (RABU LITERASI RESIK)</h3>',
-                '    <p>MINGGU KE-' + reportData.weekNumber + ' &bull; SEMESTER GANJIL TAHUN AJARAN 2026/2027</p>',
-                '  </div>',
-                '  <table class="meta-table">',
-                '    <tr>',
-                '      <td width="22%"><strong>Nama Peserta Didik</strong></td>',
-                '      <td width="2%">:</td>',
-                '      <td width="36%"><strong>' + (userData.name || '-').toUpperCase() + '</strong></td>',
-                '      <td width="18%"><strong>Konsentrasi Keahlian</strong></td>',
-                '      <td width="2%">:</td>',
-                '      <td width="20%">Rekayasa Perangkat Lunak</td>',
-                '    </tr>',
-                '    <tr>',
-                '      <td><strong>Kelas / Rombel</strong></td>',
-                '      <td>:</td>',
-                '      <td>' + (userData.studentClass || '10 RPL') + '</td>',
-                '      <td><strong>Tanggal Pengerjaan</strong></td>',
-                '      <td>:</td>',
-                '      <td>' + reportData.reportDate + '</td>',
-                '    </tr>',
-                '  </table>',
-                '  <div class="section-header">1. Kelengkapan Identitas Buku</div>',
-                '  <table class="meta-table" style="margin-left: 6px; margin-bottom: 6px;">',
-                '    <tr><td width="22%">Judul Buku</td><td width="2%">:</td><td><strong>' + reportData.bookTitle + '</strong></td></tr>',
-                '    <tr><td>Penulis / Pengarang</td><td>:</td><td>' + reportData.author + '</td></tr>',
-                '    <tr><td>Penerbit & Kota Terbit</td><td>:</td><td>' + (reportData.publisher || '-') + ', ' + (reportData.city || '-') + '</td></tr>',
-                '    <tr><td>Tahun Terbit / Tebal</td><td>:</td><td>Tahun ' + (reportData.year || '-') + ' &bull; ' + (reportData.pageCount || '-') + ' Halaman ' + (reportData.edition ? '(' + reportData.edition + ')' : '') + '</td></tr>',
-                '  </table>',
-                '  <div class="section-header">2. Isi Ringkasan Buku (Aspek Menulis)</div>',
-                '  <div class="content-box">' + (reportData.summary || '').replace(/\n/g, '<br/>') + '</div>',
-                '  <div class="section-header">3. Amanat / Pesan Moral Bacaan</div>',
-                '  <div class="content-box">' + (reportData.moralMessage || '').replace(/\n/g, '<br/>') + '</div>',
-                '  <div class="score-box">',
-                '    <div style="font-weight: bold; font-size: 10.5pt; text-align: center; margin-bottom: 4px; text-transform: uppercase;">EVALUASI & PENILAIAN RUBRIK RESIK RESMI</div>',
-                '    <table class="score-table">',
-                '      <thead>',
-                '        <tr>',
-                '          <th>Aspek Menulis (Max 16)</th>',
-                '          <th>Aspek Presentasi (Max 20)</th>',
-                '          <th>Nilai Akhir (0-100)</th>',
-                '          <th>Ketercapaian Kompetensi</th>',
-                '        </tr>',
-                '      </thead>',
-                '      <tbody>',
-                '        <tr>',
-                '          <td><strong>' + (reportData.writingScore !== null && reportData.writingScore !== undefined ? reportData.writingScore + ' / 16' : '-') + '</strong></td>',
-                '          <td><strong>' + (reportData.presentationScore !== null && reportData.presentationScore !== undefined ? reportData.presentationScore + ' / 20' : '-') + '</strong></td>',
-                '          <td><strong style="font-size: 13pt; color: #000;">' + (reportData.finalScore !== null && reportData.finalScore !== undefined ? reportData.finalScore : '-') + '</strong></td>',
-                '          <td><strong>' + (reportData.finalScore >= 75 ? 'TUNTAS (SANGAT BAIK)' : reportData.finalScore !== null && reportData.finalScore !== undefined ? 'PERLU PEMBINAAN' : 'MENUNGGU PENILAIAN') + '</strong></td>',
-                '        </tr>',
-                '      </tbody>',
-                '    </table>',
-                (reportData.teacherFeedback ? '    <div style="font-style: italic; margin-top: 6px; font-size: 9.5pt; background: #fafafa; padding: 4px 8px; border-left: 3px solid #000;"><strong>Catatan Guru Pengampu:</strong> "' + reportData.teacherFeedback + '"</div>' : ''),
-                '  </div>',
-                '  <table class="footer-signature">',
-                '    <tr>',
-                '      <td>',
-                '        Peserta Didik,<br/><br/><br/><br/>',
-                '        <strong><u>( ' + (userData.name || 'Siswa RPL') + ' )</u></strong><br/>',
-                '        <span style="font-size: 8.5pt; font-family: monospace;">NIS/Kelas: ' + (userData.studentClass || '10 RPL') + '</span>',
-                '      </td>',
-                '      <td>',
-                '        Rongga, ' + reportData.reportDate + '<br/>',
-                '        Guru Pengampu RPL / Literasi,<br/><br/><br/><br/>',
-                '        <strong><u>( Agung Gumelar Saputra, S.Tr.T. )</u></strong><br/>',
-                '        <span style="font-size: 8.5pt; font-family: monospace;">NIP. 199306012022211013</span>',
-                '      </td>',
-                '    </tr>',
-                '  </table>',
-                '</body>',
-                '</html>'
-            ].join('');
-
-            printWindow.document.write(printHtml);
-            printWindow.document.close();
-            setTimeout(() => { printWindow.print(); }, 400);
-        }
-    }"
+    x-data="literasiHubData()"
 >
 
     <!-- Floating Anti Copy-Paste Toast Alert -->
@@ -1314,4 +982,352 @@
     {% endif %}
 
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function literasiHubData() {
+    return {
+        currentTab: 'write',
+        summaryText: '',
+        moralText: '',
+        checkTataBahasa: false,
+        checkTandaBaca: false,
+        checkKalimatEfektif: false,
+        checkBahasaBaku: false,
+        searchQuery: '',
+        copyWarning: false,
+
+        triggerPasteWarning() {
+            this.copyWarning = true;
+            setTimeout(() => { this.copyWarning = false; }, 4500);
+        },
+
+        get summaryWords() {
+            const clean = this.summaryText.trim();
+            if (!clean) return 0;
+            return clean.split(/\s+/).length;
+        },
+
+        get moralWords() {
+            const clean = this.moralText.trim();
+            if (!clean) return 0;
+            return clean.split(/\s+/).length;
+        },
+
+        get isAllChecklistChecked() {
+            return this.checkTataBahasa && this.checkTandaBaca && this.checkKalimatEfektif && this.checkBahasaBaku;
+        },
+
+        get isFormValid() {
+            return this.summaryWords >= 100 && this.moralWords >= 30 && this.isAllChecklistChecked;
+        },
+
+        // Peer Review Modal State
+        peerModalOpen: false,
+        peerReportId: null,
+        peerStudentName: '',
+        peerStudentClass: '',
+        peerBookTitle: '',
+        peerSummary: '',
+        peerRating: 5,
+        peerComment: '',
+        peerSubmitting: false,
+        peerSuccessMessage: '',
+        peerErrorMessage: '',
+
+        openPeerModal(rep) {
+            this.peerReportId = rep.id;
+            this.peerStudentName = rep.studentName;
+            this.peerStudentClass = rep.studentClass || '10 RPL';
+            this.peerBookTitle = rep.bookTitle;
+            this.peerSummary = rep.summary;
+            this.peerRating = 5;
+            this.peerComment = '';
+            this.peerSuccessMessage = '';
+            this.peerErrorMessage = '';
+            this.peerModalOpen = true;
+        },
+
+        async submitPeerReview() {
+            if (!this.peerComment.trim()) {
+                this.peerErrorMessage = 'Harap isi ulasan tanggapan atau apresiasi Anda.';
+                return;
+            }
+            this.peerSubmitting = true;
+            this.peerErrorMessage = '';
+            try {
+                const url = '{% url "literasi:submit_peer_review" 0 %}'.replace('0', this.peerReportId);
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        rating: this.peerRating,
+                        comment: this.peerComment
+                    })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    this.peerSuccessMessage = data.message;
+                    setTimeout(() => {
+                        this.peerModalOpen = false;
+                        window.location.reload();
+                    }, 1200);
+                } else {
+                    this.peerErrorMessage = data.error || data.message || 'Gagal mengirim ulasan peer review.';
+                }
+            } catch (e) {
+                this.peerErrorMessage = 'Terjadi kesalahan jaringan saat mengirim review.';
+            } finally {
+                this.peerSubmitting = false;
+            }
+        },
+
+        // Teacher Evaluation Modal State
+        gradeModalOpen: false,
+        gradeReportId: null,
+        gradeStudentName: '',
+        gradeStudentClass: '',
+        gradeWeekNumber: 1,
+        gradeBookTitle: '',
+        gradeAuthor: '',
+        gradeSummary: '',
+        gradeMoral: '',
+        gradeFeedback: '',
+        gradeSubmitting: false,
+        gradeSuccessMessage: '',
+        gradeErrorMessage: '',
+
+        // 4 Aspek Menulis (@1-4, max 16)
+        w1: 4, w2: 4, w3: 4, w4: 4,
+        // 5 Aspek Presentasi (@1-4, max 20)
+        p1: 4, p2: 4, p3: 4, p4: 4, p5: 4,
+
+        get totalWriting() {
+            return Number(this.w1) + Number(this.w2) + Number(this.w3) + Number(this.w4);
+        },
+
+        get totalPresentation() {
+            return Number(this.p1) + Number(this.p2) + Number(this.p3) + Number(this.p4) + Number(this.p5);
+        },
+
+        get calcFinalScore() {
+            return Math.round(((this.totalWriting + this.totalPresentation) / 36) * 100);
+        },
+
+        openGradeModal(rep) {
+            this.gradeReportId = rep.id;
+            this.gradeStudentName = rep.studentName;
+            this.gradeStudentClass = rep.studentClass || '10 RPL';
+            this.gradeWeekNumber = rep.weekNumber;
+            this.gradeBookTitle = rep.bookTitle;
+            this.gradeAuthor = rep.author;
+            this.gradeSummary = rep.summary;
+            this.gradeMoral = rep.moralMessage;
+            this.gradeFeedback = rep.teacherFeedback || '';
+            this.gradeSuccessMessage = '';
+            this.gradeErrorMessage = '';
+
+            this.w1 = rep.w1 || 4;
+            this.w2 = rep.w2 || 4;
+            this.w3 = rep.w3 || 4;
+            this.w4 = rep.w4 || 4;
+            this.p1 = rep.p1 || 4;
+            this.p2 = rep.p2 || 4;
+            this.p3 = rep.p3 || 4;
+            this.p4 = rep.p4 || 4;
+            this.p5 = rep.p5 || 4;
+
+            this.gradeModalOpen = true;
+        },
+
+        async submitTeacherGrade() {
+            this.gradeSubmitting = true;
+            this.gradeErrorMessage = '';
+            try {
+                const res = await fetch('{% url "literasi:grade_literasi" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        reportId: this.gradeReportId,
+                        w1: this.w1, w2: this.w2, w3: this.w3, w4: this.w4,
+                        p1: this.p1, p2: this.p2, p3: this.p3, p4: this.p4, p5: this.p5,
+                        teacherFeedback: this.gradeFeedback
+                    })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    this.gradeSuccessMessage = data.message;
+                    setTimeout(() => {
+                        this.gradeModalOpen = false;
+                        window.location.reload();
+                    }, 1200);
+                } else {
+                    this.gradeErrorMessage = data.error || 'Gagal menyimpan evaluasi nilai.';
+                }
+            } catch (e) {
+                this.gradeErrorMessage = 'Terjadi gangguan koneksi server.';
+            } finally {
+                this.gradeSubmitting = false;
+            }
+        },
+
+        // Print PDF Standar Resmi Sekolah SMKN 1 Rongga
+        printResensi(reportData, userData) {
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) {
+                alert('Pop-up terblokir oleh browser. Harap izinkan pop-up untuk mencetak dokumen.');
+                return;
+            }
+
+            const logoUrl = window.location.origin + '{% static "images/logo-smkn1rongga.png" %}';
+            const studentName = (userData.name || 'SISWA').replace(/\s+/g, '_');
+            const studentNameUpper = (userData.name || '-').toUpperCase();
+            const studentClass = userData.studentClass || '10 RPL';
+            const summaryHtml = (reportData.summary || '').replace(/\n/g, '<br/>');
+            const moralHtml = (reportData.moralMessage || '').replace(/\n/g, '<br/>');
+            const writingScoreDisplay = (reportData.writingScore !== null && reportData.writingScore !== undefined) ? (reportData.writingScore + ' / 16') : '-';
+            const presScoreDisplay = (reportData.presentationScore !== null && reportData.presentationScore !== undefined) ? (reportData.presentationScore + ' / 20') : '-';
+            const finalScoreDisplay = (reportData.finalScore !== null && reportData.finalScore !== undefined) ? reportData.finalScore : '-';
+            const kktpStatus = (reportData.finalScore >= 75) ? 'TUNTAS (SANGAT BAIK)' : ((reportData.finalScore !== null && reportData.finalScore !== undefined) ? 'PERLU PEMBINAAN' : 'MENUNGGU PENILAIAN');
+            const feedbackHtml = reportData.teacherFeedback ? `<div style="font-style: italic; margin-top: 6px; font-size: 9.5pt; background: #fafafa; padding: 4px 8px; border-left: 3px solid #000;"><strong>Catatan Guru Pengampu:</strong> "${reportData.teacherFeedback}"</div>` : '';
+
+            const printHtml = `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>LAPORAN_RESIK_${studentName}_MINGGU_${reportData.weekNumber}</title>
+  <style>
+    @page { size: A4 portrait; margin: 12mm 15mm 15mm 15mm; }
+    * { box-sizing: border-box; }
+    body { font-family: "Times New Roman", Times, serif; margin: 0; color: #000; line-height: 1.35; font-size: 11pt; background: #fff; }
+    .kop-container { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 8px; margin-bottom: 2px; }
+    .kop-logo { width: 85px; height: 95px; object-fit: contain; flex-shrink: 0; }
+    .kop-text { text-align: center; flex: 1; line-height: 1.2; }
+    .kop-text h4 { margin: 0; font-size: 10.5pt; font-weight: normal; text-transform: uppercase; letter-spacing: 0.5px; }
+    .kop-text h3 { margin: 2px 0; font-size: 11.5pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+    .kop-text h2 { margin: 2px 0; font-size: 14.5pt; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+    .kop-text p.meta-sub { margin: 2px 0 0 0; font-size: 9.5pt; font-weight: bold; text-transform: uppercase; }
+    .kop-text p.address { margin: 2px 0 0 0; font-size: 8.5pt; font-style: italic; line-height: 1.2; }
+    .kop-line-thick { border-top: 3px solid #000; margin-top: 4px; }
+    .kop-line-thin { border-top: 1px solid #000; margin-top: 2px; margin-bottom: 14px; }
+    .doc-title { text-align: center; margin-bottom: 14px; }
+    .doc-title h3 { margin: 0; font-size: 12pt; font-weight: bold; text-decoration: underline; text-transform: uppercase; letter-spacing: 0.5px; }
+    .doc-title p { margin: 2px 0 0 0; font-size: 9.5pt; font-family: monospace; font-weight: bold; }
+    .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10pt; }
+    .meta-table td { padding: 2.5px 4px; vertical-align: top; }
+    .section-header { font-weight: bold; font-size: 10.5pt; margin-top: 10px; margin-bottom: 4px; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 2px; }
+    .content-box { border: 1px solid #444; padding: 8px 10px; background: #fff; margin-bottom: 10px; text-align: justify; font-size: 10pt; line-height: 1.4; }
+    .score-box { border: 1.5px solid #000; padding: 8px 10px; margin-top: 12px; page-break-inside: avoid; }
+    .score-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 9.5pt; margin-top: 4px; }
+    .score-table th, .score-table td { border: 1px solid #000; padding: 4px 6px; }
+    .score-table th { background: #f2f2f2; font-weight: bold; }
+    .footer-signature { margin-top: 24px; width: 100%; page-break-inside: avoid; }
+    .footer-signature td { text-align: center; width: 50%; vertical-align: top; font-size: 10pt; }
+    @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+  </style>
+</head>
+<body>
+  <div class="kop-container">
+    <img src="${logoUrl}" class="kop-logo" alt="Logo SMKN 1 Rongga" />
+    <div class="kop-text">
+      <h4>PEMERINTAH DAERAH PROVINSI JAWA BARAT</h4>
+      <h4>DINAS PENDIDIKAN</h4>
+      <h4>CABANG DINAS PENDIDIKAN WILAYAH VI</h4>
+      <h2>SMK NEGERI 1 RONGGA</h2>
+      <p class="meta-sub">PROGRAM KEAHLIAN PENGEMBANGAN PERANGKAT LUNAK DAN GIM (PPLG)</p>
+      <p class="address">Jl. Raya Rongga, Desa. Cibedug Kec. Rongga Kab. Bandung Barat Prov. Jawa Barat Telp. 022-6950350</p>
+      <p class="address"><u>Website :</u> smkn1rongga.sch.id Email : mail@smkn1rongga.sch.id</p>
+      <p class="address">Bandung Barat 40565</p>
+    </div>
+    <div style="width: 85px; flex-shrink: 0;"></div>
+  </div>
+  <div class="kop-line-thick"></div>
+  <div class="kop-line-thin"></div>
+  <div class="doc-title">
+    <h3>LEMBAR LAPORAN RESENSI BUKU (RABU LITERASI RESIK)</h3>
+    <p>MINGGU KE-${reportData.weekNumber} &bull; SEMESTER GANJIL TAHUN AJARAN 2026/2027</p>
+  </div>
+  <table class="meta-table">
+    <tr>
+      <td width="22%"><strong>Nama Peserta Didik</strong></td>
+      <td width="2%">:</td>
+      <td width="36%"><strong>${studentNameUpper}</strong></td>
+      <td width="18%"><strong>Konsentrasi Keahlian</strong></td>
+      <td width="2%">:</td>
+      <td width="20%">Rekayasa Perangkat Lunak</td>
+    </tr>
+    <tr>
+      <td><strong>Kelas / Rombel</strong></td>
+      <td>:</td>
+      <td>${studentClass}</td>
+      <td><strong>Tanggal Pengerjaan</strong></td>
+      <td>:</td>
+      <td>${reportData.reportDate}</td>
+    </tr>
+  </table>
+  <div class="section-header">1. Kelengkapan Identitas Buku</div>
+  <table class="meta-table" style="margin-left: 6px; margin-bottom: 6px;">
+    <tr><td width="22%">Judul Buku</td><td width="2%">:</td><td><strong>${reportData.bookTitle}</strong></td></tr>
+    <tr><td>Penulis / Pengarang</td><td>:</td><td>${reportData.author}</td></tr>
+    <tr><td>Penerbit & Kota Terbit</td><td>:</td><td>${reportData.publisher || '-'}, ${reportData.city || '-'}</td></tr>
+    <tr><td>Tahun Terbit / Tebal</td><td>:</td><td>Tahun ${reportData.year || '-'} &bull; ${reportData.pageCount || '-'} Halaman ${reportData.edition ? '(' + reportData.edition + ')' : ''}</td></tr>
+  </table>
+  <div class="section-header">2. Isi Ringkasan Buku (Aspek Menulis)</div>
+  <div class="content-box">${summaryHtml}</div>
+  <div class="section-header">3. Amanat / Pesan Moral Bacaan</div>
+  <div class="content-box">${moralHtml}</div>
+  <div class="score-box">
+    <div style="font-weight: bold; font-size: 10.5pt; text-align: center; margin-bottom: 4px; text-transform: uppercase;">EVALUASI & PENILAIAN RUBRIK RESIK RESMI</div>
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th>Aspek Menulis (Max 16)</th>
+          <th>Aspek Presentasi (Max 20)</th>
+          <th>Nilai Akhir (0-100)</th>
+          <th>Ketercapaian Kompetensi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>${writingScoreDisplay}</strong></td>
+          <td><strong>${presScoreDisplay}</strong></td>
+          <td><strong style="font-size: 13pt; color: #000;">${finalScoreDisplay}</strong></td>
+          <td><strong>${kktpStatus}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    ${feedbackHtml}
+  </div>
+  <table class="footer-signature">
+    <tr>
+      <td>
+        Peserta Didik,<br/><br/><br/><br/>
+        <strong><u>( ${userData.name || 'Siswa RPL'} )</u></strong><br/>
+        <span style="font-size: 8.5pt; font-family: monospace;">NIS/Kelas: ${studentClass}</span>
+      </td>
+      <td>
+        Rongga, ${reportData.reportDate}<br/>
+        Guru Pengampu RPL / Literasi,<br/><br/><br/><br/>
+        <strong><u>( Agung Gumelar Saputra, S.Tr.T. )</u></strong><br/>
+        <span style="font-size: 8.5pt; font-family: monospace;">NIP. 199306012022211013</span>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+            printWindow.document.write(printHtml);
+            printWindow.document.close();
+            setTimeout(() => { printWindow.print(); }, 400);
+        }
+    };
+}
+</script>
 {% endblock %}
