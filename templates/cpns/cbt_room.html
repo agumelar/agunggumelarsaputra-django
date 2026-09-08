@@ -1,0 +1,366 @@
+{% extends 'cpns/base_cpns.html' %}
+{% load static %}
+
+{% block title %}CBT Ujian: {{ package.judul }} | CPNS Drilling Hub{% endblock %}
+
+{% block cpns_content %}
+<div x-data="cbtEngine()" x-init="init()" @keydown.window="handleKeyboard($event)" class="py-6 select-none">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        
+        <!-- Top Sticky Examination Status Bar -->
+        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+            <!-- Left Info -->
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-mono font-bold px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    {{ package.kode }}
+                </span>
+                <span class="text-xs font-semibold text-slate-300 hidden sm:inline truncate max-w-xs">
+                    {{ package.judul }}
+                </span>
+                <span class="text-xs px-2 py-0.5 rounded-full font-mono font-medium {% if mode == 'SIMULASI_CAT' %}bg-sky-500/10 text-sky-400 border border-sky-500/20{% else %}bg-amber-500/10 text-amber-400 border border-amber-500/20{% endif %}">
+                    {{ mode|yesno:"Simulasi CAT,Drilling Bebas" }}
+                </span>
+            </div>
+
+            <!-- Center Digital Countdown Timer -->
+            <div class="flex items-center gap-4">
+                {% if mode == 'SIMULASI_CAT' %}
+                    <div class="flex items-center gap-2 px-4 py-1.5 rounded-xl bg-slate-950 border font-mono font-bold text-lg tracking-wider"
+                         :class="remainingSeconds < 300 ? 'border-rose-500/60 text-rose-400 animate-pulse' : 'border-slate-800 text-slate-100'">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span x-text="formatTime(remainingSeconds)">00:00</span>
+                    </div>
+                {% else %}
+                    <div class="text-xs text-slate-400 font-mono flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        Waktu Fleksibel
+                    </div>
+                {% endif %}
+
+                <!-- Font Size Controller -->
+                <div class="hidden sm:flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+                    <button @click="fontSize = 'sm'" :class="fontSize === 'sm' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'" class="px-2 py-1 rounded-lg transition font-mono">A-</button>
+                    <button @click="fontSize = 'base'" :class="fontSize === 'base' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'" class="px-2 py-1 rounded-lg transition font-mono">A</button>
+                    <button @click="fontSize = 'lg'" :class="fontSize === 'lg' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'" class="px-2 py-1 rounded-lg transition font-mono">A+</button>
+                </div>
+            </div>
+
+            <!-- Finish Button -->
+            <div>
+                <button @click="openConfirmModal = true" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow-md shadow-rose-600/25 transition">
+                    Selesai Ujian
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Examination Grid: Question (Left) vs Number Nav (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Left Panel: Current Question (8 Cols) -->
+            <div class="lg:col-span-8 space-y-6">
+                <template x-if="currentQuestion">
+                    <div class="p-6 sm:p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-6 shadow-xl">
+                        
+                        <!-- Question Header & Subtest Tag -->
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold text-slate-100 font-mono">
+                                    Soal Nomor <span x-text="currentQuestion.number" class="text-indigo-400"></span>
+                                </span>
+                                <span class="text-xs text-slate-500 font-mono">/ <span x-text="totalQuestions"></span></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs px-2.5 py-0.5 rounded font-mono font-bold"
+                                      :class="{
+                                          'bg-sky-500/10 text-sky-400 border border-sky-500/20': currentQuestion.subtest === 'TWK',
+                                          'bg-amber-500/10 text-amber-400 border border-amber-500/20': currentQuestion.subtest === 'TIU',
+                                          'bg-rose-500/10 text-rose-400 border border-rose-500/20': currentQuestion.subtest === 'TKP',
+                                          'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20': currentQuestion.subtest === 'SKB_GURU',
+                                      }"
+                                      x-text="currentQuestion.subtest">
+                                </span>
+                                <span x-show="currentQuestion.topic" x-text="currentQuestion.topic" class="text-xs text-slate-400 hidden sm:inline"></span>
+                            </div>
+                        </div>
+
+                        <!-- Question Text -->
+                        <div class="text-slate-100 leading-relaxed"
+                             :class="{
+                                 'text-sm': fontSize === 'sm',
+                                 'text-base sm:text-lg': fontSize === 'base',
+                                 'text-lg sm:text-xl': fontSize === 'lg'
+                             }"
+                             x-text="currentQuestion.text">
+                        </div>
+
+                        <!-- Options A - E -->
+                        <div class="space-y-3 pt-2">
+                            <template x-for="opt in currentQuestion.options" :key="opt.key">
+                                <div @click="selectAnswer(opt.key)"
+                                     class="p-4 rounded-2xl border cursor-pointer transition flex items-start gap-4 group"
+                                     :class="answers[currentQuestion.id] === opt.key 
+                                        ? 'bg-indigo-600/15 border-indigo-500 text-slate-100 shadow-md shadow-indigo-600/10' 
+                                        : 'bg-slate-950/40 border-slate-800 hover:border-slate-700 text-slate-300'">
+                                    <!-- Option Key Letter (A-E) -->
+                                    <div class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs font-mono shrink-0 transition"
+                                         :class="answers[currentQuestion.id] === opt.key 
+                                            ? 'bg-indigo-600 text-white' 
+                                            : 'bg-slate-800 text-slate-400 group-hover:text-slate-200'">
+                                        <span x-text="opt.key"></span>
+                                    </div>
+                                    <!-- Option Text -->
+                                    <div class="text-sm pt-1 leading-relaxed flex-1" x-text="opt.text"></div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Instant Explanation in Drilling Mode -->
+                        {% if mode == 'DRILLING_BEBAS' %}
+                            <div class="pt-4 border-t border-slate-800" x-show="currentQuestion.explanation">
+                                <div class="flex items-center justify-between">
+                                    <button @click="showExplanation = !showExplanation" type="button" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/30 transition flex items-center gap-1.5">
+                                        <span x-text="showExplanation ? 'Sembunyikan Pembahasan' : '💡 Buka Pembahasan & Kunci'"></span>
+                                    </button>
+                                </div>
+
+                                <div x-show="showExplanation" class="mt-4 p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4 text-xs">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-slate-400">Kunci Jawaban:</span>
+                                        <span class="font-bold text-emerald-400 font-mono text-sm" x-text="currentQuestion.explanation.correct_answer"></span>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                                        <div class="font-bold text-indigo-400 text-xs">🧠 Bedah Konsep & Teori Dasar</div>
+                                        <p class="text-slate-300 leading-relaxed" x-text="currentQuestion.explanation.concept"></p>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                                        <div class="font-bold text-rose-400 text-xs">🔍 Analisis Pengecoh</div>
+                                        <p class="text-slate-300 leading-relaxed" x-text="currentQuestion.explanation.distractor"></p>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                                        <div class="font-bold text-emerald-400 text-xs">⚡ Tips Cepat & Kata Kunci</div>
+                                        <p class="text-slate-300 leading-relaxed" x-text="currentQuestion.explanation.fast_tip"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Navigation Buttons -->
+                        <div class="pt-6 border-t border-slate-800 flex items-center justify-between gap-3">
+                            <button @click="prevQuestion()" :disabled="currentIndex === 0" 
+                                    class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:pointer-events-none text-xs font-semibold text-slate-200 border border-slate-700 transition">
+                                &larr; Sebelumnya
+                            </button>
+
+                            <!-- Ragu-ragu Checkbox -->
+                            <button @click="toggleFlag()" type="button" 
+                                    class="px-4 py-2.5 rounded-xl border text-xs font-semibold transition flex items-center gap-2"
+                                    :class="flagged[currentQuestion.id] 
+                                        ? 'bg-amber-500/20 border-amber-500 text-amber-300' 
+                                        : 'bg-slate-800/60 border-slate-700 text-slate-400 hover:text-slate-200'">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/>
+                                </svg>
+                                <span x-text="flagged[currentQuestion.id] ? 'Ragu-Ragu' : 'Tandai Ragu'"></span>
+                            </button>
+
+                            <button @click="nextQuestion()" :disabled="currentIndex === totalQuestions - 1" 
+                                    class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:pointer-events-none text-xs font-semibold text-white transition">
+                                Selanjutnya &rarr;
+                            </button>
+                        </div>
+
+                    </div>
+                </template>
+            </div>
+
+            <!-- Right Panel: Question Grid Navigator (4 Cols) -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6 shadow-xl">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                        <h3 class="text-sm font-bold text-slate-100">Navigasi Soal</h3>
+                        <span class="text-xs text-slate-400 font-mono">
+                            <span class="text-emerald-400 font-bold" x-text="countAnswered()"></span> / <span x-text="totalQuestions"></span> Terjawab
+                        </span>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="grid grid-cols-3 gap-2 text-[10px] text-center font-mono">
+                        <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">Terjawab</div>
+                        <div class="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400">Ragu-Ragu</div>
+                        <div class="p-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-500">Kosong</div>
+                    </div>
+
+                    <!-- 110 Question Grid Buttons -->
+                    <div class="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto pr-1">
+                        <template x-for="(q, idx) in questions" :key="q.id">
+                            <button @click="goToQuestion(idx)"
+                                    class="h-9 rounded-xl font-mono text-xs font-bold transition flex items-center justify-center border"
+                                    :class="{
+                                        'ring-2 ring-indigo-500 ring-offset-2 ring-offset-slate-900': currentIndex === idx,
+                                        'bg-amber-500/20 border-amber-500 text-amber-300': flagged[q.id],
+                                        'bg-emerald-600 border-emerald-500 text-white': answers[q.id] && !flagged[q.id],
+                                        'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700': !answers[q.id] && !flagged[q.id]
+                                    }">
+                                <span x-text="q.number"></span>
+                            </button>
+                        </template>
+                    </div>
+
+                    <!-- Keyboard Shortcut Hint -->
+                    <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-500 space-y-1">
+                        <div class="font-semibold text-slate-400">Tombol Pintas Keyboard:</div>
+                        <div>&bull; <kbd class="px-1 rounded bg-slate-800 text-slate-300">A</kbd>–<kbd class="px-1 rounded bg-slate-800 text-slate-300">E</kbd> atau <kbd class="px-1 rounded bg-slate-800 text-slate-300">1</kbd>–<kbd class="px-1 rounded bg-slate-800 text-slate-300">5</kbd>: Pilih jawaban</div>
+                        <div>&bull; <kbd class="px-1 rounded bg-slate-800 text-slate-300">&larr;</kbd> / <kbd class="px-1 rounded bg-slate-800 text-slate-300">&rarr;</kbd>: Soal sebelumnya / berikutnya</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Confirm Submit Modal Dialog -->
+    <div x-show="openConfirmModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div @click.away="openConfirmModal = false" class="max-w-md w-full p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6 shadow-2xl">
+            <h3 class="text-lg font-bold text-slate-100">Konfirmasi Selesai Ujian</h3>
+            
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Apakah Anda yakin ingin menyelesaikan ujian dan mengirimkan seluruh lembar jawaban?
+            </p>
+
+            <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 text-xs font-mono">
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Total Terjawab:</span>
+                    <span class="text-emerald-400 font-bold" x-text="countAnswered()"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Ditandai Ragu:</span>
+                    <span class="text-amber-400 font-bold" x-text="countFlagged()"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Belum Dijawab:</span>
+                    <span class="text-rose-400 font-bold" x-text="totalQuestions - countAnswered()"></span>
+                </div>
+            </div>
+
+            <form method="POST" action="{% url 'cpns:cbt_submit' package.slug %}" id="cbtSubmitForm">
+                {% csrf_token %}
+                <input type="hidden" name="answers_payload" :value="JSON.stringify(answers)">
+                <input type="hidden" name="time_spent_seconds" :value="timeSpent">
+                <input type="hidden" name="mode" value="{{ mode }}">
+
+                <div class="flex gap-3 pt-2">
+                    <button @click="openConfirmModal = false" type="button" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition">
+                        Lanjut Mengerjakan
+                    </button>
+                    <button type="submit" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow-lg shadow-rose-600/30 transition">
+                        Ya, Kumpulkan Jawaban
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function cbtEngine() {
+    return {
+        questions: {{ questions_json|safe }},
+        totalQuestions: {{ total_questions }},
+        currentIndex: 0,
+        fontSize: 'base',
+        answers: {},
+        flagged: {},
+        showExplanation: false,
+        openConfirmModal: false,
+        mode: '{{ mode }}',
+        remainingSeconds: {{ duration_seconds }},
+        timeSpent: 0,
+        timerInterval: null,
+
+        init() {
+            if (this.mode === 'SIMULASI_CAT' && this.remainingSeconds > 0) {
+                this.timerInterval = setInterval(() => {
+                    this.remainingSeconds--;
+                    this.timeSpent++;
+                    if (this.remainingSeconds <= 0) {
+                        clearInterval(this.timerInterval);
+                        document.getElementById('cbtSubmitForm').submit();
+                    }
+                }, 1000);
+            }
+        },
+
+        get currentQuestion() {
+            return this.questions[this.currentIndex] || null;
+        },
+
+        selectAnswer(key) {
+            if (!this.currentQuestion) return;
+            this.answers[this.currentQuestion.id] = key;
+        },
+
+        toggleFlag() {
+            if (!this.currentQuestion) return;
+            const qId = this.currentQuestion.id;
+            this.flagged[qId] = !this.flagged[qId];
+        },
+
+        prevQuestion() {
+            if (this.currentIndex > 0) {
+                this.currentIndex--;
+                this.showExplanation = false;
+            }
+        },
+
+        nextQuestion() {
+            if (this.currentIndex < this.totalQuestions - 1) {
+                this.currentIndex++;
+                this.showExplanation = false;
+            }
+        },
+
+        goToQuestion(idx) {
+            if (idx >= 0 && idx < this.totalQuestions) {
+                this.currentIndex = idx;
+                this.showExplanation = false;
+            }
+        },
+
+        countAnswered() {
+            return Object.keys(this.answers).filter(k => this.answers[k]).length;
+        },
+
+        countFlagged() {
+            return Object.keys(this.flagged).filter(k => this.flagged[k]).length;
+        },
+
+        formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        },
+
+        handleKeyboard(e) {
+            // Hindari shortcut jika modal terbuka atau input teks terfokus
+            if (this.openConfirmModal) return;
+            if (['input', 'textarea'].includes(e.target.tagName.toLowerCase())) return;
+
+            const key = e.key.toUpperCase();
+            if (['A', 'B', 'C', 'D', 'E'].includes(key)) {
+                this.selectAnswer(key);
+            } else if (['1', '2', '3', '4', '5'].includes(key)) {
+                const map = {'1': 'A', '2': 'B', '3': 'C', '4': 'D', '5': 'E'};
+                this.selectAnswer(map[key]);
+            } else if (e.key === 'ArrowLeft') {
+                this.prevQuestion();
+            } else if (e.key === 'ArrowRight') {
+                this.nextQuestion();
+            }
+        }
+    }
+}
+</script>
+{% endblock %}

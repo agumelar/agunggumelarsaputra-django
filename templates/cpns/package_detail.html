@@ -1,0 +1,130 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}{{ package.judul }} | CPNS Drilling Hub{% endblock %}
+
+{% block cpns_content %}
+<div class="py-12">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs text-slate-400">
+            <a href="{% url 'cpns:landing' %}" class="hover:text-slate-200">Beranda</a>
+            <span>/</span>
+            <a href="{% url 'cpns:package_list' %}" class="hover:text-slate-200">Katalog Paket</a>
+            <span>/</span>
+            <span class="text-slate-200 truncate">{{ package.kode }}</span>
+        </nav>
+
+        <!-- Main Package Header Card -->
+        <div class="p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <span class="text-xs font-mono font-bold px-3 py-1 rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    {{ package.kode }} &bull; {{ package.get_tipe_ujian_display }}
+                </span>
+                <span class="text-xs text-slate-400 font-mono">
+                    Durasi: <strong class="text-slate-200">{{ package.durasi_menit }} Menit</strong> &bull; Total: <strong class="text-slate-200">{{ package.total_questions_count }} Soal</strong>
+                </span>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-display font-bold text-slate-100 leading-tight">
+                {{ package.judul }}
+            </h1>
+
+            <p class="text-sm text-slate-300 leading-relaxed">
+                {{ package.deskripsi }}
+            </p>
+
+            <!-- Passing Grade Details -->
+            {% if package.tipe_ujian == 'SKD' %}
+                <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div>
+                        <div class="text-[11px] text-slate-500">Ambang Batas TWK</div>
+                        <div class="text-lg font-mono font-bold text-sky-400">65 Poin</div>
+                        <div class="text-[10px] text-slate-500">Min. 13 Soal Benar</div>
+                    </div>
+                    <div>
+                        <div class="text-[11px] text-slate-500">Ambang Batas TIU</div>
+                        <div class="text-lg font-mono font-bold text-amber-400">80 Poin</div>
+                        <div class="text-[10px] text-slate-500">Min. 16 Soal Benar</div>
+                    </div>
+                    <div>
+                        <div class="text-[11px] text-slate-500">Ambang Batas TKP</div>
+                        <div class="text-lg font-mono font-bold text-rose-400">166 Poin</div>
+                        <div class="text-[10px] text-slate-500">Akumulasi Bobot 1-5</div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-slate-400">Passing Grade Kelulusan SKB Guru</span>
+                        <div class="text-xl font-mono font-bold text-emerald-400">{{ package.passing_grade_skb }} Poin</div>
+                    </div>
+                    <span class="text-xs text-slate-500">Pedagogik & Kurikulum Merdeka</span>
+                </div>
+            {% endif %}
+
+            <!-- Action Buttons: 2 Modes -->
+            <div class="pt-4 border-t border-slate-800/80 flex flex-wrap gap-4">
+                <a href="{% url 'cpns:cbt_exam' package.slug %}?mode=SIMULASI_CAT" class="flex-1 text-center py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 transition">
+                    ⏱️ Masuk Simulasi CAT Resmi ({{ package.durasi_menit }} Menit)
+                </a>
+                <a href="{% url 'cpns:cbt_exam' package.slug %}?mode=DRILLING_BEBAS" class="flex-1 text-center py-3.5 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm border border-slate-700 transition">
+                    💡 Mode Drilling Bebas (Pembahasan Langsung)
+                </a>
+            </div>
+        </div>
+
+        <!-- Riwayat Attempt Peserta -->
+        {% if attempts %}
+            <div class="space-y-4">
+                <h2 class="text-xl font-bold text-slate-100">Riwayat Pengerjaan Anda</h2>
+                <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/60">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-800/80 text-slate-400 border-b border-slate-700 font-medium">
+                            <tr>
+                                <th class="p-3.5">Tanggal</th>
+                                <th class="p-3.5">Mode</th>
+                                {% if package.tipe_ujian == 'SKD' %}
+                                    <th class="p-3.5">TWK</th>
+                                    <th class="p-3.5">TIU</th>
+                                    <th class="p-3.5">TKP</th>
+                                {% endif %}
+                                <th class="p-3.5">Total Skor</th>
+                                <th class="p-3.5">Status</th>
+                                <th class="p-3.5 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 font-mono">
+                            {% for att in attempts %}
+                                <tr class="hover:bg-slate-800/30">
+                                    <td class="p-3.5">{{ att.completed_at|date:"d M Y, H:i" }}</td>
+                                    <td class="p-3.5">{{ att.get_mode_display }}</td>
+                                    {% if package.tipe_ujian == 'SKD' %}
+                                        <td class="p-3.5 {% if att.lulus_twk %}text-emerald-400{% else %}text-rose-400{% endif %}">{{ att.skor_twk }}</td>
+                                        <td class="p-3.5 {% if att.lulus_tiu %}text-emerald-400{% else %}text-rose-400{% endif %}">{{ att.skor_tiu }}</td>
+                                        <td class="p-3.5 {% if att.lulus_tkp %}text-emerald-400{% else %}text-rose-400{% endif %}">{{ att.skor_tkp }}</td>
+                                    {% endif %}
+                                    <td class="p-3.5 font-bold text-slate-100">{{ att.total_skor }}</td>
+                                    <td class="p-3.5">
+                                        {% if att.status_lulus %}
+                                            <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]">LOLOS PG</span>
+                                        {% else %}
+                                            <span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px]">BELUM PG</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="p-3.5 text-right font-sans">
+                                        <a href="{% url 'cpns:cbt_result' package.slug att.id %}" class="text-indigo-400 hover:text-indigo-300 font-medium">
+                                            Lihat Review &rarr;
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

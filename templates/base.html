@@ -81,7 +81,9 @@
     {% include 'components/toast.html' %}
 
     <!-- Top Navigation Bar -->
+    {% block navbar %}
     {% include 'components/navbar.html' %}
+    {% endblock navbar %}
 
     <!-- Main Content Area -->
     <main id="main-content" class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -89,7 +91,9 @@
     </main>
 
     <!-- Footer -->
+    {% block footer %}
     {% include 'components/footer.html' %}
+    {% endblock footer %}
 
     {% block extra_scripts %}{% endblock %}
 </body>

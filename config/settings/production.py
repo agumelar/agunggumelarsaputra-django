@@ -24,6 +24,8 @@ else:
         'http://145.241.157.243:8080',
         'https://agunggumelarsaputra.com',
         'https://www.agunggumelarsaputra.com',
+        'https://cpns.agunggumelarsaputra.com',
+        'http://cpns.agunggumelarsaputra.com',
     ]
 
 # Database configuration for PostgreSQL

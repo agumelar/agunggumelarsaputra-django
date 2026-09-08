@@ -1,0 +1,120 @@
+{% extends 'cpns/base_cpns.html' %}
+{% load custom_tags %}
+
+{% block title %}Katalog Paket Soal CPNS & SKB Guru{% endblock %}
+
+{% block cpns_content %}
+<div class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        
+        <!-- Header -->
+        <div class="space-y-2">
+            <h1 class="text-3xl font-display font-bold text-slate-100">Katalog Paket Ujian & Drilling</h1>
+            <p class="text-sm text-slate-400">Pilih simulasi penuh standar CAT BKN atau paket drilling fokus per subtopik.</p>
+        </div>
+
+        <!-- Section 1: SKD (Seleksi Kompetensi Dasar) -->
+        <div class="space-y-6">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-800">
+                <span class="w-3 h-3 rounded-full bg-sky-500"></span>
+                <h2 class="text-xl font-bold text-slate-100">Seleksi Kompetensi Dasar (SKD) BKN</h2>
+                <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 font-mono">TWK &bull; TIU &bull; TKP</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for pkg in skd_packages %}
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-sky-400 border border-slate-700">
+                                    {{ pkg.kode }}
+                                </span>
+                                <span class="text-xs text-slate-400 font-mono">{{ pkg.durasi_menit }} Menit</span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-100 mb-2 leading-snug">
+                                {{ pkg.judul }}
+                            </h3>
+                            <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-4">
+                                {{ pkg.deskripsi }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <!-- User Best Score Info if exists -->
+                            {% if pkg.id in user_best_attempts %}
+                                {% with att=user_best_attempts|get_item:pkg.id %}
+                                    <div class="mb-4 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-xs flex items-center justify-between">
+                                        <span class="text-slate-400">Skor Terbaik:</span>
+                                        <span class="font-mono font-bold {% if att.status_lulus %}text-emerald-400{% else %}text-amber-400{% endif %}">
+                                            {{ att.total_skor }} ({{ att.status_lulus|yesno:"Lolos PG,Belum PG" }})
+                                        </span>
+                                    </div>
+                                {% endwith %}
+                            {% endif %}
+
+                            <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                                <span class="text-xs text-slate-500 font-mono">{{ pkg.total_questions_count }} Soal</span>
+                                <div class="flex gap-2">
+                                    <a href="{% url 'cpns:cbt_exam' pkg.slug %}?mode=DRILLING_BEBAS" class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                                        Drilling
+                                    </a>
+                                    <a href="{% url 'cpns:package_detail' pkg.slug %}" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition">
+                                        Mulai CAT
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-sm text-slate-500">Belum ada paket SKD yang dipublikasikan.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Section 2: SKB Guru / Tenaga Pendidik -->
+        <div class="space-y-6 pt-6">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-800">
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <h2 class="text-xl font-bold text-slate-100">Seleksi Kompetensi Bidang (SKB) Guru & Tenaga Pendidik</h2>
+                <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">Pedagogik & Kurikulum Merdeka</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for pkg in skb_packages %}
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-emerald-400 border border-slate-700">
+                                    {{ pkg.kode }}
+                                </span>
+                                <span class="text-xs text-slate-400 font-mono">{{ pkg.durasi_menit }} Menit</span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-100 mb-2 leading-snug">
+                                {{ pkg.judul }}
+                            </h3>
+                            <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-4">
+                                {{ pkg.deskripsi }}
+                            </p>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                            <span class="text-xs text-slate-500 font-mono">{{ pkg.total_questions_count }} Soal</span>
+                            <div class="flex gap-2">
+                                <a href="{% url 'cpns:cbt_exam' pkg.slug %}?mode=DRILLING_BEBAS" class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                                    Drilling
+                                </a>
+                                <a href="{% url 'cpns:package_detail' pkg.slug %}" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition">
+                                    Mulai CAT
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-sm text-slate-500">Belum ada paket SKB Guru yang dipublikasikan.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

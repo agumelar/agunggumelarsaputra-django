@@ -1,0 +1,135 @@
+{% for item in reviews %}
+    <div class="p-6 rounded-3xl bg-slate-900 border {% if item.is_correct %}border-slate-800{% else %}border-rose-900/40{% endif %} space-y-5 shadow-lg">
+        <!-- Question Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+            <div class="flex items-center gap-2.5">
+                <span class="w-8 h-8 rounded-xl bg-slate-800 text-slate-200 font-mono font-bold text-xs flex items-center justify-center">
+                    #{{ item.question.urutan }}
+                </span>
+                <span class="text-xs px-2.5 py-0.5 rounded font-mono font-bold"
+                      :class="{
+                          'bg-sky-500/10 text-sky-400 border border-sky-500/20': '{{ item.question.subtes }}' === 'TWK',
+                          'bg-amber-500/10 text-amber-400 border border-amber-500/20': '{{ item.question.subtes }}' === 'TIU',
+                          'bg-rose-500/10 text-rose-400 border border-rose-500/20': '{{ item.question.subtes }}' === 'TKP',
+                          'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20': '{{ item.question.subtes }}' === 'SKB_GURU',
+                      }">
+                    {{ item.question.subtes }}
+                </span>
+                <span class="text-xs text-slate-400 font-medium hidden sm:inline">{{ item.question.subtopik }}</span>
+            </div>
+
+            <!-- Score / Points Tag -->
+            <div class="flex items-center gap-2 font-mono text-xs">
+                {% if item.question.subtes == 'TKP' %}
+                    <span class="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-bold">
+                        Poin Didapat: +{{ item.earned_points }}
+                    </span>
+                {% else %}
+                    {% if item.is_correct %}
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
+                            +5 Poin (Benar)
+                        </span>
+                    {% else %}
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold">
+                            0 Poin (Salah)
+                        </span>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Question Text -->
+        <div class="text-sm sm:text-base text-slate-100 leading-relaxed font-normal">
+            {{ item.question.pertanyaan }}
+        </div>
+
+        <!-- Options Review Grid -->
+        <div class="space-y-2.5 text-xs">
+            <!-- Opsi A -->
+            <div class="p-3 rounded-xl border flex items-start gap-3 {% if item.question.kunci_jawaban == 'A' and item.question.subtes != 'TKP' %}bg-emerald-950/30 border-emerald-500/40 text-emerald-200{% elif item.user_choice == 'A' and not item.is_correct %}bg-rose-950/30 border-rose-500/40 text-rose-200{% else %}bg-slate-950/40 border-slate-800 text-slate-300{% endif %}">
+                <span class="w-6 h-6 rounded-lg bg-slate-800 font-mono font-bold flex items-center justify-center shrink-0">A</span>
+                <span class="pt-1 flex-1">{{ item.question.opsi_a }}</span>
+                {% if item.question.bobot_tkp %}
+                    <span class="font-mono text-[11px] text-indigo-400 font-bold self-center">{{ item.question.bobot_tkp.A }} Poin</span>
+                {% endif %}
+            </div>
+
+            <!-- Opsi B -->
+            <div class="p-3 rounded-xl border flex items-start gap-3 {% if item.question.kunci_jawaban == 'B' and item.question.subtes != 'TKP' %}bg-emerald-950/30 border-emerald-500/40 text-emerald-200{% elif item.user_choice == 'B' and not item.is_correct %}bg-rose-950/30 border-rose-500/40 text-rose-200{% else %}bg-slate-950/40 border-slate-800 text-slate-300{% endif %}">
+                <span class="w-6 h-6 rounded-lg bg-slate-800 font-mono font-bold flex items-center justify-center shrink-0">B</span>
+                <span class="pt-1 flex-1">{{ item.question.opsi_b }}</span>
+                {% if item.question.bobot_tkp %}
+                    <span class="font-mono text-[11px] text-indigo-400 font-bold self-center">{{ item.question.bobot_tkp.B }} Poin</span>
+                {% endif %}
+            </div>
+
+            <!-- Opsi C -->
+            <div class="p-3 rounded-xl border flex items-start gap-3 {% if item.question.kunci_jawaban == 'C' and item.question.subtes != 'TKP' %}bg-emerald-950/30 border-emerald-500/40 text-emerald-200{% elif item.user_choice == 'C' and not item.is_correct %}bg-rose-950/30 border-rose-500/40 text-rose-200{% else %}bg-slate-950/40 border-slate-800 text-slate-300{% endif %}">
+                <span class="w-6 h-6 rounded-lg bg-slate-800 font-mono font-bold flex items-center justify-center shrink-0">C</span>
+                <span class="pt-1 flex-1">{{ item.question.opsi_c }}</span>
+                {% if item.question.bobot_tkp %}
+                    <span class="font-mono text-[11px] text-indigo-400 font-bold self-center">{{ item.question.bobot_tkp.C }} Poin</span>
+                {% endif %}
+            </div>
+
+            <!-- Opsi D -->
+            <div class="p-3 rounded-xl border flex items-start gap-3 {% if item.question.kunci_jawaban == 'D' and item.question.subtes != 'TKP' %}bg-emerald-950/30 border-emerald-500/40 text-emerald-200{% elif item.user_choice == 'D' and not item.is_correct %}bg-rose-950/30 border-rose-500/40 text-rose-200{% else %}bg-slate-950/40 border-slate-800 text-slate-300{% endif %}">
+                <span class="w-6 h-6 rounded-lg bg-slate-800 font-mono font-bold flex items-center justify-center shrink-0">D</span>
+                <span class="pt-1 flex-1">{{ item.question.opsi_d }}</span>
+                {% if item.question.bobot_tkp %}
+                    <span class="font-mono text-[11px] text-indigo-400 font-bold self-center">{{ item.question.bobot_tkp.D }} Poin</span>
+                {% endif %}
+            </div>
+
+            <!-- Opsi E -->
+            <div class="p-3 rounded-xl border flex items-start gap-3 {% if item.question.kunci_jawaban == 'E' and item.question.subtes != 'TKP' %}bg-emerald-950/30 border-emerald-500/40 text-emerald-200{% elif item.user_choice == 'E' and not item.is_correct %}bg-rose-950/30 border-rose-500/40 text-rose-200{% else %}bg-slate-950/40 border-slate-800 text-slate-300{% endif %}">
+                <span class="w-6 h-6 rounded-lg bg-slate-800 font-mono font-bold flex items-center justify-center shrink-0">E</span>
+                <span class="pt-1 flex-1">{{ item.question.opsi_e }}</span>
+                {% if item.question.bobot_tkp %}
+                    <span class="font-mono text-[11px] text-indigo-400 font-bold self-center">{{ item.question.bobot_tkp.E }} Poin</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 3-Level Pedagogical Deep Explanation ("Konsep Tuntas") -->
+        <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3.5 text-xs">
+            <div class="flex items-center gap-2 font-bold text-slate-200 border-b border-slate-800 pb-2">
+                <span class="text-indigo-400">💡</span> Pembahasan & Kunci Konsep Tuntas
+            </div>
+
+            <!-- Level 1: Bedah Konsep -->
+            <div class="space-y-1">
+                <div class="font-semibold text-indigo-400 text-xs flex items-center gap-1.5">
+                    <span>🧠</span> Bedah Konsep & Landasan Teori
+                </div>
+                <p class="text-slate-300 leading-relaxed pl-5">
+                    {{ item.question.bedah_konsep|default:"Belum ada ringkasan konsep tambahan untuk butir soal ini." }}
+                </p>
+            </div>
+
+            <!-- Level 2: Analisis Pengecoh -->
+            <div class="space-y-1">
+                <div class="font-semibold text-rose-400 text-xs flex items-center gap-1.5">
+                    <span>🔍</span> Analisis Opsi Pengecoh (Distractor Analysis)
+                </div>
+                <p class="text-slate-300 leading-relaxed pl-5">
+                    {{ item.question.alasan_pengecoh|default:"Pilihan lain tidak memenuhi kriteria kaidah materi pokok." }}
+                </p>
+            </div>
+
+            <!-- Level 3: Tips & Pola Cepat -->
+            <div class="space-y-1">
+                <div class="font-semibold text-emerald-400 text-xs flex items-center gap-1.5">
+                    <span>⚡</span> Tips Cepat & Kata Kunci Ujian
+                </div>
+                <p class="text-slate-300 leading-relaxed pl-5">
+                    {{ item.question.tips_cepat|default:"Gunakan teknik eliminasi opsi paling ekstrim saat ragu." }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <div class="p-10 text-center rounded-3xl bg-slate-900 border border-slate-800 text-slate-400 text-sm">
+        Tidak ada soal yang cocok dengan filter yang dipilih.
+    </div>
+{% endfor %}

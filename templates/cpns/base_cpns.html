@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CPNS Hub - Drilling Soal SKD & SKB Guru{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-indigo-600 selection:text-white">
+    <!-- Navbar Subdomain CPNS -->
+    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand / Logo -->
+            <a href="{% url 'cpns:landing' %}" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-sky-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+                    <span class="font-mono text-sm tracking-wider">CPNS</span>
+                </div>
+                <div>
+                    <span class="font-display font-bold text-lg text-slate-100 tracking-tight flex items-center gap-1.5">
+                        CPNS Drilling Hub
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-mono border border-indigo-500/20 font-normal">BKN CAT</span>
+                    </span>
+                    <span class="text-xs text-slate-400 hidden sm:block">Agung Gumelar Saputra, S.Tr.T.</span>
+                </div>
+            </a>
+
+            <!-- Nav Links -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                <a href="{% url 'cpns:landing' %}" class="transition-colors hover:text-indigo-400 {% if request.resolver_match.url_name == 'landing' %}text-indigo-400{% else %}text-slate-300{% endif %}">
+                    Beranda
+                </a>
+                <a href="{% url 'cpns:package_list' %}" class="transition-colors hover:text-indigo-400 {% if request.resolver_match.url_name == 'package_list' %}text-indigo-400{% else %}text-slate-300{% endif %}">
+                    Katalog Paket
+                </a>
+                <a href="{% url 'cpns:package_detail' 'simulasi-resmi-skd-cat-bkn-01' %}" class="transition-colors hover:text-indigo-400 text-slate-300">
+                    Simulasi SKD
+                </a>
+                <a href="{% url 'cpns:package_detail' 'simulasi-resmi-skb-guru-01' %}" class="transition-colors hover:text-indigo-400 text-slate-300">
+                    SKB Guru
+                </a>
+            </nav>
+
+            <!-- Actions & User Profile -->
+            <div class="flex items-center gap-3">
+                {% if user.is_authenticated %}
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700/60 text-xs">
+                        <div class="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">
+                            {{ user.first_name|default:user.username|slice:":1"|upper }}
+                        </div>
+                        <span class="font-medium text-slate-200 hidden sm:inline">{{ user.display_name|default:user.username }}</span>
+                        <span class="text-indigo-400 font-mono font-bold ml-1">Lv.{{ user.level }}</span>
+                    </div>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="text-xs font-semibold px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+                        Masuk Akun
+                    </a>
+                {% endif %}
+                <a href="{% url 'cpns:package_list' %}" class="text-xs font-semibold px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/30 transition">
+                    Mulai Drilling
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1">
+        {% if messages %}
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+                {% for message in messages %}
+                    <div class="p-4 mb-3 rounded-xl border text-sm flex items-center justify-between {% if message.tags == 'error' %}bg-rose-950/40 border-rose-800/60 text-rose-300{% else %}bg-emerald-950/40 border-emerald-800/60 text-emerald-300{% endif %}">
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block cpns_content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800/80 py-8 text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-md bg-indigo-600 flex items-center justify-center font-bold text-white text-[10px]">AGS</div>
+                <span>&copy; 2026 <strong>CPNS Drilling Hub</strong> &bull; Agung Gumelar Saputra, S.Tr.T.</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="https://agunggumelarsaputra.com" class="hover:text-indigo-400 transition-colors">Portal Utama</a>
+                <a href="{% url 'cpns:package_list' %}" class="hover:text-indigo-400 transition-colors">Bank Soal BKN</a>
+                <span class="text-slate-600">DATH Stack Architecture</span>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}

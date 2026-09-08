@@ -19,6 +19,7 @@ urlpatterns = [
     path('literasi/', include('apps.literasi.urls', namespace='literasi')),
     path('gamification/', include('apps.gamification.urls', namespace='gamification')),
     path('panel-guru/', include('apps.admin_panel.urls', namespace='admin_panel')),
+    path('cpns/', include('apps.cpns.urls', namespace='cpns')),
 ]
 
 # Serve media files in development

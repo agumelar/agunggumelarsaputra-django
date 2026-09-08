@@ -38,6 +38,7 @@ LOCAL_APPS = [
     'apps.literasi.apps.LiterasiConfig',
     'apps.gamification.apps.GamificationConfig',
     'apps.admin_panel.apps.AdminPanelConfig',
+    'apps.cpns.apps.CpnsConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
+    'apps.cpns.middleware.CpnsSubdomainMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

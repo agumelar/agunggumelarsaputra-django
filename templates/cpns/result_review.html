@@ -1,0 +1,167 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Hasil & Evaluasi: {{ package.judul }} | CPNS Drilling Hub{% endblock %}
+
+{% block cpns_content %}
+<div class="py-12">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        
+        <!-- Breadcrumb & Top Actions -->
+        <div class="flex items-center justify-between text-xs">
+            <nav class="flex items-center gap-2 text-slate-400">
+                <a href="{% url 'cpns:package_list' %}" class="hover:text-slate-200">Katalog Paket</a>
+                <span>/</span>
+                <span class="text-slate-200">{{ package.kode }}</span>
+                <span>/</span>
+                <span class="text-slate-400">Hasil Evaluasi</span>
+            </nav>
+
+            <a href="{% url 'cpns:cbt_exam' package.slug %}?mode={{ attempt.mode }}" class="font-semibold text-indigo-400 hover:text-indigo-300">
+                &larr; Ulangi Pengerjaan
+            </a>
+        </div>
+
+        <!-- Evaluation Summary Hero Card -->
+        <div class="p-8 sm:p-10 rounded-3xl bg-slate-900 border border-slate-800 space-y-8 shadow-2xl relative overflow-hidden">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <span class="text-xs font-mono font-bold px-3 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                        {{ package.kode }} &bull; {{ attempt.get_mode_display }}
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-display font-bold text-slate-100 mt-2">
+                        Lembar Hasil & Evaluasi Ujian
+                    </h1>
+                </div>
+
+                <!-- Status Badge -->
+                <div>
+                    {% if attempt.status_lulus %}
+                        <div class="px-5 py-2.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-sm sm:text-base flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                            LULUS PASSING GRADE (LOLOS RANKING)
+                        </div>
+                    {% else %}
+                        <div class="px-5 py-2.5 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-300 font-bold text-sm sm:text-base flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+                            BELUM MEMENUHI AMBANG BATAS BKN
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Score Cards Grid -->
+            {% if package.tipe_ujian == 'SKD' %}
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <!-- TWK -->
+                    <div class="p-5 rounded-2xl bg-slate-950 border {% if attempt.lulus_twk %}border-emerald-500/40{% else %}border-rose-500/40{% endif %} text-center space-y-1">
+                        <span class="text-[11px] text-slate-400">Skor TWK (Min. {{ package.passing_grade_twk }})</span>
+                        <div class="text-3xl font-mono font-extrabold {% if attempt.lulus_twk %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                            {{ attempt.skor_twk }}
+                        </div>
+                        <span class="text-[10px] font-mono {% if attempt.lulus_twk %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                            {{ attempt.lulus_twk|yesno:"Memenuhi PG,Di Bawah PG" }}
+                        </span>
+                    </div>
+
+                    <!-- TIU -->
+                    <div class="p-5 rounded-2xl bg-slate-950 border {% if attempt.lulus_tiu %}border-emerald-500/40{% else %}border-rose-500/40{% endif %} text-center space-y-1">
+                        <span class="text-[11px] text-slate-400">Skor TIU (Min. {{ package.passing_grade_tiu }})</span>
+                        <div class="text-3xl font-mono font-extrabold {% if attempt.lulus_tiu %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                            {{ attempt.skor_tiu }}
+                        </div>
+                        <span class="text-[10px] font-mono {% if attempt.lulus_tiu %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                            {{ attempt.lulus_tiu|yesno:"Memenuhi PG,Di Bawah PG" }}
+                        </span>
+                    </div>
+
+                    <!-- TKP -->
+                    <div class="p-5 rounded-2xl bg-slate-950 border {% if attempt.lulus_tkp %}border-emerald-500/40{% else %}border-rose-500/40{% endif %} text-center space-y-1">
+                        <span class="text-[11px] text-slate-400">Skor TKP (Min. {{ package.passing_grade_tkp }})</span>
+                        <div class="text-3xl font-mono font-extrabold {% if attempt.lulus_tkp %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                            {{ attempt.skor_tkp }}
+                        </div>
+                        <span class="text-[10px] font-mono {% if attempt.lulus_tkp %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                            {{ attempt.lulus_tkp|yesno:"Memenuhi PG,Di Bawah PG" }}
+                        </span>
+                    </div>
+
+                    <!-- Total Score -->
+                    <div class="p-5 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 text-center space-y-1">
+                        <span class="text-[11px] text-indigo-300 font-semibold">Total Nilai Akhir</span>
+                        <div class="text-3xl font-mono font-black text-white">
+                            {{ attempt.total_skor }}
+                        </div>
+                        <span class="text-[10px] text-indigo-300 font-mono">Maksimum: 550 Poin</span>
+                    </div>
+                </div>
+            {% else %}
+                <div class="p-6 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-slate-400">Skor Akhir SKB Guru</span>
+                        <div class="text-4xl font-mono font-black text-white mt-1">{{ attempt.skor_skb }} Poin</div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-400">Ambang Batas Minimum: {{ package.passing_grade_skb }} Poin</span>
+                        <div class="text-sm font-bold mt-1 {% if attempt.status_lulus %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                            {{ attempt.status_lulus|yesno:"Lulus Kompetensi,Belum Lulus KKM" }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Metadata footer -->
+            <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 flex flex-wrap items-center justify-between gap-2">
+                <span>Waktu Submit: <strong class="text-slate-200">{{ attempt.completed_at|date:"d F Y, H:i" }} WIB</strong></span>
+                <span>Durasi Pengerjaan: <strong class="text-slate-200 font-mono">{{ attempt.waktu_detik }} Detik</strong></span>
+            </div>
+        </div>
+
+        <!-- Section: Bedah Butir Soal Interaktif dengan HTMX -->
+        <div class="space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-100">Bedah Soal & Pembahasan Konsep Tuntas</h2>
+                    <p class="text-xs text-slate-400">Analisis setiap jawaban Anda, landasan teori materi, dan tips pengerjaan cepat.</p>
+                </div>
+
+                <!-- HTMX Filter Tabs -->
+                <div class="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-medium">
+                    <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=all"
+                            hx-target="#reviewItemsContainer"
+                            class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'all' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                        Semua Butir
+                    </button>
+                    <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=salah"
+                            hx-target="#reviewItemsContainer"
+                            class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'salah' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                        Hanya Salah
+                    </button>
+                    {% if package.tipe_ujian == 'SKD' %}
+                        <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=TWK"
+                                hx-target="#reviewItemsContainer"
+                                class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'TWK' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                            TWK
+                        </button>
+                        <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=TIU"
+                                hx-target="#reviewItemsContainer"
+                                class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'TIU' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                            TIU
+                        </button>
+                        <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=TKP"
+                                hx-target="#reviewItemsContainer"
+                                class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'TKP' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                            TKP
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- HTMX Target Container -->
+            <div id="reviewItemsContainer" class="space-y-6">
+                {% include 'cpns/partials/review_list.html' %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

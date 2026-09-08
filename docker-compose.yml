@@ -13,7 +13,7 @@ services:
       - DJANGO_SETTINGS_MODULE=config.settings.production
       - DEBUG=False
       - ALLOWED_HOSTS=*
-      - CSRF_TRUSTED_ORIGINS=http://145.241.157.243:8080,http://145.241.157.243,https://agunggumelarsaputra.com,https://www.agunggumelarsaputra.com
+      - CSRF_TRUSTED_ORIGINS=http://145.241.157.243:8080,http://145.241.157.243,https://agunggumelarsaputra.com,https://www.agunggumelarsaputra.com,https://cpns.agunggumelarsaputra.com,http://cpns.agunggumelarsaputra.com
       - DB_NAME=ags_db
       - DB_USER=ags_user
       - DB_PASSWORD=ags_password_secure2026
