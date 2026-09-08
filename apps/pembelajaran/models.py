@@ -48,16 +48,23 @@ class UserSubmission(models.Model):
     ]
 
     LEVEL_CHOICES = [
-        ('Level 0', 'Level 0 - Belum Terlihat'),
-        ('Level 1', 'Level 1 - Mengenal'),
-        ('Level 2', 'Level 2 - Mencoba (Target Minimal Sem. 1)'),
-        ('Level 3', 'Level 3 - Mandiri'),
+        ('Level 4 (Mahir & Mandiri ★★★)', 'Level 4 (Mahir & Mandiri ★★★) - Sangat Baik'),
+        ('Level 3 (Mampu Membimbing ★★)', 'Level 3 (Mampu Membimbing ★★) - Baik'),
+        ('Level 2 (Mencoba ★)', 'Level 2 (Mencoba ★) - Cukup (Target Minimal)'),
+        ('Level 1 (Mulai Berkembang)', 'Level 1 (Mulai Berkembang) - Perlu Bimbingan'),
+        ('Level 0 (Belum Berkembang)', 'Level 0 (Belum Berkembang) - Belum Tuntas'),
         ('Level 4', 'Level 4 - Mahir / Standar Industri'),
+        ('Level 3', 'Level 3 - Mandiri'),
+        ('Level 2', 'Level 2 - Mencoba (Target Minimal Sem. 1)'),
+        ('Level 1', 'Level 1 - Mengenal'),
+        ('Level 0', 'Level 0 - Belum Terlihat'),
     ]
 
     STATUS_CHOICES = [
         ('submitted', 'Terkirim / Menunggu Penilaian'),
         ('graded', 'Sudah Dinilai Guru'),
+        ('reviewed', 'Telah Ditinjau Guru'),
+        ('verified', 'Terverifikasi'),
     ]
 
     user = models.ForeignKey(
@@ -107,7 +114,7 @@ class UserSubmission(models.Model):
         verbose_name='Nilai Guru (0-100)'
     )
     teacher_level = models.CharField(
-        max_length=30,
+        max_length=60,
         choices=LEVEL_CHOICES,
         blank=True,
         null=True,

@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.utils import timezone
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+import csv
+import json
 
 from .models import EnrollmentToken, UserEnrollment
 from .forms import EnrollmentTokenForm, TeacherGradeForm, TeacherGradeLiterasiForm
@@ -130,37 +132,292 @@ def token_detail_view(request, token_id):
 @user_passes_test(teacher_check, login_url='accounts:login')
 def submission_list_view(request):
     """
-    Hub Penilaian Guru: Memeriksa dan menilai seluruh submisi LKPD & Refleksi siswa.
+    Hub Penilaian Guru: Memeriksa dan menilai seluruh submisi LKPD & Refleksi siswa secara terpisah dan interaktif.
     """
     filter_status = request.GET.get('status', 'all')
     filter_modul = request.GET.get('modul', '')
+    filter_tab = request.GET.get('tab', 'lkpd')
 
-    submissions = UserSubmission.objects.select_related('user', 'modul').order_by('-submitted_at')
-
-    if filter_status == 'pending':
-        submissions = submissions.filter(status='submitted')
-    elif filter_status == 'graded':
-        submissions = submissions.filter(status='graded')
+    all_submissions = UserSubmission.objects.select_related('user', 'modul', 'graded_by').order_by('-submitted_at')
 
     if filter_modul:
-        submissions = submissions.filter(modul__slug=filter_modul)
+        all_submissions = all_submissions.filter(modul__slug=filter_modul)
+
+    # Deduplikasi: Simpan submisi paling mutakhir per siswa per modul per tipe tugas
+    unique_map = {}
+    for s in all_submissions:
+        key = f"{s.user_id}_{s.modul_id}_{s.submission_type}"
+        if key not in unique_map:
+            unique_map[key] = s
+
+    deduped_submissions = list(unique_map.values())
+
+    lkpd_submissions = [s for s in deduped_submissions if s.submission_type == 'lkpd']
+    reflection_submissions = [s for s in deduped_submissions if s.submission_type == 'reflection']
+
+    # Hitung Statistik
+    total_lkpd = len(lkpd_submissions)
+    pending_lkpd = sum(1 for s in lkpd_submissions if s.status != 'graded' or s.teacher_score is None)
+    graded_lkpd = sum(1 for s in lkpd_submissions if s.status == 'graded' and s.teacher_score is not None)
+
+    total_reflections = len(reflection_submissions)
+    pending_reflections = sum(1 for s in reflection_submissions if s.status not in ['reviewed', 'graded'])
+    reviewed_reflections = sum(1 for s in reflection_submissions if s.status in ['reviewed', 'graded'])
+
+    # Serialisasi payload JSON form data agar aman diproses oleh Alpine.js modal
+    for s in lkpd_submissions:
+        s.form_data_json = json.dumps(s.form_data or {})
+    for s in reflection_submissions:
+        s.form_data_json = json.dumps(s.form_data or {})
 
     all_modules = Modul.objects.filter(is_published=True).order_by('urutan')
+    classes = ['10 RPL 1', '10 RPL 2', '11 RPL 1', '11 RPL 2', '12 RPL 1', '12 RPL 2']
+    kktp_levels = [
+        ('Level 4 (Mahir & Mandiri ★★★)', 'Level 4 (Mahir & Mandiri ★★★) - Sangat Baik'),
+        ('Level 3 (Mampu Membimbing ★★)', 'Level 3 (Mampu Membimbing ★★) - Baik'),
+        ('Level 2 (Mencoba ★)', 'Level 2 (Mencoba ★) - Cukup (Target Minimal)'),
+        ('Level 1 (Mulai Berkembang)', 'Level 1 (Mulai Berkembang) - Perlu Bimbingan'),
+        ('Level 0 (Belum Berkembang)', 'Level 0 (Belum Berkembang) - Belum Tuntas'),
+    ]
 
     context = {
-        'submissions': submissions,
+        'lkpd_submissions': lkpd_submissions,
+        'reflection_submissions': reflection_submissions,
+        'total_lkpd': total_lkpd,
+        'pending_lkpd': pending_lkpd,
+        'graded_lkpd': graded_lkpd,
+        'total_reflections': total_reflections,
+        'pending_reflections': pending_reflections,
+        'reviewed_reflections': reviewed_reflections,
         'all_modules': all_modules,
+        'classes': classes,
+        'kktp_levels': kktp_levels,
         'filter_status': filter_status,
         'filter_modul': filter_modul,
+        'filter_tab': filter_tab,
         'active_nav': 'admin_submissions',
     }
     return render(request, 'admin_panel/submissions.html', context)
 
 
 @user_passes_test(teacher_check, login_url='accounts:login')
+@require_POST
+def grade_submission_api_view(request):
+    """
+    API Endpoint: Menyimpan penilaian skor dan level KKTP LKPD secara instan (AJAX/Fetch).
+    """
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+    except Exception:
+        return JsonResponse({'error': 'Format payload tidak valid.'}, status=400)
+
+    submission_id = data.get('submissionId') or data.get('submission_id')
+    if not submission_id:
+        return JsonResponse({'error': 'ID Submisi diperlukan.'}, status=400)
+
+    submission = get_object_or_404(UserSubmission.objects.select_related('user', 'modul'), id=submission_id)
+
+    raw_score = data.get('teacherScore')
+    if raw_score is None:
+        raw_score = data.get('teacher_score')
+
+    try:
+        score_val = int(raw_score)
+        if score_val < 0 or score_val > 100:
+            return JsonResponse({'error': 'Skor harus berada di antara 0 dan 100.'}, status=400)
+    except (ValueError, TypeError):
+        return JsonResponse({'error': 'Skor angka tidak valid.'}, status=400)
+
+    teacher_level = data.get('teacherLevel') or data.get('teacher_level') or ''
+    teacher_feedback = (data.get('teacherFeedback') or data.get('teacher_feedback') or '').strip()
+
+    submission.teacher_score = score_val
+    submission.teacher_level = teacher_level
+    submission.teacher_feedback = teacher_feedback
+    submission.status = 'graded'
+    submission.graded_by = request.user
+    submission.graded_at = timezone.now()
+    submission.save()
+
+    return JsonResponse({
+        'success': True,
+        'message': f'Nilai LKPD {submission.user.display_name} ({score_val}/100) berhasil disimpan!',
+        'submission': {
+            'id': submission.id,
+            'teacherScore': submission.teacher_score,
+            'teacherLevel': submission.teacher_level,
+            'teacherFeedback': submission.teacher_feedback,
+            'status': submission.status,
+            'isPassed': submission.teacher_score >= 73,
+        }
+    })
+
+
+@user_passes_test(teacher_check, login_url='accounts:login')
+@require_POST
+def review_reflection_api_view(request):
+    """
+    API Endpoint: Menandai Jurnal Refleksi siswa selesai ditinjau dan memberikan feedback kualitatif.
+    """
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+    except Exception:
+        return JsonResponse({'error': 'Format payload tidak valid.'}, status=400)
+
+    submission_id = data.get('submissionId') or data.get('submission_id')
+    if not submission_id:
+        return JsonResponse({'error': 'ID Submisi diperlukan.'}, status=400)
+
+    submission = get_object_or_404(UserSubmission.objects.select_related('user', 'modul'), id=submission_id)
+
+    teacher_feedback = (data.get('teacherFeedback') or data.get('teacher_feedback') or '').strip()
+    if not teacher_feedback:
+        teacher_feedback = 'Telah dibaca dan diapresiasi oleh Guru Pengampu RPL.'
+
+    submission.teacher_feedback = teacher_feedback
+    submission.status = 'reviewed'
+    submission.graded_by = request.user
+    submission.graded_at = timezone.now()
+    submission.save()
+
+    return JsonResponse({
+        'success': True,
+        'message': f'Jurnal refleksi {submission.user.display_name} telah selesai ditinjau!',
+        'submission': {
+            'id': submission.id,
+            'teacherFeedback': submission.teacher_feedback,
+            'status': submission.status,
+        }
+    })
+
+
+@user_passes_test(teacher_check, login_url='accounts:login')
+def export_lkpd_excel_view(request):
+    """
+    Ekspor Rekapitulasi Penilaian LKPD Siswa ke format CSV (Excel Compatible UTF-8 BOM).
+    """
+    filter_modul = request.GET.get('modul', '')
+    filter_class = request.GET.get('class', '')
+
+    submissions = UserSubmission.objects.filter(submission_type='lkpd').select_related('user', 'modul', 'graded_by').order_by('modul__urutan', 'user__first_name')
+
+    if filter_modul:
+        submissions = submissions.filter(modul__slug=filter_modul)
+    if filter_class and filter_class != 'all' and filter_class != 'Semua Kelas':
+        submissions = submissions.filter(user__kelas=filter_class)
+
+    response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+    response['Content-Disposition'] = 'attachment; filename="Rekap_Nilai_LKPD_PPLG_RPL_SMKN1Rongga.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        'No',
+        'Nama Peserta Didik',
+        'NISN',
+        'Kelas / Rombel',
+        'Modul Pembelajaran',
+        'Status Penilaian',
+        'Level Capaian KKTP',
+        'Nilai Skor (0-100)',
+        'Status Ketuntasan (KKM 73)',
+        'Tautan Evidence Google Drive',
+        'Catatan & Feedback Guru',
+        'Waktu Pengumpulan',
+        'Guru Penilai'
+    ])
+
+    for idx, sub in enumerate(submissions, start=1):
+        is_graded = sub.status == 'graded' and sub.teacher_score is not None
+        is_passed = is_graded and sub.teacher_score >= 73
+        status_kkm = 'TUNTAS (TERKUNCI)' if is_passed else ('REMEDIAL / BELUM TUNTAS' if is_graded else 'MENUNGGU PENILAIAN')
+        status_label = 'Sudah Dinilai' if is_graded else 'Menunggu Penilaian'
+        drive_link = sub.drive_url or (sub.form_data.get('driveUrl') if isinstance(sub.form_data, dict) else '-') or '-'
+
+        writer.writerow([
+            idx,
+            sub.user.display_name,
+            sub.user.nisn or '-',
+            sub.user.kelas or '10 RPL',
+            f"[{sub.modul.kode}] {sub.modul.judul}",
+            status_label,
+            sub.teacher_level or '-',
+            sub.teacher_score if sub.teacher_score is not None else '-',
+            status_kkm,
+            drive_link,
+            sub.teacher_feedback or '-',
+            sub.submitted_at.strftime('%d/%m/%Y %H:%M') if sub.submitted_at else '-',
+            sub.graded_by.display_name if sub.graded_by else '-'
+        ])
+
+    return response
+
+
+@user_passes_test(teacher_check, login_url='accounts:login')
+def export_reflections_excel_view(request):
+    """
+    Ekspor Rekapitulasi Jurnal Refleksi Siswa ke format CSV (Excel Compatible UTF-8 BOM).
+    """
+    filter_modul = request.GET.get('modul', '')
+    filter_class = request.GET.get('class', '')
+
+    submissions = UserSubmission.objects.filter(submission_type='reflection').select_related('user', 'modul', 'graded_by').order_by('modul__urutan', 'user__first_name')
+
+    if filter_modul:
+        submissions = submissions.filter(modul__slug=filter_modul)
+    if filter_class and filter_class != 'all' and filter_class != 'Semua Kelas':
+        submissions = submissions.filter(user__kelas=filter_class)
+
+    response = HttpResponse(content_type='text/csv; charset=utf-8-sig')
+    response['Content-Disposition'] = 'attachment; filename="Rekap_Jurnal_Refleksi_RPL_SMKN1Rongga.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        'No',
+        'Nama Peserta Didik',
+        'NISN',
+        'Kelas / Rombel',
+        'Modul Pembelajaran',
+        '1. Hal Baru Dipelajari (Konsep RPL)',
+        '2. Urgensi / Penerapan Portofolio',
+        '3. Kendala & Solusi Teknis',
+        '4. Komitmen Belajar',
+        'Status Tinjauan',
+        'Catatan Apresiasi Guru',
+        'Waktu Pengumpulan',
+        'Ditinjau Oleh'
+    ])
+
+    for idx, sub in enumerate(submissions, start=1):
+        fd = sub.form_data if isinstance(sub.form_data, dict) else {}
+        q1 = fd.get('q1') or fd.get('understanding') or '-'
+        q2 = fd.get('q2') or '-'
+        q3 = fd.get('q3') or fd.get('obstacle') or '-'
+        q4 = fd.get('q4') or fd.get('action_plan') or '-'
+        status_label = 'Ditinjau' if sub.status in ['reviewed', 'graded'] else 'Menunggu Tinjauan'
+
+        writer.writerow([
+            idx,
+            sub.user.display_name,
+            sub.user.nisn or '-',
+            sub.user.kelas or '10 RPL',
+            f"[{sub.modul.kode}] {sub.modul.judul}",
+            q1,
+            q2,
+            q3,
+            q4,
+            status_label,
+            sub.teacher_feedback or '-',
+            sub.submitted_at.strftime('%d/%m/%Y %H:%M') if sub.submitted_at else '-',
+            sub.graded_by.display_name if sub.graded_by else '-'
+        ])
+
+    return response
+
+
+@user_passes_test(teacher_check, login_url='accounts:login')
 def grade_submission_view(request, submission_id):
     """
-    Form Penilaian Detail Submisi LKPD oleh Guru Pengampu.
+    Form Penilaian Detail Submisi LKPD oleh Guru Pengampu (Fallback URL).
     """
     submission = get_object_or_404(UserSubmission.objects.select_related('user', 'modul'), id=submission_id)
     form = TeacherGradeForm(request.POST or None, instance=submission)
