@@ -4,22 +4,26 @@
 {% block title %}Konsol Manajemen Guru & Monitoring Siswa | {{ SITE_TITLE }}{% endblock %}
 
 {% block content %}
+{{ lkpd_data_json|json_script:"lkpd-submissions-data" }}
+{{ reflection_data_json|json_script:"reflection-submissions-data" }}
+{{ literasi_data_json|json_script:"literasi-reports-data" }}
+
 <div 
     class="space-y-6 py-6"
     x-data="teacherHubData()"
 >
 
     <!-- Admin Hero Banner -->
-    <div class="card p-6 md:p-8 rounded-2xl border border-amber-500/20 bg-gradient-to-br from-card via-card to-amber-950/20 shadow-lg relative overflow-hidden space-y-5">
+    <div class="card p-6 md:p-8 rounded-2xl border border-amber-500/20 bg-gradient-to-br from-card via-card to-amber-500/5 dark:to-amber-950/20 shadow-lg relative overflow-hidden space-y-5">
         <div class="absolute -right-8 -top-8 text-9xl opacity-5 pointer-events-none select-none">⚡</div>
 
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
             <div class="space-y-2.5 max-w-3xl">
                 <div class="flex flex-wrap items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[11px] font-mono font-bold uppercase tracking-wider">
+                    <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[11px] font-mono font-bold uppercase tracking-wider">
                         ADMINISTRATOR CONSOLE
                     </span>
-                    <span class="px-2.5 py-0.5 rounded-full bg-surface-low text-gray-300 border border-outline-variant text-[11px] font-mono font-semibold">
+                    <span class="px-2.5 py-0.5 rounded-full bg-surface-low text-foreground border border-outline-variant text-[11px] font-mono font-semibold">
                         GURU PENGAMPU RPL
                     </span>
                     <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-[11px] font-mono font-bold">
@@ -31,7 +35,7 @@
                     Konsol Manajemen Guru & Monitoring Siswa
                 </h1>
 
-                <p class="text-xs sm:text-sm text-gray-400 font-sans leading-relaxed">
+                <p class="text-xs sm:text-sm text-muted-foreground font-sans leading-relaxed">
                     Pusat kendali KBM Konsentrasi Keahlian Rekayasa Perangkat Lunak (RPL). Kelola token sesi rombel, evaluasi lembar kerja (LKPD), tinjau respon jurnal refleksi, kelola akun siswa, pantau log ujian Drilling TKA, dan evaluasi Rabu Literasi RESIK secara <i>real-time</i>.
                 </p>
             </div>
@@ -48,7 +52,7 @@
                 <a 
                     href="/admin/" 
                     target="_blank" 
-                    class="px-3.5 py-2.5 rounded-xl bg-surface-low hover:bg-surface-high text-gray-300 hover:text-foreground text-xs font-mono font-semibold border border-outline-variant transition-colors flex items-center gap-2"
+                    class="px-3.5 py-2.5 rounded-xl bg-surface-low hover:bg-surface-high text-foreground text-xs font-mono font-semibold border border-outline-variant transition-colors flex items-center gap-2"
                 >
                     <svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     <span>Django Admin</span>
@@ -63,80 +67,80 @@
         <!-- Metric 1: Pengguna Siswa & Guru -->
         <div @click="activeTab = 'students'" class="card p-4 rounded-xl border border-amber-500/20 bg-card space-y-1.5 shadow-sm hover:border-amber-500/40 cursor-pointer transition-all">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-gray-400 uppercase font-mono">Siswa & Guru</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-mono font-bold">👥 Users</span>
+                <span class="text-[11px] font-semibold text-muted-foreground uppercase font-mono">Siswa & Guru</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-bold">👥 Users</span>
             </div>
             <div class="text-2xl sm:text-3xl font-bold text-foreground font-mono">
-                {{ total_students }} <span class="text-xs text-gray-400 font-sans font-normal">Siswa</span>
+                {{ total_students }} <span class="text-xs text-muted-foreground font-sans font-normal">Siswa</span>
             </div>
-            <div class="text-[10px] font-mono text-gray-400 truncate pt-0.5">
-                <span class="text-amber-400 font-semibold">{{ total_teachers }} Guru</span> • <span class="text-purple-400 font-semibold">{{ total_superadmins }} Admin</span>
+            <div class="text-[10px] font-mono text-muted-foreground truncate pt-0.5">
+                <span class="text-amber-600 dark:text-amber-400 font-semibold">{{ total_teachers }} Guru</span> • <span class="text-purple-600 dark:text-purple-400 font-semibold">{{ total_superadmins }} Admin</span>
             </div>
         </div>
 
         <!-- Metric 2: Token Sesi Aktif -->
         <div @click="activeTab = 'tokens'" class="card p-4 rounded-xl border border-cyan-500/20 bg-card space-y-1.5 shadow-sm hover:border-cyan-500/40 cursor-pointer transition-all">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-gray-400 uppercase font-mono">Token Sesi</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono font-bold">🎟️ Sesi</span>
+                <span class="text-[11px] font-semibold text-muted-foreground uppercase font-mono">Token Sesi</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-mono font-bold">🎟️ Sesi</span>
             </div>
-            <div class="text-2xl sm:text-3xl font-bold text-cyan-400 font-mono">
-                {{ active_tokens }} <span class="text-xs text-gray-400 font-sans font-normal">Aktif</span>
+            <div class="text-2xl sm:text-3xl font-bold text-cyan-600 dark:text-cyan-400 font-mono">
+                {{ active_tokens }} <span class="text-xs text-muted-foreground font-sans font-normal">Aktif</span>
             </div>
-            <p class="text-[10px] text-gray-400 font-mono">Total {{ total_tokens }} token terdaftar</p>
+            <p class="text-[10px] text-muted-foreground font-mono">Total {{ total_tokens }} token terdaftar</p>
         </div>
 
         <!-- Metric 3: Penilaian LKPD -->
         <div @click="activeTab = 'lkpd'" class="card p-4 rounded-xl border border-purple-500/20 bg-card space-y-1.5 shadow-sm hover:border-purple-500/40 cursor-pointer transition-all">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-gray-400 uppercase font-mono">Evaluasi LKPD</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 font-mono font-bold">📝 LKPD</span>
+                <span class="text-[11px] font-semibold text-muted-foreground uppercase font-mono">Evaluasi LKPD</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-purple-500/10 text-purple-600 dark:text-purple-400 font-mono font-bold">📝 LKPD</span>
             </div>
-            <div class="text-2xl sm:text-3xl font-bold text-purple-400 font-mono">
-                {{ total_lkpd }} <span class="text-xs text-gray-400 font-sans font-normal">Submisi</span>
+            <div class="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400 font-mono">
+                {{ total_lkpd }} <span class="text-xs text-muted-foreground font-sans font-normal">Submisi</span>
             </div>
-            <p class="text-[10px] text-gray-400 font-mono">
-                <span class="text-amber-400 font-bold {% if pending_lkpd > 0 %}animate-pulse{% endif %}">{{ pending_lkpd }} Menunggu</span> • <span class="text-emerald-400 font-bold">{{ graded_lkpd }} Dinilai</span>
+            <p class="text-[10px] text-muted-foreground font-mono">
+                <span class="text-amber-600 dark:text-amber-400 font-bold {% if pending_lkpd > 0 %}animate-pulse{% endif %}">{{ pending_lkpd }} Menunggu</span> • <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ graded_lkpd }} Dinilai</span>
             </p>
         </div>
 
         <!-- Metric 4: Jurnal Refleksi -->
         <div @click="activeTab = 'reflections'" class="card p-4 rounded-xl border border-pink-500/20 bg-card space-y-1.5 shadow-sm hover:border-pink-500/40 cursor-pointer transition-all">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-gray-400 uppercase font-mono">Jurnal Refleksi</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-pink-500/10 text-pink-400 font-mono font-bold">💭 Refleksi</span>
+                <span class="text-[11px] font-semibold text-muted-foreground uppercase font-mono">Jurnal Refleksi</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-pink-500/10 text-pink-600 dark:text-pink-400 font-mono font-bold">💭 Refleksi</span>
             </div>
-            <div class="text-2xl sm:text-3xl font-bold text-pink-400 font-mono">
-                {{ total_reflections }} <span class="text-xs text-gray-400 font-sans font-normal">Jurnal</span>
+            <div class="text-2xl sm:text-3xl font-bold text-pink-600 dark:text-pink-400 font-mono">
+                {{ total_reflections }} <span class="text-xs text-muted-foreground font-sans font-normal">Jurnal</span>
             </div>
-            <p class="text-[10px] text-gray-400 font-mono">
-                <span class="text-amber-400 font-bold {% if pending_reflections > 0 %}animate-pulse{% endif %}">{{ pending_reflections }} Baru</span> • <span class="text-pink-400 font-bold">{{ reviewed_reflections }} Ditinjau</span>
+            <p class="text-[10px] text-muted-foreground font-mono">
+                <span class="text-amber-600 dark:text-amber-400 font-bold {% if pending_reflections > 0 %}animate-pulse{% endif %}">{{ pending_reflections }} Baru</span> • <span class="text-pink-600 dark:text-pink-400 font-bold">{{ reviewed_reflections }} Ditinjau</span>
             </p>
         </div>
 
         <!-- Metric 5: Rata-Rata TKA -->
         <div @click="activeTab = 'tka'" class="card p-4 rounded-xl border border-blue-500/20 bg-card space-y-1.5 shadow-sm hover:border-blue-500/40 cursor-pointer transition-all">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-gray-400 uppercase font-mono">Rata-Rata TKA</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 font-mono font-bold">📊 Score</span>
+                <span class="text-[11px] font-semibold text-muted-foreground uppercase font-mono">Rata-Rata TKA</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 font-mono font-bold">📊 Score</span>
             </div>
-            <div class="text-2xl sm:text-3xl font-bold text-amber-400 font-mono">
-                {{ avg_score_tka }} <span class="text-xs text-gray-400 font-sans font-normal">/ 100</span>
+            <div class="text-2xl sm:text-3xl font-bold text-amber-600 dark:text-amber-400 font-mono">
+                {{ avg_score_tka }} <span class="text-xs text-muted-foreground font-sans font-normal">/ 100</span>
             </div>
-            <p class="text-[10px] text-gray-400 font-mono">Lulus KKM 73: <span class="text-emerald-400 font-bold">{{ pass_rate_tka }}%</span></p>
+            <p class="text-[10px] text-muted-foreground font-mono">Lulus KKM 73: <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ pass_rate_tka }}%</span></p>
         </div>
 
         <!-- Metric 6: Rabu Literasi RESIK -->
         <div @click="activeTab = 'literasi'" class="card p-4 rounded-xl border border-emerald-500/20 bg-card space-y-1.5 shadow-sm hover:border-emerald-500/40 cursor-pointer transition-all">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-gray-400 uppercase font-mono">Rabu Literasi</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono font-bold">📚 RESIK</span>
+                <span class="text-[11px] font-semibold text-muted-foreground uppercase font-mono">Rabu Literasi</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold">📚 RESIK</span>
             </div>
-            <div class="text-2xl sm:text-3xl font-bold text-emerald-400 font-mono">
-                {{ total_literasi }} <span class="text-xs text-gray-400 font-sans font-normal">Resensi</span>
+            <div class="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400 font-mono">
+                {{ total_literasi }} <span class="text-xs text-muted-foreground font-sans font-normal">Resensi</span>
             </div>
-            <p class="text-[10px] text-gray-400 font-mono">
-                <span class="text-amber-400 font-bold {% if pending_literasi > 0 %}animate-pulse{% endif %}">{{ pending_literasi }} Menunggu</span> • <span class="text-emerald-400 font-bold">{{ graded_literasi }} Dinilai</span>
+            <p class="text-[10px] text-muted-foreground font-mono">
+                <span class="text-amber-600 dark:text-amber-400 font-bold {% if pending_literasi > 0 %}animate-pulse{% endif %}">{{ pending_literasi }} Menunggu</span> • <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ graded_literasi }} Dinilai</span>
             </p>
         </div>
 
@@ -146,7 +150,7 @@
     <div 
         x-show="globalAlert.show" 
         x-cloak
-        :class="globalAlert.isError ? 'bg-destructive/15 border-destructive/30 text-destructive' : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'"
+        :class="globalAlert.isError ? 'bg-destructive/15 border-destructive/30 text-destructive' : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'"
         class="p-3.5 rounded-xl border text-xs font-semibold text-center transition-all flex items-center justify-center gap-2"
     >
         <span x-text="globalAlert.isError ? '✕' : '✓'"></span>
@@ -163,7 +167,7 @@
             <button 
                 type="button"
                 @click="activeTab = 'overview'" 
-                :class="activeTab === 'overview' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-gray-400 hover:text-foreground hover:bg-surface-high font-medium'"
+                :class="activeTab === 'overview' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-surface-base font-medium'"
                 class="px-3.5 py-2 rounded-xl text-xs transition-all flex items-center gap-2"
             >
                 <span>🌐</span>
@@ -174,27 +178,27 @@
             <button 
                 type="button"
                 @click="activeTab = 'tokens'" 
-                :class="activeTab === 'tokens' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-gray-400 hover:text-foreground hover:bg-surface-high font-medium'"
+                :class="activeTab === 'tokens' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-surface-base font-medium'"
                 class="px-3.5 py-2 rounded-xl text-xs transition-all flex items-center gap-2"
             >
                 <span>🎟️</span>
                 <span>Token Sesi</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">{{ total_tokens }}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">{{ total_tokens }}</span>
             </button>
 
             <!-- Tab 3: Evaluasi LKPD -->
             <button 
                 type="button"
                 @click="activeTab = 'lkpd'" 
-                :class="activeTab === 'lkpd' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-gray-400 hover:text-foreground hover:bg-surface-high font-medium'"
+                :class="activeTab === 'lkpd' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-surface-base font-medium'"
                 class="px-3.5 py-2 rounded-xl text-xs transition-all flex items-center gap-2"
             >
                 <span>📝</span>
                 <span>Evaluasi LKPD</span>
                 {% if pending_lkpd > 0 %}
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/15 text-amber-400 border border-amber-500/30 font-bold animate-pulse">{{ pending_lkpd }} Menunggu</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold animate-pulse">{{ pending_lkpd }} Menunggu</span>
                 {% else %}
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">{{ total_lkpd }}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">{{ total_lkpd }}</span>
                 {% endif %}
             </button>
 
@@ -202,15 +206,15 @@
             <button 
                 type="button"
                 @click="activeTab = 'reflections'" 
-                :class="activeTab === 'reflections' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-gray-400 hover:text-foreground hover:bg-surface-high font-medium'"
+                :class="activeTab === 'reflections' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-surface-base font-medium'"
                 class="px-3.5 py-2 rounded-xl text-xs transition-all flex items-center gap-2"
             >
                 <span>💭</span>
                 <span>Jurnal Refleksi</span>
                 {% if pending_reflections > 0 %}
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-pink-500/15 text-pink-400 border border-pink-500/30 font-bold animate-pulse">{{ pending_reflections }} Baru</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-pink-500/15 text-pink-600 dark:text-pink-400 border border-pink-500/30 font-bold animate-pulse">{{ pending_reflections }} Baru</span>
                 {% else %}
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-purple-500/10 text-purple-400 border border-purple-500/20">{{ total_reflections }}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">{{ total_reflections }}</span>
                 {% endif %}
             </button>
 
@@ -218,39 +222,39 @@
             <button 
                 type="button"
                 @click="activeTab = 'students'" 
-                :class="activeTab === 'students' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-gray-400 hover:text-foreground hover:bg-surface-high font-medium'"
+                :class="activeTab === 'students' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-surface-base font-medium'"
                 class="px-3.5 py-2 rounded-xl text-xs transition-all flex items-center gap-2"
             >
                 <span>👥</span>
                 <span>Data Siswa</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20">{{ total_students }}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">{{ total_students }}</span>
             </button>
 
             <!-- Tab 6: Log Ujian TKA -->
             <button 
                 type="button"
                 @click="activeTab = 'tka'" 
-                :class="activeTab === 'tka' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-gray-400 hover:text-foreground hover:bg-surface-high font-medium'"
+                :class="activeTab === 'tka' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-surface-base font-medium'"
                 class="px-3.5 py-2 rounded-xl text-xs transition-all flex items-center gap-2"
             >
                 <span>📊</span>
                 <span>Log Ujian TKA</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20">{{ total_tka_attempts }}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">{{ total_tka_attempts }}</span>
             </button>
 
             <!-- Tab 7: Rabu Literasi -->
             <button 
                 type="button"
                 @click="activeTab = 'literasi'" 
-                :class="activeTab === 'literasi' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-gray-400 hover:text-foreground hover:bg-surface-high font-medium'"
+                :class="activeTab === 'literasi' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-surface-base font-medium'"
                 class="px-3.5 py-2 rounded-xl text-xs transition-all flex items-center gap-2"
             >
                 <span>📚</span>
                 <span>Rabu Literasi</span>
                 {% if pending_literasi > 0 %}
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/15 text-amber-400 border border-amber-500/30 font-bold animate-pulse">{{ pending_literasi }} Menunggu</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold animate-pulse">{{ pending_literasi }} Menunggu</span>
                 {% else %}
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">{{ total_literasi }}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">{{ total_literasi }}</span>
                 {% endif %}
             </button>
 
@@ -258,12 +262,12 @@
             <button 
                 type="button"
                 @click="activeTab = 'lesson-logs'" 
-                :class="activeTab === 'lesson-logs' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-gray-400 hover:text-foreground hover:bg-surface-high font-medium'"
+                :class="activeTab === 'lesson-logs' ? 'bg-primary text-primary-foreground font-bold shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-surface-base font-medium'"
                 class="px-3.5 py-2 rounded-xl text-xs transition-all flex items-center gap-2"
             >
                 <span>📖</span>
                 <span>Log Modul</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-surface-low text-gray-300 border border-outline-variant">{{ total_lessons_completed }}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-surface-low text-foreground border border-outline-variant">{{ total_lessons_completed }}</span>
             </button>
 
         </div>
@@ -282,12 +286,12 @@
                     {% if pending_lkpd > 0 %}
                     <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-xs shadow-sm">{{ pending_lkpd }} Perlu Dinilai</span>
                     {% else %}
-                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs font-semibold">Tuntas</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-mono text-xs font-semibold">Tuntas</span>
                     {% endif %}
                 </div>
                 <div class="mt-4 space-y-1">
                     <h3 class="font-bold text-foreground group-hover:text-primary transition-colors text-sm font-display">Penilaian LKPD & KKTP</h3>
-                    <p class="text-xs text-gray-400 line-clamp-2">Evaluasi portofolio praktikum, kriteria KKTP, dan tautan Google Drive.</p>
+                    <p class="text-xs text-muted-foreground line-clamp-2">Evaluasi portofolio praktikum, kriteria KKTP, dan tautan Google Drive.</p>
                 </div>
             </div>
 
@@ -298,12 +302,12 @@
                     {% if pending_reflections > 0 %}
                     <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-xs shadow-sm">{{ pending_reflections }} Baru</span>
                     {% else %}
-                    <span class="px-2.5 py-0.5 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 font-mono text-xs font-semibold">Tuntas</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-400 border border-pink-500/20 font-mono text-xs font-semibold">Tuntas</span>
                     {% endif %}
                 </div>
                 <div class="mt-4 space-y-1">
                     <h3 class="font-bold text-foreground group-hover:text-pink-400 transition-colors text-sm font-display">Tinjauan Jurnal Refleksi</h3>
-                    <p class="text-xs text-gray-400 line-clamp-2">Tinjau pemikiran kritis, tantangan belajar, dan apresiasi respon siswa.</p>
+                    <p class="text-xs text-muted-foreground line-clamp-2">Tinjau pemikiran kritis, tantangan belajar, dan apresiasi respon siswa.</p>
                 </div>
             </div>
 
@@ -315,7 +319,7 @@
                 </div>
                 <div class="mt-4 space-y-1">
                     <h3 class="font-bold text-foreground group-hover:text-blue-400 transition-colors text-sm font-display">Hasil CBT TKA Siswa</h3>
-                    <p class="text-xs text-gray-400 line-clamp-2">Analisis skor kelulusan KKM 73 dan statistik jawaban benar/salah.</p>
+                    <p class="text-xs text-muted-foreground line-clamp-2">Analisis skor kelulusan KKM 73 dan statistik jawaban benar/salah.</p>
                 </div>
             </div>
 
@@ -326,12 +330,12 @@
                     {% if pending_literasi > 0 %}
                     <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-amber-950 font-bold font-mono text-xs shadow-sm">{{ pending_literasi }} Menunggu</span>
                     {% else %}
-                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs font-semibold">Tuntas</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-mono text-xs font-semibold">Tuntas</span>
                     {% endif %}
                 </div>
                 <div class="mt-4 space-y-1">
                     <h3 class="font-bold text-foreground group-hover:text-emerald-400 transition-colors text-sm font-display">Evaluasi Rabu Literasi (RESIK)</h3>
-                    <p class="text-xs text-gray-400 line-clamp-2">Review rangkuman buku, 9 rubrik aspek penilaian, dan cetak PDF resmi.</p>
+                    <p class="text-xs text-muted-foreground line-clamp-2">Review rangkuman buku, 9 rubrik aspek penilaian, dan cetak PDF resmi.</p>
                 </div>
             </div>
         </div>
@@ -357,20 +361,20 @@
                                 </span>
                                 <span class="text-xs font-bold text-foreground">{{ token.title }}</span>
                             </div>
-                            <p class="text-[11px] text-gray-400 font-mono">Kelas: {{ token.target_class }} &bull; Peserta: {{ token.cached_enrolled_count }}/{{ token.max_uses }} &bull; Ujian: {{ token.cached_exam_count }}</p>
+                            <p class="text-[11px] text-muted-foreground font-mono">Kelas: {{ token.target_class }} &bull; Peserta: {{ token.cached_enrolled_count }}/{{ token.max_uses }} &bull; Ujian: {{ token.cached_exam_count }}</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <button 
-                                type="button"
+                                type="button" 
                                 @click="openTokenReportModal({{ token.id }}, '{{ token.token|escapejs }}', '{{ token.title|escapejs }}')"
-                                class="text-xs text-cyan-400 hover:text-cyan-300 font-mono px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg transition-colors"
+                                class="text-xs text-cyan-600 dark:text-cyan-400 hover:underline font-mono px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg transition-colors"
                             >
                                 📊 Rekap
                             </button>
                         </div>
                     </div>
                     {% empty %}
-                    <p class="text-xs text-gray-400 py-4 text-center">Belum ada token sesi yang dibuat.</p>
+                    <p class="text-xs text-muted-foreground py-4 text-center">Belum ada token sesi yang dibuat.</p>
                     {% endfor %}
                 </div>
             </div>
@@ -389,18 +393,18 @@
                     <div class="py-3 flex items-center justify-between first:pt-0 last:pb-0">
                         <div class="space-y-0.5">
                             <p class="text-xs font-bold text-foreground">{{ student.display_name }}</p>
-                            <p class="text-[11px] text-gray-400 font-mono">
+                            <p class="text-[11px] text-muted-foreground font-mono">
                                 {{ student.kelas|default:"10 RPL" }} &bull; NISN: {{ student.nisn|default:"-" }} &bull; {{ student.email }}
                             </p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-mono text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                            <span class="text-xs font-mono text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                                 {{ student.xp|default:0 }} XP
                             </span>
                             <button 
-                                type="button"
+                                type="button" 
                                 @click="openPasswordResetModal({{ student.id }}, '{{ student.display_name|escapejs }}', '{{ student.email|escapejs }}')"
-                                class="text-[11px] text-blue-400 hover:text-blue-300 font-mono px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded"
+                                class="text-[11px] text-blue-600 dark:text-blue-400 hover:underline font-mono px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded"
                                 title="Reset Kata Sandi"
                             >
                                 🔑 Reset
@@ -408,7 +412,7 @@
                         </div>
                     </div>
                     {% empty %}
-                    <p class="text-xs text-gray-400 py-4 text-center">Belum ada data siswa.</p>
+                    <p class="text-xs text-muted-foreground py-4 text-center">Belum ada data siswa.</p>
                     {% endfor %}
                 </div>
             </div>
@@ -423,11 +427,11 @@
             <div>
                 <h2 class="text-base font-bold text-foreground flex items-center gap-2">
                     <span>🎟️ Manajemen Token Sesi Belajar & Ujian (Roll Token)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-surface-low text-gray-300 border border-outline-variant">
+                    <span class="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-surface-low text-foreground border border-outline-variant">
                         REKAP PER-TOKEN
                     </span>
                 </h2>
-                <p class="text-xs text-gray-400 mt-1">
+                <p class="text-xs text-muted-foreground mt-1">
                     Buat (Roll) Token baru untuk sesi kelas tertentu. Siswa wajib melakukan <b>Enroll Token</b> agar data pengerjaan ujian dan modul tercatat rapi per-sesi.
                 </p>
             </div>
@@ -447,7 +451,7 @@
                 <h3 class="text-xs font-bold text-foreground flex items-center gap-2">
                     <span>🎲 Formulir Penerbitan Token Sesi Baru</span>
                 </h3>
-                <span class="text-[11px] text-gray-400 font-mono">Pengampu: {{ request.user.display_name }}</span>
+                <span class="text-[11px] text-muted-foreground font-mono">Pengampu: {{ request.user.display_name }}</span>
             </div>
 
             <form action="{% url 'admin_panel:token_create' %}" method="POST" class="space-y-4 text-xs">
@@ -504,7 +508,7 @@
         <!-- Tabel Daftar Token Sesi -->
         <div class="overflow-x-auto border border-outline-variant rounded-xl">
             <table class="w-full text-left text-xs">
-                <thead class="text-[11px] text-gray-400 uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
+                <thead class="text-[11px] text-muted-foreground uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
                     <tr>
                         <th class="py-2.5 px-3">Kode Token</th>
                         <th class="py-2.5 px-3">Nama Sesi & Tipe</th>
@@ -526,7 +530,7 @@
                                 <button 
                                     type="button" 
                                     @click="copyToClipboard('{{ t.token }}')"
-                                    class="p-1 rounded text-gray-400 hover:text-foreground hover:bg-surface-high transition-colors"
+                                    class="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-surface-high transition-colors"
                                     title="Salin Kode Token"
                                 >
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -537,14 +541,14 @@
                         </td>
                         <td class="py-3 px-3">
                             <span class="font-semibold text-foreground block">{{ t.title }}</span>
-                            <div class="flex items-center gap-2 text-[10px] text-gray-400 mt-0.5 font-mono">
+                            <div class="flex items-center gap-2 text-[10px] text-muted-foreground mt-0.5 font-mono">
                                 <span>{{ t.get_target_type_display }}</span>
                                 <span>•</span>
                                 <span>{{ t.created_at|date:"d M Y" }}</span>
                             </div>
                         </td>
                         <td class="py-3 px-3 font-mono">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-low text-gray-300 border border-outline-variant">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-low text-foreground border border-outline-variant">
                                 {{ t.target_class }}
                             </span>
                         </td>
@@ -553,7 +557,7 @@
                                 👥 {{ t.cached_enrolled_count }}/{{ t.max_uses }}
                             </span>
                         </td>
-                        <td class="py-3 px-3 font-mono font-semibold text-emerald-400">
+                        <td class="py-3 px-3 font-mono font-semibold text-emerald-600 dark:text-emerald-400">
                             {{ t.cached_exam_count }} Selesai
                         </td>
                         <td class="py-3 px-3">
@@ -561,7 +565,7 @@
                                 {% csrf_token %}
                                 <button 
                                     type="submit" 
-                                    class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase transition-colors {% if t.is_active %}bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25{% else %}bg-surface-low text-gray-400 border border-outline-variant hover:bg-surface-high{% endif %}"
+                                    class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase transition-colors {% if t.is_active %}bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25{% else %}bg-surface-low text-muted-foreground border border-outline-variant hover:bg-surface-high{% endif %}"
                                     title="Klik untuk toggle status"
                                 >
                                     {% if t.is_active %}● AKTIF{% else %}○ DITUTUP{% endif %}
@@ -590,7 +594,7 @@
                                     {% csrf_token %}
                                     <button 
                                         type="submit" 
-                                        class="p-1.5 rounded-lg text-gray-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                                        class="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
                                         title="Hapus Token"
                                     >
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -603,7 +607,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="p-8 text-center text-xs text-gray-400 bg-surface-low/20">
+                        <td colspan="7" class="p-8 text-center text-xs text-muted-foreground bg-surface-low/20">
                             Belum ada Token Sesi KBM. Klik tombol <b>"+ Buat (Roll) Token Baru"</b> di atas.
                         </td>
                     </tr>
@@ -625,7 +629,7 @@
                         KKM 73
                     </span>
                 </h2>
-                <p class="text-xs text-gray-400 mt-0.5">Penetapan skor kuantitatif, ketercapaian kriteria KKTP, dan link Google Drive portofolio.</p>
+                <p class="text-xs text-muted-foreground mt-0.5">Penetapan skor kuantitatif, ketercapaian kriteria KKTP, dan link Google Drive portofolio.</p>
             </div>
 
             <div class="flex items-center gap-2">
@@ -645,7 +649,7 @@
                 type="text" 
                 x-model="lkpdSearch" 
                 placeholder="Cari nama siswa / NISN..." 
-                class="px-3 py-2 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-gray-500"
+                class="px-3 py-2 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-muted-foreground"
             />
             <select 
                 x-model="lkpdClassFilter" 
@@ -674,7 +678,7 @@
         <!-- Tabel LKPD -->
         <div class="overflow-x-auto border border-outline-variant rounded-xl">
             <table class="w-full text-left text-xs">
-                <thead class="text-[11px] text-gray-400 uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
+                <thead class="text-[11px] text-muted-foreground uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
                     <tr>
                         <th class="py-2.5 px-3">Siswa</th>
                         <th class="py-2.5 px-3">Modul</th>
@@ -693,7 +697,7 @@
                     >
                         <td class="py-3 px-3 font-semibold text-foreground">
                             {{ sub.user.display_name }}
-                            <span class="block text-[10px] text-gray-400 font-mono font-normal">{{ sub.user.kelas|default:"10 RPL" }} &bull; NISN: {{ sub.user.nisn|default:"-" }}</span>
+                            <span class="block text-[10px] text-muted-foreground font-mono font-normal">{{ sub.user.kelas|default:"10 RPL" }} &bull; NISN: {{ sub.user.nisn|default:"-" }}</span>
                         </td>
                         <td class="py-3 px-3">
                             <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-primary/10 text-primary border border-primary/20">
@@ -703,36 +707,36 @@
                         </td>
                         <td class="py-3 px-3">
                             {% if sub.drive_url %}
-                            <a href="{{ sub.drive_url }}" target="_blank" class="px-2 py-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono text-[11px] inline-flex items-center gap-1 hover:bg-blue-500/20">
+                            <a href="{{ sub.drive_url }}" target="_blank" class="px-2 py-1 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-mono text-[11px] inline-flex items-center gap-1 hover:bg-blue-500/20">
                                 <span>📁 Google Drive</span>
                             </a>
                             {% else %}
-                            <span class="text-[10px] text-gray-500 font-mono italic">Tidak ada link</span>
+                            <span class="text-[10px] text-muted-foreground font-mono italic">Tidak ada link</span>
                             {% endif %}
                         </td>
-                        <td class="py-3 px-3 font-mono text-[11px] text-gray-300">
+                        <td class="py-3 px-3 font-mono text-[11px] text-foreground">
                             {{ sub.teacher_level|default:"-" }}
                         </td>
                         <td class="py-3 px-3 font-mono font-bold text-sm text-foreground">
                             {% if sub.teacher_score is not None %}
                             {{ sub.teacher_score }} / 100
                             {% else %}
-                            <span class="text-gray-500 font-normal">-</span>
+                            <span class="text-muted-foreground font-normal">-</span>
                             {% endif %}
                         </td>
                         <td class="py-3 px-3">
                             {% if sub.status == 'graded' and sub.teacher_score is not None %}
                                 {% if sub.teacher_score >= 73 %}
-                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                                     <span>✓</span> Tuntas
                                 </span>
                                 {% else %}
-                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30">
                                     <span>⚠️</span> Remedial
                                 </span>
                                 {% endif %}
                             {% else %}
-                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/25">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25">
                                 <span>⏳</span> Menunggu
                             </span>
                             {% endif %}
@@ -740,23 +744,7 @@
                         <td class="py-3 px-3 text-right">
                             <button 
                                 type="button"
-                                @click="openGradeModal({
-                                    id: {{ sub.id }},
-                                    studentName: '{{ sub.user.display_name|escapejs }}',
-                                    studentEmail: '{{ sub.user.email|escapejs }}',
-                                    studentClass: '{{ sub.user.kelas|default:"10 RPL"|escapejs }}',
-                                    studentNis: '{{ sub.user.nisn|default:"-"|escapejs }}',
-                                    moduleCode: '{{ sub.modul.kode|escapejs }}',
-                                    moduleTitle: '{{ sub.modul.judul|escapejs }}',
-                                    moduleSlug: '{{ sub.modul.slug|escapejs }}',
-                                    submittedAt: '{{ sub.submitted_at|date:"d M Y, H:i" }}',
-                                    teacherScore: {% if sub.teacher_score is not None %}{{ sub.teacher_score }}{% else %}null{% endif %},
-                                    teacherLevel: '{{ sub.teacher_level|default:""|escapejs }}',
-                                    teacherFeedback: '{{ sub.teacher_feedback|default:""|escapejs }}',
-                                    driveUrl: '{{ sub.drive_url|default:""|escapejs }}',
-                                    status: '{{ sub.status }}',
-                                    formDataRaw: '{{ sub.form_data_json|escapejs }}'
-                                })"
+                                @click="openGradeModal({{ sub.id }})"
                                 class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground border border-primary/20 transition-all shadow-sm inline-flex items-center gap-1 ml-auto"
                             >
                                 {% if sub.status == 'graded' and sub.teacher_score is not None %}
@@ -769,7 +757,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="p-8 text-center text-xs text-gray-400 bg-surface-low/20">
+                        <td colspan="7" class="p-8 text-center text-xs text-muted-foreground bg-surface-low/20">
                             Belum ada submisi LKPD dari siswa.
                         </td>
                     </tr>
@@ -787,11 +775,11 @@
             <div>
                 <h2 class="text-base font-bold text-foreground flex items-center gap-2">
                     <span>💭 Jurnal Refleksi Mandiri Peserta Didik</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                    <span class="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-pink-500/10 text-pink-600 dark:text-pink-400 border border-pink-500/20">
                         FORMATIF KUALITATIF
                     </span>
                 </h2>
-                <p class="text-xs text-gray-400 mt-0.5">Tinjau 4 aspek refleksi pembelajaran siswa dan berikan apresiasi atau umpan balik motivatif.</p>
+                <p class="text-xs text-muted-foreground mt-0.5">Tinjau 4 aspek refleksi pembelajaran siswa dan berikan apresiasi atau umpan balik motivatif.</p>
             </div>
 
             <div class="flex items-center gap-2">
@@ -811,7 +799,7 @@
                 type="text" 
                 x-model="refSearch" 
                 placeholder="Cari nama siswa / NISN..." 
-                class="px-3 py-2 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-gray-500"
+                class="px-3 py-2 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-muted-foreground"
             />
             <select 
                 x-model="refClassFilter" 
@@ -840,7 +828,7 @@
         <!-- Tabel Refleksi -->
         <div class="overflow-x-auto border border-outline-variant rounded-xl">
             <table class="w-full text-left text-xs">
-                <thead class="text-[11px] text-gray-400 uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
+                <thead class="text-[11px] text-muted-foreground uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
                     <tr>
                         <th class="py-2.5 px-3">Siswa</th>
                         <th class="py-2.5 px-3">Modul</th>
@@ -858,27 +846,27 @@
                     >
                         <td class="py-3 px-3 font-semibold text-foreground">
                             {{ ref.user.display_name }}
-                            <span class="block text-[10px] text-gray-400 font-mono font-normal">{{ ref.user.kelas|default:"10 RPL" }} &bull; NISN: {{ ref.user.nisn|default:"-" }}</span>
+                            <span class="block text-[10px] text-muted-foreground font-mono font-normal">{{ ref.user.kelas|default:"10 RPL" }} &bull; NISN: {{ ref.user.nisn|default:"-" }}</span>
                         </td>
                         <td class="py-3 px-3">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-pink-500/10 text-pink-500 dark:text-pink-400 border border-pink-500/20">
                                 {{ ref.modul.kode }}
                             </span>
                             <span class="text-xs text-foreground block mt-0.5 truncate max-w-[220px]">{{ ref.modul.judul }}</span>
                         </td>
-                        <td class="py-3 px-3 font-mono text-gray-400">
+                        <td class="py-3 px-3 font-mono text-muted-foreground">
                             {{ ref.submitted_at|date:"d M Y, H:i" }}
                         </td>
-                        <td class="py-3 px-3 text-xs text-gray-300 italic max-w-xs truncate">
+                        <td class="py-3 px-3 text-xs text-foreground italic max-w-xs truncate">
                             {{ ref.teacher_feedback|default:"Belum ada tanggapan guru." }}
                         </td>
                         <td class="py-3 px-3">
                             {% if ref.status == 'reviewed' %}
-                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-pink-500/15 text-pink-400 border border-pink-500/30">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-pink-500/15 text-pink-600 dark:text-pink-400 border border-pink-500/30">
                                 <span>✓</span> Ditinjau
                             </span>
                             {% else %}
-                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 animate-pulse">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 animate-pulse">
                                 <span>⏳</span> Menunggu
                             </span>
                             {% endif %}
@@ -886,20 +874,8 @@
                         <td class="py-3 px-3 text-right">
                             <button 
                                 type="button"
-                                @click="openReflectionModal({
-                                    id: {{ ref.id }},
-                                    studentName: '{{ ref.user.display_name|escapejs }}',
-                                    studentEmail: '{{ ref.user.email|escapejs }}',
-                                    studentClass: '{{ ref.user.kelas|default:"10 RPL"|escapejs }}',
-                                    studentNis: '{{ ref.user.nisn|default:"-"|escapejs }}',
-                                    moduleCode: '{{ ref.modul.kode|escapejs }}',
-                                    moduleTitle: '{{ ref.modul.judul|escapejs }}',
-                                    submittedAt: '{{ ref.submitted_at|date:"d M Y, H:i" }}',
-                                    teacherFeedback: '{{ ref.teacher_feedback|default:""|escapejs }}',
-                                    status: '{{ ref.status }}',
-                                    formDataRaw: '{{ ref.form_data_json|escapejs }}'
-                                })"
-                                class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-pink-500/10 hover:bg-pink-600 text-pink-400 hover:text-white border border-pink-500/20 transition-all shadow-sm inline-flex items-center gap-1 ml-auto"
+                                @click="openReflectionModal({{ ref.id }})"
+                                class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-pink-500/10 hover:bg-pink-600 text-pink-600 dark:text-pink-400 hover:text-white border border-pink-500/20 transition-all shadow-sm inline-flex items-center gap-1 ml-auto"
                             >
                                 {% if ref.status == 'reviewed' %}
                                 <span>✏️ Ubah Tinjauan</span>
@@ -911,7 +887,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="p-8 text-center text-xs text-gray-400 bg-surface-low/20">
+                        <td colspan="6" class="p-8 text-center text-xs text-muted-foreground bg-surface-low/20">
                             Belum ada jurnal refleksi yang dikirimkan.
                         </td>
                     </tr>
@@ -929,11 +905,11 @@
             <div>
                 <h2 class="text-base font-bold text-foreground flex items-center gap-2">
                     <span>👥 Data Pengguna & Otoritas Siswa RPL</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    <span class="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                         {{ total_students }} SISWA TERDAFTAR
                     </span>
                 </h2>
-                <p class="text-xs text-gray-400 mt-0.5">
+                <p class="text-xs text-muted-foreground mt-0.5">
                     Daftar seluruh akun siswa SMKN 1 Rongga, status rombel kelas, perolehan XP, dan fitur reset kata sandi mandiri oleh guru.
                 </p>
             </div>
@@ -944,7 +920,7 @@
                     type="text" 
                     x-model="studentSearch" 
                     placeholder="Cari nama / NISN / email..." 
-                    class="px-3 py-1.5 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-gray-500 w-48 sm:w-64"
+                    class="px-3 py-1.5 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-muted-foreground w-48 sm:w-64"
                 />
                 <select 
                     x-model="studentClassFilter" 
@@ -958,7 +934,7 @@
 
         <div class="overflow-x-auto border border-outline-variant rounded-xl">
             <table class="w-full text-left text-xs">
-                <thead class="text-[11px] text-gray-400 uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
+                <thead class="text-[11px] text-muted-foreground uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
                     <tr>
                         <th class="py-2.5 px-3">Nama Peserta Didik</th>
                         <th class="py-2.5 px-3">Kelas / Rombel</th>
@@ -982,32 +958,32 @@
                                 </div>
                                 <div>
                                     <span class="font-semibold text-foreground block">{{ student.display_name }}</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">@{{ student.username }}</span>
+                                    <span class="text-[10px] text-muted-foreground font-mono">@{{ student.username }}</span>
                                 </div>
                             </div>
                         </td>
                         <td class="py-3 px-3 font-mono">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-low text-gray-300 border border-outline-variant">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-low text-foreground border border-outline-variant">
                                 {{ student.kelas|default:"10 RPL" }}
                             </span>
                         </td>
-                        <td class="py-3 px-3 font-mono text-gray-400">
+                        <td class="py-3 px-3 font-mono text-muted-foreground">
                             {{ student.nisn|default:"-" }}
                         </td>
-                        <td class="py-3 px-3 font-mono text-gray-400">
+                        <td class="py-3 px-3 font-mono text-muted-foreground">
                             {{ student.email }}
                         </td>
                         <td class="py-3 px-3 font-mono">
-                            <span class="text-amber-400 font-bold">{{ student.xp|default:0 }} XP</span>
+                            <span class="text-amber-600 dark:text-amber-400 font-bold">{{ student.xp|default:0 }} XP</span>
                         </td>
-                        <td class="py-3 px-3 font-mono text-gray-400">
+                        <td class="py-3 px-3 font-mono text-muted-foreground">
                             {{ student.date_joined|date:"d M Y" }}
                         </td>
                         <td class="py-3 px-3 text-right">
                             <button 
                                 type="button" 
                                 @click="openPasswordResetModal({{ student.id }}, '{{ student.display_name|escapejs }}', '{{ student.email|escapejs }}')"
-                                class="px-2.5 py-1.5 rounded-lg text-xs font-medium border border-blue-500/30 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition-colors inline-flex items-center gap-1 shadow-sm"
+                                class="px-2.5 py-1.5 rounded-lg text-xs font-medium border border-blue-500/30 text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition-colors inline-flex items-center gap-1 shadow-sm"
                                 title="Reset Password Siswa"
                             >
                                 <span>🔑 Reset Sandi</span>
@@ -1016,7 +992,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="p-8 text-center text-xs text-gray-400 bg-surface-low/40">
+                        <td colspan="7" class="p-8 text-center text-xs text-muted-foreground bg-surface-low/40">
                             Belum ada data siswa terdaftar.
                         </td>
                     </tr>
@@ -1035,14 +1011,14 @@
                 <h2 class="text-base font-bold text-foreground flex items-center gap-2">
                     <span>🎯 Log Seluruh Nilai Ujian Drilling TKA PPLG</span>
                 </h2>
-                <p class="text-xs text-gray-400 mt-0.5">Riwayat lengkap nilai simulasi ujian CBT yang telah dikerjakan oleh siswa.</p>
+                <p class="text-xs text-muted-foreground mt-0.5">Riwayat lengkap nilai simulasi ujian CBT yang telah dikerjakan oleh siswa.</p>
             </div>
 
             <div class="flex items-center gap-2 text-[10px] font-mono font-semibold flex-shrink-0 flex-wrap">
-                <span class="px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                <span class="px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                     📊 {{ total_tka_attempts }} Percobaan
                 </span>
-                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                     ✓ Lulus KKM 73: {{ pass_rate_tka }}%
                 </span>
                 <a 
@@ -1061,7 +1037,7 @@
                 type="text" 
                 x-model="tkaSearch" 
                 placeholder="Cari nama siswa / email..." 
-                class="px-3 py-2 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-gray-500"
+                class="px-3 py-2 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-muted-foreground"
             />
             <select 
                 x-model="tkaClassFilter" 
@@ -1082,7 +1058,7 @@
 
         <div class="overflow-x-auto border border-outline-variant rounded-xl">
             <table class="w-full text-left text-xs">
-                <thead class="text-[11px] text-gray-400 uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
+                <thead class="text-[11px] text-muted-foreground uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
                     <tr>
                         <th class="py-3 px-3">Nama Siswa</th>
                         <th class="py-3 px-3">Kelas</th>
@@ -1102,37 +1078,37 @@
                     >
                         <td class="py-3 px-3 font-semibold text-foreground">
                             {{ exam.user.display_name }}
-                            <span class="block text-[10px] text-gray-400 font-mono font-normal">{{ exam.user.email }}</span>
+                            <span class="block text-[10px] text-muted-foreground font-mono font-normal">{{ exam.user.email }}</span>
                         </td>
                         <td class="py-3 px-3 font-mono">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-low text-gray-300 border border-outline-variant">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-low text-foreground border border-outline-variant">
                                 {{ exam.user.kelas|default:"-" }}
                             </span>
                         </td>
-                        <td class="py-3 px-3 font-mono text-primary">
+                        <td class="py-3 px-3 font-mono text-primary font-bold">
                             {{ exam.package.kode }}
                         </td>
                         <td class="py-3 px-3">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                                 #{{ exam.attempt_number }}
                             </span>
                         </td>
-                        <td class="py-3 px-3 font-mono text-gray-400">
+                        <td class="py-3 px-3 font-mono text-muted-foreground">
                             {{ exam.completed_at|date:"d M Y, H:i" }}
                         </td>
                         <td class="py-3 px-3 font-mono font-bold text-sm text-foreground">
                             {{ exam.score }} / 100
                         </td>
-                        <td class="py-3 px-3 font-mono text-gray-400">
+                        <td class="py-3 px-3 font-mono text-muted-foreground">
                             {{ exam.correct_answers }} / {{ exam.total_questions }} Soal
                         </td>
                         <td class="py-3 px-3">
                             {% if exam.score >= 73 %}
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
                                 ✓ KOMPETEN
                             </span>
                             {% else %}
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/25">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25">
                                 ⚠️ BELUM KOMPETEN
                             </span>
                             {% endif %}
@@ -1140,7 +1116,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="8" class="p-8 text-center text-xs text-gray-400 bg-surface-low/40">
+                        <td colspan="8" class="p-8 text-center text-xs text-muted-foreground bg-surface-low/40">
                             Belum ada rekaman ujian CBT yang masuk dari siswa.
                         </td>
                     </tr>
@@ -1158,18 +1134,18 @@
             <div>
                 <h2 class="text-base font-bold text-foreground flex items-center gap-2">
                     <span>📚 Penilaian Rabu Literasi (RESIK)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                         RUBRIK RESIK RESMI
                     </span>
                 </h2>
-                <p class="text-xs text-gray-400 mt-0.5">Tinjau dan nilai resensi buku non-teks mingguan siswa berdasarkan rubrik Menulis (Max 16) & Presentasi (Max 20).</p>
+                <p class="text-xs text-muted-foreground mt-0.5">Tinjau dan nilai resensi buku non-teks mingguan siswa berdasarkan rubrik Menulis (Max 16) & Presentasi (Max 20).</p>
             </div>
 
             <div class="flex items-center gap-2 text-[10px] font-mono font-semibold flex-shrink-0 flex-wrap">
-                <span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                <span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                     ⏳ {{ pending_literasi }} Menunggu
                 </span>
-                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                     ✓ {{ graded_literasi }} Dinilai
                 </span>
                 <a 
@@ -1188,7 +1164,7 @@
                 type="text" 
                 x-model="litSearch" 
                 placeholder="Cari nama siswa / judul buku..." 
-                class="px-3 py-2 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-gray-500"
+                class="px-3 py-2 bg-background border border-outline-variant rounded-xl text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-muted-foreground"
             />
             <select 
                 x-model="litClassFilter" 
@@ -1209,7 +1185,7 @@
 
         <div class="overflow-x-auto border border-outline-variant rounded-xl">
             <table class="w-full text-left text-xs">
-                <thead class="text-[11px] text-gray-400 uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
+                <thead class="text-[11px] text-muted-foreground uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
                     <tr>
                         <th class="py-3 px-3">Siswa & Kelas</th>
                         <th class="py-3 px-3">Judul Buku & Penulis</th>
@@ -1227,28 +1203,28 @@
                     >
                         <td class="py-3 px-3 font-semibold text-foreground">
                             {{ report.user.display_name }}
-                            <span class="block text-[10px] text-gray-400 font-mono font-normal">{{ report.user.kelas|default:"10 RPL" }} &bull; NISN: {{ report.user.nisn|default:"-" }}</span>
+                            <span class="block text-[10px] text-muted-foreground font-mono font-normal">{{ report.user.kelas|default:"10 RPL" }} &bull; NISN: {{ report.user.nisn|default:"-" }}</span>
                         </td>
                         <td class="py-3 px-3">
                             <span class="font-bold text-foreground block">{{ report.book_title }}</span>
-                            <span class="text-[10px] text-gray-400 font-mono">{{ report.author }} &bull; {{ report.page_count|default:"-" }} Hal</span>
+                            <span class="text-[10px] text-muted-foreground font-mono">{{ report.author }} &bull; {{ report.page_count|default:"-" }} Hal</span>
                         </td>
                         <td class="py-3 px-3 font-mono">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                                 Mg {{ report.week_number }}
                             </span>
                         </td>
-                        <td class="py-3 px-3 font-mono text-gray-400">
+                        <td class="py-3 px-3 font-mono text-muted-foreground">
                             {{ report.created_at|date:"d M Y, H:i" }}
                         </td>
                         <td class="py-3 px-3">
                             {% if report.status == 'graded' %}
-                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                                 <span>✓</span> {{ report.final_score|floatformat:1 }} / 100
                             </span>
-                            <span class="block text-[10px] text-gray-400 font-mono mt-0.5">W:{{ report.writing_score }} P:{{ report.presentation_score }}</span>
+                            <span class="block text-[10px] text-muted-foreground font-mono mt-0.5">W:{{ report.writing_score }} P:{{ report.presentation_score }}</span>
                             {% else %}
-                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 animate-pulse">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 animate-pulse">
                                 <span>⏳</span> Menunggu
                             </span>
                             {% endif %}
@@ -1256,22 +1232,8 @@
                         <td class="py-3 px-3 text-right">
                             <button 
                                 type="button"
-                                @click="openLiterasiModal({
-                                    id: {{ report.id }},
-                                    studentName: '{{ report.user.display_name|escapejs }}',
-                                    studentClass: '{{ report.user.kelas|default:"10 RPL"|escapejs }}',
-                                    bookTitle: '{{ report.book_title|escapejs }}',
-                                    author: '{{ report.author|escapejs }}',
-                                    publisher: '{{ report.publisher|default:"-"|escapejs }}',
-                                    pageCount: '{{ report.page_count|default:"-"|escapejs }}',
-                                    weekNumber: {{ report.week_number }},
-                                    summary: '{{ report.summary|escapejs }}',
-                                    moral: '{{ report.moral_message|escapejs }}',
-                                    wScore: {{ report.writing_score|default:12 }},
-                                    pScore: {{ report.presentation_score|default:15 }},
-                                    teacherFeedback: '{{ report.teacher_feedback|default:""|escapejs }}'
-                                })"
-                                class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600/15 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 transition-all shadow-sm inline-flex items-center gap-1 ml-auto"
+                                @click="openLiterasiModal({{ report.id }})"
+                                class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600/15 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white border border-emerald-500/30 transition-all shadow-sm inline-flex items-center gap-1 ml-auto"
                             >
                                 {% if report.status == 'graded' %}
                                 <span>✏️ Ubah Nilai</span>
@@ -1283,7 +1245,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="p-8 text-center text-xs text-gray-400 bg-surface-low/20">
+                        <td colspan="6" class="p-8 text-center text-xs text-muted-foreground bg-surface-low/20">
                             Belum ada laporan Rabu Literasi (RESIK) yang dikirimkan.
                         </td>
                     </tr>
@@ -1301,12 +1263,12 @@
             <h2 class="text-base font-bold text-foreground flex items-center gap-2">
                 <span>📖 Log Penyelesaian Modul Materi Siswa</span>
             </h2>
-            <p class="text-xs text-gray-400 mt-0.5">Daftar siswa yang telah membaca dan menandai selesai modul materi di Learning Hub RPL.</p>
+            <p class="text-xs text-muted-foreground mt-0.5">Daftar siswa yang telah membaca dan menandai selesai modul materi di Learning Hub RPL.</p>
         </div>
 
         <div class="overflow-x-auto border border-outline-variant rounded-xl">
             <table class="w-full text-left text-xs">
-                <thead class="text-[11px] text-gray-400 uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
+                <thead class="text-[11px] text-muted-foreground uppercase font-mono bg-surface-low/90 border-b border-outline-variant">
                     <tr>
                         <th class="py-2.5 px-3">Nama Siswa</th>
                         <th class="py-2.5 px-3">Kelas / Rombel</th>
@@ -1321,7 +1283,7 @@
                             {{ log.user.display_name }}
                         </td>
                         <td class="py-3 px-3 font-mono">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-low text-gray-300 border border-outline-variant">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-low text-foreground border border-outline-variant">
                                 {{ log.user.kelas|default:"10 RPL" }}
                             </span>
                         </td>
@@ -1331,13 +1293,13 @@
                             </span>
                             <span class="text-xs text-foreground ml-1 font-medium">{{ log.modul.judul }}</span>
                         </td>
-                        <td class="py-3 px-3 text-right font-mono text-gray-400">
+                        <td class="py-3 px-3 text-right font-mono text-muted-foreground">
                             {{ log.completed_at|date:"d M Y, H:i" }}
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="4" class="p-8 text-center text-xs text-gray-400 bg-surface-low/40">
+                        <td colspan="4" class="p-8 text-center text-xs text-muted-foreground bg-surface-low/40">
                             Belum ada rekaman penyelesaian modul materi.
                         </td>
                     </tr>
@@ -1351,6 +1313,10 @@
     <!-- MODALS SECTION                                                            -->
     <!-- ========================================================================= -->
 
+    <!-- ========================================================================= -->
+    <!-- MODALS SECTION                                                            -->
+    <!-- ========================================================================= -->
+
     <!-- 1. Modal Rekap Sesi Token (#token-report-modal) -->
     <div 
         x-show="tokenReportModalOpen" 
@@ -1359,45 +1325,45 @@
     >
         <div 
             @click.away="tokenReportModalOpen = false"
-            class="bg-card border border-outline-variant rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-scaleIn"
+            class="bg-card border border-border rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-scaleIn"
         >
-            <div class="p-4 sm:p-5 border-b border-outline-variant flex items-center justify-between bg-surface-low/80">
+            <div class="p-4 sm:p-5 border-b border-border flex items-center justify-between bg-secondary/40">
                 <div class="flex items-center gap-2.5">
-                    <span class="px-2.5 py-0.5 rounded font-mono font-bold text-xs bg-cyan-500/15 text-cyan-400 border border-cyan-500/30" x-text="tokenReportData.tokenCode"></span>
+                    <span class="px-2.5 py-0.5 rounded font-mono font-bold text-xs bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30" x-text="tokenReportData.tokenCode"></span>
                     <div>
                         <h3 class="text-sm sm:text-base font-bold text-foreground" x-text="tokenReportData.tokenTitle"></h3>
-                        <p class="text-[11px] text-gray-400 font-mono" x-text="tokenReportData.targetClass"></p>
+                        <p class="text-[11px] text-muted-foreground font-mono" x-text="tokenReportData.targetClass"></p>
                     </div>
                 </div>
-                <button type="button" @click="tokenReportModalOpen = false" class="p-1.5 rounded-lg text-gray-400 hover:text-foreground hover:bg-surface-high transition-colors">
+                <button type="button" @click="tokenReportModalOpen = false" class="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
                     ✕
                 </button>
             </div>
 
             <!-- Stats Bar -->
-            <div class="grid grid-cols-4 gap-2 p-4 bg-surface-low/50 border-b border-outline-variant text-center font-mono text-xs">
+            <div class="grid grid-cols-4 gap-2 p-4 bg-secondary/20 border-b border-border text-center font-mono text-xs">
                 <div>
-                    <span class="text-[10px] text-gray-400 uppercase block">Enrolled</span>
+                    <span class="text-[10px] text-muted-foreground uppercase block">Enrolled</span>
                     <span class="text-base font-bold text-foreground" x-text="tokenReportData.stats.totalEnrolled"></span>
                 </div>
                 <div>
-                    <span class="text-[10px] text-gray-400 uppercase block">Ikut Ujian</span>
-                    <span class="text-base font-bold text-cyan-400" x-text="tokenReportData.stats.totalExamTaken"></span>
+                    <span class="text-[10px] text-muted-foreground uppercase block">Ikut Ujian</span>
+                    <span class="text-base font-bold text-cyan-600 dark:text-cyan-400" x-text="tokenReportData.stats.totalExamTaken"></span>
                 </div>
                 <div>
-                    <span class="text-[10px] text-gray-400 uppercase block">Rata-Rata</span>
-                    <span class="text-base font-bold text-amber-400" x-text="tokenReportData.stats.avgScore + ' / 100'"></span>
+                    <span class="text-[10px] text-muted-foreground uppercase block">Rata-Rata</span>
+                    <span class="text-base font-bold text-amber-600 dark:text-amber-400" x-text="tokenReportData.stats.avgScore + ' / 100'"></span>
                 </div>
                 <div>
-                    <span class="text-[10px] text-gray-400 uppercase block">Kelulusan</span>
-                    <span class="text-base font-bold text-emerald-400" x-text="tokenReportData.stats.passRate + '%'"></span>
+                    <span class="text-[10px] text-muted-foreground uppercase block">Kelulusan</span>
+                    <span class="text-base font-bold text-emerald-600 dark:text-emerald-400" x-text="tokenReportData.stats.passRate + '%'"></span>
                 </div>
             </div>
 
             <!-- Student List -->
             <div class="p-4 overflow-y-auto max-h-[50vh]">
                 <table class="w-full text-left text-xs">
-                    <thead class="text-[10px] text-gray-400 uppercase font-mono border-b border-outline-variant">
+                    <thead class="text-[10px] text-muted-foreground uppercase font-mono border-b border-border">
                         <tr>
                             <th class="pb-2">Nama Siswa</th>
                             <th class="pb-2">Kelas</th>
@@ -1406,35 +1372,35 @@
                             <th class="pb-2 text-right">Status KKM 73</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-outline-variant font-medium">
+                    <tbody class="divide-y divide-border font-medium">
                         <template x-for="st in tokenReportData.students" :key="st.userId">
-                            <tr class="hover:bg-surface-low/50 transition-colors">
+                            <tr class="hover:bg-accent/40 transition-colors">
                                 <td class="py-2.5 font-semibold text-foreground" x-text="st.name"></td>
-                                <td class="py-2.5 font-mono text-gray-400" x-text="st.studentClass"></td>
-                                <td class="py-2.5 font-mono text-gray-400 text-[11px]" x-text="st.enrolledAt"></td>
+                                <td class="py-2.5 font-mono text-muted-foreground" x-text="st.studentClass"></td>
+                                <td class="py-2.5 font-mono text-muted-foreground text-[11px]" x-text="st.enrolledAt"></td>
                                 <td class="py-2.5 font-mono font-bold text-foreground">
                                     <span x-text="st.examScore !== null ? st.examScore : '-'"></span>
                                 </td>
                                 <td class="py-2.5 text-right">
                                     <span 
                                         x-show="st.hasTakenExam"
-                                        :class="st.isPassed ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'"
+                                        :class="st.isPassed ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'"
                                         class="px-2 py-0.5 rounded text-[10px] font-mono font-bold inline-block"
                                         x-text="st.isPassed ? '✓ TUNTAS' : '⚠️ BELUM TUNTAS'"
                                     ></span>
-                                    <span x-show="!st.hasTakenExam" class="text-[10px] text-gray-500 font-mono italic">Belum Ujian</span>
+                                    <span x-show="!st.hasTakenExam" class="text-[10px] text-muted-foreground font-mono italic">Belum Ujian</span>
                                 </td>
                             </tr>
                         </template>
                         <tr x-show="tokenReportData.students.length === 0">
-                            <td colspan="5" class="py-6 text-center text-xs text-gray-400">Belum ada siswa yang enroll pada sesi ini.</td>
+                            <td colspan="5" class="py-6 text-center text-xs text-muted-foreground">Belum ada siswa yang enroll pada sesi ini.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="p-4 border-t border-outline-variant flex items-center justify-between bg-surface-low/50">
-                <button type="button" @click="window.print()" class="px-3.5 py-2 rounded-xl bg-surface-low hover:bg-surface-high border border-outline-variant text-foreground text-xs font-semibold flex items-center gap-1.5 transition-colors">
+            <div class="p-4 border-t border-border flex items-center justify-between bg-secondary/30">
+                <button type="button" @click="window.print()" class="px-3.5 py-2 rounded-xl bg-secondary hover:bg-accent border border-border text-foreground text-xs font-semibold flex items-center gap-1.5 transition-colors">
                     <span>🖨️ Cetak Rekap</span>
                 </button>
                 <a 
@@ -1456,19 +1422,19 @@
     >
         <div 
             @click.away="pwdModalOpen = false"
-            class="bg-card border border-outline-variant rounded-2xl w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl animate-scaleIn"
+            class="bg-card border border-border rounded-2xl w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl animate-scaleIn"
         >
-            <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+            <div class="flex items-center justify-between border-b border-border pb-3">
                 <div class="flex items-center gap-2">
                     <span class="text-lg">🔑</span>
                     <h3 class="text-sm sm:text-base font-bold text-foreground">Reset Kata Sandi Siswa</h3>
                 </div>
-                <button type="button" @click="pwdModalOpen = false" class="text-gray-400 hover:text-foreground">✕</button>
+                <button type="button" @click="pwdModalOpen = false" class="text-muted-foreground hover:text-foreground">✕</button>
             </div>
 
-            <div class="p-3.5 rounded-xl bg-surface-low/80 border border-outline-variant space-y-1 text-xs">
+            <div class="p-3.5 rounded-xl bg-secondary/40 border border-border space-y-1 text-xs">
                 <p class="font-bold text-foreground" x-text="pwdTarget.name"></p>
-                <p class="text-[11px] font-mono text-gray-400" x-text="pwdTarget.email"></p>
+                <p class="text-[11px] font-mono text-muted-foreground" x-text="pwdTarget.email"></p>
             </div>
 
             <div class="space-y-1.5">
@@ -1477,13 +1443,13 @@
                     type="text" 
                     x-model="pwdTarget.newPassword"
                     placeholder="Contoh: smkn1rongga"
-                    class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-outline-variant text-xs text-foreground font-mono focus:outline-none focus:border-primary"
+                    class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-border text-xs text-foreground font-mono focus:outline-none focus:border-primary"
                 />
-                <p class="text-[10px] text-gray-400">Sandi dapat diatur kembali mandiri oleh siswa setelah berhasil masuk.</p>
+                <p class="text-[10px] text-muted-foreground">Sandi dapat diatur kembali mandiri oleh siswa setelah berhasil masuk.</p>
             </div>
 
-            <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-outline-variant">
-                <button type="button" @click="pwdModalOpen = false" class="px-4 py-2 rounded-xl bg-surface-low hover:bg-surface-high border border-outline-variant text-foreground text-xs font-semibold transition-colors">
+            <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-border">
+                <button type="button" @click="pwdModalOpen = false" class="px-4 py-2 rounded-xl bg-secondary hover:bg-accent border border-border text-foreground text-xs font-semibold transition-colors">
                     Batal
                 </button>
                 <button 
@@ -1506,120 +1472,131 @@
     >
         <div 
             @click.away="gradeModalOpen = false"
-            class="bg-card border border-outline-variant rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl animate-scaleIn"
+            class="bg-card border border-border rounded-2xl w-full max-w-4xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl animate-scaleIn"
         >
-            <div class="p-4 sm:p-5 border-b border-outline-variant flex items-center justify-between bg-surface-low/80">
-                <div class="flex items-center gap-2.5">
-                    <span class="px-2.5 py-0.5 rounded font-mono font-bold text-xs bg-purple-500/15 text-purple-400 border border-purple-500/30">LKPD & KKTP</span>
-                    <span class="px-2.5 py-0.5 rounded font-mono text-xs bg-surface-low text-gray-300 border border-outline-variant" x-text="activeLkpd.studentClass"></span>
-                    <h3 class="text-sm sm:text-base font-bold text-foreground" x-text="activeLkpd.studentName"></h3>
+            <div class="p-4 sm:p-5 border-b border-border flex items-start sm:items-center justify-between bg-secondary/40 gap-3">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="px-2.5 py-0.5 rounded font-mono font-bold text-xs bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30">LKPD & KKTP</span>
+                        <span class="px-2.5 py-0.5 rounded font-mono text-xs bg-secondary text-foreground border border-border" x-text="activeLkpd.studentClass"></span>
+                        <span class="text-xs text-muted-foreground font-mono hidden sm:inline" x-text="activeLkpd.moduleSlug || activeLkpd.moduleTitle"></span>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-extrabold text-foreground tracking-tight" x-text="activeLkpd.studentName"></h3>
                 </div>
-                <button type="button" @click="gradeModalOpen = false" class="p-1.5 rounded-lg text-gray-400 hover:text-foreground hover:bg-surface-high transition-colors">
-                    ✕
+                <button type="button" @click="gradeModalOpen = false" class="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0" title="Tutup Modal (Esc)">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
 
-            <div class="p-4 sm:p-6 overflow-y-auto space-y-5">
-                <!-- Modul Title & Drive link -->
-                <div class="p-3.5 rounded-xl bg-surface-low/80 border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                    <div>
-                        <span class="text-[10px] text-gray-400 font-mono uppercase block">Target Modul Pembelajaran</span>
-                        <span class="font-bold text-foreground text-sm" x-text="activeLkpd.moduleTitle"></span>
-                    </div>
-                    <div x-show="activeLkpd.driveUrl" class="flex-shrink-0">
-                        <a :href="activeLkpd.driveUrl" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30 font-mono text-xs font-bold inline-flex items-center gap-1.5 hover:bg-blue-500/25 transition-colors">
-                            <span>📁 Buka Bukti Google Drive ↗</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Section Lembar Jawaban Siswa -->
-                <div class="space-y-2">
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-grow">
+                <!-- Section A: Student Answer Viewer -->
+                <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <h4 class="text-xs font-bold text-foreground uppercase font-mono flex items-center gap-2">
-                            <span>📝 Lembar Jawaban & Praktikum Siswa</span>
+                        <h4 class="text-xs font-bold text-foreground uppercase tracking-wider font-mono flex items-center gap-2">
+                            <span>📋 Lembar Jawaban & Praktikum Siswa</span>
                         </h4>
-                        <span class="text-[10px] font-mono text-gray-400">Data Submisi LKPD</span>
-                    </div>
-                    <div x-html="formattedLkpdAnswersHtml" class="max-h-64 overflow-y-auto pr-1"></div>
-                </div>
-
-                <!-- Form Inputs -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <div class="flex items-center justify-between">
-                            <label class="text-xs font-semibold text-foreground">Skor Angka (0-100)</label>
-                            <span 
-                                :class="activeLkpd.teacherScore >= 73 ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-amber-400 bg-amber-500/10 border-amber-500/20'"
-                                class="text-[10px] font-mono font-bold px-2 py-0.5 rounded border"
-                                x-text="activeLkpd.teacherScore >= 73 ? '✓ Tuntas (KKM 73)' : '⚠️ Remedial (< 73)'"
-                            ></span>
+                        <div x-show="activeLkpd.driveUrl" class="flex-shrink-0">
+                            <a :href="activeLkpd.driveUrl" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/25 text-xs font-semibold hover:bg-cyan-500/20 transition-all inline-flex items-center gap-1.5">
+                                <span>📁 Buka Bukti Google Drive ↗</span>
+                            </a>
                         </div>
-                        <input 
-                            type="number" 
-                            min="0" 
-                            max="100" 
-                            x-model="activeLkpd.teacherScore"
-                            placeholder="Contoh: 85"
-                            class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-outline-variant text-xs text-foreground font-mono focus:outline-none focus:border-primary"
-                        />
                     </div>
-
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-foreground">Level Capaian KKTP Vokasi</label>
-                        <select 
-                            x-model="activeLkpd.teacherLevel"
-                            class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-outline-variant text-xs text-foreground focus:outline-none focus:border-primary"
-                        >
-                            <option value="">Pilih Level KKTP</option>
-                            {% for val, label in kktp_levels %}
-                            <option value="{{ val }}">{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                    <div x-html="formattedLkpdAnswersHtml" class="p-4 rounded-xl bg-background border border-border/80 space-y-3 text-xs max-h-96 overflow-y-auto"></div>
                 </div>
 
-                <!-- Quick Presets -->
-                <div class="space-y-2">
-                    <span class="text-[11px] font-medium text-gray-400 block">Preset Umpan Balik Cepat:</span>
-                    <div class="flex flex-wrap gap-1.5">
-                        <button type="button" @click="activeLkpd.teacherFeedback = 'Analisis sangat komprehensif, implementasi kode dan dokumentasi memenuhi standar industri vokasi.'" class="px-2.5 py-1 rounded-lg bg-surface-low hover:bg-surface-high border border-outline-variant text-[11px] text-gray-300 transition-colors">
-                            🌟 Sangat Baik & Lengkap
-                        </button>
-                        <button type="button" @click="activeLkpd.teacherFeedback = 'Tugas telah diselesaikan dengan baik sesuai seluruh kriteria pada rubrik LKPD.'" class="px-2.5 py-1 rounded-lg bg-surface-low hover:bg-surface-high border border-outline-variant text-[11px] text-gray-300 transition-colors">
-                            ✓ Tuntas Sesuai Kriteria
-                        </button>
-                        <button type="button" @click="activeLkpd.teacherFeedback = 'Harap lengkapi tautan bukti atau screenshot hasil praktikum pada folder Google Drive.'" class="px-2.5 py-1 rounded-lg bg-surface-low hover:bg-surface-high border border-outline-variant text-[11px] text-gray-300 transition-colors">
-                            📁 Perbaiki Bukti Drive
-                        </button>
-                        <button type="button" @click="activeLkpd.teacherFeedback = 'Pemahaman konsep masih perlu bimbingan. Silakan pelajari kembali materi dan ajukan remedial.'" class="px-2.5 py-1 rounded-lg bg-surface-low hover:bg-surface-high border border-outline-variant text-[11px] text-gray-300 transition-colors">
-                            ⚠️ Perlu Remedial
-                        </button>
+                <!-- Section B: Teacher Evaluation Form -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-secondary/30 border border-border/90 space-y-4">
+                    <div class="flex items-center justify-between border-b border-border/60 pb-3">
+                        <h4 class="text-xs font-bold text-foreground uppercase tracking-wider font-mono flex items-center gap-2">
+                            <span>⭐ Form Penilaian Guru & Penetapan KKTP</span>
+                        </h4>
+                        <span class="text-[11px] font-mono text-muted-foreground">
+                            Pengampu: Agung Gumelar Saputra, S.Tr.T.
+                        </span>
                     </div>
-                </div>
 
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-foreground">Catatan & Umpan Balik Evaluasi Guru</label>
-                    <textarea 
-                        x-model="activeLkpd.teacherFeedback"
-                        rows="3"
-                        placeholder="Tuliskan catatan evaluasi, poin perbaikan, atau apresiasi atas hasil praktikum siswa..."
-                        class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-outline-variant text-xs text-foreground focus:outline-none focus:border-primary leading-relaxed"
-                    ></textarea>
+                    <!-- Inputs: Score & KKTP -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                                    <span>Skor Angka (0 - 100)</span>
+                                    <span class="text-destructive">*</span>
+                                </label>
+                                <span 
+                                    :class="activeLkpd.teacherScore >= 90 ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' : (activeLkpd.teacherScore >= 73 ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30' : 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30')"
+                                    class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded border"
+                                    x-text="activeLkpd.teacherScore >= 90 ? '🌟 Sangat Kompeten (A)' : (activeLkpd.teacherScore >= 73 ? '✓ Kompeten (KKM 73)' : '⚠️ Remedial (< 73)')"
+                                ></span>
+                            </div>
+                            <input 
+                                type="number" 
+                                min="0" 
+                                max="100" 
+                                x-model.number="activeLkpd.teacherScore"
+                                placeholder="Contoh: 85"
+                                class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-border text-sm font-mono font-bold text-foreground focus:outline-none focus:border-primary shadow-sm"
+                            />
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-foreground">Kategori Capaian KKTP Vokasi</label>
+                            <select 
+                                x-model="activeLkpd.teacherLevel"
+                                class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-border text-xs text-foreground focus:outline-none focus:border-primary shadow-sm"
+                            >
+                                <option value="">Pilih Level KKTP</option>
+                                {% for val, label in kktp_levels %}
+                                <option value="{{ val }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Quick Presets -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-semibold text-foreground">Catatan & Evaluasi Konstruktif Guru</label>
+                            <span class="text-[10px] text-muted-foreground">Klik preset cepat di bawah:</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button type="button" @click="activeLkpd.teacherFeedback = 'Kerja luar biasa! Analisis peran profesi dan pemahaman materi sudah sangat komprehensif dan mandiri. Pertahankan! 🌟'" class="px-2.5 py-1 rounded-md bg-card hover:bg-accent text-foreground text-[11px] border border-border transition-colors cursor-pointer">
+                                ✨ Kerja Luar Biasa
+                            </button>
+                            <button type="button" @click="activeLkpd.teacherFeedback = 'Analisis aplikasi dan identifikasi peran sudah tepat. Terus eksplorasi teknologi terkini! 🚀'" class="px-2.5 py-1 rounded-md bg-card hover:bg-accent text-foreground text-[11px] border border-border transition-colors cursor-pointer">
+                                🚀 Analisis Tepat
+                            </button>
+                            <button type="button" @click="activeLkpd.teacherFeedback = 'Cukup baik, namun beberapa bagian analisis dan refleksi perlu diperdalam lagi pada pertemuan berikutnya. ✍️'" class="px-2.5 py-1 rounded-md bg-card hover:bg-accent text-foreground text-[11px] border border-border transition-colors cursor-pointer">
+                                ✍️ Perlu Pendalaman
+                            </button>
+                            <button type="button" @click="activeLkpd.teacherFeedback = 'Jawaban telah diverifikasi dan memenuhi standar ketuntasan minimal (KKM).'" class="px-2.5 py-1 rounded-md bg-card hover:bg-accent text-foreground text-[11px] border border-border transition-colors cursor-pointer">
+                                ✓ Tuntas KKM
+                            </button>
+                        </div>
+
+                        <textarea 
+                            x-model="activeLkpd.teacherFeedback"
+                            rows="3"
+                            placeholder="Tuliskan catatan apresiasi, saran perbaikan teknis kode/analisis, atau masukan untuk siswa..."
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-border text-xs text-foreground focus:outline-none focus:border-primary placeholder:text-muted-foreground leading-relaxed"
+                        ></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="p-4 sm:p-5 border-t border-outline-variant flex items-center justify-end gap-2.5 bg-surface-low/50">
-                <button type="button" @click="gradeModalOpen = false" class="px-4 py-2 rounded-xl bg-surface-low hover:bg-surface-high border border-outline-variant text-foreground text-xs font-semibold transition-colors">
+            <div class="p-4 sm:p-5 border-t border-border flex items-center justify-end gap-2.5 bg-secondary/30">
+                <button type="button" @click="gradeModalOpen = false" class="px-4 py-2.5 rounded-xl text-xs font-medium bg-secondary hover:bg-accent text-foreground border border-border transition-colors">
                     Batal
                 </button>
                 <button 
                     type="button" 
                     @click="submitLkpdGrade()"
                     :disabled="lkpdSubmitting"
-                    class="px-6 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                    class="px-6 py-2.5 rounded-xl text-xs font-bold bg-primary hover:bg-primary/90 text-primary-foreground transition-all shadow-md flex items-center gap-1.5"
                 >
-                    <span x-text="lkpdSubmitting ? 'Menyimpan...' : '✓ Simpan Penilaian LKPD'"></span>
+                    <span x-text="lkpdSubmitting ? 'Menyimpan...' : '💾 Simpan & Rilis Nilai ke Siswa'"></span>
                 </button>
             </div>
         </div>
@@ -1633,78 +1610,123 @@
     >
         <div 
             @click.away="reflectionModalOpen = false"
-            class="bg-card border border-outline-variant rounded-2xl w-full max-w-2xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl animate-scaleIn"
+            class="bg-card border border-border rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl animate-scaleIn"
         >
-            <div class="p-4 sm:p-5 border-b border-outline-variant flex items-center justify-between bg-surface-low/80">
-                <div class="flex items-center gap-2.5">
-                    <span class="px-2.5 py-0.5 rounded font-mono font-bold text-xs bg-pink-500/15 text-pink-400 border border-pink-500/30">JURNAL REFLEKSI</span>
-                    <span class="px-2.5 py-0.5 rounded font-mono text-xs bg-surface-low text-gray-300 border border-outline-variant" x-text="activeRef.studentClass"></span>
-                    <h3 class="text-sm sm:text-base font-bold text-foreground" x-text="activeRef.studentName"></h3>
+            <div class="p-4 sm:p-5 border-b border-border flex items-start sm:items-center justify-between bg-secondary/40 gap-3">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="px-2.5 py-0.5 rounded font-mono font-bold text-xs bg-pink-500/15 text-pink-600 dark:text-pink-400 border border-pink-500/30">
+                            💭 JURNAL REFLEKSI SISWA
+                        </span>
+                        <span class="px-2.5 py-0.5 rounded font-mono text-xs bg-secondary text-foreground border border-border" x-text="activeRef.studentClass"></span>
+                        <span class="text-xs text-muted-foreground font-mono hidden sm:inline" x-text="activeRef.moduleSlug || activeRef.moduleTitle"></span>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-extrabold text-foreground tracking-tight" x-text="activeRef.studentName"></h3>
                 </div>
-                <button type="button" @click="reflectionModalOpen = false" class="p-1.5 rounded-lg text-gray-400 hover:text-foreground hover:bg-surface-high transition-colors">
-                    ✕
+                <button type="button" @click="reflectionModalOpen = false" class="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0" title="Tutup Modal (Esc)">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
 
-            <div class="p-4 sm:p-6 overflow-y-auto space-y-4">
-                <!-- 4 Reflection Questions Cards -->
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-grow">
+                <!-- Section A: Student Qualitative Voice / Responses -->
                 <div class="space-y-3">
-                    <div class="p-3.5 rounded-xl bg-surface-low/80 border border-outline-variant space-y-1">
-                        <span class="text-[10px] font-mono text-pink-400 uppercase font-bold">1. Hal Baru yang Dipelajari</span>
-                        <p class="text-xs text-foreground leading-relaxed whitespace-pre-wrap" x-text="activeRef.formData.q1 || '-'"></p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-surface-low/80 border border-outline-variant space-y-1">
-                        <span class="text-[10px] font-mono text-pink-400 uppercase font-bold">2. Urgensi Portofolio vs Ijazah Formal</span>
-                        <p class="text-xs text-foreground leading-relaxed whitespace-pre-wrap" x-text="activeRef.formData.q2 || '-'"></p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-surface-low/80 border border-outline-variant space-y-1">
-                        <span class="text-[10px] font-mono text-pink-400 uppercase font-bold">3. Kendala & Solusi Teknis</span>
-                        <p class="text-xs text-foreground leading-relaxed whitespace-pre-wrap" x-text="activeRef.formData.q3 || '-'"></p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-surface-low/80 border border-outline-variant space-y-1">
-                        <span class="text-[10px] font-mono text-pink-400 uppercase font-bold">4. Komitmen Belajar Pertemuan Berikutnya</span>
-                        <p class="text-xs text-foreground leading-relaxed whitespace-pre-wrap" x-text="activeRef.formData.q4 || '-'"></p>
+                    <h4 class="text-xs font-bold text-foreground uppercase tracking-wider font-mono flex items-center gap-2">
+                        <span>💡 Isian Jurnal Refleksi Mandiri Siswa</span>
+                    </h4>
+
+                    <!-- 4 Reflection Questions Cards -->
+                    <div class="space-y-3">
+                        <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-1.5">
+                            <span class="font-bold text-foreground block text-xs flex items-center gap-1.5">
+                                <span class="text-primary font-mono">•</span>
+                                <span>1. Hal Baru yang Dipelajari tentang Rekayasa Perangkat Lunak & PPLG:</span>
+                            </span>
+                            <div class="p-3 rounded-lg bg-card border border-border text-foreground text-xs leading-relaxed font-normal whitespace-pre-wrap" x-text="activeRef.formData.q1 || '-'"></div>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-1.5">
+                            <span class="font-bold text-foreground block text-xs flex items-center gap-1.5">
+                                <span class="text-primary font-mono">•</span>
+                                <span>2. Urgensi Bukti Portofolio (Evidence) vs Ijazah Formal di Industri IT:</span>
+                            </span>
+                            <div class="p-3 rounded-lg bg-card border border-border text-foreground text-xs leading-relaxed font-normal whitespace-pre-wrap" x-text="activeRef.formData.q2 || '-'"></div>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-1.5">
+                            <span class="font-bold text-foreground block text-xs flex items-center gap-1.5">
+                                <span class="text-primary font-mono">•</span>
+                                <span>3. Kendala & Solusi Teknis saat Menyiapkan Evidence Google Drive:</span>
+                            </span>
+                            <div class="p-3 rounded-lg bg-card border border-border text-foreground text-xs leading-relaxed font-normal whitespace-pre-wrap" x-text="activeRef.formData.q3 || '-'"></div>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-1.5">
+                            <span class="font-bold text-foreground block text-xs flex items-center gap-1.5">
+                                <span class="text-primary font-mono">•</span>
+                                <span>4. Komitmen Belajar untuk Pertemuan / Modul Berikutnya:</span>
+                            </span>
+                            <div class="p-3 rounded-lg bg-card border border-border text-foreground text-xs leading-relaxed font-normal whitespace-pre-wrap" x-text="activeRef.formData.q4 || '-'"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Presets -->
-                <div class="space-y-2 pt-2">
-                    <span class="text-[11px] font-medium text-gray-400 block">Preset Umpan Balik Guru:</span>
-                    <div class="flex flex-wrap gap-1.5">
-                        <button type="button" @click="activeRef.teacherFeedback = 'Refleksi sangat mendalam dan menunjukkan pemikiran kritis serta kesadaran belajar yang tinggi.'" class="px-2.5 py-1 rounded-lg bg-surface-low hover:bg-surface-high border border-outline-variant text-[11px] text-gray-300 transition-colors">
-                            ✨ Sangat Mendalam
-                        </button>
-                        <button type="button" @click="activeRef.teacherFeedback = 'Catatan tantangan belajar telah dipahami. Mari kita diskusikan solusinya pada sesi lab berikutnya.'" class="px-2.5 py-1 rounded-lg bg-surface-low hover:bg-surface-high border border-outline-variant text-[11px] text-gray-300 transition-colors">
-                            🎯 Solusi di Sesi Depan
-                        </button>
-                        <button type="button" @click="activeRef.teacherFeedback = 'Pertahankan komitmen dan konsistensi belajarnya. Terus kembangkan eksplorasi mandiri!'" class="px-2.5 py-1 rounded-lg bg-surface-low hover:bg-surface-high border border-outline-variant text-[11px] text-gray-300 transition-colors">
-                            💪 Terus Berkembang
-                        </button>
+                <!-- Section B: Teacher Qualitative Feedback & Appreciation Form -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-secondary/30 border border-border/90 space-y-4">
+                    <div class="flex items-center justify-between border-b border-border/60 pb-3">
+                        <div>
+                            <h4 class="text-xs font-bold text-foreground uppercase tracking-wider font-mono flex items-center gap-2">
+                                <span>💬 Tanggapan & Apresiasi Guru</span>
+                            </h4>
+                            <p class="text-[11px] text-muted-foreground mt-0.5">
+                                Refleksi formatif kualitatif untuk melatih kejujuran dan refleksi diri siswa.
+                            </p>
+                        </div>
+                        <span class="text-[11px] font-mono text-muted-foreground hidden sm:inline">
+                            Pengampu: Agung Gumelar Saputra, S.Tr.T.
+                        </span>
                     </div>
-                </div>
 
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-foreground">Catatan Apresiasi Guru Pengampu</label>
-                    <textarea 
-                        x-model="activeRef.teacherFeedback"
-                        rows="3"
-                        placeholder="Tuliskan apresiasi, saran pengembangan, atau jawaban atas kendala siswa..."
-                        class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-outline-variant text-xs text-foreground focus:outline-none focus:border-pink-500 leading-relaxed"
-                    ></textarea>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-semibold text-foreground">Catatan Apresiasi / Tanggapan untuk Siswa</label>
+                            <span class="text-[10px] text-muted-foreground">Klik preset cepat di bawah:</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button type="button" @click="activeRef.teacherFeedback = 'Terima kasih atas refleksimu yang sangat jujur dan mendalam! Pertahankan semangat eksplorasi dan rasa ingin tahumu. 🌟'" class="px-2.5 py-1 rounded-md bg-card hover:bg-accent text-foreground text-[11px] border border-border transition-colors cursor-pointer">
+                                ✨ Sangat Mendalam
+                            </button>
+                            <button type="button" @click="activeRef.teacherFeedback = 'Bagus sekali! Kendala yang kamu alami adalah hal wajar dalam belajar pemrograman. Terus berlatih dan jangan ragu bertanya. 💪'" class="px-2.5 py-1 rounded-md bg-card hover:bg-accent text-foreground text-[11px] border border-border transition-colors cursor-pointer">
+                                💪 Apresiasi Kendala
+                            </button>
+                            <button type="button" @click="activeRef.teacherFeedback = 'Pemahaman konsepmu terhadap materi modul ini sudah sangat baik. Komitmen belajarmu patut diacungi jempol! 👍'" class="px-2.5 py-1 rounded-md bg-card hover:bg-accent text-foreground text-[11px] border border-border transition-colors cursor-pointer">
+                                👍 Konsep Sangat Baik
+                            </button>
+                            <button type="button" @click="activeRef.teacherFeedback = 'Catatan kendala teknismu telah dicatat. Pada sesi tatap muka berikutnya kita akan bedah solusinya bersama. 🎯'" class="px-2.5 py-1 rounded-md bg-card hover:bg-accent text-foreground text-[11px] border border-border transition-colors cursor-pointer">
+                                🎯 Solusi di Sesi Depan
+                            </button>
+                        </div>
+
+                        <textarea 
+                            x-model="activeRef.teacherFeedback"
+                            rows="3"
+                            placeholder="Tuliskan apresiasi, motivasi, atau jawaban atas kendala yang dialami siswa saat belajar..."
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-border text-xs text-foreground focus:outline-none focus:border-pink-500 placeholder:text-muted-foreground leading-relaxed"
+                        ></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="p-4 sm:p-5 border-t border-outline-variant flex items-center justify-end gap-2.5 bg-surface-low/50">
-                <button type="button" @click="reflectionModalOpen = false" class="px-4 py-2 rounded-xl bg-surface-low hover:bg-surface-high border border-outline-variant text-foreground text-xs font-semibold transition-colors">
+            <div class="p-4 sm:p-5 border-t border-border flex items-center justify-end gap-2.5 bg-secondary/30">
+                <button type="button" @click="reflectionModalOpen = false" class="px-4 py-2.5 rounded-xl text-xs font-medium bg-secondary hover:bg-accent text-foreground border border-border transition-colors">
                     Batal
                 </button>
                 <button 
                     type="button" 
                     @click="submitRefReview()"
                     :disabled="refSubmitting"
-                    class="px-6 py-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                    class="px-6 py-2.5 rounded-xl text-xs font-bold bg-pink-600 hover:bg-pink-500 text-white transition-all shadow-md flex items-center gap-1.5"
                 >
-                    <span x-text="refSubmitting ? 'Menyimpan...' : '✓ Simpan Tinjauan Refleksi'"></span>
+                    <span x-text="refSubmitting ? 'Menyimpan...' : '✓ Simpan Tanggapan Guru'"></span>
                 </button>
             </div>
         </div>
@@ -1718,46 +1740,46 @@
     >
         <div 
             @click.away="litModalOpen = false"
-            class="bg-card border border-outline-variant rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl animate-scaleIn"
+            class="bg-card border border-border rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl animate-scaleIn"
         >
-            <div class="p-4 sm:p-5 border-b border-outline-variant flex items-center justify-between bg-surface-low/80">
+            <div class="p-4 sm:p-5 border-b border-border flex items-center justify-between bg-secondary/40">
                 <div class="flex items-center gap-2.5">
-                    <span class="px-2.5 py-0.5 rounded font-mono font-bold text-xs bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">RUBRIK RESIK</span>
-                    <span class="px-2.5 py-0.5 rounded font-mono text-xs bg-surface-low text-gray-300 border border-outline-variant" x-text="activeLit.studentClass"></span>
+                    <span class="px-2.5 py-0.5 rounded font-mono font-bold text-xs bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">RUBRIK RESIK</span>
+                    <span class="px-2.5 py-0.5 rounded font-mono text-xs bg-secondary text-foreground border border-border" x-text="activeLit.studentClass"></span>
                     <h3 class="text-sm sm:text-base font-bold text-foreground" x-text="activeLit.studentName"></h3>
                 </div>
-                <button type="button" @click="litModalOpen = false" class="p-1.5 rounded-lg text-gray-400 hover:text-foreground hover:bg-surface-high transition-colors">
+                <button type="button" @click="litModalOpen = false" class="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
                     ✕
                 </button>
             </div>
 
             <div class="p-4 sm:p-6 overflow-y-auto space-y-5">
                 <!-- Book Info -->
-                <div class="p-3.5 rounded-xl bg-surface-low/80 border border-outline-variant space-y-1 text-xs">
+                <div class="p-3.5 rounded-xl bg-secondary/40 border border-border space-y-1 text-xs">
                     <div class="flex items-center justify-between">
                         <span class="font-bold text-foreground text-sm" x-text="activeLit.bookTitle"></span>
-                        <span class="px-2 py-0.5 rounded font-mono font-bold text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" x-text="'Minggu ' + activeLit.weekNumber"></span>
+                        <span class="px-2 py-0.5 rounded font-mono font-bold text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20" x-text="'Minggu ' + activeLit.weekNumber"></span>
                     </div>
-                    <p class="text-gray-400 font-mono" x-text="activeLit.author + ' &bull; ' + activeLit.publisher + ' &bull; ' + activeLit.pageCount + ' Hal'"></p>
+                    <p class="text-muted-foreground font-mono" x-text="activeLit.author + ' • ' + activeLit.publisher + ' • ' + activeLit.pageCount + ' Hal'"></p>
                 </div>
 
                 <!-- Text Previews -->
                 <div class="space-y-3">
                     <div class="space-y-1">
-                        <span class="text-[11px] font-mono text-emerald-400 font-bold uppercase">Ringkasan Isi Bacaan:</span>
-                        <div class="p-3 rounded-xl bg-background border border-outline-variant text-xs text-foreground leading-relaxed max-h-28 overflow-y-auto whitespace-pre-wrap" x-text="activeLit.summary"></div>
+                        <span class="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase">Ringkasan Isi Bacaan:</span>
+                        <div class="p-3 rounded-xl bg-background border border-border text-xs text-foreground leading-relaxed max-h-28 overflow-y-auto whitespace-pre-wrap" x-text="activeLit.summary"></div>
                     </div>
                     <div class="space-y-1">
-                        <span class="text-[11px] font-mono text-cyan-400 font-bold uppercase">Amanat / Pesan Moral:</span>
-                        <div class="p-3 rounded-xl bg-background border border-outline-variant text-xs text-foreground leading-relaxed max-h-20 overflow-y-auto whitespace-pre-wrap" x-text="activeLit.moral"></div>
+                        <span class="text-[11px] font-mono text-cyan-600 dark:text-cyan-400 font-bold uppercase">Amanat / Pesan Moral:</span>
+                        <div class="p-3 rounded-xl bg-background border border-border text-xs text-foreground leading-relaxed max-h-20 overflow-y-auto whitespace-pre-wrap" x-text="activeLit.moral"></div>
                     </div>
                 </div>
 
                 <!-- 9 Rubrics (4 Writing, 5 Presentation) -->
-                <div class="p-4 rounded-xl bg-surface-low/60 border border-outline-variant space-y-4">
-                    <div class="flex items-center justify-between border-b border-outline-variant pb-2">
+                <div class="p-4 rounded-xl bg-secondary/30 border border-border space-y-4">
+                    <div class="flex items-center justify-between border-b border-border pb-2">
                         <h4 class="text-xs font-bold text-foreground font-mono uppercase">Formulir 9 Aspek Rubrik RESIK (Skala 1 - 4)</h4>
-                        <span class="text-xs font-mono font-bold text-emerald-400" x-text="'Nilai Akhir: ' + calculateLitFinalScore() + ' / 100'"></span>
+                        <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400" x-text="'Nilai Akhir: ' + calculateLitFinalScore() + ' / 100'"></span>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -1765,19 +1787,19 @@
                         <div class="space-y-2.5">
                             <span class="font-bold text-foreground text-[11px] font-mono block">A. Aspek Menulis (Max 16)</span>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] text-gray-300 flex justify-between">1. Kelengkapan Identitas Buku: <span class="font-mono font-bold text-foreground" x-text="activeLit.w1"></span></label>
+                                <label class="text-[11px] text-foreground font-medium flex justify-between">1. Kelengkapan Identitas Buku: <span class="font-mono font-bold text-foreground" x-text="activeLit.w1"></span></label>
                                 <input type="range" min="1" max="4" x-model="activeLit.w1" class="w-full accent-emerald-500">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] text-gray-300 flex justify-between">2. Kualitas Ringkasan: <span class="font-mono font-bold text-foreground" x-text="activeLit.w2"></span></label>
+                                <label class="text-[11px] text-foreground font-medium flex justify-between">2. Kualitas Ringkasan: <span class="font-mono font-bold text-foreground" x-text="activeLit.w2"></span></label>
                                 <input type="range" min="1" max="4" x-model="activeLit.w2" class="w-full accent-emerald-500">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] text-gray-300 flex justify-between">3. Kedalaman Amanat Moral: <span class="font-mono font-bold text-foreground" x-text="activeLit.w3"></span></label>
+                                <label class="text-[11px] text-foreground font-medium flex justify-between">3. Kedalaman Amanat Moral: <span class="font-mono font-bold text-foreground" x-text="activeLit.w3"></span></label>
                                 <input type="range" min="1" max="4" x-model="activeLit.w3" class="w-full accent-emerald-500">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] text-gray-300 flex justify-between">4. Tata Bahasa & Ejaan: <span class="font-mono font-bold text-foreground" x-text="activeLit.w4"></span></label>
+                                <label class="text-[11px] text-foreground font-medium flex justify-between">4. Tata Bahasa & Ejaan: <span class="font-mono font-bold text-foreground" x-text="activeLit.w4"></span></label>
                                 <input type="range" min="1" max="4" x-model="activeLit.w4" class="w-full accent-emerald-500">
                             </div>
                         </div>
@@ -1786,23 +1808,23 @@
                         <div class="space-y-2.5">
                             <span class="font-bold text-foreground text-[11px] font-mono block">B. Aspek Presentasi (Max 20)</span>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] text-gray-300 flex justify-between">1. Penguasaan Cerita: <span class="font-mono font-bold text-foreground" x-text="activeLit.p1"></span></label>
+                                <label class="text-[11px] text-foreground font-medium flex justify-between">1. Penguasaan Cerita: <span class="font-mono font-bold text-foreground" x-text="activeLit.p1"></span></label>
                                 <input type="range" min="1" max="4" x-model="activeLit.p1" class="w-full accent-cyan-500">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] text-gray-300 flex justify-between">2. Kejelasan Artikulasi: <span class="font-mono font-bold text-foreground" x-text="activeLit.p2"></span></label>
+                                <label class="text-[11px] text-foreground font-medium flex justify-between">2. Kejelasan Artikulasi: <span class="font-mono font-bold text-foreground" x-text="activeLit.p2"></span></label>
                                 <input type="range" min="1" max="4" x-model="activeLit.p2" class="w-full accent-cyan-500">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] text-gray-300 flex justify-between">3. Rasa Percaya Diri: <span class="font-mono font-bold text-foreground" x-text="activeLit.p3"></span></label>
+                                <label class="text-[11px] text-foreground font-medium flex justify-between">3. Rasa Percaya Diri: <span class="font-mono font-bold text-foreground" x-text="activeLit.p3"></span></label>
                                 <input type="range" min="1" max="4" x-model="activeLit.p3" class="w-full accent-cyan-500">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] text-gray-300 flex justify-between">4. Ketepatan Waktu: <span class="font-mono font-bold text-foreground" x-text="activeLit.p4"></span></label>
+                                <label class="text-[11px] text-foreground font-medium flex justify-between">4. Ketepatan Waktu: <span class="font-mono font-bold text-foreground" x-text="activeLit.p4"></span></label>
                                 <input type="range" min="1" max="4" x-model="activeLit.p4" class="w-full accent-cyan-500">
                             </div>
                             <div class="space-y-1.5">
-                                <label class="text-[11px] text-gray-300 flex justify-between">5. Interaksi Audiens: <span class="font-mono font-bold text-foreground" x-text="activeLit.p5"></span></label>
+                                <label class="text-[11px] text-foreground font-medium flex justify-between">5. Interaksi Audiens: <span class="font-mono font-bold text-foreground" x-text="activeLit.p5"></span></label>
                                 <input type="range" min="1" max="4" x-model="activeLit.p5" class="w-full accent-cyan-500">
                             </div>
                         </div>
@@ -1815,28 +1837,28 @@
                         x-model="activeLit.teacherFeedback"
                         rows="2"
                         placeholder="Tuliskan catatan evaluasi apresiasi atau perbaikan..."
-                        class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-outline-variant text-xs text-foreground focus:outline-none focus:border-emerald-500 leading-relaxed"
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-background border border-border text-xs text-foreground focus:outline-none focus:border-emerald-500 placeholder:text-muted-foreground leading-relaxed"
                     ></textarea>
                 </div>
             </div>
 
-            <div class="p-4 sm:p-5 border-t border-outline-variant flex items-center justify-between bg-surface-low/50">
+            <div class="p-4 sm:p-5 border-t border-border flex items-center justify-between bg-secondary/30">
                 <button 
                     type="button" 
                     @click="printLiterasiReportPDF()" 
-                    class="px-3.5 py-2 rounded-xl bg-surface-low hover:bg-surface-high border border-outline-variant text-foreground text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                    class="px-3.5 py-2 rounded-xl bg-secondary hover:bg-accent border border-border text-foreground text-xs font-semibold flex items-center gap-1.5 transition-colors"
                 >
                     <span>🖨️ Cetak PDF Resmi</span>
                 </button>
                 <div class="flex items-center gap-2">
-                    <button type="button" @click="litModalOpen = false" class="px-4 py-2 rounded-xl bg-surface-low hover:bg-surface-high border border-outline-variant text-foreground text-xs font-semibold transition-colors">
+                    <button type="button" @click="litModalOpen = false" class="px-4 py-2.5 rounded-xl bg-secondary hover:bg-accent border border-border text-foreground text-xs font-semibold transition-colors">
                         Batal
                     </button>
                     <button 
                         type="button" 
                         @click="submitLiterasiGrade()"
                         :disabled="litSubmitting"
-                        class="px-6 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                        class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
                     >
                         <span x-text="litSubmitting ? 'Menyimpan...' : '💾 Simpan Nilai RESIK'"></span>
                     </button>
@@ -1856,6 +1878,49 @@ function teacherHubData() {
         showCreateToken: false,
         globalAlert: { show: false, message: '', isError: false },
 
+        // Data Maps populated on init from Django json_script tags
+        lkpdMap: {},
+        refMap: {},
+        litMap: {},
+
+        init() {
+            try {
+                const lkpdEl = document.getElementById('lkpd-submissions-data');
+                if (lkpdEl && lkpdEl.textContent) {
+                    const list = JSON.parse(lkpdEl.textContent);
+                    if (Array.isArray(list)) {
+                        list.forEach(item => { this.lkpdMap[item.id] = item; });
+                    }
+                }
+            } catch (e) {
+                console.warn('Error parsing lkpd-submissions-data:', e);
+            }
+
+            try {
+                const refEl = document.getElementById('reflection-submissions-data');
+                if (refEl && refEl.textContent) {
+                    const list = JSON.parse(refEl.textContent);
+                    if (Array.isArray(list)) {
+                        list.forEach(item => { this.refMap[item.id] = item; });
+                    }
+                }
+            } catch (e) {
+                console.warn('Error parsing reflection-submissions-data:', e);
+            }
+
+            try {
+                const litEl = document.getElementById('literasi-reports-data');
+                if (litEl && litEl.textContent) {
+                    const list = JSON.parse(litEl.textContent);
+                    if (Array.isArray(list)) {
+                        list.forEach(item => { this.litMap[item.id] = item; });
+                    }
+                }
+            } catch (e) {
+                console.warn('Error parsing literasi-reports-data:', e);
+            }
+        },
+
         // LKPD State
         lkpdSearch: '',
         lkpdClassFilter: '',
@@ -1868,6 +1933,7 @@ function teacherHubData() {
             studentName: '',
             studentClass: '',
             moduleTitle: '',
+            moduleSlug: '',
             driveUrl: '',
             teacherScore: 85,
             teacherLevel: '',
@@ -1887,6 +1953,7 @@ function teacherHubData() {
             studentName: '',
             studentClass: '',
             moduleTitle: '',
+            moduleSlug: '',
             teacherFeedback: '',
             formData: {}
         },
@@ -1973,42 +2040,98 @@ function teacherHubData() {
                 .replace(/'/g, '&#039;');
         },
 
+        parseFormDataSafe(raw) {
+            if (!raw) return {};
+            let data = raw;
+            while (typeof data === 'string') {
+                try {
+                    const parsed = JSON.parse(data);
+                    data = parsed;
+                } catch (e) {
+                    break;
+                }
+            }
+            return typeof data === 'object' && data !== null ? data : { 'Isi Jawaban': String(data) };
+        },
+
         get formattedLkpdAnswersHtml() {
-            const data = this.activeLkpd.formData;
-            if (!data || Object.keys(data).length === 0) {
-                return '<div class="p-4 rounded-xl bg-surface-low border border-outline-variant text-center text-xs text-gray-400">Tidak ada rincian form jawaban tertulis atau submisi kosong.</div>';
+            const fd = this.parseFormDataSafe(this.activeLkpd.formData);
+            if (!fd || Object.keys(fd).length === 0) {
+                return '<div class="p-6 text-center text-muted-foreground italic bg-secondary/20 rounded-xl border border-border/50">Tidak ada rincian formulir yang tersimpan.</div>';
             }
 
-            let html = '<div class="space-y-3 text-xs">';
+            let html = '<div class="space-y-4">';
 
-            // 1. Check for audit_table (Modul 01: Audit Aplikasi)
-            if (Array.isArray(data.audit_table) && data.audit_table.length > 0) {
+            // 1. Identitas Siswa dari Form
+            const studentName = fd.studentName || this.activeLkpd.studentName;
+            const studentNis = fd.studentNis || '-';
+            const studentClass = fd.studentClass || this.activeLkpd.studentClass;
+            const subDate = fd.submissionDate || '-';
+            
+            html += `
+                <div class="p-3.5 rounded-xl bg-secondary/40 border border-border grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                    <div>
+                        <span class="text-[10px] font-mono text-muted-foreground uppercase block mb-0.5">Nama Peserta Didik</span>
+                        <span class="font-bold text-foreground block">${this.escapeHtml(studentName || '-')}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-muted-foreground uppercase block mb-0.5">NIS / NISN</span>
+                        <span class="font-mono font-medium text-foreground block">${this.escapeHtml(studentNis)}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-muted-foreground uppercase block mb-0.5">Rombel / Kelas</span>
+                        <span class="font-semibold text-primary block">${this.escapeHtml(studentClass || '-')}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-muted-foreground uppercase block mb-0.5">Waktu Pengumpulan</span>
+                        <span class="font-mono text-muted-foreground text-[11px] block">${this.escapeHtml(subDate)}</span>
+                    </div>
+                </div>
+            `;
+
+            // 2. Audit Apps Table (Khusus LKPD Modul 01 & sejenisnya)
+            const auditList = Array.isArray(fd.auditApps) ? fd.auditApps : (Array.isArray(fd.audit_table) ? fd.audit_table : null);
+            if (auditList && auditList.length > 0) {
                 html += `
-                    <div class="border border-outline-variant rounded-xl overflow-hidden">
-                        <div class="px-3.5 py-2 bg-surface-low border-b border-outline-variant flex items-center justify-between">
-                            <span class="text-xs font-bold text-foreground font-mono">📊 Tabel Audit Ekosistem Industri Perangkat Lunak (Modul 01)</span>
-                            <span class="text-[10px] font-mono text-primary font-semibold">${data.audit_table.length} Aplikasi Diaudit</span>
+                    <div class="space-y-2 pt-1">
+                        <div class="flex items-center justify-between">
+                            <h5 class="text-xs font-bold text-purple-600 dark:text-purple-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                                <span>📊 Tabel Hasil Audit Aplikasi & Analisis Profesi RPL</span>
+                            </h5>
+                            <span class="text-[10px] font-mono text-muted-foreground">${auditList.length} Aplikasi Diaudit</span>
                         </div>
-                        <div class="overflow-x-auto">
+
+                        <div class="overflow-x-auto border border-border rounded-xl">
                             <table class="w-full text-left text-xs">
-                                <thead class="bg-surface-low/80 text-[10px] text-gray-400 uppercase font-mono border-b border-outline-variant">
+                                <thead class="bg-secondary/60 text-muted-foreground font-mono text-[10px] uppercase border-b border-border">
                                     <tr>
-                                        <th class="p-2.5">Aplikasi</th>
-                                        <th class="p-2.5">Platform</th>
-                                        <th class="p-2.5">Tech Stack</th>
-                                        <th class="p-2.5">Model Bisnis</th>
-                                        <th class="p-2.5">Dampak / Catatan</th>
+                                        <th class="py-2.5 px-3 w-10 text-center">No</th>
+                                        <th class="py-2.5 px-3 min-w-[150px]">Nama Aplikasi & Platform</th>
+                                        <th class="py-2.5 px-3 min-w-[220px]">Fitur Utama yang Sering Digunakan</th>
+                                        <th class="py-2.5 px-3 min-w-[200px]">Peran Pengembang Terkait (Roles)</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-outline-variant font-medium">`;
-                data.audit_table.forEach((row) => {
+                                <tbody class="divide-y divide-border bg-card">`;
+                auditList.forEach((app, idx) => {
+                    const appName = app.name || app.appName || app.nama || '-';
+                    const appFeature = app.feature || app.notes || app.catatan || app.techStack || '-';
+                    const appRoles = app.roles || app.businessModel || app.category || '-';
                     html += `
-                        <tr class="hover:bg-surface-low/50">
-                            <td class="p-2.5 font-bold text-foreground">${this.escapeHtml(row.appName || row.nama || '-')}</td>
-                            <td class="p-2.5 font-mono text-gray-300">${this.escapeHtml(row.category || row.kategori || '-')}</td>
-                            <td class="p-2.5 font-mono text-primary">${this.escapeHtml(row.techStack || row.teknologi || '-')}</td>
-                            <td class="p-2.5 text-gray-300">${this.escapeHtml(row.businessModel || row.modelBisnis || '-')}</td>
-                            <td class="p-2.5 text-gray-400">${this.escapeHtml(row.notes || row.catatan || row.dampak || '-')}</td>
+                        <tr class="hover:bg-accent/30 transition-colors">
+                            <td class="py-3 px-3 font-mono text-muted-foreground text-center font-bold">${idx + 1}</td>
+                            <td class="py-3 px-3 font-bold text-foreground">
+                                <span class="px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 inline-block font-mono">
+                                    ${this.escapeHtml(appName)}
+                                </span>
+                            </td>
+                            <td class="py-3 px-3 text-foreground leading-relaxed">
+                                ${this.escapeHtml(appFeature)}
+                            </td>
+                            <td class="py-3 px-3">
+                                <span class="font-mono text-[11px] text-foreground bg-secondary/60 px-2 py-1 rounded border border-border inline-block">
+                                    ${this.escapeHtml(appRoles)}
+                                </span>
+                            </td>
                         </tr>`;
                 });
                 html += `
@@ -2018,49 +2141,130 @@ function teacherHubData() {
                     </div>`;
             }
 
-            // 2. Structured key-value answers (schema_answers or direct keys)
-            const answers = data.schema_answers && typeof data.schema_answers === 'object' ? data.schema_answers : data;
-            const ignoreKeys = ['audit_table', 'csrfmiddlewaretoken', 'submission_type', 'modul_slug'];
+            // 3. Jurnal Refleksi Mandiri (q1, q2, q3, q4)
+            const reflectionPrompts = {
+                q1: '1. Hal Baru yang Dipelajari tentang Rekayasa Perangkat Lunak & PPLG',
+                q2: '2. Urgensi Bukti Portofolio (Evidence) vs Ijazah Formal di Industri IT',
+                q3: '3. Kendala & Solusi Teknis saat Menyiapkan Evidence Google Drive',
+                q4: '4. Komitmen Belajar untuk Pertemuan / Modul Berikutnya',
+            };
 
-            const entries = Object.entries(answers).filter(([k]) => !ignoreKeys.includes(k));
-            if (entries.length > 0) {
-                html += '<div class="space-y-2">';
-                entries.forEach(([key, val]) => {
-                    let label = key
-                        .replace(/([A-Z])/g, ' $1')
-                        .replace(/_/g, ' ')
-                        .replace(/^./, str => str.toUpperCase())
-                        .trim();
-                    let valDisplay = '';
-                    if (typeof val === 'object' && val !== null) {
-                        valDisplay = `<pre class="text-[11px] font-mono bg-surface-lowest p-2.5 rounded-lg overflow-x-auto text-gray-300">${this.escapeHtml(JSON.stringify(val, null, 2))}</pre>`;
-                    } else {
-                        valDisplay = `<p class="text-xs text-foreground leading-relaxed whitespace-pre-wrap">${this.escapeHtml(val || '-')}</p>`;
-                    }
+            const reflKeys = ['q1', 'q2', 'q3', 'q4'].filter(k => fd[k] !== undefined && fd[k] !== '');
+            if (reflKeys.length > 0) {
+                html += `
+                    <div class="space-y-3 pt-1">
+                        <h5 class="text-xs font-bold text-cyan-600 dark:text-cyan-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                            <span>💡 Jurnal Refleksi Mandiri Peserta Didik</span>
+                        </h5>
+                        <div class="space-y-3">`;
+                reflKeys.forEach(k => {
                     html += `
-                        <div class="p-3 rounded-xl bg-surface-low border border-outline-variant space-y-1">
-                            <span class="text-[10px] font-mono text-purple-400 uppercase font-bold tracking-wider">${this.escapeHtml(label)}</span>
-                            ${valDisplay}
+                        <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-1.5">
+                            <span class="font-bold text-foreground block text-xs flex items-center gap-1.5">
+                                <span class="text-primary font-mono">•</span>
+                                <span>${reflectionPrompts[k] || k}:</span>
+                            </span>
+                            <div class="p-3 rounded-lg bg-card border border-border text-foreground text-xs leading-relaxed font-normal whitespace-pre-wrap">
+                                ${this.escapeHtml(fd[k])}
+                            </div>
                         </div>`;
                 });
-                html += '</div>';
+                html += `
+                        </div>
+                    </div>`;
+            }
+
+            // 4. Isian Formulir Tambahan Siswa (extra fields)
+            const excludedFields = new Set([
+                'studentName', 'studentNis', 'studentClass', 'submissionDate',
+                'auditApps', 'audit_table', 'q1', 'q2', 'q3', 'q4', 'driveUrl',
+                'csrfmiddlewaretoken', 'submission_type', 'modul_slug', 'schema_answers'
+            ]);
+            let searchObj = fd;
+            if (fd.schema_answers && typeof fd.schema_answers === 'object') {
+                searchObj = { ...fd, ...fd.schema_answers };
+            }
+            const extraFields = Object.keys(searchObj).filter(k => !excludedFields.has(k));
+
+            if (extraFields.length > 0) {
+                html += `
+                    <div class="space-y-3 pt-1">
+                        <h5 class="text-xs font-bold text-foreground font-mono flex items-center gap-2 uppercase tracking-wider">
+                            <span>📝 Isian Formulir Tambahan Siswa</span>
+                        </h5>
+                        <div class="space-y-2.5">`;
+                extraFields.forEach(k => {
+                    const val = searchObj[k];
+                    const title = k
+                        .replace(/([A-Z])/g, ' $1')
+                        .replace(/^./, str => str.toUpperCase())
+                        .replace(/_/g, ' ');
+
+                    if (Array.isArray(val) || (typeof val === 'object' && val !== null)) {
+                        html += `
+                            <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-1.5">
+                                <span class="font-bold text-foreground block text-xs">${this.escapeHtml(title)}:</span>
+                                <div class="p-2.5 rounded-lg bg-card border border-border overflow-x-auto">
+                                    <pre class="text-[11px] font-mono whitespace-pre-wrap text-foreground">${this.escapeHtml(JSON.stringify(val, null, 2))}</pre>
+                                </div>
+                            </div>`;
+                    } else {
+                        html += `
+                            <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-1">
+                                <span class="font-semibold text-muted-foreground font-mono text-[11px] block">${this.escapeHtml(title)}:</span>
+                                <div class="p-2.5 rounded-lg bg-card border border-border text-foreground text-xs leading-relaxed">
+                                    ${this.escapeHtml(String(val || '-'))}
+                                </div>
+                            </div>`;
+                    }
+                });
+                html += `
+                        </div>
+                    </div>`;
+            }
+
+            // 5. Bukti Google Drive Link Preview jika ada di form data atau submission
+            const driveLink = fd.driveUrl || this.activeLkpd.driveUrl;
+            if (driveLink) {
+                html += `
+                    <div class="p-3.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-xl">📁</span>
+                            <div>
+                                <span class="font-bold text-cyan-600 dark:text-cyan-400 text-xs block">Tautan Bukti Google Drive Portofolio Siswa</span>
+                                <span class="text-[11px] text-muted-foreground truncate max-w-sm block font-mono">${this.escapeHtml(driveLink)}</span>
+                            </div>
+                        </div>
+                        <a 
+                            href="${this.escapeHtml(driveLink)}" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            class="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center gap-1.5 shrink-0 transition-colors shadow-sm"
+                        >
+                            <span>Buka Folder Drive</span> ↗
+                        </a>
+                    </div>`;
             }
 
             html += '</div>';
             return html;
         },
 
-        openGradeModal(sub, name, studentClass, moduleTitle, driveUrl, score, level, feedback, formData) {
-            let data = {};
-            if (typeof sub === 'object' && sub !== null) {
-                data = sub;
-            } else {
+        openGradeModal(target, name, studentClass, moduleTitle, driveUrl, score, level, feedback, formData) {
+            let data = null;
+            if (typeof target === 'number' || (typeof target === 'string' && /^\d+$/.test(target))) {
+                data = this.lkpdMap[target];
+            } else if (typeof target === 'object' && target !== null) {
+                data = target;
+            }
+
+            if (!data) {
                 data = {
-                    id: sub,
-                    studentName: name,
-                    studentClass: studentClass,
-                    moduleTitle: moduleTitle,
-                    driveUrl: driveUrl,
+                    id: target,
+                    studentName: name || '',
+                    studentClass: studentClass || '',
+                    moduleTitle: moduleTitle || '',
+                    driveUrl: driveUrl || '',
                     teacherScore: score,
                     teacherLevel: level,
                     teacherFeedback: feedback,
@@ -2068,33 +2272,29 @@ function teacherHubData() {
                 };
             }
 
-            let parsedFormData = {};
-            if (typeof data.formDataRaw === 'string' && data.formDataRaw.trim().length > 0) {
-                try {
-                    parsedFormData = JSON.parse(data.formDataRaw);
-                } catch (e) {
-                    console.warn('Gagal parse formDataRaw LKPD:', e);
-                    parsedFormData = {};
-                }
-            } else if (data.formData && typeof data.formData === 'object') {
-                parsedFormData = data.formData;
-            }
+            const parsed = this.parseFormDataSafe(data.formData || data.formDataRaw);
+            const resolvedDrive = data.driveUrl || parsed.driveUrl || '';
 
             this.activeLkpd = {
                 id: data.id,
-                studentName: data.studentName || '',
-                studentClass: data.studentClass || '',
+                studentName: data.studentName || parsed.studentName || '',
+                studentClass: data.studentClass || parsed.studentClass || '',
                 moduleTitle: data.moduleTitle || '',
-                driveUrl: data.driveUrl || '',
+                moduleSlug: data.moduleSlug || '',
+                driveUrl: resolvedDrive,
                 teacherScore: (data.teacherScore !== '' && data.teacherScore !== null && data.teacherScore !== undefined) ? Number(data.teacherScore) : 85,
                 teacherLevel: data.teacherLevel || '',
                 teacherFeedback: data.teacherFeedback || '',
-                formData: parsedFormData
+                formData: parsed
             };
             this.gradeModalOpen = true;
         },
 
         async submitLkpdGrade() {
+            if (isNaN(this.activeLkpd.teacherScore) || this.activeLkpd.teacherScore < 0 || this.activeLkpd.teacherScore > 100) {
+                this.notify('Skor harus berada di antara angka 0 dan 100.', true);
+                return;
+            }
             this.lkpdSubmitting = true;
             try {
                 const res = await fetch('{% url "admin_panel:grade_submission_api" %}', {
@@ -2112,7 +2312,7 @@ function teacherHubData() {
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    this.notify(data.message);
+                    this.notify(data.message || 'Nilai & evaluasi LKPD berhasil disimpan dan dirilis ke dashboard siswa!');
                     this.gradeModalOpen = false;
                     setTimeout(() => window.location.reload(), 800);
                 } else {
@@ -2134,40 +2334,35 @@ function teacherHubData() {
             return true;
         },
 
-        openReflectionModal(ref, name, studentClass, moduleTitle, feedback, formData) {
-            let data = {};
-            if (typeof ref === 'object' && ref !== null) {
-                data = ref;
-            } else {
+        openReflectionModal(target, name, studentClass, moduleTitle, feedback, formData) {
+            let data = null;
+            if (typeof target === 'number' || (typeof target === 'string' && /^\d+$/.test(target))) {
+                data = this.refMap[target];
+            } else if (typeof target === 'object' && target !== null) {
+                data = target;
+            }
+
+            if (!data) {
                 data = {
-                    id: ref,
-                    studentName: name,
-                    studentClass: studentClass,
-                    moduleTitle: moduleTitle,
+                    id: target,
+                    studentName: name || '',
+                    studentClass: studentClass || '',
+                    moduleTitle: moduleTitle || '',
                     teacherFeedback: feedback,
                     formData: formData
                 };
             }
 
-            let parsedFormData = {};
-            if (typeof data.formDataRaw === 'string' && data.formDataRaw.trim().length > 0) {
-                try {
-                    parsedFormData = JSON.parse(data.formDataRaw);
-                } catch (e) {
-                    console.warn('Gagal parse formDataRaw Refleksi:', e);
-                    parsedFormData = {};
-                }
-            } else if (data.formData && typeof data.formData === 'object') {
-                parsedFormData = data.formData;
-            }
+            const parsed = this.parseFormDataSafe(data.formData || data.formDataRaw);
 
             this.activeRef = {
                 id: data.id,
-                studentName: data.studentName || '',
-                studentClass: data.studentClass || '',
+                studentName: data.studentName || parsed.studentName || '',
+                studentClass: data.studentClass || parsed.studentClass || '',
                 moduleTitle: data.moduleTitle || '',
+                moduleSlug: data.moduleSlug || '',
                 teacherFeedback: data.teacherFeedback || '',
-                formData: parsedFormData
+                formData: parsed
             };
             this.reflectionModalOpen = true;
         },
@@ -2188,7 +2383,7 @@ function teacherHubData() {
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    this.notify(data.message);
+                    this.notify(data.message || 'Tanggapan guru berhasil disimpan!');
                     this.reflectionModalOpen = false;
                     setTimeout(() => window.location.reload(), 800);
                 } else {
@@ -2238,7 +2433,7 @@ function teacherHubData() {
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    this.notify(data.message);
+                    this.notify(data.message || 'Kata sandi berhasil diperbarui.');
                     this.pwdModalOpen = false;
                 } else {
                     this.notify(data.error || 'Gagal mereset kata sandi.', true);
@@ -2267,22 +2462,26 @@ function teacherHubData() {
             return true;
         },
 
-        openLiterasiModal(rep, name, studentClass, bookTitle, author, publisher, pageCount, weekNumber, summary, moral, wScore, pScore, feedback) {
-            let data = {};
-            if (typeof rep === 'object' && rep !== null) {
-                data = rep;
-            } else {
+        openLiterasiModal(target, name, studentClass, bookTitle, author, publisher, pageCount, weekNumber, summary, moral, wScore, pScore, feedback) {
+            let data = null;
+            if (typeof target === 'number' || (typeof target === 'string' && /^\d+$/.test(target))) {
+                data = this.litMap[target];
+            } else if (typeof target === 'object' && target !== null) {
+                data = target;
+            }
+
+            if (!data) {
                 data = {
-                    id: rep,
-                    studentName: name,
-                    studentClass: studentClass,
-                    bookTitle: bookTitle,
-                    author: author,
-                    publisher: publisher,
-                    pageCount: pageCount,
-                    weekNumber: weekNumber,
-                    summary: summary,
-                    moral: moral,
+                    id: target,
+                    studentName: name || '',
+                    studentClass: studentClass || '',
+                    bookTitle: bookTitle || '',
+                    author: author || '',
+                    publisher: publisher || '',
+                    pageCount: pageCount || '',
+                    weekNumber: weekNumber || 1,
+                    summary: summary || '',
+                    moral: moral || '',
                     wScore: wScore,
                     pScore: pScore,
                     feedback: feedback
@@ -2309,7 +2508,7 @@ function teacherHubData() {
                 p3: Math.min(4, Math.max(1, Math.round((data.pScore || 15) / 5))),
                 p4: Math.min(4, Math.max(1, Math.round((data.pScore || 15) / 5))),
                 p5: Math.min(4, Math.max(1, Math.round((data.pScore || 15) / 5))),
-                teacherFeedback: data.feedback || ''
+                teacherFeedback: data.feedback || data.teacherFeedback || ''
             };
             this.litModalOpen = true;
         },
@@ -2345,7 +2544,7 @@ function teacherHubData() {
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    this.notify(data.message);
+                    this.notify(data.message || 'Nilai RESIK berhasil disimpan!');
                     this.litModalOpen = false;
                     setTimeout(() => window.location.reload(), 800);
                 } else {

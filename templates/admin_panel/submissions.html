@@ -4,6 +4,8 @@
 {% block title %}Hub Penilaian LKPD & Refleksi Siswa | {{ SITE_TITLE }}{% endblock %}
 
 {% block content %}
+{{ lkpd_data_json|json_script:"lkpd-submissions-data" }}
+{{ reflection_data_json|json_script:"reflection-submissions-data" }}
 <div 
     class="space-y-6 py-6"
     x-data="submissionsHub()"
@@ -21,7 +23,7 @@
                     RPL SMKN 1 Rongga
                 </span>
             </div>
-            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-sans">
+            <p class="text-xs sm:text-sm text-muted-foreground font-sans">
                 Evaluasi capaian KKTP (Standar KKM 73), tinjauan formatif jurnal refleksi, dan pengesahan portofolio kejuruan.
             </p>
         </div>
@@ -52,12 +54,12 @@
                 type="button" 
                 @click="currentTab = 'lkpd'"
                 class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all"
-                :class="currentTab === 'lkpd' ? 'bg-surface-high text-primary shadow-sm border border-outline-variant font-extrabold' : 'text-gray-600 dark:text-gray-400 hover:text-foreground'"
+                :class="currentTab === 'lkpd' ? 'bg-surface-high text-primary shadow-sm border border-outline-variant font-extrabold' : 'text-muted-foreground hover:text-foreground'"
             >
                 <span>📋 Tugas LKPD & KKTP</span>
                 <span 
                     class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold"
-                    :class="currentTab === 'lkpd' ? 'bg-primary text-white' : 'bg-surface-lowest border border-outline-variant text-gray-600 dark:text-gray-400'"
+                    :class="currentTab === 'lkpd' ? 'bg-primary text-white' : 'bg-surface-lowest border border-outline-variant text-muted-foreground'"
                 >
                     {{ total_lkpd }}
                 </span>
@@ -67,12 +69,12 @@
                 type="button" 
                 @click="currentTab = 'reflection'"
                 class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all"
-                :class="currentTab === 'reflection' ? 'bg-surface-high text-primary shadow-sm border border-outline-variant font-extrabold' : 'text-gray-600 dark:text-gray-400 hover:text-foreground'"
+                :class="currentTab === 'reflection' ? 'bg-surface-high text-primary shadow-sm border border-outline-variant font-extrabold' : 'text-muted-foreground hover:text-foreground'"
             >
                 <span>💭 Jurnal Refleksi Siswa</span>
                 <span 
                     class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold"
-                    :class="currentTab === 'reflection' ? 'bg-primary text-white' : 'bg-surface-lowest border border-outline-variant text-gray-600 dark:text-gray-400'"
+                    :class="currentTab === 'reflection' ? 'bg-primary text-white' : 'bg-surface-lowest border border-outline-variant text-muted-foreground'"
                 >
                     {{ total_reflections }}
                 </span>
@@ -109,7 +111,7 @@
         
         <!-- Search Input -->
         <div class="space-y-1">
-            <label class="block font-semibold text-gray-500 dark:text-gray-400 font-mono text-[11px]">PENCARIAN SISWA</label>
+            <label class="block font-semibold text-muted-foreground font-mono text-[11px]">PENCARIAN SISWA</label>
             <div class="relative">
                 <input 
                     type="text" 
@@ -117,13 +119,13 @@
                     placeholder="Nama, email, atau NISN..." 
                     class="m3-input py-2 px-3 text-xs w-full pl-8"
                 />
-                <span class="absolute left-2.5 top-2.5 text-gray-400 text-xs">🔍</span>
+                <span class="absolute left-2.5 top-2.5 text-muted-foreground text-xs">🔍</span>
             </div>
         </div>
 
         <!-- Filter Kelas -->
         <div class="space-y-1">
-            <label class="block font-semibold text-gray-500 dark:text-gray-400 font-mono text-[11px]">ROMBEL / KELAS</label>
+            <label class="block font-semibold text-muted-foreground font-mono text-[11px]">ROMBEL / KELAS</label>
             <select x-model="selectedClass" class="m3-input py-2 px-3 text-xs w-full font-mono">
                 <option value="all">Semua Kelas / Rombel</option>
                 {% for cls in classes %}
@@ -134,7 +136,7 @@
 
         <!-- Filter Modul -->
         <div class="space-y-1">
-            <label class="block font-semibold text-gray-500 dark:text-gray-400 font-mono text-[11px]">MODUL PEMBELAJARAN</label>
+            <label class="block font-semibold text-muted-foreground font-mono text-[11px]">MODUL PEMBELAJARAN</label>
             <select x-model="selectedModule" class="m3-input py-2 px-3 text-xs w-full font-mono">
                 <option value="all">Semua Modul (01 - 16)</option>
                 {% for m in all_modules %}
@@ -145,7 +147,7 @@
 
         <!-- Filter Status -->
         <div class="space-y-1">
-            <label class="block font-semibold text-gray-500 dark:text-gray-400 font-mono text-[11px]">STATUS PENILAIAN</label>
+            <label class="block font-semibold text-muted-foreground font-mono text-[11px]">STATUS PENILAIAN</label>
             <select x-model="selectedStatus" class="m3-input py-2 px-3 text-xs w-full font-mono">
                 <option value="all">Semua Status</option>
                 <template x-if="currentTab === 'lkpd'">
@@ -173,7 +175,7 @@
         <div class="m3-surface overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
-                    <thead class="bg-surface-lowest border-b border-outline-variant text-gray-500 dark:text-gray-400 font-mono text-[11px]">
+                    <thead class="bg-surface-lowest border-b border-outline-variant text-muted-foreground font-mono text-[11px]">
                         <tr>
                             <th class="px-5 py-3.5">Peserta Didik</th>
                             <th class="px-5 py-3.5">Modul & Tipe</th>
@@ -193,7 +195,7 @@
                             <td class="px-5 py-4">
                                 <div class="space-y-0.5">
                                     <p class="font-bold text-foreground text-xs">{{ sub.user.display_name }}</p>
-                                    <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono flex items-center gap-1.5">
+                                    <p class="text-[11px] text-muted-foreground font-mono flex items-center gap-1.5">
                                         <span class="px-1.5 py-0.2 rounded bg-surface-lowest border border-outline-variant font-semibold text-foreground">
                                             {{ sub.user.kelas|default:"10 RPL" }}
                                         </span>
@@ -207,14 +209,14 @@
                             <td class="px-5 py-4 font-mono">
                                 <div class="space-y-0.5">
                                     <span class="font-bold text-primary text-xs">{{ sub.modul.kode }}</span>
-                                    <p class="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-1 font-sans" title="{{ sub.modul.judul }}">
+                                    <p class="text-[11px] text-muted-foreground line-clamp-1 font-sans" title="{{ sub.modul.judul }}">
                                         {{ sub.modul.judul }}
                                     </p>
                                 </div>
                             </td>
 
                             <!-- Time -->
-                            <td class="px-5 py-4 font-mono text-gray-500 dark:text-gray-400 text-[11px] whitespace-nowrap">
+                            <td class="px-5 py-4 font-mono text-muted-foreground text-[11px] whitespace-nowrap">
                                 {{ sub.submitted_at|date:"d M Y, H:i" }}
                             </td>
 
@@ -230,7 +232,7 @@
                                     <span>📁 Buka Drive</span> ↗
                                 </a>
                                 {% else %}
-                                <span class="text-gray-500 font-mono text-[11px]">-</span>
+                                <span class="text-muted-foreground font-mono text-[11px]">-</span>
                                 {% endif %}
                             </td>
 
@@ -249,7 +251,7 @@
                                         {% endif %}
                                     </div>
                                     {% if sub.teacher_feedback %}
-                                    <p class="text-[10px] text-gray-500 dark:text-gray-400 italic line-clamp-1 max-w-[200px]" title="{{ sub.teacher_feedback }}">
+                                    <p class="text-[10px] text-muted-foreground italic line-clamp-1 max-w-[200px]" title="{{ sub.teacher_feedback }}">
                                         "{{ sub.teacher_feedback }}"
                                     </p>
                                     {% endif %}
@@ -265,23 +267,7 @@
                             <td class="px-5 py-4 text-right whitespace-nowrap">
                                 <button 
                                     type="button" 
-                                    @click="openGradeModal({
-                                        id: {{ sub.id }},
-                                        studentName: '{{ sub.user.display_name|escapejs }}',
-                                        studentEmail: '{{ sub.user.email|escapejs }}',
-                                        studentClass: '{{ sub.user.kelas|default:"10 RPL"|escapejs }}',
-                                        studentNis: '{{ sub.user.nisn|default:"-"|escapejs }}',
-                                        moduleCode: '{{ sub.modul.kode|escapejs }}',
-                                        moduleTitle: '{{ sub.modul.judul|escapejs }}',
-                                        moduleSlug: '{{ sub.modul.slug|escapejs }}',
-                                        submittedAt: '{{ sub.submitted_at|date:"d M Y, H:i" }}',
-                                        teacherScore: {% if sub.teacher_score is not None %}{{ sub.teacher_score }}{% else %}null{% endif %},
-                                        teacherLevel: '{{ sub.teacher_level|default:""|escapejs }}',
-                                        teacherFeedback: '{{ sub.teacher_feedback|default:""|escapejs }}',
-                                        driveUrl: '{{ sub.drive_url|default:""|escapejs }}',
-                                        status: '{{ sub.status }}',
-                                        formDataRaw: '{{ sub.form_data_json|escapejs }}'
-                                    })"
+                                    @click="openGradeModal({{ sub.id }})"
                                     class="m3-btn-primary text-xs py-1.5 px-3 font-semibold"
                                 >
                                     {% if sub.status == 'graded' and sub.teacher_score is not None %}
@@ -294,7 +280,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="6" class="px-5 py-12 text-center text-gray-500 dark:text-gray-400 font-sans">
+                            <td colspan="6" class="px-5 py-12 text-center text-muted-foreground font-sans">
                                 Belum ada pengumpulan tugas LKPD dari siswa.
                             </td>
                         </tr>
@@ -312,7 +298,7 @@
         <div class="m3-surface overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
-                    <thead class="bg-surface-lowest border-b border-outline-variant text-gray-500 dark:text-gray-400 font-mono text-[11px]">
+                    <thead class="bg-surface-lowest border-b border-outline-variant text-muted-foreground font-mono text-[11px]">
                         <tr>
                             <th class="px-5 py-3.5">Peserta Didik</th>
                             <th class="px-5 py-3.5">Modul Pembelajaran</th>
@@ -332,7 +318,7 @@
                             <td class="px-5 py-4">
                                 <div class="space-y-0.5">
                                     <p class="font-bold text-foreground text-xs">{{ ref.user.display_name }}</p>
-                                    <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono flex items-center gap-1.5">
+                                    <p class="text-[11px] text-muted-foreground font-mono flex items-center gap-1.5">
                                         <span class="px-1.5 py-0.2 rounded bg-surface-lowest border border-outline-variant font-semibold text-foreground">
                                             {{ ref.user.kelas|default:"10 RPL" }}
                                         </span>
@@ -346,14 +332,14 @@
                             <td class="px-5 py-4 font-mono">
                                 <div class="space-y-0.5">
                                     <span class="font-bold text-pink-500 text-xs">{{ ref.modul.kode }}</span>
-                                    <p class="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-1 font-sans" title="{{ ref.modul.judul }}">
+                                    <p class="text-[11px] text-muted-foreground line-clamp-1 font-sans" title="{{ ref.modul.judul }}">
                                         {{ ref.modul.judul }}
                                     </p>
                                 </div>
                             </td>
 
                             <!-- Time -->
-                            <td class="px-5 py-4 font-mono text-gray-500 dark:text-gray-400 text-[11px] whitespace-nowrap">
+                            <td class="px-5 py-4 font-mono text-muted-foreground text-[11px] whitespace-nowrap">
                                 {{ ref.submitted_at|date:"d M Y, H:i" }}
                             </td>
 
@@ -388,20 +374,7 @@
                             <td class="px-5 py-4 text-right whitespace-nowrap">
                                 <button 
                                     type="button" 
-                                    @click="openReflectionModal({
-                                        id: {{ ref.id }},
-                                        studentName: '{{ ref.user.display_name|escapejs }}',
-                                        studentEmail: '{{ ref.user.email|escapejs }}',
-                                        studentClass: '{{ ref.user.kelas|default:"10 RPL"|escapejs }}',
-                                        studentNis: '{{ ref.user.nisn|default:"-"|escapejs }}',
-                                        moduleCode: '{{ ref.modul.kode|escapejs }}',
-                                        moduleTitle: '{{ ref.modul.judul|escapejs }}',
-                                        moduleSlug: '{{ ref.modul.slug|escapejs }}',
-                                        submittedAt: '{{ ref.submitted_at|date:"d M Y, H:i" }}',
-                                        teacherFeedback: '{{ ref.teacher_feedback|default:""|escapejs }}',
-                                        status: '{{ ref.status }}',
-                                        formDataRaw: '{{ ref.form_data_json|escapejs }}'
-                                    })"
+                                    @click="openReflectionModal({{ ref.id }})"
                                     class="m3-btn-secondary text-xs py-1.5 px-3 font-semibold text-pink-600 dark:text-pink-400 border-pink-500/30 hover:bg-pink-500/10"
                                 >
                                     {% if ref.status == 'reviewed' or ref.status == 'graded' %}
@@ -414,7 +387,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="6" class="px-5 py-12 text-center text-gray-500 dark:text-gray-400 font-sans">
+                            <td colspan="6" class="px-5 py-12 text-center text-muted-foreground font-sans">
                                 Belum ada jurnal refleksi yang dikirimkan oleh siswa.
                             </td>
                         </tr>
@@ -446,7 +419,7 @@
                             TUGAS LKPD
                         </span>
                         <span class="px-2.5 py-0.5 rounded bg-surface-lowest border border-outline-variant text-foreground font-semibold" x-text="activeLkpd.studentClass"></span>
-                        <span class="text-gray-500 dark:text-gray-400 font-bold" x-text="'[' + activeLkpd.moduleCode + '] ' + activeLkpd.moduleTitle"></span>
+                        <span class="text-muted-foreground font-bold" x-text="'[' + activeLkpd.moduleCode + '] ' + activeLkpd.moduleTitle"></span>
                     </div>
                     <h3 class="text-base sm:text-lg font-extrabold text-foreground tracking-tight" x-text="activeLkpd.studentName + ' (' + activeLkpd.studentEmail + ')'"></h3>
                 </div>
@@ -454,7 +427,7 @@
                 <button 
                     type="button" 
                     @click="gradeModalOpen = false"
-                    class="p-2 rounded-xl text-gray-400 hover:text-foreground hover:bg-surface-high transition-colors shrink-0"
+                    class="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-surface-high transition-colors shrink-0"
                     title="Tutup Modal (Esc)"
                 >
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -497,7 +470,7 @@
                         <h4 class="text-xs font-bold text-foreground uppercase tracking-wider font-mono flex items-center gap-2">
                             <span>⭐ Evaluasi Guru & Penetapan Capaian KKTP</span>
                         </h4>
-                        <span class="text-[11px] font-mono text-gray-500 dark:text-gray-400">
+                        <span class="text-[11px] font-mono text-muted-foreground">
                             Pengampu: Agung Gumelar Saputra, S.Tr.T.
                         </span>
                     </div>
@@ -512,7 +485,7 @@
                                     </label>
                                     <span 
                                         class="text-[10px] font-mono font-bold px-2 py-0.5 rounded"
-                                        :class="activeLkpd.teacherScore >= 73 ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : (activeLkpd.teacherScore !== null && activeLkpd.teacherScore !== '' ? 'bg-amber-500/15 text-amber-500 border border-amber-500/30' : 'bg-surface-lowest border border-outline-variant text-gray-500')"
+                                        :class="activeLkpd.teacherScore >= 73 ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : (activeLkpd.teacherScore !== null && activeLkpd.teacherScore !== '' ? 'bg-amber-500/15 text-amber-500 border border-amber-500/30' : 'bg-surface-lowest border border-outline-variant text-muted-foreground')"
                                         x-text="getKktpStatusLabel(activeLkpd.teacherScore)"
                                     ></span>
                                 </div>
@@ -550,7 +523,7 @@
                                 <label class="text-xs font-semibold text-foreground font-mono">
                                     CATATAN EVALUASI & FEEDBACK KONSTRUKTIF GURU
                                 </label>
-                                <span class="text-[11px] text-gray-500 dark:text-gray-400 font-sans">Preset sekali klik:</span>
+                                <span class="text-[11px] text-muted-foreground font-sans">Preset sekali klik:</span>
                             </div>
 
                             <!-- Preset Chips -->
@@ -643,7 +616,7 @@
                             💭 JURNAL REFLEKSI
                         </span>
                         <span class="px-2.5 py-0.5 rounded bg-surface-lowest border border-outline-variant text-foreground font-semibold" x-text="activeRef.studentClass"></span>
-                        <span class="text-gray-500 dark:text-gray-400 font-bold" x-text="'[' + activeRef.moduleCode + '] ' + activeRef.moduleTitle"></span>
+                        <span class="text-muted-foreground font-bold" x-text="'[' + activeRef.moduleCode + '] ' + activeRef.moduleTitle"></span>
                     </div>
                     <h3 class="text-base sm:text-lg font-extrabold text-foreground tracking-tight" x-text="activeRef.studentName + ' (' + activeRef.studentEmail + ')'"></h3>
                 </div>
@@ -651,7 +624,7 @@
                 <button 
                     type="button" 
                     @click="reflectionModalOpen = false"
-                    class="p-2 rounded-xl text-gray-400 hover:text-foreground hover:bg-surface-high transition-colors shrink-0"
+                    class="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-surface-high transition-colors shrink-0"
                     title="Tutup Modal (Esc)"
                 >
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -714,7 +687,7 @@
                         <h4 class="text-xs font-bold text-foreground uppercase tracking-wider font-mono flex items-center gap-2">
                             <span>🤝 Catatan Tanggapan & Apresiasi Guru</span>
                         </h4>
-                        <span class="text-[11px] font-mono text-gray-500 dark:text-gray-400">
+                        <span class="text-[11px] font-mono text-muted-foreground">
                             Asesmen Formatif Kualitatif
                         </span>
                     </div>
@@ -725,7 +698,7 @@
                                 <label class="text-xs font-semibold text-foreground font-mono">
                                     UMPAN BALIK APRESIASI GURU
                                 </label>
-                                <span class="text-[11px] text-gray-500 dark:text-gray-400 font-sans">Preset sekali klik:</span>
+                                <span class="text-[11px] text-muted-foreground font-sans">Preset sekali klik:</span>
                             </div>
 
                             <!-- Preset Chips -->
@@ -803,6 +776,36 @@ function submissionsHub() {
         selectedModule: '{{ filter_modul|default:"all" }}',
         selectedStatus: '{{ filter_status|default:"all" }}',
 
+        // Maps populated on init
+        lkpdMap: {},
+        refMap: {},
+
+        init() {
+            try {
+                const lkpdEl = document.getElementById('lkpd-submissions-data');
+                if (lkpdEl && lkpdEl.textContent) {
+                    const list = JSON.parse(lkpdEl.textContent);
+                    if (Array.isArray(list)) {
+                        list.forEach(item => { this.lkpdMap[item.id] = item; });
+                    }
+                }
+            } catch (e) {
+                console.warn('Error parsing lkpd-submissions-data:', e);
+            }
+
+            try {
+                const refEl = document.getElementById('reflection-submissions-data');
+                if (refEl && refEl.textContent) {
+                    const list = JSON.parse(refEl.textContent);
+                    if (Array.isArray(list)) {
+                        list.forEach(item => { this.refMap[item.id] = item; });
+                    }
+                }
+            } catch (e) {
+                console.warn('Error parsing reflection-submissions-data:', e);
+            }
+        },
+
         // LKPD Modal State
         gradeModalOpen: false,
         gradeSubmitting: false,
@@ -846,86 +849,141 @@ function submissionsHub() {
             formData: {}
         },
 
+        parseFormDataSafe(raw) {
+            if (!raw) return {};
+            let data = raw;
+            while (typeof data === 'string') {
+                try {
+                    const parsed = JSON.parse(data);
+                    data = parsed;
+                } catch (e) {
+                    break;
+                }
+            }
+            return typeof data === 'object' && data !== null ? data : { 'Isi Jawaban': String(data) };
+        },
+
         get formattedLkpdAnswersHtml() {
-            const fd = this.activeLkpd.formData || {};
-            const keys = Object.keys(fd);
-            if (keys.length === 0) {
-                return '<div class="p-6 text-center text-gray-400 italic bg-surface-low rounded-xl border border-outline-variant">Tidak ada rincian formulir yang tersimpan.</div>';
+            const fd = this.parseFormDataSafe(this.activeLkpd.formData);
+            if (!fd || Object.keys(fd).length === 0) {
+                return '<div class="p-6 text-center text-muted-foreground italic bg-secondary/20 rounded-xl border border-border/50">Tidak ada rincian formulir yang tersimpan.</div>';
             }
 
             let html = '<div class="space-y-4">';
 
             // 1. Identitas Form jika ada
-            if (fd.studentName || fd.studentNis || fd.studentClass || fd.submissionDate) {
-                html += `
-                    <div class="p-3.5 rounded-xl bg-surface-low border border-outline-variant grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                        <div>
-                            <span class="text-[10px] font-mono text-gray-400 uppercase block mb-0.5">Nama Peserta Didik</span>
-                            <span class="font-bold text-foreground block">${this.escapeHtml(fd.studentName || '-')}</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-mono text-gray-400 uppercase block mb-0.5">NIS / NISN</span>
-                            <span class="font-mono text-foreground block">${this.escapeHtml(fd.studentNis || '-')}</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-mono text-gray-400 uppercase block mb-0.5">Rombel / Kelas</span>
-                            <span class="font-semibold text-primary block">${this.escapeHtml(fd.studentClass || '-')}</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-mono text-gray-400 uppercase block mb-0.5">Waktu Kirim</span>
-                            <span class="font-mono text-gray-400 text-[11px] block">${this.escapeHtml(fd.submissionDate || '-')}</span>
-                        </div>
-                    </div>
-                `;
-            }
+            const studentName = fd.studentName || this.activeLkpd.studentName;
+            const studentNis = fd.studentNis || this.activeLkpd.studentNis || '-';
+            const studentClass = fd.studentClass || this.activeLkpd.studentClass;
+            const subDate = fd.submissionDate || this.activeLkpd.submittedAt || '-';
 
-            // 2. Audit Apps Table (Khusus Modul 01)
-            if (Array.isArray(fd.auditApps) && fd.auditApps.length > 0) {
+            html += `
+                <div class="p-3.5 rounded-xl bg-secondary/40 border border-border grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                    <div>
+                        <span class="text-[10px] font-mono text-muted-foreground uppercase block mb-0.5">Nama Peserta Didik</span>
+                        <span class="font-bold text-foreground block">${this.escapeHtml(studentName || '-')}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-muted-foreground uppercase block mb-0.5">NIS / NISN</span>
+                        <span class="font-mono font-medium text-foreground block">${this.escapeHtml(studentNis)}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-muted-foreground uppercase block mb-0.5">Rombel / Kelas</span>
+                        <span class="font-semibold text-primary block">${this.escapeHtml(studentClass || '-')}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono text-muted-foreground uppercase block mb-0.5">Waktu Kirim</span>
+                        <span class="font-mono text-muted-foreground text-[11px] block">${this.escapeHtml(subDate)}</span>
+                    </div>
+                </div>
+            `;
+
+            // 2. Audit Apps Table (Khusus Modul 01: Audit Aplikasi)
+            const auditList = Array.isArray(fd.auditApps) ? fd.auditApps : (Array.isArray(fd.audit_table) ? fd.audit_table : null);
+            if (auditList && auditList.length > 0) {
                 html += `
                     <div class="space-y-2 pt-1">
                         <div class="flex items-center justify-between">
-                            <h5 class="text-xs font-bold text-primary font-mono flex items-center gap-2 uppercase tracking-wider">
-                                <span>📊 Tabel Audit Aplikasi & Analisis Profesi RPL</span>
+                            <h5 class="text-xs font-bold text-purple-600 dark:text-purple-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                                <span>📊 Tabel Hasil Audit Aplikasi & Analisis Profesi RPL</span>
                             </h5>
-                            <span class="text-[10px] font-mono text-gray-400">${fd.auditApps.length} Aplikasi Diaudit</span>
+                            <span class="text-[10px] font-mono text-muted-foreground">${auditList.length} Aplikasi Diaudit</span>
                         </div>
-                        <div class="overflow-x-auto border border-outline-variant rounded-xl">
+
+                        <div class="overflow-x-auto border border-border rounded-xl">
                             <table class="w-full text-left text-xs">
-                                <thead class="bg-surface-low text-gray-400 font-mono text-[10px] uppercase border-b border-outline-variant">
+                                <thead class="bg-secondary/60 text-muted-foreground font-mono text-[10px] uppercase border-b border-border">
                                     <tr>
                                         <th class="py-2.5 px-3 w-10 text-center">No</th>
                                         <th class="py-2.5 px-3 min-w-[150px]">Nama Aplikasi & Platform</th>
-                                        <th class="py-2.5 px-3 min-w-[220px]">Fitur Utama</th>
-                                        <th class="py-2.5 px-3 min-w-[200px]">Peran Profesi Pengembang</th>
+                                        <th class="py-2.5 px-3 min-w-[220px]">Fitur Utama yang Sering Digunakan</th>
+                                        <th class="py-2.5 px-3 min-w-[200px]">Peran Pengembang Terkait (Roles)</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-outline-variant bg-surface">
-                                    ${fd.auditApps.map((app, idx) => `
-                                        <tr class="hover:bg-surface-low transition-colors">
-                                            <td class="py-3 px-3 font-mono text-gray-400 text-center font-bold">${idx + 1}</td>
-                                            <td class="py-3 px-3 font-bold text-foreground">
-                                                <span class="px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 inline-block font-mono">
-                                                    ${this.escapeHtml(app.name || '-')}
-                                                </span>
-                                            </td>
-                                            <td class="py-3 px-3 text-foreground leading-relaxed font-sans">
-                                                ${this.escapeHtml(app.feature || '-')}
-                                            </td>
-                                            <td class="py-3 px-3">
-                                                <span class="font-mono text-[11px] text-foreground bg-surface-low px-2 py-1 rounded border border-outline-variant inline-block">
-                                                    ${this.escapeHtml(app.roles || '-')}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    `).join('')}
+                                <tbody class="divide-y divide-border bg-card">`;
+                auditList.forEach((app, idx) => {
+                    const appName = app.name || app.appName || app.nama || '-';
+                    const appFeature = app.feature || app.notes || app.catatan || app.techStack || '-';
+                    const appRoles = app.roles || app.businessModel || app.category || '-';
+                    html += `
+                        <tr class="hover:bg-accent/30 transition-colors">
+                            <td class="py-3 px-3 font-mono text-muted-foreground text-center font-bold">${idx + 1}</td>
+                            <td class="py-3 px-3 font-bold text-foreground">
+                                <span class="px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 inline-block font-mono">
+                                    ${this.escapeHtml(appName)}
+                                </span>
+                            </td>
+                            <td class="py-3 px-3 text-foreground leading-relaxed">
+                                ${this.escapeHtml(appFeature)}
+                            </td>
+                            <td class="py-3 px-3">
+                                <span class="font-mono text-[11px] text-foreground bg-secondary/60 px-2 py-1 rounded border border-border inline-block">
+                                    ${this.escapeHtml(appRoles)}
+                                </span>
+                            </td>
+                        </tr>`;
+                });
+                html += `
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
 
-            // 3. Structured Sections LKPD (Modul 02–16)
+            // 3. Jurnal Refleksi Mandiri (q1, q2, q3, q4)
+            const reflectionPrompts = {
+                q1: '1. Hal Baru yang Dipelajari tentang Rekayasa Perangkat Lunak & PPLG',
+                q2: '2. Urgensi Bukti Portofolio (Evidence) vs Ijazah Formal di Industri IT',
+                q3: '3. Kendala & Solusi Teknis saat Menyiapkan Evidence Google Drive',
+                q4: '4. Komitmen Belajar untuk Pertemuan / Modul Berikutnya',
+            };
+
+            const reflKeys = ['q1', 'q2', 'q3', 'q4'].filter(k => fd[k] !== undefined && fd[k] !== '');
+            if (reflKeys.length > 0) {
+                html += `
+                    <div class="space-y-3 pt-1">
+                        <h5 class="text-xs font-bold text-cyan-600 dark:text-cyan-400 font-mono flex items-center gap-2 uppercase tracking-wider">
+                            <span>💡 Jurnal Refleksi Mandiri Peserta Didik</span>
+                        </h5>
+                        <div class="space-y-3">`;
+                reflKeys.forEach(k => {
+                    html += `
+                        <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-1.5">
+                            <span class="font-bold text-foreground block text-xs flex items-center gap-1.5">
+                                <span class="text-primary font-mono">•</span>
+                                <span>${reflectionPrompts[k] || k}:</span>
+                            </span>
+                            <div class="p-3 rounded-lg bg-card border border-border text-foreground text-xs leading-relaxed font-normal whitespace-pre-wrap">
+                                ${this.escapeHtml(fd[k])}
+                            </div>
+                        </div>`;
+                });
+                html += `
+                        </div>
+                    </div>`;
+            }
+
+            // 4. Structured Sections LKPD (Modul 02–16)
             if (Array.isArray(fd.sections) && fd.sections.length > 0) {
                 html += `
                     <div class="space-y-3 pt-1">
@@ -934,14 +992,14 @@ function submissionsHub() {
                         </h5>
                         <div class="space-y-3">
                             ${fd.sections.map((sec, sIdx) => `
-                                <div class="p-3.5 rounded-xl bg-surface-low border border-outline-variant space-y-2">
+                                <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-2">
                                     <h6 class="font-bold text-foreground text-xs font-mono">${sIdx + 1}. ${this.escapeHtml(sec.title || 'Aktivitas Praktikum')}</h6>
                                     ${sec.answers ? `
                                         <div class="space-y-1.5 pl-2 border-l-2 border-primary/40">
                                             ${Object.entries(sec.answers).map(([qKey, qVal]) => `
                                                 <div class="space-y-0.5">
-                                                    <span class="font-semibold text-gray-400 font-mono text-[11px] block">${this.escapeHtml(qKey)}:</span>
-                                                    <div class="p-2 rounded bg-surface-lowest text-foreground text-xs leading-relaxed font-sans">${this.escapeHtml(String(qVal || '-'))}</div>
+                                                    <span class="font-semibold text-muted-foreground font-mono text-[11px] block">${this.escapeHtml(qKey)}:</span>
+                                                    <div class="p-2 rounded bg-card text-foreground text-xs leading-relaxed font-sans border border-border/50">${this.escapeHtml(String(qVal || '-'))}</div>
                                                 </div>
                                             `).join('')}
                                         </div>
@@ -953,12 +1011,17 @@ function submissionsHub() {
                 `;
             }
 
-            // 4. Other Extra Fields
+            // 5. Other Extra Fields
             const excludedFields = new Set([
                 'studentName', 'studentNis', 'studentClass', 'submissionDate', 
-                'auditApps', 'sections', 'q1', 'q2', 'q3', 'q4', 'driveUrl'
+                'auditApps', 'audit_table', 'sections', 'q1', 'q2', 'q3', 'q4', 'driveUrl',
+                'csrfmiddlewaretoken', 'submission_type', 'modul_slug', 'schema_answers'
             ]);
-            const extraFields = Object.keys(fd).filter(k => !excludedFields.has(k));
+            let searchObj = fd;
+            if (fd.schema_answers && typeof fd.schema_answers === 'object') {
+                searchObj = { ...fd, ...fd.schema_answers };
+            }
+            const extraFields = Object.keys(searchObj).filter(k => !excludedFields.has(k));
             if (extraFields.length > 0) {
                 html += `
                     <div class="space-y-2.5 pt-1">
@@ -967,12 +1030,12 @@ function submissionsHub() {
                         </h5>
                         <div class="space-y-2">
                             ${extraFields.map(k => {
-                                const val = fd[k];
+                                const val = searchObj[k];
                                 const label = k.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).replace(/_/g, ' ');
                                 return `
-                                    <div class="p-3 rounded-xl bg-surface-low border border-outline-variant space-y-1">
-                                        <span class="font-semibold text-gray-400 font-mono text-[11px] block">${this.escapeHtml(label)}:</span>
-                                        <div class="p-2 rounded bg-surface-lowest text-foreground text-xs leading-relaxed font-sans">
+                                    <div class="p-3.5 rounded-xl bg-secondary/30 border border-border space-y-1">
+                                        <span class="font-semibold text-muted-foreground font-mono text-[11px] block">${this.escapeHtml(label)}:</span>
+                                        <div class="p-2.5 rounded-lg bg-card border border-border text-foreground text-xs leading-relaxed">
                                             ${typeof val === 'object' ? `<pre class="text-[11px] font-mono">${this.escapeHtml(JSON.stringify(val, null, 2))}</pre>` : this.escapeHtml(String(val || '-'))}
                                         </div>
                                     </div>
@@ -983,22 +1046,23 @@ function submissionsHub() {
                 `;
             }
 
-            // 5. Bukti Drive Link Preview
-            if (fd.driveUrl) {
+            // 6. Bukti Drive Link Preview
+            const driveLink = fd.driveUrl || this.activeLkpd.driveUrl;
+            if (driveLink) {
                 html += `
                     <div class="p-3.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono">
                         <div class="flex items-center gap-2.5">
                             <span class="text-xl">📁</span>
                             <div>
                                 <span class="font-bold text-cyan-600 dark:text-cyan-400 text-xs block">Folder Bukti Portofolio Google Drive</span>
-                                <span class="text-[11px] text-gray-400 truncate max-w-sm block">${this.escapeHtml(fd.driveUrl)}</span>
+                                <span class="text-[11px] text-muted-foreground truncate max-w-sm block">${this.escapeHtml(driveLink)}</span>
                             </div>
                         </div>
                         <a 
-                            href="${this.escapeHtml(fd.driveUrl)}" 
+                            href="${this.escapeHtml(driveLink)}" 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            class="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shrink-0 transition-colors shadow-sm"
+                            class="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shrink-0 transition-colors shadow-sm"
                         >
                             Buka Folder Drive ↗
                         </a>
@@ -1021,24 +1085,20 @@ function submissionsHub() {
         },
 
         matchesLkpdFilter(name, email, nisn, studentClass, moduleSlug, status, score) {
-            // Search Query
             if (this.searchQuery.trim()) {
                 const q = this.searchQuery.trim().toLowerCase();
                 const matchSearch = name.includes(q) || email.includes(q) || nisn.includes(q);
                 if (!matchSearch) return false;
             }
 
-            // Class Filter
             if (this.selectedClass !== 'all' && studentClass !== this.selectedClass) {
                 return false;
             }
 
-            // Module Filter
             if (this.selectedModule !== 'all' && moduleSlug !== this.selectedModule) {
                 return false;
             }
 
-            // Status Filter
             if (this.selectedStatus === 'pending') {
                 return status !== 'graded' || score === null;
             } else if (this.selectedStatus === 'passed') {
@@ -1051,24 +1111,20 @@ function submissionsHub() {
         },
 
         matchesReflectionFilter(name, email, nisn, studentClass, moduleSlug, status) {
-            // Search Query
             if (this.searchQuery.trim()) {
                 const q = this.searchQuery.trim().toLowerCase();
                 const matchSearch = name.includes(q) || email.includes(q) || nisn.includes(q);
                 if (!matchSearch) return false;
             }
 
-            // Class Filter
             if (this.selectedClass !== 'all' && studentClass !== this.selectedClass) {
                 return false;
             }
 
-            // Module Filter
             if (this.selectedModule !== 'all' && moduleSlug !== this.selectedModule) {
                 return false;
             }
 
-            // Status Filter
             if (this.selectedStatus === 'pending') {
                 return status !== 'reviewed' && status !== 'graded';
             } else if (this.selectedStatus === 'reviewed') {
@@ -1083,20 +1139,27 @@ function submissionsHub() {
                 return 'KKM: 73 (Standar Minimal)';
             }
             const num = Number(score);
-            if (num >= 73) {
+            if (num >= 90) {
+                return '🌟 SANGAT KOMPETEN (A)';
+            } else if (num >= 73) {
                 return '✓ TUNTAS KKM (TERKUNCI)';
             } else {
                 return '⚠️ REMEDIAL (PERLU PERBAIKAN)';
             }
         },
 
-        openGradeModal(sub) {
-            let parsedFormData = {};
-            try {
-                parsedFormData = typeof sub.formDataRaw === 'string' ? JSON.parse(sub.formDataRaw) : (sub.formDataRaw || {});
-            } catch (e) {
-                parsedFormData = {};
+        openGradeModal(target) {
+            let sub = null;
+            if (typeof target === 'number' || (typeof target === 'string' && /^\d+$/.test(target))) {
+                sub = this.lkpdMap[target];
+            } else if (typeof target === 'object' && target !== null) {
+                sub = target;
             }
+
+            if (!sub) return;
+
+            const parsedFormData = this.parseFormDataSafe(sub.formData || sub.formDataRaw);
+            const resolvedDrive = sub.driveUrl || parsedFormData.driveUrl || '';
 
             this.activeLkpd = {
                 id: sub.id,
@@ -1108,10 +1171,10 @@ function submissionsHub() {
                 moduleTitle: sub.moduleTitle,
                 moduleSlug: sub.moduleSlug,
                 submittedAt: sub.submittedAt,
-                teacherScore: sub.teacherScore !== null ? sub.teacherScore : '',
+                teacherScore: (sub.teacherScore !== null && sub.teacherScore !== undefined && sub.teacherScore !== '') ? sub.teacherScore : '',
                 teacherLevel: sub.teacherLevel || 'Level 3 (Mampu Membimbing ★★)',
                 teacherFeedback: sub.teacherFeedback || '',
-                driveUrl: sub.driveUrl || (parsedFormData.driveUrl || ''),
+                driveUrl: resolvedDrive,
                 status: sub.status,
                 formData: parsedFormData
             };
@@ -1165,13 +1228,17 @@ function submissionsHub() {
             }
         },
 
-        openReflectionModal(ref) {
-            let parsedFormData = {};
-            try {
-                parsedFormData = typeof ref.formDataRaw === 'string' ? JSON.parse(ref.formDataRaw) : (ref.formDataRaw || {});
-            } catch (e) {
-                parsedFormData = {};
+        openReflectionModal(target) {
+            let ref = null;
+            if (typeof target === 'number' || (typeof target === 'string' && /^\d+$/.test(target))) {
+                ref = this.refMap[target];
+            } else if (typeof target === 'object' && target !== null) {
+                ref = target;
             }
+
+            if (!ref) return;
+
+            const parsedFormData = this.parseFormDataSafe(ref.formData || ref.formDataRaw);
 
             this.activeRef = {
                 id: ref.id,

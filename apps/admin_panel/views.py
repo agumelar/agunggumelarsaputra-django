@@ -58,7 +58,14 @@ def dashboard_view(request):
     for s in all_submissions:
         key = f"{s.user_id}_{s.modul_id}_{s.submission_type}"
         if key not in unique_sub_map:
-            s.form_data_json = json.dumps(s.form_data or {})
+            fd = s.form_data or {}
+            while isinstance(fd, str):
+                try:
+                    fd = json.loads(fd)
+                except Exception:
+                    break
+            s.form_data = fd
+            s.form_data_json = json.dumps(fd if isinstance(fd, dict) else {})
             unique_sub_map[key] = s
 
     deduped_submissions = list(unique_sub_map.values())
@@ -102,7 +109,65 @@ def dashboard_view(request):
     kktp_levels = UserSubmission.LEVEL_CHOICES
     token_form = EnrollmentTokenForm()
 
+    lkpd_data_list = []
+    for s in lkpd_submissions:
+        lkpd_data_list.append({
+            'id': s.id,
+            'studentName': s.user.display_name,
+            'studentEmail': s.user.email,
+            'studentClass': s.user.kelas or '10 RPL',
+            'studentNis': s.user.nisn or '-',
+            'moduleCode': s.modul.kode,
+            'moduleTitle': s.modul.judul,
+            'moduleSlug': s.modul.slug,
+            'submittedAt': s.submitted_at.strftime('%d %b %Y, %H:%M') if s.submitted_at else '-',
+            'teacherScore': s.teacher_score,
+            'teacherLevel': s.teacher_level or '',
+            'teacherFeedback': s.teacher_feedback or '',
+            'driveUrl': s.drive_url or '',
+            'status': s.status,
+            'formData': s.form_data if isinstance(s.form_data, dict) else {}
+        })
+
+    reflection_data_list = []
+    for r in reflection_submissions:
+        reflection_data_list.append({
+            'id': r.id,
+            'studentName': r.user.display_name,
+            'studentEmail': r.user.email,
+            'studentClass': r.user.kelas or '10 RPL',
+            'studentNis': r.user.nisn or '-',
+            'moduleCode': r.modul.kode,
+            'moduleTitle': r.modul.judul,
+            'moduleSlug': r.modul.slug,
+            'submittedAt': r.submitted_at.strftime('%d %b %Y, %H:%M') if r.submitted_at else '-',
+            'teacherFeedback': r.teacher_feedback or '',
+            'status': r.status,
+            'formData': r.form_data if isinstance(r.form_data, dict) else {}
+        })
+
+    literasi_data_list = []
+    for rep in all_literasi_reports:
+        literasi_data_list.append({
+            'id': rep.id,
+            'studentName': rep.user.display_name,
+            'studentClass': rep.user.kelas or '10 RPL',
+            'bookTitle': rep.book_title,
+            'author': rep.author,
+            'publisher': rep.publisher or '-',
+            'pageCount': rep.page_count or '-',
+            'weekNumber': rep.week_number,
+            'summary': rep.summary or '',
+            'moral': rep.moral_message or '',
+            'wScore': rep.writing_score or 12,
+            'pScore': rep.presentation_score or 15,
+            'teacherFeedback': rep.teacher_feedback or ''
+        })
+
     context = {
+        'lkpd_data_json': lkpd_data_list,
+        'reflection_data_json': reflection_data_list,
+        'literasi_data_json': literasi_data_list,
         # Metrics
         'total_students': total_students,
         'total_teachers': total_teachers,
@@ -256,9 +321,60 @@ def submission_list_view(request):
 
     # Serialisasi payload JSON form data agar aman diproses oleh Alpine.js modal
     for s in lkpd_submissions:
-        s.form_data_json = json.dumps(s.form_data or {})
+        fd = s.form_data or {}
+        while isinstance(fd, str):
+            try:
+                fd = json.loads(fd)
+            except Exception:
+                break
+        s.form_data = fd
+        s.form_data_json = json.dumps(fd if isinstance(fd, dict) else {})
     for s in reflection_submissions:
-        s.form_data_json = json.dumps(s.form_data or {})
+        fd = s.form_data or {}
+        while isinstance(fd, str):
+            try:
+                fd = json.loads(fd)
+            except Exception:
+                break
+        s.form_data = fd
+        s.form_data_json = json.dumps(fd if isinstance(fd, dict) else {})
+
+    lkpd_data_list = []
+    for s in lkpd_submissions:
+        lkpd_data_list.append({
+            'id': s.id,
+            'studentName': s.user.display_name,
+            'studentEmail': s.user.email,
+            'studentClass': s.user.kelas or '10 RPL',
+            'studentNis': s.user.nisn or '-',
+            'moduleCode': s.modul.kode,
+            'moduleTitle': s.modul.judul,
+            'moduleSlug': s.modul.slug,
+            'submittedAt': s.submitted_at.strftime("%d %b %Y, %H:%M") if s.submitted_at else '',
+            'teacherScore': s.teacher_score,
+            'teacherLevel': s.teacher_level or '',
+            'teacherFeedback': s.teacher_feedback or '',
+            'driveUrl': s.drive_url or '',
+            'status': s.status,
+            'formData': s.form_data if isinstance(s.form_data, dict) else {},
+        })
+
+    reflection_data_list = []
+    for s in reflection_submissions:
+        reflection_data_list.append({
+            'id': s.id,
+            'studentName': s.user.display_name,
+            'studentEmail': s.user.email,
+            'studentClass': s.user.kelas or '10 RPL',
+            'studentNis': s.user.nisn or '-',
+            'moduleCode': s.modul.kode,
+            'moduleTitle': s.modul.judul,
+            'moduleSlug': s.modul.slug,
+            'submittedAt': s.submitted_at.strftime("%d %b %Y, %H:%M") if s.submitted_at else '',
+            'teacherFeedback': s.teacher_feedback or '',
+            'status': s.status,
+            'formData': s.form_data if isinstance(s.form_data, dict) else {},
+        })
 
     all_modules = Modul.objects.filter(is_published=True).order_by('urutan')
     classes = ['10 RPL 1', '10 RPL 2', '11 RPL 1', '11 RPL 2', '12 RPL 1', '12 RPL 2']
@@ -273,6 +389,8 @@ def submission_list_view(request):
     context = {
         'lkpd_submissions': lkpd_submissions,
         'reflection_submissions': reflection_submissions,
+        'lkpd_data_json': lkpd_data_list,
+        'reflection_data_json': reflection_data_list,
         'total_lkpd': total_lkpd,
         'pending_lkpd': pending_lkpd,
         'graded_lkpd': graded_lkpd,
