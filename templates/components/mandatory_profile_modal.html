@@ -1,0 +1,295 @@
+{% if user.is_authenticated and user.is_siswa and not user.is_profile_complete %}
+<!-- Mandatory Profile Onboarding Modal (Lock / Anti-Escape) -->
+<div 
+    id="mandatory-profile-modal" 
+    class="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+    data-no-escape="true"
+    x-data="mandatoryOnboarding()"
+>
+    <div class="m3-surface max-w-lg w-full p-6 sm:p-8 rounded-3xl border border-outline-variant shadow-2xl space-y-6 relative my-auto text-foreground">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-mono font-bold uppercase border border-primary/25">
+                <span>✨</span> TAHAP ONBOARDING WAJIB SISWA
+            </div>
+            <h2 class="text-2xl font-extrabold text-foreground font-display tracking-tight">
+                Lengkapi Foto Profil & Kelas 🎓
+            </h2>
+            <p class="text-xs text-muted-foreground leading-relaxed max-w-sm mx-auto">
+                Foto profil dan kelas wajib dilengkapi untuk identitas belajar, kartu resensi literasi, sertifikat, serta tampilan di <strong>Papan Peringkat (Leaderboard) RPL</strong>.
+            </p>
+        </div>
+
+        <!-- Error Alert -->
+        <div 
+            x-show="errorMessage" 
+            x-cloak
+            class="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 dark:text-rose-400 text-xs font-semibold text-center leading-relaxed"
+            x-text="errorMessage"
+        ></div>
+
+        <!-- Form Onboarding -->
+        <form @submit.prevent="submitOnboarding" class="space-y-5 text-xs">
+            
+            <!-- 1. Pas Foto Siswa Upload & Canvas Crop -->
+            <div class="flex flex-col items-center justify-center space-y-3 p-4 rounded-2xl bg-surface-lowest border border-outline-variant">
+                <div class="relative group cursor-pointer" @click="triggerFileInput">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-primary/50 bg-[#141d2d] flex items-center justify-center shadow-md relative">
+                        <template x-if="avatarPreview">
+                            <img :src="avatarPreview" alt="Preview Pas Foto" class="w-full h-full object-cover">
+                        </template>
+                        <template x-if="!avatarPreview">
+                            <div class="flex flex-col items-center justify-center text-muted-foreground gap-1">
+                                <span class="text-3xl">👤</span>
+                                <span class="text-[10px] font-mono">Pilih Foto</span>
+                            </div>
+                        </template>
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[10px] font-semibold gap-1">
+                            <span>📷</span>
+                            <span>Ganti Foto</span>
+                        </div>
+                    </div>
+                    <button 
+                        type="button" 
+                        class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary hover:bg-primary/90 text-on-primary flex items-center justify-center shadow-md border-2 border-surface transition-transform group-hover:scale-110"
+                        title="Pilih Pas Foto Siswa"
+                    >
+                        📷
+                    </button>
+                </div>
+
+                <input 
+                    type="file" 
+                    id="onboarding-avatar-file-input" 
+                    accept="image/jpeg,image/png,image/webp,image/jpg" 
+                    class="hidden" 
+                    @change="handleFileChange"
+                />
+
+                <div class="text-center space-y-1">
+                    <button 
+                        type="button" 
+                        @click="triggerFileInput"
+                        class="px-3.5 py-1.5 rounded-lg bg-surface-high border border-outline-variant hover:border-outline text-foreground text-xs font-medium transition-colors"
+                    >
+                        📁 Pilih Pas Foto Siswa
+                    </button>
+                    <p class="text-[10px] text-muted-foreground">
+                        Format: JPG, PNG, atau WebP. Foto otomatis di-crop bujur sangkar (1:1) & dikompresi ringan.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 2. Nama Lengkap -->
+            <div class="space-y-1.5">
+                <label class="block font-semibold text-foreground">
+                    Nama Lengkap Siswa <span class="text-rose-400">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    x-model="name" 
+                    required 
+                    class="m3-input rounded-xl text-sm" 
+                    placeholder="Nama lengkap sesuai absensi" 
+                />
+                <p class="text-[10px] text-muted-foreground">Pastikan ejaan nama Anda sudah benar sesuai data presensi kelas.</p>
+            </div>
+
+            <!-- 3. Dropdown Kelas Rombel SMKN 1 Rongga -->
+            <div class="space-y-1.5">
+                <label class="block font-semibold text-foreground">
+                    Kelas / Rombel Anda <span class="text-rose-400">*</span>
+                </label>
+                <select 
+                    x-model="selectedClass" 
+                    required 
+                    class="m3-input font-mono text-sm rounded-xl"
+                >
+                    <option value="">-- Pilih Kelas Anda --</option>
+                    <optgroup label="Tingkat 10 (Fase E - RPL)">
+                        <option value="10 RPL 1">10 RPL 1</option>
+                        <option value="10 RPL 2">10 RPL 2</option>
+                        <option value="10 RPL 3">10 RPL 3</option>
+                        <option value="10 RPL 4">10 RPL 4</option>
+                    </optgroup>
+                    <optgroup label="Tingkat 11 (Fase F - RPL)">
+                        <option value="11 RPL 1">11 RPL 1</option>
+                        <option value="11 RPL 2">11 RPL 2</option>
+                        <option value="11 RPL 3">11 RPL 3</option>
+                        <option value="11 RPL 4">11 RPL 4</option>
+                    </optgroup>
+                    <optgroup label="Tingkat 12 (Fase F - RPL)">
+                        <option value="12 RPL 1">12 RPL 1</option>
+                        <option value="12 RPL 2">12 RPL 2</option>
+                        <option value="12 RPL 3">12 RPL 3</option>
+                        <option value="12 RPL 4">12 RPL 4</option>
+                    </optgroup>
+                    <optgroup label="🧪 Khusus Pengujian / Sandbox">
+                        <option value="Kelas Uji Coba">Kelas Uji Coba (Sandbox)</option>
+                    </optgroup>
+                </select>
+                <p class="text-[10px] text-muted-foreground">Pilih rombel resmi Anda agar rekap nilai guru & sertifikat tercatat akurat.</p>
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+                type="submit" 
+                :disabled="isSubmitting"
+                class="m3-btn-primary w-full py-3.5 font-bold text-xs shadow-md justify-center"
+            >
+                <template x-if="isSubmitting">
+                    <span class="inline-flex items-center gap-2">
+                        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Menyimpan Profil Siswa...
+                    </span>
+                </template>
+                <template x-if="!isSubmitting">
+                    <span class="inline-flex items-center gap-1.5">
+                        <span>🚀</span> Simpan Profil & Buka Akses Belajar
+                    </span>
+                </template>
+            </button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+function mandatoryOnboarding() {
+    return {
+        name: '{{ user.display_name|escapejs }}',
+        selectedClass: '{{ user.kelas|default:""|escapejs }}',
+        avatarPreview: {% if user.avatar_display %}'{{ user.avatar_display|escapejs }}'{% else %}null{% endif %},
+        compressedDataUrl: null,
+        errorMessage: '',
+        isSubmitting: false,
+
+        triggerFileInput() {
+            document.getElementById('onboarding-avatar-file-input').click();
+        },
+
+        handleFileChange(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                this.errorMessage = 'File yang dipilih harus berupa format gambar (JPG, PNG, WebP).';
+                return;
+            }
+
+            this.errorMessage = '';
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    // HTML5 Canvas Center Square Crop & Resize 240x240 px
+                    const canvas = document.createElement('canvas');
+                    const targetSize = 240;
+                    canvas.width = targetSize;
+                    canvas.height = targetSize;
+                    const ctx = canvas.getContext('2d');
+                    if (!ctx) return;
+
+                    const minSide = Math.min(img.width, img.height);
+                    const startX = (img.width - minSide) / 2;
+                    const startY = (img.height - minSide) / 2;
+
+                    ctx.drawImage(
+                        img,
+                        startX,
+                        startY,
+                        minSide,
+                        minSide,
+                        0,
+                        0,
+                        targetSize,
+                        targetSize
+                    );
+
+                    let resultUrl = canvas.toDataURL('image/webp', 0.85);
+                    if (resultUrl.length < 50) {
+                        resultUrl = canvas.toDataURL('image/jpeg', 0.85);
+                    }
+                    this.compressedDataUrl = resultUrl;
+                    this.avatarPreview = resultUrl;
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        },
+
+        async submitOnboarding() {
+            this.errorMessage = '';
+
+            const trimmedName = this.name ? this.name.trim() : '';
+            if (!trimmedName || trimmedName.length < 2) {
+                this.errorMessage = 'Nama lengkap harus diisi minimal 2 karakter.';
+                return;
+            }
+
+            if (!this.selectedClass) {
+                this.errorMessage = 'Harap pilih Kelas / Rombel Anda.';
+                return;
+            }
+
+            const finalAvatar = this.compressedDataUrl || (this.avatarPreview && this.avatarPreview.startsWith('data:image/') ? this.avatarPreview : null);
+            {% if not user.avatar_display %}
+            if (!finalAvatar) {
+                this.errorMessage = 'Harap unggah pas foto profil Anda terlebih dahulu.';
+                return;
+            }
+            {% endif %}
+
+            this.isSubmitting = true;
+
+            try {
+                const getCookie = (name) => {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                };
+
+                const csrftoken = getCookie('csrftoken') || '{{ csrf_token }}';
+
+                const response = await fetch('/accounts/api/complete-profile/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify({
+                        name: trimmedName,
+                        kelas: this.selectedClass,
+                        avatar_data: finalAvatar || '',
+                    })
+                });
+
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    window.location.reload();
+                } else {
+                    this.errorMessage = data.error || 'Gagal menyimpan profil siswa.';
+                    this.isSubmitting = false;
+                }
+            } catch (err) {
+                this.errorMessage = 'Terjadi gangguan jaringan atau server. Silakan coba lagi.';
+                this.isSubmitting = false;
+            }
+        }
+    };
+}
+</script>
+{% endif %}

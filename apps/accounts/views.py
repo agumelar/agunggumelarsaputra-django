@@ -3,6 +3,8 @@ import json
 import urllib.parse
 import urllib.request
 import urllib.error
+import base64
+import uuid
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -12,7 +14,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.views.decorators.http import require_POST
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.core.files.base import ContentFile
 
 from .forms import StudentRegistrationForm, UserLoginForm, UserProfileForm, ClaimTokenForm
 from apps.admin_panel.models import EnrollmentToken, UserEnrollment
@@ -356,7 +359,10 @@ def profile_view(request):
 
     if request.method == 'POST' and 'update_profile' in request.POST:
         if profile_form.is_valid():
-            profile_form.save()
+            user_obj = profile_form.save(commit=False)
+            if 'avatar' in request.FILES:
+                user_obj.avatar_url = None
+            user_obj.save()
             messages.success(request, "Profil Anda berhasil diperbarui.")
             return redirect('accounts:profile')
 
@@ -372,6 +378,93 @@ def profile_view(request):
         'active_nav': 'profile',
     }
     return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+@require_POST
+def complete_profile_api_view(request):
+    """
+    API Endpoint: Melengkapi profil wajib siswa (Pas Foto Profil & Pilihan Kelas).
+    Mendukung upload via data URL (Base64 dari HTML5 Canvas crop) maupun form-data.
+    """
+    if not request.user.is_siswa:
+        return JsonResponse({'error': 'Hanya akun siswa yang perlu melengkapi data onboarding.'}, status=400)
+
+    try:
+        if request.content_type == 'application/json':
+            payload = json.loads(request.body.decode('utf-8'))
+        else:
+            payload = request.POST
+
+        name = payload.get('name', '').strip()
+        kelas = payload.get('kelas', '').strip()
+        avatar_data = payload.get('avatar_data', '').strip()
+
+        # Validasi nama
+        if not name or len(name) < 2:
+            return JsonResponse({'error': 'Nama lengkap harus diisi minimal 2 karakter.'}, status=400)
+        if len(name) > 100:
+            return JsonResponse({'error': 'Nama lengkap maksimal 100 karakter.'}, status=400)
+
+        # Validasi kelas
+        valid_classes = [c[0] for c in User.KELAS_CHOICES]
+        if not kelas or kelas not in valid_classes:
+            return JsonResponse({'error': 'Harap pilih Kelas / Rombel yang valid sesuai daftar.'}, status=400)
+
+        # Validasi & proses foto avatar
+        avatar_file = request.FILES.get('avatar_file')
+        user = request.user
+
+        if avatar_data and avatar_data.startswith('data:image/'):
+            try:
+                format_part, imgstr = avatar_data.split(';base64,')
+                ext = format_part.split('/')[-1].lower()
+                if ext in ['jpeg', 'jpg']:
+                    ext = 'jpg'
+                elif ext == 'webp':
+                    ext = 'webp'
+                elif ext == 'png':
+                    ext = 'png'
+                else:
+                    ext = 'jpg'
+
+                # Batas aman payload base64: maksimal ~2MB
+                if len(imgstr) > 2500000:
+                    return JsonResponse({'error': 'Ukuran foto terlalu besar. Gunakan foto lain.'}, status=400)
+
+                file_data = base64.b64decode(imgstr)
+                filename = f"avatar_user_{user.id}_{uuid.uuid4().hex[:8]}.{ext}"
+                user.avatar.save(filename, ContentFile(file_data), save=False)
+                user.avatar_url = None
+            except Exception as e:
+                return JsonResponse({'error': f'Gagal memproses data gambar: {str(e)}'}, status=400)
+        elif avatar_file:
+            user.avatar = avatar_file
+            user.avatar_url = None
+        else:
+            # Jika belum punya foto dan tidak ada unggahan baru
+            if not user.avatar and (not user.avatar_url or 'dicebear' in user.avatar_url):
+                return JsonResponse({'error': 'Harap unggah pas foto profil Anda terlebih dahulu.'}, status=400)
+
+        # Simpan nama
+        name_parts = name.split(' ', 1)
+        user.first_name = name_parts[0]
+        user.last_name = name_parts[1] if len(name_parts) > 1 else ''
+
+        # Simpan kelas
+        user.kelas = kelas
+        user.save()
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Profil dan foto berhasil disimpan! Selamat belajar.',
+            'redirect_url': reverse('core:home'),
+        })
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Format payload tidak valid.'}, status=400)
+    except Exception as err:
+        return JsonResponse({'error': f'Terjadi kesalahan di server: {str(err)}'}, status=500)
 
 
 @login_required

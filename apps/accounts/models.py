@@ -15,6 +15,22 @@ class User(AbstractUser):
         (ROLE_SISWA, 'Siswa RPL'),
     ]
 
+    KELAS_CHOICES = [
+        ('10 RPL 1', '10 RPL 1'),
+        ('10 RPL 2', '10 RPL 2'),
+        ('10 RPL 3', '10 RPL 3'),
+        ('10 RPL 4', '10 RPL 4'),
+        ('11 RPL 1', '11 RPL 1'),
+        ('11 RPL 2', '11 RPL 2'),
+        ('11 RPL 3', '11 RPL 3'),
+        ('11 RPL 4', '11 RPL 4'),
+        ('12 RPL 1', '12 RPL 1'),
+        ('12 RPL 2', '12 RPL 2'),
+        ('12 RPL 3', '12 RPL 3'),
+        ('12 RPL 4', '12 RPL 4'),
+        ('Kelas Uji Coba', 'Kelas Uji Coba (Sandbox)'),
+    ]
+
     # Email dibuat unik untuk kompatibilitas autentikasi & legacy Neon DB
     email = models.EmailField(
         blank=True,
@@ -101,6 +117,18 @@ class User(AbstractUser):
     @property
     def is_siswa(self):
         return self.role == self.ROLE_SISWA
+
+    @property
+    def is_profile_complete(self):
+        """
+        Mengecek apakah profil siswa sudah lengkap (memiliki kelas dan foto profil aktif).
+        Pengguna dengan peran Guru atau Superuser selalu dianggap lengkap.
+        """
+        if not self.is_siswa:
+            return True
+        has_class = bool(self.kelas and self.kelas.strip())
+        has_avatar = bool(self.avatar or (self.avatar_url and self.avatar_url.strip() and 'dicebear' not in self.avatar_url))
+        return has_class and has_avatar
 
     @property
     def display_name(self):

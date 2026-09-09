@@ -155,3 +155,131 @@ class AuthenticationAndRegistrationTestCase(TestCase):
         self.assertEqual(new_user.first_name, 'Siswa')
         self.assertEqual(new_user.last_name, 'Baru Google')
         self.assertEqual(new_user.xp, 50)
+
+    def test_is_profile_complete_property(self):
+        """Test properti is_profile_complete untuk Guru dan Siswa."""
+        # Guru selalu lengkap
+        self.assertTrue(self.teacher.is_profile_complete)
+
+        # Siswa tanpa kelas dan tanpa foto: tidak lengkap
+        student = User.objects.create_user(
+            username='siswa_test',
+            email='siswa_test@smkn1rongga.sch.id',
+            password='password123',
+            role=User.ROLE_SISWA,
+            kelas='',
+            avatar=None,
+            avatar_url=''
+        )
+        self.assertFalse(student.is_profile_complete)
+
+        # Siswa punya kelas tapi belum punya foto: tidak lengkap
+        student.kelas = '10 RPL 1'
+        student.save()
+        self.assertFalse(student.is_profile_complete)
+
+        # Siswa punya kelas dan foto URL: lengkap
+        student.avatar_url = 'https://example.com/photo.jpg'
+        student.save()
+        self.assertTrue(student.is_profile_complete)
+
+    def test_complete_profile_api_success(self):
+        """Test API complete-profile berhasil menyimpan nama, kelas, dan base64 avatar."""
+        student = User.objects.create_user(
+            username='siswa_incomplete',
+            email='incomplete@smkn1rongga.sch.id',
+            password='password123',
+            role=User.ROLE_SISWA
+        )
+        self.client.force_login(student)
+
+        # Base64 data url dummy 1x1 pixel PNG
+        dummy_base64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+
+        payload = {
+            'name': 'Anita Sri Devi',
+            'kelas': '11 RPL 2',
+            'avatar_data': dummy_base64
+        }
+        response = self.client.post(
+            reverse('accounts:complete_profile_api'),
+            data=payload,
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data.get('success'))
+
+        # Refresh student
+        student.refresh_from_db()
+        self.assertEqual(student.first_name, 'Anita')
+        self.assertEqual(student.last_name, 'Sri Devi')
+        self.assertEqual(student.kelas, '11 RPL 2')
+        self.assertTrue(bool(student.avatar))
+        self.assertTrue(student.is_profile_complete)
+
+    def test_complete_profile_api_validation_errors(self):
+        """Test validasi pada API complete-profile jika nama, kelas, atau foto tidak valid."""
+        student = User.objects.create_user(
+            username='siswa_val',
+            email='val@smkn1rongga.sch.id',
+            password='password123',
+            role=User.ROLE_SISWA
+        )
+        self.client.force_login(student)
+
+        # 1. Nama kosong / kurang dari 2 karakter
+        res1 = self.client.post(
+            reverse('accounts:complete_profile_api'),
+            data={'name': 'A', 'kelas': '10 RPL 1', 'avatar_data': ''},
+            content_type='application/json'
+        )
+        self.assertEqual(res1.status_code, 400)
+        self.assertIn('minimal 2 karakter', res1.json().get('error', ''))
+
+        # 2. Kelas tidak valid
+        res2 = self.client.post(
+            reverse('accounts:complete_profile_api'),
+            data={'name': 'Budi Santoso', 'kelas': '99 RPL FAKE', 'avatar_data': ''},
+            content_type='application/json'
+        )
+        self.assertEqual(res2.status_code, 400)
+        self.assertIn('Kelas / Rombel yang valid', res2.json().get('error', ''))
+
+        # 3. Avatar kosong
+        res3 = self.client.post(
+            reverse('accounts:complete_profile_api'),
+            data={'name': 'Budi Santoso', 'kelas': '10 RPL 1', 'avatar_data': ''},
+            content_type='application/json'
+        )
+        self.assertEqual(res3.status_code, 400)
+        self.assertIn('pas foto profil', res3.json().get('error', ''))
+
+    def test_profile_form_includes_kelas_for_students(self):
+        """Test form profil mengikutsertakan dan memvalidasi kelas untuk siswa."""
+        from apps.accounts.forms import UserProfileForm
+
+        student = User.objects.create_user(
+            username='siswa_form',
+            email='form@smkn1rongga.sch.id',
+            password='password123',
+            role=User.ROLE_SISWA,
+            kelas='10 RPL 3'
+        )
+        form = UserProfileForm(instance=student)
+        self.assertIn('kelas', form.fields)
+        self.assertTrue(form.fields['kelas'].required)
+
+        # Test valid submission
+        post_data = {
+            'first_name': 'Ahmad',
+            'last_name': 'Dahlan',
+            'kelas': '12 RPL 1',
+            'bio': 'Belajar Django',
+            'github_username': 'ahmad123'
+        }
+        form_post = UserProfileForm(data=post_data, instance=student)
+        self.assertTrue(form_post.is_valid())
+        updated_user = form_post.save()
+        self.assertEqual(updated_user.kelas, '12 RPL 1')
+

@@ -115,16 +115,30 @@ class UserProfileForm(forms.ModelForm):
     """
     Form Update Profil Pengguna (Siswa / Guru).
     """
+    kelas = forms.ChoiceField(
+        choices=[('', '-- Pilih Kelas / Rombel --')] + User.KELAS_CHOICES,
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'm3-input font-mono text-sm',
+            'id': 'kelas-select',
+        })
+    )
+
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'bio', 'github_username', 'avatar']
+        fields = ['first_name', 'last_name', 'kelas', 'bio', 'github_username', 'avatar']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'm3-input', 'placeholder': 'Nama depan'}),
             'last_name': forms.TextInput(attrs={'class': 'm3-input', 'placeholder': 'Nama belakang'}),
             'bio': forms.Textarea(attrs={'class': 'm3-input', 'rows': 3, 'placeholder': 'Deskripsi singkat tentang Anda...'}),
             'github_username': forms.TextInput(attrs={'class': 'm3-input font-mono', 'placeholder': 'Username GitHub tanpa @'}),
-            'avatar': forms.FileInput(attrs={'class': 'hidden', 'id': 'avatar-input', 'accept': 'image/*'}),
+            'avatar': forms.FileInput(attrs={'class': 'hidden', 'id': 'avatar-input', 'accept': 'image/jpeg,image/png,image/webp,image/jpg'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and getattr(self.instance, 'is_siswa', False):
+            self.fields['kelas'].required = True
 
 
 class ClaimTokenForm(forms.Form):
