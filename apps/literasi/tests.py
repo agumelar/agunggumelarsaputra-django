@@ -126,6 +126,40 @@ class LiterasiModuleTestCase(TestCase):
         self.assertEqual(report.status, 'submitted')
         self.assertTrue(report.self_checklist.get('tata_bahasa'))
 
+    def test_submit_literasi_idempotent_no_duplicate(self):
+        """Test submitting report again for same week updates existing report and does not duplicate XP."""
+        self.client.login(username='siswa_fauzi', password='password123')
+        data1 = {
+            'week_number': 1,
+            'report_date': '2026-08-26',
+            'book_title': 'Clean Architecture',
+            'author': 'Uncle Bob',
+            'source_type': 'Buku Fisik',
+            'summary': self.valid_summary,
+            'moral_message': self.valid_moral,
+            'check_tata_bahasa': 'on',
+            'check_tanda_baca': 'on',
+            'check_kalimat_efektif': 'on',
+            'check_bahasa_baku': 'on',
+        }
+        res1 = self.client.post(reverse('literasi:submit_literasi'), data1)
+        self.assertEqual(res1.status_code, 200)
+        self.assertEqual(LiterasiReport.objects.filter(user=self.student1).count(), 1)
+        self.student1.refresh_from_db()
+        xp_after_first = self.student1.xp
+
+        # Submit second time (same week, updated title)
+        data2 = data1.copy()
+        data2['book_title'] = 'Clean Architecture Second Edition'
+        res2 = self.client.post(reverse('literasi:submit_literasi'), data2, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(res2.status_code, 200)
+        self.assertEqual(LiterasiReport.objects.filter(user=self.student1).count(), 1)
+        self.student1.refresh_from_db()
+        # XP should NOT increase on update
+        self.assertEqual(self.student1.xp, xp_after_first)
+        updated_report = LiterasiReport.objects.get(user=self.student1)
+        self.assertEqual(updated_report.book_title, 'Clean Architecture Second Edition')
+
     def test_submit_peer_review_success_and_awards_xp(self):
         """Test peer review from classmate awards +5 XP for reviewer."""
         report = LiterasiReport.objects.create(

@@ -174,7 +174,7 @@
                 </p>
             </div>
 
-            <form hx-post="{% url 'literasi:submit_literasi' %}" hx-target="#literasi-response-container" class="space-y-6 text-xs">
+            <form id="literasi-report-form" @submit.prevent="submitLiterasiForm()" class="space-y-6 text-xs">
                 {% csrf_token %}
 
                 <!-- BAGIAN 1: IDENTITAS BUKU (SKOR MAX 4) -->
@@ -392,17 +392,38 @@
                     </div>
                 </div>
 
-                <!-- Submit Button -->
-                <div class="pt-4 border-t border-outline-variant">
+                <!-- Submit Button & Feedback Area -->
+                <div class="pt-4 border-t border-outline-variant space-y-3">
+                    <!-- Inline Feedback Alert Box -->
+                    <div 
+                        x-show="submitMessage" 
+                        x-cloak 
+                        class="p-4 rounded-xl text-xs font-semibold flex items-center gap-2.5 transition-all animate-fadeIn"
+                        :class="submitMessageType === 'success' ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30'"
+                    >
+                        <span x-text="submitMessageType === 'success' ? '✓' : '⚠️'" class="text-base font-bold shrink-0"></span>
+                        <span x-text="submitMessage" class="font-sans leading-relaxed"></span>
+                    </div>
+
+                    <!-- Submit Button -->
                     <button 
                         type="submit" 
-                        :disabled="!isFormValid"
-                        class="m3-btn-primary w-full py-3.5 text-xs sm:text-sm font-bold disabled:opacity-40 disabled:pointer-events-none shadow-md"
+                        :disabled="isSubmitting"
+                        class="m3-btn-primary w-full py-3.5 text-xs sm:text-sm font-bold shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
+                        :class="isSubmitting ? 'opacity-60 cursor-wait' : ''"
                     >
-                        <span>✨ Kumpulkan Resensi Minggu Ke-{{ next_week_number }} (+35 XP) →</span>
+                        <span x-show="!isSubmitting">✨ Kumpulkan Resensi Minggu Ke-{{ next_week_number }} (+35 XP) →</span>
+                        <span x-show="isSubmitting" class="flex items-center gap-2" x-cloak>
+                            <svg class="animate-spin h-4 w-4 text-white shrink-0" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            <span>Sedang Menyimpan & Mengirimkan Resensi...</span>
+                        </span>
                     </button>
 
-                    <div x-show="!isFormValid" class="space-y-1 text-center font-mono text-[11px] mt-3" x-cloak>
+                    <!-- Real-time Validation Hints -->
+                    <div class="space-y-1 text-center font-mono text-[11px] pt-1">
                         <p x-show="summaryWords < 100" class="text-rose-500 dark:text-rose-400">
                             &bull; Rangkuman masih kurang <span x-text="100 - summaryWords"></span> kata (minimal 100 kata).
                         </p>
@@ -997,6 +1018,9 @@ function literasiHubData() {
         checkBahasaBaku: false,
         searchQuery: '',
         copyWarning: false,
+        submitMessage: '',
+        submitMessageType: '',
+        isSubmitting: false,
 
         triggerPasteWarning() {
             this.copyWarning = true;
@@ -1021,6 +1045,91 @@ function literasiHubData() {
 
         get isFormValid() {
             return this.summaryWords >= 100 && this.moralWords >= 30 && this.isAllChecklistChecked;
+        },
+
+        async submitLiterasiForm() {
+            this.submitMessage = '';
+            
+            // 1. Validasi Rangkuman Kata
+            if (this.summaryWords < 100) {
+                this.submitMessage = `Rangkuman Anda baru berisi ${this.summaryWords} kata. Syarat minimal laporan RESIK adalah 100 kata.`;
+                this.submitMessageType = 'error';
+                const el = document.getElementById('id_summary');
+                if (el) el.focus();
+                return;
+            }
+
+            // 2. Validasi Amanat Kata
+            if (this.moralWords < 30) {
+                this.submitMessage = `Amanat / pesan moral baru berisi ${this.moralWords} kata. Syarat minimal adalah 30 kata.`;
+                this.submitMessageType = 'error';
+                const el = document.getElementById('id_moral_message');
+                if (el) el.focus();
+                return;
+            }
+
+            // 3. Validasi Checklist Mandatori
+            if (!this.isAllChecklistChecked) {
+                this.submitMessage = 'Harap centang seluruh 4 butir checklist mandatori kerapihan tulisan sebelum mengumpulkan.';
+                this.submitMessageType = 'error';
+                return;
+            }
+
+            const form = document.getElementById('literasi-report-form');
+            if (!form) return;
+
+            // 4. Validasi Identitas Buku
+            const bookTitle = form.querySelector('[name="book_title"]')?.value?.trim();
+            const author = form.querySelector('[name="author"]')?.value?.trim();
+            if (!bookTitle || !author) {
+                this.submitMessage = 'Harap isi Judul Buku dan Penulis / Pengarang terlebih dahulu.';
+                this.submitMessageType = 'error';
+                return;
+            }
+
+            this.isSubmitting = true;
+            this.submitMessage = '';
+            const formData = new FormData(form);
+
+            try {
+                const res = await fetch('{% url "literasi:submit_literasi" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    this.submitMessage = data.message || 'Resensi berhasil dikumpulkan!';
+                    this.submitMessageType = 'success';
+                    
+                    // Reset field form
+                    this.summaryText = '';
+                    this.moralText = '';
+                    this.checkTataBahasa = false;
+                    this.checkTandaBaca = false;
+                    this.checkKalimatEfektif = false;
+                    this.checkBahasaBaku = false;
+
+                    // Reload setelah 1.2 detik agar data riwayat langsung ter-update
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1200);
+                } else {
+                    this.submitMessage = data.error || data.message || 'Gagal mengirim resensi.';
+                    this.submitMessageType = 'error';
+                }
+            } catch (err) {
+                this.submitMessage = 'Terjadi gangguan jaringan saat mengirimkan resensi. Silakan periksa koneksi internet Anda.';
+                this.submitMessageType = 'error';
+            } finally {
+                this.isSubmitting = false;
+            }
         },
 
         // Peer Review Modal State

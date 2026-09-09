@@ -77,45 +77,98 @@ def literasi_hub_view(request):
 @require_POST
 def submit_literasi_view(request):
     """
-    HTMX Endpoint: Submisi Laporan Literasi RESIK (+35 XP).
+    Endpoint: Submisi Laporan Literasi RESIK (+35 XP).
+    Mendukung pengiriman via Fetch/AJAX dan HTMX.
     Memvalidasi jumlah kata (minimal 100 kata ringkasan, minimal 30 kata amanat).
+    Idempotent: Jika siswa sudah mengirimkan laporan di minggu yang sama dan belum dinilai,
+    sistem akan memperbarui (update) laporan tersebut tanpa membuat baris duplikat dan tanpa spam XP.
     """
+    is_ajax = (request.headers.get('x-requested-with') == 'XMLHttpRequest' or 
+               'application/json' in request.headers.get('accept', ''))
+
     form = LiterasiReportForm(request.POST)
 
     if form.is_valid():
-        report = form.save(commit=False)
-        report.user = request.user
-        words = report.summary.strip().split()
-        report.word_count = len(words)
-        report.status = 'submitted'
+        week_num = form.cleaned_data.get('week_number') or 1
+        
+        # Cek apakah sudah ada laporan siswa di minggu tersebut
+        existing_report = LiterasiReport.objects.filter(
+            user=request.user, 
+            week_number=week_num
+        ).order_by('-created_at').first()
 
-        # Simpan status checklist mandatori
+        if existing_report and existing_report.status == 'graded':
+            err_msg = f'Laporan Literasi Minggu Ke-{week_num} sudah dinilai oleh Guru dan tidak dapat diubah lagi.'
+            if is_ajax:
+                return JsonResponse({'success': False, 'error': err_msg}, status=400)
+            return render(request, 'literasi/partials/report_status.html', {'success': False, 'message': err_msg})
+
         checklist_data = {
             'tata_bahasa': request.POST.get('check_tata_bahasa') == 'on',
             'tanda_baca': request.POST.get('check_tanda_baca') == 'on',
             'kalimat_efektif': request.POST.get('check_kalimat_efektif') == 'on',
             'bahasa_baku': request.POST.get('check_bahasa_baku') == 'on',
         }
-        report.self_checklist = checklist_data
-        report.save()
 
-        # Award +35 XP
-        xp_reward = 35
-        request.user.xp += xp_reward
-        request.user.recalculate_level()
-        request.user.save(update_fields=['xp', 'level'])
+        if existing_report and existing_report.status != 'graded':
+            # Update existing report (Idempotent - no duplicate rows or duplicate XP)
+            cleaned = form.cleaned_data
+            existing_report.book_title = cleaned['book_title']
+            existing_report.author = cleaned['author']
+            existing_report.publisher = cleaned.get('publisher', '')
+            existing_report.city = cleaned.get('city', '')
+            existing_report.year = cleaned.get('year', '')
+            existing_report.page_count = cleaned.get('page_count', '')
+            existing_report.edition = cleaned.get('edition', '')
+            existing_report.source_type = cleaned.get('source_type', 'Buku Fisik')
+            existing_report.summary = cleaned['summary']
+            existing_report.moral_message = cleaned['moral_message']
+            words = existing_report.summary.strip().split()
+            existing_report.word_count = len(words)
+            existing_report.report_date = cleaned.get('report_date') or timezone.now().date()
+            existing_report.self_checklist = checklist_data
+            existing_report.status = 'submitted'
+            existing_report.save()
 
-        XPHistory.objects.create(
-            user=request.user,
-            amount=xp_reward,
-            category='literasi',
-            description=f'Setoran Rabu Literasi Minggu Ke-{report.week_number}: {report.book_title}'
-        )
+            report = existing_report
+            xp_reward = 0
+            message = f'Laporan Literasi Minggu Ke-{report.week_number} ({report.word_count} kata) berhasil diperbarui!'
+        else:
+            # Create new report + Award +35 XP
+            report = form.save(commit=False)
+            report.user = request.user
+            words = report.summary.strip().split()
+            report.word_count = len(words)
+            report.status = 'submitted'
+            report.self_checklist = checklist_data
+            report.save()
+
+            xp_reward = 35
+            request.user.xp += xp_reward
+            request.user.recalculate_level()
+            request.user.save(update_fields=['xp', 'level'])
+
+            XPHistory.objects.create(
+                user=request.user,
+                amount=xp_reward,
+                category='literasi',
+                description=f'Setoran Rabu Literasi Minggu Ke-{report.week_number}: {report.book_title}'
+            )
+            message = f'Laporan Literasi Minggu Ke-{report.week_number} ({report.word_count} kata) berhasil dikirim!'
+
+        if is_ajax:
+            return JsonResponse({
+                'success': True,
+                'message': message,
+                'xp_reward': xp_reward,
+                'week_number': report.week_number,
+                'word_count': report.word_count
+            })
 
         context = {
             'report': report,
             'success': True,
-            'message': f'Laporan Literasi Minggu Ke-{report.week_number} ({report.word_count} kata) berhasil dikirim!',
+            'message': message,
             'xp_reward': xp_reward,
         }
     else:
@@ -126,6 +179,9 @@ def submit_literasi_view(request):
             error_msg = form.errors['moral_message'][0]
         elif form.errors:
             error_msg = list(form.errors.values())[0][0]
+
+        if is_ajax:
+            return JsonResponse({'success': False, 'error': error_msg}, status=400)
 
         context = {
             'form': form,

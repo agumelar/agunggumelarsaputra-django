@@ -2375,6 +2375,16 @@ input[type='text']:focus,
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+@keyframes spin{
+  to{
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin{
+  animation: spin 1s linear infinite;
+}
+
 .cursor-default{
   cursor: default;
 }
@@ -2385,6 +2395,10 @@ input[type='text']:focus,
 
 .cursor-pointer{
   cursor: pointer;
+}
+
+.cursor-wait{
+  cursor: wait;
 }
 
 .select-none{
@@ -4634,6 +4648,10 @@ input[type='text']:focus,
   opacity: 1;
 }
 
+.opacity-25{
+  opacity: 0.25;
+}
+
 .opacity-40{
   opacity: 0.4;
 }
@@ -4644,6 +4662,10 @@ input[type='text']:focus,
 
 .opacity-50{
   opacity: 0.5;
+}
+
+.opacity-60{
+  opacity: 0.6;
 }
 
 .opacity-70{
