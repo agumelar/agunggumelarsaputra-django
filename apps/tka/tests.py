@@ -9,7 +9,6 @@ User = get_user_model()
 
 class TkaModuleTestCase(TestCase):
     def setUp(self):
-        # Create Teacher
         self.teacher = User.objects.create_user(
             username='guru_agung',
             email='agung@smkn1rongga.sch.id',
@@ -20,7 +19,6 @@ class TkaModuleTestCase(TestCase):
             nip='199001012020011001'
         )
 
-        # Create Student
         self.student = User.objects.create_user(
             username='siswa_fauzi',
             email='fauzi@smkn1rongga.sch.id',

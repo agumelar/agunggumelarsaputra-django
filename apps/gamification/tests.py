@@ -11,7 +11,6 @@ User = get_user_model()
 
 class GamificationModuleTestCase(TestCase):
     def setUp(self):
-        # Create Teacher
         self.teacher = User.objects.create_user(
             username='guru_agung',
             email='agung@smkn1rongga.sch.id',
@@ -22,7 +21,6 @@ class GamificationModuleTestCase(TestCase):
             nip='199001012020011001'
         )
 
-        # Create Students with distinct XP and Classes
         self.student1 = User.objects.create_user(
             username='siswa_fauzi',
             email='fauzi@smkn1rongga.sch.id',
@@ -62,7 +60,6 @@ class GamificationModuleTestCase(TestCase):
             streak_count=2
         )
 
-        # Create XP History Records
         XPHistory.objects.create(
             user=self.student1,
             amount=50,

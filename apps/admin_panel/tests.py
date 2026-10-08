@@ -229,7 +229,6 @@ class SubmissionHubTestCase(TestCase):
         """Test ekspor rekap nilai LKPD ke CSV (UTF-8 BOM)."""
         self.client.login(username='guru_agung', password='password123')
 
-        # Set nilai tuntas KKM 73
         self.lkpd_submission.teacher_score = 85
         self.lkpd_submission.teacher_level = 'Level 3 (Mampu Membimbing ★★★)'
         self.lkpd_submission.status = 'graded'

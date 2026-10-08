@@ -5,7 +5,7 @@
             
             <!-- Left: Brand / Logo -->
             <div class="flex items-center gap-3">
-                <a href="{% url 'core:home' %}" class="flex items-center gap-3 group focus:outline-none">
+                <a href="{% url 'core:home' %}" class="flex items-center gap-3 group rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                     <div class="w-10 h-10 rounded-xl overflow-hidden bg-black border border-outline group-hover:border-primary transition-all shrink-0 flex items-center justify-center p-1">
                         <img src="{% static 'images/logo-icon.png' %}" alt="Logo AGS" class="w-full h-full object-contain">
                     </div>
@@ -57,7 +57,7 @@
                 <button 
                     @click="$store.theme.toggle()" 
                     type="button" 
-                    class="w-9 h-9 flex items-center justify-center rounded-xl bg-surface-lowest border border-outline-variant hover:border-outline text-foreground transition-all focus:outline-none"
+                    class="w-9 h-9 flex items-center justify-center rounded-xl bg-surface-lowest border border-outline-variant hover:border-outline text-foreground transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     aria-label="Toggle Light/Dark Theme"
                     title="Ganti Tema (Terang / Gelap)"
                 >
@@ -86,7 +86,7 @@
                     {% endif %}
 
                     <div class="relative" x-data="{ userMenuOpen: false }">
-                        <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-low border border-outline-variant hover:border-outline text-xs font-medium text-foreground focus:outline-none">
+                        <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-low border border-outline-variant hover:border-outline text-xs font-medium text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                             {% if user.avatar_display %}
                                 <img src="{{ user.avatar_display }}" alt="{{ user.display_name }}" class="w-6 h-6 rounded-full object-cover border border-outline shrink-0">
                             {% else %}
@@ -141,7 +141,7 @@
                 <button 
                     @click="$store.theme.toggle()" 
                     type="button" 
-                    class="p-2 rounded-lg bg-surface-low border border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground focus:outline-none"
+                    class="p-2 rounded-lg bg-surface-low border border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     aria-label="Toggle Theme"
                 >
                     <span x-show="$store.theme.isDark" x-cloak>
@@ -156,7 +156,7 @@
                     </span>
                 </button>
 
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-lg bg-surface-low border border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground focus:outline-none">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-lg bg-surface-low border border-outline-variant text-gray-600 dark:text-gray-300 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                     <svg x-show="!mobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>

@@ -9,7 +9,6 @@ User = get_user_model()
 
 class AuthenticationAndRegistrationTestCase(TestCase):
     def setUp(self):
-        # Create a teacher
         self.teacher = User.objects.create_user(
             username='guru_agung',
             email='agung@smkn1rongga.sch.id',
@@ -20,7 +19,6 @@ class AuthenticationAndRegistrationTestCase(TestCase):
             nip='199001012020011001'
         )
 
-        # Create active enrollment token
         self.token = EnrollmentToken.objects.create(
             token='RPL-TEST',
             title='Sesi KBM Uji Coba',

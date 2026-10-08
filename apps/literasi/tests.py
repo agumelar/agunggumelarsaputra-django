@@ -9,7 +9,6 @@ User = get_user_model()
 
 class LiterasiModuleTestCase(TestCase):
     def setUp(self):
-        # Create Teacher
         self.teacher = User.objects.create_user(
             username='guru_agung',
             email='agung@smkn1rongga.sch.id',
@@ -20,7 +19,6 @@ class LiterasiModuleTestCase(TestCase):
             nip='199001012020011001'
         )
 
-        # Create Student 1 (Author)
         self.student1 = User.objects.create_user(
             username='siswa_fauzi',
             email='fauzi@smkn1rongga.sch.id',
@@ -32,7 +30,6 @@ class LiterasiModuleTestCase(TestCase):
             xp=50
         )
 
-        # Create Student 2 (Reviewer)
         self.student2 = User.objects.create_user(
             username='siswa_budi',
             email='budi@smkn1rongga.sch.id',

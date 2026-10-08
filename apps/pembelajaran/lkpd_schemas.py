@@ -14,10 +14,10 @@ def url(name, label):
 profession_fields = []
 for number in [1, 2, 3]:
     profession_fields.extend([
-        text(f'profession{number}Name', f'Profesi {number} — nama profesi'),
-        textarea(f'profession{number}Responsibilities', f'Profesi {number} — tugas dan tanggung jawab utama'),
-        textarea(f'profession{number}Tools', f'Profesi {number} — bahasa atau tools yang wajib dipelajari'),
-        textarea(f'profession{number}Reason', f'Profesi {number} — alasan ketertarikan'),
+        text(f'profession{number}Name', f'Profesi {number}: nama profesi'),
+        textarea(f'profession{number}Responsibilities', f'Profesi {number}: tugas dan tanggung jawab utama'),
+        textarea(f'profession{number}Tools', f'Profesi {number}: bahasa atau tools yang wajib dipelajari'),
+        textarea(f'profession{number}Reason', f'Profesi {number}: alasan ketertarikan'),
     ])
 
 ORIENTASI_LKPD_SCHEMAS = {
@@ -139,9 +139,9 @@ ORIENTASI_LKPD_SCHEMAS = {
             {
                 'title': 'Audit 3 Produk Digital',
                 'fields': [
-                    textarea('appOneAudit', 'Aplikasi 1 — pengguna, masalah, fungsi, dan nilai produk'),
-                    textarea('appTwoAudit', 'Aplikasi 2 — pengguna, masalah, fungsi, dan nilai produk'),
-                    textarea('appThreeAudit', 'Aplikasi 3 — pengguna, masalah, fungsi, dan nilai produk'),
+                    textarea('appOneAudit', 'Aplikasi 1: pengguna, masalah, fungsi, dan nilai produk'),
+                    textarea('appTwoAudit', 'Aplikasi 2: pengguna, masalah, fungsi, dan nilai produk'),
+                    textarea('appThreeAudit', 'Aplikasi 3: pengguna, masalah, fungsi, dan nilai produk'),
                     textarea('auditConclusion', 'Kesimpulan komparatif')
                 ]
             }

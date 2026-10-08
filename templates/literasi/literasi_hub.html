@@ -43,10 +43,10 @@
                         SMK NEGERI 1 RONGGA
                     </span>
                     <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-bold">
-                        📚 Syarat Minimal: 100 Kata
+                        Syarat Minimal: 100 Kata
                     </span>
                     <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-mono font-bold">
-                        ✨ +35 XP / Resensi Buku
+                        +35 XP / Resensi Buku
                     </span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-extrabold font-display text-foreground tracking-tight">
@@ -67,7 +67,7 @@
                     @click="currentTab = 'write'" 
                     class="m3-btn-primary text-xs py-2 px-4 shadow-sm"
                 >
-                    ✍️ Tulis Resensi Baru ➔
+                    Tulis Resensi Baru
                 </button>
             </div>
         </div>
@@ -117,7 +117,7 @@
             :class="currentTab === 'write' ? 'bg-primary text-primary-on-primary font-bold border-primary shadow-sm' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
             class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
         >
-            <span>📝 1. Tulis Resensi Baru</span>
+            <span>1. Tulis Resensi Baru</span>
             <span class="px-1.5 py-0.2 rounded bg-amber-400 text-amber-950 font-bold text-[10px]">+35 XP</span>
         </button>
 
@@ -126,7 +126,7 @@
             :class="currentTab === 'my_reports' ? 'bg-secondary text-secondary-on-secondary font-bold border-secondary shadow-sm' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
             class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
         >
-            <span>📚 2. Riwayat & Cetak PDF Resensi Saya ({{ user_reports|length }})</span>
+            <span>2. Riwayat & Cetak PDF Resensi Saya ({{ user_reports|length }})</span>
         </button>
 
         <button 
@@ -134,7 +134,7 @@
             :class="currentTab === 'peer_feed' ? 'bg-amber-400 text-amber-950 font-bold border-amber-400 shadow-sm' : 'bg-surface-low text-gray-600 dark:text-gray-300 hover:text-foreground border-outline-variant'"
             class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2"
         >
-            <span>🌟 3. Galeri Literasi & Peer Review ({{ peer_feed|length }})</span>
+            <span>3. Galeri Literasi & Peer Review ({{ peer_feed|length }})</span>
             <span class="px-1.5 py-0.2 rounded bg-surface-high text-foreground font-bold text-[10px]">+5 XP</span>
         </button>
 
@@ -144,7 +144,7 @@
             :class="currentTab === 'teacher_panel' ? 'bg-amber-500 text-black font-bold border-amber-500 shadow-sm' : 'bg-surface-low text-amber-600 dark:text-amber-400 hover:text-foreground border-outline-variant'"
             class="px-4 py-2 rounded-lg border whitespace-nowrap transition-all flex items-center gap-2 ml-auto"
         >
-            <span>⭐ 4. Panel Evaluasi Guru ({{ all_submissions|length }})</span>
+            <span>4. Panel Evaluasi Guru ({{ all_submissions|length }})</span>
             <span class="px-1.5 py-0.2 rounded bg-amber-400 text-amber-950 font-bold text-[10px]">GURU</span>
         </button>
         {% endif %}
@@ -166,7 +166,7 @@
                         Formulir Setoran Laporan Rabu Literasi (RESIK)
                     </h2>
                     <span class="px-2.5 py-1 rounded bg-rose-500/10 text-rose-500 dark:text-rose-400 font-mono text-[11px] font-semibold border border-rose-500/20">
-                        🚫 Anti Copy-Paste Aktif
+                        Anti Copy-Paste Aktif
                     </span>
                 </div>
                 <p class="text-xs text-gray-500 dark:text-gray-400">
