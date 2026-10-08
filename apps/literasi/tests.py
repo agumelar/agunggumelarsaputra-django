@@ -49,12 +49,63 @@ class LiterasiModuleTestCase(TestCase):
         # 33 words sample moral message
         self.valid_moral = "Amanat penting dari bacaan ini adalah kejujuran dan ketekunan dalam menulis kode program. Seorang pengembang perangkat lunak profesional harus senantiasa memperhatikan kualitas, arsitektur, dan kemudahan pemeliharaan sistem demi kemaslahatan pengguna dan masyarakat."
 
-    def test_literasi_hub_view(self):
-        """Test literasi_hub_view returns 200 and renders RESIK branding."""
+    def test_literasi_hub_view_anonymous_redirects_to_login(self):
+        """Test anonymous user is redirected to login page when accessing literasi_hub."""
+        response = self.client.get(reverse('literasi:literasi_hub'))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/accounts/login/', response.url)
+
+    def test_literasi_hub_view_authenticated(self):
+        """Test logged in student can access literasi_hub and see RESIK branding."""
+        self.client.login(username='siswa_fauzi', password='password123')
         response = self.client.get(reverse('literasi:literasi_hub'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Rabu Literasi (RESIK)')
         self.assertContains(response, '100 Kata')
+
+    def test_submit_literasi_unauthenticated_returns_401_json(self):
+        """Test submitting report without authentication returns JSON 401 with require_login."""
+        data = {
+            'week_number': 1,
+            'report_date': '2026-08-26',
+            'book_title': 'Clean Code',
+            'author': 'Robert C. Martin',
+            'summary': self.valid_summary,
+            'moral_message': self.valid_moral,
+        }
+        response = self.client.post(
+            reverse('literasi:submit_literasi'),
+            data=data,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_ACCEPT='application/json'
+        )
+        self.assertEqual(response.status_code, 401)
+        res_data = response.json()
+        self.assertFalse(res_data['success'])
+        self.assertTrue(res_data['require_login'])
+        self.assertIn('login', res_data['login_url'])
+
+    def test_submit_peer_review_unauthenticated_returns_401_json(self):
+        """Test submitting peer review without authentication returns JSON 401 with require_login."""
+        report = LiterasiReport.objects.create(
+            user=self.student1,
+            week_number=1,
+            book_title='Clean Architecture',
+            author='Uncle Bob',
+            summary=self.valid_summary,
+            moral_message=self.valid_moral,
+            word_count=105,
+            status='submitted'
+        )
+        response = self.client.post(
+            reverse('literasi:submit_peer_review', kwargs={'report_id': report.id}),
+            data=json.dumps({'rating': 5, 'comment': 'Bagus sekali'}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 401)
+        res_data = response.json()
+        self.assertFalse(res_data['success'])
+        self.assertTrue(res_data['require_login'])
 
     def test_submit_literasi_fails_under_100_words(self):
         """Test submitting report with less than 100 words fails validation."""

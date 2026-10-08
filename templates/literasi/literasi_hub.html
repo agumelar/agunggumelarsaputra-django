@@ -174,6 +174,25 @@
                 </p>
             </div>
 
+            <!-- Banner Indikator Draf Terpulihkan -->
+            <div 
+                x-show="draftRestored" 
+                x-cloak 
+                class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 flex items-center justify-between gap-3 text-xs font-mono"
+            >
+                <div class="flex items-center gap-2">
+                    <span class="text-base">💾</span>
+                    <span>Draf tulisan resensi Anda sebelumnya telah dipulihkan otomatis dari peramban ini.</span>
+                </div>
+                <button 
+                    type="button" 
+                    @click="clearDraftFromStorage(); summaryText = ''; moralText = '';" 
+                    class="px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-800 dark:text-amber-200 text-[11px] font-bold border border-amber-500/40 transition shrink-0"
+                >
+                    Hapus Draf
+                </button>
+            </div>
+
             <form id="literasi-report-form" @submit.prevent="submitLiterasiForm()" class="space-y-6 text-xs">
                 {% csrf_token %}
 
@@ -1047,6 +1066,81 @@ function literasiHubData() {
             return this.summaryWords >= 100 && this.moralWords >= 30 && this.isAllChecklistChecked;
         },
 
+        draftRestored: false,
+
+        init() {
+            this.restoreDraftFromStorage();
+            this.$watch('summaryText', () => this.saveDraftToStorage());
+            this.$watch('moralText', () => this.saveDraftToStorage());
+        },
+
+        saveDraftToStorage() {
+            try {
+                const form = document.getElementById('literasi-report-form');
+                const draft = {
+                    book_title: form?.querySelector('[name="book_title"]')?.value || '',
+                    author: form?.querySelector('[name="author"]')?.value || '',
+                    publisher: form?.querySelector('[name="publisher"]')?.value || '',
+                    city: form?.querySelector('[name="city"]')?.value || '',
+                    year: form?.querySelector('[name="year"]')?.value || '',
+                    page_count: form?.querySelector('[name="page_count"]')?.value || '',
+                    summary: this.summaryText || '',
+                    moral_message: this.moralText || '',
+                    saved_at: new Date().toISOString()
+                };
+                localStorage.setItem('literasi_resik_draft_v1', JSON.stringify(draft));
+            } catch (e) {}
+        },
+
+        restoreDraftFromStorage() {
+            try {
+                const raw = localStorage.getItem('literasi_resik_draft_v1');
+                if (!raw) return;
+                const draft = JSON.parse(raw);
+                if (!this.summaryText && draft.summary) {
+                    this.summaryText = draft.summary;
+                    this.moralText = draft.moral_message || '';
+                    this.draftRestored = true;
+                    this.$nextTick(() => {
+                        const form = document.getElementById('literasi-report-form');
+                        if (form) {
+                            if (draft.book_title) {
+                                const el = form.querySelector('[name="book_title"]');
+                                if (el && !el.value) el.value = draft.book_title;
+                            }
+                            if (draft.author) {
+                                const el = form.querySelector('[name="author"]');
+                                if (el && !el.value) el.value = draft.author;
+                            }
+                            if (draft.publisher) {
+                                const el = form.querySelector('[name="publisher"]');
+                                if (el && !el.value) el.value = draft.publisher;
+                            }
+                            if (draft.city) {
+                                const el = form.querySelector('[name="city"]');
+                                if (el && !el.value) el.value = draft.city;
+                            }
+                            if (draft.year) {
+                                const el = form.querySelector('[name="year"]');
+                                if (el && !el.value) el.value = draft.year;
+                            }
+                            if (draft.page_count) {
+                                const el = form.querySelector('[name="page_count"]');
+                                if (el && !el.value) el.value = draft.page_count;
+                            }
+                        }
+                    });
+                }
+            } catch (e) {}
+        },
+
+        clearDraftFromStorage() {
+            try {
+                localStorage.removeItem('literasi_resik_draft_v1');
+                this.draftRestored = false;
+            } catch (e) {}
+        },
+
         async submitLiterasiForm() {
             this.submitMessage = '';
             
@@ -1089,25 +1183,52 @@ function literasiHubData() {
 
             this.isSubmitting = true;
             this.submitMessage = '';
+            this.saveDraftToStorage();
             const formData = new FormData(form);
+
+            const getCsrfToken = () => {
+                return (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] || '{{ csrf_token }}';
+            };
 
             try {
                 const res = await fetch('{% url "literasi:submit_literasi" %}', {
                     method: 'POST',
                     headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-CSRFToken': getCsrfToken(),
                         'X-Requested-With': 'XMLHttpRequest',
                         'Accept': 'application/json'
                     },
                     body: formData
                 });
 
-                const data = await res.json();
+                // Cek jika dialihkan ke halaman login (HTTP 401 atau redirected)
+                if (res.status === 401 || (res.redirected && res.url.includes('/accounts/login/'))) {
+                    this.submitMessage = '⚠️ Sesi login Anda telah berakhir atau belum masuk. Draf tulisan Anda telah kami amankan otomatis. Mengalihkan ke halaman login...';
+                    this.submitMessageType = 'error';
+                    const redirectUrl = res.url || '{% url "accounts:login" %}?next={% url "literasi:literasi_hub" %}';
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 2000);
+                    return;
+                }
 
-                if (res.ok && data.success) {
+                let data = null;
+                const contentType = res.headers.get('content-type') || '';
+                if (contentType.includes('application/json')) {
+                    try {
+                        data = await res.json();
+                    } catch (jsonErr) {
+                        data = null;
+                    }
+                }
+
+                if (res.ok && data && data.success) {
                     this.submitMessage = data.message || 'Resensi berhasil dikumpulkan!';
                     this.submitMessageType = 'success';
                     
+                    // Bersihkan draf karena berhasil disimpan permanen
+                    this.clearDraftFromStorage();
+
                     // Reset field form
                     this.summaryText = '';
                     this.moralText = '';
@@ -1120,12 +1241,33 @@ function literasiHubData() {
                     setTimeout(() => {
                         window.location.reload();
                     }, 1200);
+                } else if (data && data.require_login) {
+                    this.submitMessage = '⚠️ ' + (data.error || 'Sesi login Anda telah berakhir. Draf tulisan Anda telah kami amankan otomatis.');
+                    this.submitMessageType = 'error';
+                    if (data.login_url) {
+                        setTimeout(() => {
+                            window.location.href = data.login_url;
+                        }, 2000);
+                    }
+                } else if (data && (data.error || data.message)) {
+                    this.submitMessage = data.error || data.message;
+                    this.submitMessageType = 'error';
+                } else if (res.status === 403) {
+                    this.submitMessage = 'Token validasi keamanan sesi telah kedaluwarsa. Silakan muat ulang halaman (refresh) untuk memperbarui sesi.';
+                    this.submitMessageType = 'error';
+                } else if (res.status >= 500) {
+                    this.submitMessage = 'Server sedang memproses antrean. Draf Anda tersimpan aman, silakan coba tekan tombol kirim kembali dalam beberapa detik.';
+                    this.submitMessageType = 'error';
                 } else {
-                    this.submitMessage = data.error || data.message || 'Gagal mengirim resensi.';
+                    this.submitMessage = 'Gagal mengirim resensi. Pastikan seluruh isian sudah sesuai ketentuan.';
                     this.submitMessageType = 'error';
                 }
             } catch (err) {
-                this.submitMessage = 'Terjadi gangguan jaringan saat mengirimkan resensi. Silakan periksa koneksi internet Anda.';
+                if (!navigator.onLine) {
+                    this.submitMessage = 'Perangkat Anda sedang offline. Draf tersimpan di peramban, sambungkan kembali internet lalu klik kirim.';
+                } else {
+                    this.submitMessage = 'Terjadi kendala saat mengirimkan resensi. Draf tulisan Anda tetap tersimpan aman di formulir.';
+                }
                 this.submitMessageType = 'error';
             } finally {
                 this.isSubmitting = false;

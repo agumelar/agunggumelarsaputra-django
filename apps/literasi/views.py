@@ -1,6 +1,7 @@
 import csv
 import json
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
@@ -12,6 +13,7 @@ from .forms import LiterasiReportForm, PeerReviewForm
 from apps.gamification.models import XPHistory
 
 
+@login_required
 def literasi_hub_view(request):
     """
     Hub Utama Rabu Literasi (RESIK):
@@ -73,7 +75,6 @@ def literasi_hub_view(request):
     return render(request, 'literasi/literasi_hub.html', context)
 
 
-@login_required
 @require_POST
 def submit_literasi_view(request):
     """
@@ -85,6 +86,17 @@ def submit_literasi_view(request):
     """
     is_ajax = (request.headers.get('x-requested-with') == 'XMLHttpRequest' or 
                'application/json' in request.headers.get('accept', ''))
+
+    if not request.user.is_authenticated:
+        err_msg = 'Sesi login Anda telah berakhir atau Anda belum masuk. Silakan masuk ke akun Anda terlebih dahulu.'
+        if is_ajax:
+            return JsonResponse({
+                'success': False,
+                'error': err_msg,
+                'require_login': True,
+                'login_url': reverse('accounts:login') + '?next=' + reverse('literasi:literasi_hub')
+            }, status=401)
+        return redirect(reverse('accounts:login') + '?next=' + reverse('literasi:literasi_hub'))
 
     form = LiterasiReportForm(request.POST)
 
@@ -192,12 +204,17 @@ def submit_literasi_view(request):
     return render(request, 'literasi/partials/report_status.html', context)
 
 
-@login_required
 @require_POST
 def submit_peer_review_view(request, report_id):
     """
     HTMX / JSON Endpoint: Submisi Peer Review & Rating Antarsiswa (+5 XP untuk Reviewer).
     """
+    is_json = request.content_type == 'application/json' or request.headers.get('x-requested-with') == 'XMLHttpRequest'
+    if not request.user.is_authenticated:
+        if is_json:
+            return JsonResponse({'success': False, 'error': 'Sesi login Anda telah berakhir. Silakan masuk kembali.', 'require_login': True}, status=401)
+        return redirect('accounts:login')
+
     report = get_object_or_404(LiterasiReport, id=report_id)
 
     is_json = request.content_type == 'application/json'
