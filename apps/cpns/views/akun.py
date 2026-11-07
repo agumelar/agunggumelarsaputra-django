@@ -15,6 +15,7 @@ User = get_user_model()
 
 PESAN_EMAIL_ADA = "Email ini sudah terdaftar. Silakan masuk."
 PESAN_MASUK_GAGAL = "Email atau kata sandi salah."
+PESAN_AKUN_GOOGLE = "Akun ini memakai Google. Klik Masuk dengan Google."
 PESAN_SANDI_BEDA = "Kata sandi dan ulangannya tidak sama."
 PESAN_SETUJU = "Centang persetujuan untuk melanjutkan."
 PESAN_NAMA = "Nama wajib diisi."
@@ -66,7 +67,10 @@ def masuk(request):
         if user is not None:
             login(request, user)
             return redirect(_tujuan_aman(request) or reverse("cpns:dasbor"))
-        galat = PESAN_MASUK_GAGAL
+        if cocok is not None and not cocok.has_usable_password():
+            galat = PESAN_AKUN_GOOGLE
+        else:
+            galat = PESAN_MASUK_GAGAL
 
     nomor_wa = "".join(c for c in PengaturanCPNS.ambil().nomor_wa if c.isdigit())
     return render(
@@ -75,7 +79,7 @@ def masuk(request):
         {
             "galat": galat,
             "identitas": identitas,
-            "next": request.GET.get("next", ""),
+            "next": request.POST.get("next") or request.GET.get("next", ""),
             "tautan_wa": f"https://wa.me/{nomor_wa}" if nomor_wa else "",
         },
     )

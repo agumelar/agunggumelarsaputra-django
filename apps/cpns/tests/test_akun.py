@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 from django.contrib.auth import get_user_model
+from django.contrib.messages import get_messages
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
@@ -141,6 +142,28 @@ class MasukTest(TestCase):
         r = self.masuk("budi", url=url)
         self.assertRedirects(r, reverse("cpns:dasbor"), fetch_redirect_response=False)
 
+    def test_next_tetap_ada_setelah_post_gagal(self):
+        r = self.client.post(
+            reverse("cpns:masuk"),
+            {"identitas": "budi", "kata_sandi": "salah-sekali", "next": reverse("cpns:riwayat")},
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, 'name="next" value="%s"' % reverse("cpns:riwayat"))
+
+    def test_akun_google_tanpa_sandi_diberi_petunjuk(self):
+        self.user.set_unusable_password()
+        self.user.save()
+        r = self.masuk("budi", "apa-saja-123")
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "Akun ini memakai Google. Klik Masuk dengan Google.")
+        self.assertNotContains(r, "Email atau kata sandi salah.")
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_tombol_google_membawa_asal_cpns(self):
+        tautan = reverse("accounts:google_login") + "?asal=cpns"
+        self.assertContains(self.client.get(reverse("cpns:masuk")), tautan)
+        self.assertContains(self.client.get(reverse("cpns:daftar")), tautan)
+
     def test_sudah_login_diarahkan_ke_dasbor(self):
         self.client.force_login(self.user)
         r = self.client.get(reverse("cpns:masuk"))
@@ -169,9 +192,11 @@ def respons_palsu(isi):
 
 @override_settings(GOOGLE_CLIENT_ID="cid", GOOGLE_CLIENT_SECRET="rahasia")
 class CallbackGoogleTest(TestCase):
-    def panggil(self, email, host=None):
+    def panggil(self, email, host=None, flag_cpns=False):
         session = self.client.session
         session["google_oauth_state"] = "ok"
+        if flag_cpns:
+            session["google_oauth_cpns"] = True
         session.save()
         token = respons_palsu(b'{"access_token": "tok"}')
         profil = respons_palsu(('{"email": "%s", "name": "Tamu Google"}' % email).encode())
@@ -239,3 +264,73 @@ class CallbackGoogleTest(TestCase):
         self.panggil("s@contoh.id")
         user.refresh_from_db()
         self.assertTrue(user.has_usable_password())
+
+    def test_callback_akun_daftar_diberi_pesan_pindah_ke_google(self):
+        user = User.objects.create_user(
+            username="d2", email="d2@contoh.id", password=SANDI, role="peserta"
+        )
+        AksesPeserta.objects.create(user=user, via_google=False)
+        r = self.panggil("d2@contoh.id", HOST_CPNS)
+        pesan = [str(m) for m in get_messages(r.wsgi_request)]
+        self.assertIn("Akun ini sekarang masuk lewat Google.", pesan)
+
+    def test_callback_host_utama_dengan_flag_cpns_buat_peserta(self):
+        r = self.panggil("dari.cpns@contoh.id", flag_cpns=True)
+        self.assertRedirects(r, "/cpns/dasbor/", fetch_redirect_response=False)
+        user = User.objects.get(email="dari.cpns@contoh.id")
+        self.assertEqual(user.role, "peserta")
+        self.assertEqual(user.xp, 0)
+        self.assertTrue(AksesPeserta.objects.get(user=user).via_google)
+        self.assertNotIn("google_oauth_cpns", self.client.session)
+
+    def test_callback_host_utama_tanpa_flag_tetap_siswa(self):
+        r = self.panggil("murid2@contoh.id")
+        self.assertRedirects(r, reverse("core:home"), fetch_redirect_response=False)
+        self.assertEqual(User.objects.get(email="murid2@contoh.id").role, "siswa")
+
+
+@override_settings(GOOGLE_CLIENT_ID="cid", GOOGLE_CLIENT_SECRET="rahasia")
+class MulaiGoogleTest(TestCase):
+    def test_asal_cpns_menyimpan_flag(self):
+        r = self.client.get(reverse("accounts:google_login") + "?asal=cpns")
+        self.assertTrue(r["Location"].startswith("https://accounts.google.com/"))
+        self.assertTrue(self.client.session.get("google_oauth_cpns"))
+
+    def test_tanpa_asal_flag_lama_dihapus(self):
+        self.client.get(reverse("accounts:google_login") + "?asal=cpns")
+        self.client.get(reverse("accounts:google_login"))
+        self.assertNotIn("google_oauth_cpns", self.client.session)
+
+
+@override_settings(GOOGLE_CLIENT_ID="cid", GOOGLE_CLIENT_SECRET="rahasia")
+class CallbackGoogleGagalTest(TestCase):
+    def callback_state_salah(self, host=None, flag_cpns=False):
+        session = self.client.session
+        session["google_oauth_state"] = "ok"
+        if flag_cpns:
+            session["google_oauth_cpns"] = True
+        session.save()
+        extra = {"HTTP_HOST": host} if host else {}
+        return self.client.get(reverse("accounts:google_callback") + "?code=c&state=beda", **extra)
+
+    def test_state_salah_host_cpns_ke_masuk_cpns(self):
+        r = self.callback_state_salah(HOST_CPNS)
+        self.assertRedirects(r, "/masuk/", fetch_redirect_response=False)
+
+    def test_state_salah_flag_cpns_ke_masuk_cpns(self):
+        r = self.callback_state_salah(flag_cpns=True)
+        self.assertRedirects(r, "/cpns/masuk/", fetch_redirect_response=False)
+        self.assertNotIn("google_oauth_cpns", self.client.session)
+
+    def test_state_salah_host_utama_ke_login_sekolah(self):
+        r = self.callback_state_salah()
+        self.assertRedirects(r, reverse("accounts:login"), fetch_redirect_response=False)
+
+    def test_google_error_flag_cpns_ke_masuk_cpns(self):
+        session = self.client.session
+        session["google_oauth_state"] = "ok"
+        session["google_oauth_cpns"] = True
+        session.save()
+        with patch("apps.accounts.views.urllib.request.urlopen", side_effect=OSError("putus")):
+            r = self.client.get(reverse("accounts:google_callback") + "?code=c&state=ok")
+        self.assertRedirects(r, "/cpns/masuk/", fetch_redirect_response=False)

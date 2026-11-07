@@ -9,7 +9,7 @@
         <p class="text-base text-[#94A3B8]">Sudah punya akun? <a href="{% url 'cpns:masuk' %}" class="inline-flex items-center min-h-11 font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Masuk</a></p>
     </header>
 
-    <a href="{% url 'accounts:google_login' %}"
+    <a href="{% url 'accounts:google_login' %}?asal=cpns"
        class="flex items-center justify-center gap-3 w-full min-h-11 px-5 py-3 rounded-xl bg-[#F3F4F6] hover:bg-white text-[#090D16] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
         <span class="font-display font-bold" aria-hidden="true">G</span>
         <span>Daftar dengan Google</span>
