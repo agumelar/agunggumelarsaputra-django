@@ -32,6 +32,12 @@ class PengaturanCPNSTests(TestCase):
         self.assertTrue(tautan.startswith("https://wa.me/0812345?text="))
         self.assertIn(quote("a@b.com", safe=""), tautan)
 
+    def test_tautan_wa_template_atribut_pakai_bawaan(self):
+        p = PengaturanCPNS(nomor_wa="0812345", pesan_wa="Halo {email.foo}")
+        tautan = p.tautan_wa(30, "a@b.com")
+        self.assertTrue(tautan.startswith("https://wa.me/0812345?text="))
+        self.assertIn(quote("Premium 30 hari"), tautan)
+
     def test_durasi_tersedia_urut(self):
         p = PengaturanCPNS(teks_harga={"90": "x", "30": "y", "abc": "z"})
         self.assertEqual(p.durasi_tersedia(), [30, 90])

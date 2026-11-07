@@ -36,7 +36,7 @@ class PengaturanCPNS(models.Model):
             return None
         try:
             pesan = self.pesan_wa.format(durasi=durasi, email=email)
-        except (KeyError, IndexError, ValueError):
+        except (KeyError, IndexError, ValueError, AttributeError, TypeError):
             pesan = PESAN_WA_BAWAAN.format(durasi=durasi, email=email)
         return f"https://wa.me/{nomor}?text={quote(pesan, safe='')}"
 
