@@ -288,3 +288,51 @@ class HalamanSoalTest(KelolaTinjauDasar):
         r = self.client.get(reverse("cpns:kelola_tinjau_soal", args=[soal.id]))
         self.assertContains(r, "Berhasil:")
         self.assertContains(r, "Soal ditayangkan.")
+
+
+PESAN_PERLU_CEK = (
+    "Soal ini ditandai perlu cek fakta. Periksa rujukannya, hapus tanda perlu cek lewat Edit, lalu setujui."
+)
+
+
+class PerluCekTest(KelolaTinjauDasar):
+    def test_setujui_ditolak_bila_perlu_cek(self):
+        soal = buat_draf("TWK")
+        Soal.objects.filter(pk=soal.pk).update(perlu_cek=True)
+        r = self.aksi(soal, aksi="setujui")
+        self.assertRedirects(
+            r, reverse("cpns:kelola_tinjau_soal", args=[soal.id]), fetch_redirect_response=False
+        )
+        self.assertIn(PESAN_PERLU_CEK, pesan(r))
+        soal.refresh_from_db()
+        self.assertEqual(soal.status, "draf")
+        self.assertIsNone(soal.ditinjau_oleh)
+
+    def test_setujui_lolos_setelah_tanda_dihapus(self):
+        soal = buat_draf("TWK")
+        self.aksi(soal, aksi="setujui")
+        soal.refresh_from_db()
+        self.assertEqual(soal.status, "tayang")
+
+    def test_panel_pemeriksaan_fakta_gagal_saat_perlu_cek(self):
+        soal = buat_draf("TWK")
+        url = reverse("cpns:kelola_tinjau_soal", args=[soal.id])
+        self.assertNotContains(self.client.get(url), "Fakta sudah dicek")
+        Soal.objects.filter(pk=soal.pk).update(perlu_cek=True)
+        r = self.client.get(url)
+        self.assertContains(r, '<span><span class="sr-only">Gagal: </span>Fakta sudah dicek</span>', html=False)
+
+
+class TautanEditFilterTest(KelolaTinjauDasar):
+    def test_tautan_edit_membawa_filter(self):
+        soal = buat_soal("TIU", status="tayang")
+        url = reverse("cpns:kelola_tinjau_soal", args=[soal.id])
+        r = self.client.get(f"{url}?status=tayang&subtes=TIU")
+        ubah = reverse("cpns:kelola_ubah", args=[soal.id])
+        self.assertContains(r, f'href="{ubah}?status=tayang&amp;subtes=TIU" x-ref="edit"')
+
+    def test_tautan_edit_tanpa_filter_polos(self):
+        soal = buat_draf()
+        r = self.client.get(reverse("cpns:kelola_tinjau_soal", args=[soal.id]))
+        ubah = reverse("cpns:kelola_ubah", args=[soal.id])
+        self.assertContains(r, f'href="{ubah}" x-ref="edit"')

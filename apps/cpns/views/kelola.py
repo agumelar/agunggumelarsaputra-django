@@ -18,6 +18,9 @@ from ._bantu import wajib_superuser
 STATUS_BAWAAN = "draf"
 PESAN_KONFLIK = "Soal ini sudah diubah di tab lain. Muat ulang untuk melihat keadaan terbaru."
 PESAN_ALASAN = "Tulis alasan penolakan."
+PESAN_PERLU_CEK = (
+    "Soal ini ditandai perlu cek fakta. Periksa rujukannya, hapus tanda perlu cek lewat Edit, lalu setujui."
+)
 
 
 def konteks_kelola(request, aktif):
@@ -130,7 +133,7 @@ def _pemeriksaan(soal):
         .exclude(pk=soal.pk)
         .values_list("id", flat=True)[:5]
     )
-    return [
+    hasil = [
         {"label": "5 opsi terisi dan berbeda", "masalah": opsi},
         {
             "label": "Bobot TKP valid" if soal.subtes == "TKP" else "Kunci valid",
@@ -145,6 +148,14 @@ def _pemeriksaan(soal):
             else [],
         },
     ]
+    if soal.perlu_cek:
+        hasil.append(
+            {
+                "label": "Fakta sudah dicek",
+                "masalah": ["Periksa rujukannya, lalu hapus tanda perlu cek lewat Edit."],
+            }
+        )
+    return hasil
 
 
 def _opsi(soal):
@@ -242,6 +253,9 @@ def kelola_aksi(request, soal_id):
             return redirect(kembali)
         if aksi == "setujui" and soal.status == "tayang":
             messages.error(request, "Soal ini sudah tayang.")
+            return redirect(kembali)
+        if aksi == "setujui" and soal.perlu_cek:
+            messages.error(request, PESAN_PERLU_CEK)
             return redirect(kembali)
         soal.ditinjau_oleh = request.user
         soal.ditinjau_pada = timezone.now()

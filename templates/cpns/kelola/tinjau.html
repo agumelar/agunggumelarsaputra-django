@@ -138,7 +138,7 @@
                 class="inline-flex items-center gap-3 min-h-11 px-5 rounded-lg bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
             Setujui dan tayangkan <kbd class="font-mono text-sm">S</kbd>
         </button>
-        <a href="{% url 'cpns:kelola_ubah' soal.id %}" x-ref="edit"
+        <a href="{% url 'cpns:kelola_ubah' soal.id %}{% if query_filter %}?{{ query_filter }}{% endif %}" x-ref="edit"
            class="inline-flex items-center gap-3 min-h-11 px-4 rounded-lg bg-[#111827] border border-white/[0.14] font-semibold hover:bg-[#162032] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
             Edit <kbd class="font-mono text-sm">E</kbd>
         </a>

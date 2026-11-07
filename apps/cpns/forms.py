@@ -6,7 +6,11 @@ from apps.cpns.validasi import HURUF
 
 
 class SoalForm(forms.ModelForm):
-    """Formulir edit soal. Jenis ujian tidak ikut diubah. Aturan isi dari validasi_soal lewat Soal.clean."""
+    """Formulir edit soal. Jenis ujian tidak ikut diubah. Aturan isi dari validasi_soal lewat Soal.clean.
+
+    Subtes dikunci bila soal sudah dipakai di sesi, karena penilaian dan ulasan
+    mengelompokkan butir menurut subtes soal saat ini.
+    """
 
     kembalikan_draf = forms.BooleanField(required=False, label="Kembalikan ke draf")
     bobot_a = forms.IntegerField(required=False, label="Bobot A")
@@ -51,6 +55,9 @@ class SoalForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.user = user
         self.status_awal = self.instance.status
+        self.subtes_terkunci = bool(self.instance.pk) and self.instance.di_sesi.exists()
+        if self.subtes_terkunci:
+            self.fields["subtes"].disabled = True
         self.fields["kunci"] = forms.ChoiceField(
             required=False,
             label="Kunci jawaban",

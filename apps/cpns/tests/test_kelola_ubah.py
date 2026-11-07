@@ -199,3 +199,40 @@ class UbahTest(UbahDasar):
         self.assertEqual(r.status_code, 403)
         soal.refresh_from_db()
         self.assertNotEqual(soal.teks, "Retas")
+
+
+PESAN_SUBTES_TERKUNCI = (
+    "Subtes tidak bisa diubah karena soal ini sudah dipakai di sesi peserta. "
+    "Tolak soal ini lalu buat soal baru bila subtesnya salah."
+)
+
+
+class SubtesTerkunciTest(UbahDasar):
+    def soal_dipakai(self):
+        peserta = get_user_model().objects.create_user(username="peserta", password="x")
+        soal = buat_soal("TIU", kunci="A", status="tayang")
+        buat_sesi_cat(peserta, SkemaUjian.objects.get(kode="SKD-CAT"), [soal], ["A"])
+        return soal
+
+    def test_soal_dipakai_di_sesi_subtes_terkunci_di_form(self):
+        soal = self.soal_dipakai()
+        r = self.client.get(self.url(soal))
+        self.assertContains(r, PESAN_SUBTES_TERKUNCI)
+        self.assertRegex(r.content.decode(), r'<select name="subtes"[^>]*disabled')
+
+    def test_soal_dipakai_di_sesi_subtes_tidak_berubah(self):
+        soal = self.soal_dipakai()
+        r = self.client.post(self.url(soal), data_valid(soal, subtes="TWK", teks="Teks baru"))
+        self.assertEqual(r.status_code, 302)
+        soal.refresh_from_db()
+        self.assertEqual(soal.subtes, "TIU")
+        self.assertEqual(soal.teks, "Teks baru")
+
+    def test_soal_belum_dipakai_subtes_boleh_berubah(self):
+        soal = buat_soal("TIU", status="draf")
+        r = self.client.get(self.url(soal))
+        self.assertNotContains(r, PESAN_SUBTES_TERKUNCI)
+        r = self.client.post(self.url(soal), data_valid(soal, subtes="TWK"))
+        self.assertEqual(r.status_code, 302)
+        soal.refresh_from_db()
+        self.assertEqual(soal.subtes, "TWK")

@@ -36,9 +36,10 @@
             </div>
             <div class="flex flex-col gap-1">
                 <label for="{{ form.subtes.id_for_label }}" class="text-xs text-[#94A3B8]">Subtes</label>
-                <select name="subtes" id="{{ form.subtes.id_for_label }}" x-model="subtes" class="{{ kelas_input }}">
+                <select name="subtes" id="{{ form.subtes.id_for_label }}" x-model="subtes"{% if form.subtes_terkunci %} disabled aria-describedby="subtes-terkunci"{% endif %} class="{{ kelas_input }} disabled:opacity-70 disabled:cursor-not-allowed">
                     {% for nilai, label in form.fields.subtes.choices %}<option value="{{ nilai }}" {% if form.subtes.value == nilai %}selected{% endif %}>{{ label }}</option>{% endfor %}
                 </select>
+                {% if form.subtes_terkunci %}<p id="subtes-terkunci" class="text-xs text-[#FBBF24]">Subtes tidak bisa diubah karena soal ini sudah dipakai di sesi peserta. Tolak soal ini lalu buat soal baru bila subtesnya salah.</p>{% endif %}
             </div>
             <div class="flex flex-col gap-1">
                 <label for="{{ form.subtopik.id_for_label }}" class="text-xs text-[#94A3B8]">Subtopik</label>
