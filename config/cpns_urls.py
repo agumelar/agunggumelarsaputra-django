@@ -1,13 +1,19 @@
 """
 URL configuration khusus subdomain cpns.agunggumelarsaputra.com.
+
+Rute CPNS dipasang di root. Rute situs utama ikut didaftarkan di belakangnya
+karena halaman akun (login, daftar, profil) memakai navbar utama yang
+memanggil {% url %} ke namespace pembelajaran, tka, literasi, dan lainnya.
+Tanpa itu, halaman tersebut gagal dengan NoReverseMatch (500).
 """
 
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+
+from config.urls import urlpatterns as main_urlpatterns
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include('apps.cpns.urls', namespace='cpns')),
-    path('accounts/', include('apps.accounts.urls', namespace='accounts')),
-    path('core/', include('apps.core.urls', namespace='core')),
+] + [
+    pattern for pattern in main_urlpatterns
+    if getattr(pattern, 'namespace', None) != 'cpns'
 ]

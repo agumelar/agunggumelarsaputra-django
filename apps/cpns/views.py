@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.db.models import Count
+from django.http import HttpResponseBadRequest
 
 from .models import CpnsPackage, CpnsQuestion, CpnsAttempt
 
@@ -10,6 +11,32 @@ try:
     from apps.gamification.models import XPHistory
 except ImportError:
     XPHistory = None
+
+VALID_MODES = {choice for choice, _ in CpnsAttempt.MODE_CHOICES}
+VALID_ANSWER_KEYS = {'A', 'B', 'C', 'D', 'E'}
+
+
+def _clean_answers(raw_answers, package):
+    """
+    Ambil hanya jawaban A–E untuk soal milik paket ini.
+    Mengembalikan None kalau payload bukan objek JSON.
+    """
+    try:
+        data = json.loads(raw_answers)
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(data, dict):
+        return None
+
+    question_ids = {str(pk) for pk in package.questions.values_list('id', flat=True)}
+    cleaned = {}
+    for question_id, choice in data.items():
+        if question_id not in question_ids or not isinstance(choice, str):
+            continue
+        choice = choice.strip().upper()
+        if choice in VALID_ANSWER_KEYS:
+            cleaned[question_id] = choice
+    return cleaned
 
 
 def cpns_landing_view(request):
@@ -89,7 +116,9 @@ def cpns_cbt_exam_view(request, slug):
         messages.error(request, "Paket soal ini belum memiliki butir pertanyaan.")
         return redirect('cpns:package_detail', slug=slug)
 
-    mode = request.GET.get('mode', 'SIMULASI_CAT')
+    mode = request.GET.get('mode')
+    if mode not in VALID_MODES:
+        mode = 'SIMULASI_CAT'
 
     # Format JSON payload untuk Alpine.js CBT engine
     questions_data = []
@@ -140,14 +169,20 @@ def cpns_cbt_submit_view(request, slug):
     menghitung status kelulusan passing grade simultan, dan menyimpan attempt.
     """
     package = get_object_or_404(CpnsPackage, slug=slug, is_published=True)
-    raw_answers = request.POST.get('answers_payload', '{}')
-    time_spent = int(request.POST.get('time_spent_seconds', 0))
     mode = request.POST.get('mode', 'SIMULASI_CAT')
+    if mode not in VALID_MODES:
+        return HttpResponseBadRequest('Mode ujian tidak dikenal.')
 
     try:
-        answers = json.loads(raw_answers)
-    except json.JSONDecodeError:
-        answers = {}
+        time_spent = int(request.POST.get('time_spent_seconds', 0))
+    except (TypeError, ValueError):
+        return HttpResponseBadRequest('Waktu pengerjaan tidak valid.')
+    if time_spent < 0:
+        return HttpResponseBadRequest('Waktu pengerjaan tidak valid.')
+
+    answers = _clean_answers(request.POST.get('answers_payload', '{}'), package)
+    if answers is None:
+        return HttpResponseBadRequest('Format lembar jawaban tidak valid.')
 
     session_key = ''
     if not request.user.is_authenticated:

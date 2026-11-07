@@ -13,6 +13,7 @@ from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse, JsonResponse
 from django.core.files.base import ContentFile
@@ -157,7 +158,11 @@ def login_view(request):
                 messages.success(request, f"Selamat datang kembali, {user.display_name}!")
                 
                 next_url = request.GET.get('next')
-                if next_url:
+                if next_url and url_has_allowed_host_and_scheme(
+                    next_url,
+                    allowed_hosts={request.get_host()},
+                    require_https=request.is_secure(),
+                ):
                     return redirect(next_url)
                 return redirect('admin_panel:dashboard' if user.is_guru else 'core:home')
             else:

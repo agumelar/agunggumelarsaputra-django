@@ -18,7 +18,7 @@
                     {{ package.judul }}
                 </span>
                 <span class="text-xs px-2 py-0.5 rounded-full font-mono font-medium {% if mode == 'SIMULASI_CAT' %}bg-sky-500/10 text-sky-400 border border-sky-500/20{% else %}bg-amber-500/10 text-amber-400 border border-amber-500/20{% endif %}">
-                    {{ mode|yesno:"Simulasi CAT,Drilling Bebas" }}
+                    {% if mode == 'SIMULASI_CAT' %}Simulasi CAT{% else %}Drilling Bebas{% endif %}
                 </span>
             </div>
 
