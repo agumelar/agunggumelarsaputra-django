@@ -20,9 +20,9 @@ from apps.cpns.sesi_layanan import (
     simpan_jawaban,
 )
 
-HURUF = "ABCDE"
+from ._bantu import HURUF, LABEL_JENIS, ke_posisi_tampil, opsi_ulasan, teks_opsi
+
 JAWABAN_SAH = ("",) + tuple(HURUF)
-LABEL_JENIS = {"SKD": "SKD", "SKB_GURU": "SKB Guru"}
 
 
 def _sesi_milik(request, sesi_id):
@@ -33,16 +33,6 @@ def _sesi_milik(request, sesi_id):
 
 def _label_jenis(sesi):
     return LABEL_JENIS.get(sesi.skema.jenis_ujian, sesi.skema.jenis_ujian)
-
-
-def _teks_opsi(soal, huruf_asli):
-    return getattr(soal, f"opsi_{huruf_asli.lower()}")
-
-
-def _ke_posisi_tampil(urutan_opsi, jawaban_asli):
-    if not jawaban_asli or jawaban_asli not in urutan_opsi:
-        return ""
-    return HURUF[urutan_opsi.index(jawaban_asli)]
 
 
 def _gabung(bagian):
@@ -87,10 +77,10 @@ def ruang_cat(request, sesi_id):
                 "subtopik": butir.soal.subtopik,
                 "teks": butir.soal.teks,
                 "opsi": [
-                    {"key": HURUF[i], "text": _teks_opsi(butir.soal, asli)}
+                    {"key": HURUF[i], "text": teks_opsi(butir.soal, asli)}
                     for i, asli in enumerate(butir.urutan_opsi)
                 ],
-                "jawaban": _ke_posisi_tampil(butir.urutan_opsi, butir.jawaban),
+                "jawaban": ke_posisi_tampil(butir.urutan_opsi, butir.jawaban),
                 "ragu": butir.ragu,
             }
         )
@@ -195,16 +185,7 @@ def _ulasan(sesi):
                 "teks": soal.teks,
                 "status": _status_butir(butir, pakai_bobot),
                 "pakai_bobot": pakai_bobot,
-                "opsi": [
-                    {
-                        "huruf": HURUF[i],
-                        "teks": _teks_opsi(soal, asli),
-                        "dipilih": butir.jawaban == asli,
-                        "kunci": adalah_benar(soal, asli),
-                        "bobot": (soal.bobot or {}).get(asli, 0),
-                    }
-                    for i, asli in enumerate(butir.urutan_opsi)
-                ],
+                "opsi": opsi_ulasan(butir),
                 "konsep": soal.pembahasan_konsep,
                 "pengecoh": soal.pembahasan_pengecoh,
                 "cepat": soal.pembahasan_cepat,
