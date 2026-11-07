@@ -1,0 +1,92 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Premium{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <header class="space-y-3">
+        <h1 class="font-display text-3xl sm:text-4xl font-bold text-[#F3F4F6]">Premium CPNS Hub</h1>
+        <p class="text-base sm:text-lg text-[#CBD5E1] leading-relaxed">Akses penuh selama masa aktif. Kalau memasukkan kode baru sebelum masa aktif habis, sisa harinya ditambahkan.</p>
+        {% if request.user.is_authenticated %}
+        <p class="inline-flex items-center px-3 py-1 rounded-lg bg-[#FBBF24]/10 text-sm font-semibold text-[#FBBF24]">
+            {% if premium_sampai %}Premium sampai {{ premium_sampai|date:"d M Y" }}{% elif superuser %}Premium{% else %}Akun Trial{% endif %}
+        </p>
+        {% endif %}
+    </header>
+
+    {% if harga %}
+    <section aria-labelledby="judul-harga" class="space-y-3">
+        <h2 id="judul-harga" class="sr-only">Pilihan durasi</h2>
+        <ul class="grid grid-cols-2 gap-3">
+            {% for h in harga %}
+            <li class="p-4 rounded-2xl bg-[#111827] border border-white/[0.08]">
+                <p class="text-base font-semibold text-[#F3F4F6]">{{ h.durasi }} hari</p>
+                <p class="font-mono text-lg font-bold text-[#38BDF8]">{{ h.teks }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% else %}
+    <p class="text-base text-[#CBD5E1]">Harga Premium: hubungi admin.</p>
+    {% endif %}
+
+    <ul class="list-disc pl-5 space-y-1 text-base text-[#CBD5E1]">
+        <li>Semua paket belajar dan subtopik</li>
+        <li>Simulasi SKD dan SKB Guru tanpa batas</li>
+        <li>Pembahasan semua soal simulasi</li>
+        <li>Ringkasan subtopik yang masih lemah</li>
+    </ul>
+
+    <section aria-labelledby="judul-cara" class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-4">
+        <h2 id="judul-cara" class="font-display text-xl font-semibold text-[#F3F4F6]">Cara membeli</h2>
+        <ol class="list-decimal pl-5 space-y-2 text-base text-[#CBD5E1]">
+            <li>Hubungi admin lewat WhatsApp, sebutkan email akunmu dan durasi yang dipilih.</li>
+            <li>Bayar sesuai petunjuk admin.</li>
+            <li>Admin mengirim kode voucher. Masukkan kodenya di bawah.</li>
+        </ol>
+        {% if harga %}
+            {% for h in harga %}{% if h.wa %}
+            <a href="{{ h.wa }}" target="_blank" rel="noopener"
+               class="flex items-center justify-center w-full min-h-11 px-5 py-3 rounded-xl {% if forloop.first %}bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49]{% else %}border border-white/[0.14] text-[#F3F4F6] hover:bg-[#162032]{% endif %} text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                Hubungi admin via WhatsApp, paket {{ h.durasi }} hari
+            </a>
+            {% endif %}{% endfor %}
+        {% elif wa_umum %}
+            <a href="{{ wa_umum }}" target="_blank" rel="noopener"
+               class="flex items-center justify-center w-full min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                Hubungi admin via WhatsApp
+            </a>
+        {% endif %}
+        {% if not ada_kontak %}<p class="text-base text-[#CBD5E1]">Kontak admin belum diatur.</p>{% endif %}
+    </section>
+
+    <section aria-labelledby="judul-kode" class="space-y-3">
+        <h2 id="judul-kode" class="font-display text-xl font-semibold text-[#F3F4F6]">Sudah punya kode?</h2>
+        {% if request.user.is_authenticated %}
+        <form method="post" action="{% url 'cpns:tukar_voucher' %}"
+              hx-post="{% url 'cpns:tukar_voucher' %}" hx-target="#hasil-voucher" hx-swap="innerHTML"
+              hx-disabled-elt="#tombol-kode" hx-indicator="#tombol-kode"
+              hx-on::before-swap="if (event.detail.xhr.status === 400) { event.detail.shouldSwap = true; event.detail.isError = false }"
+              class="space-y-3">
+            {% csrf_token %}
+            <label for="kode-voucher" class="block text-sm font-semibold text-[#F3F4F6]">Kode voucher</label>
+            <div class="flex gap-3">
+                <input id="kode-voucher" name="kode" type="text" required maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false"
+                       placeholder="XXXX-XXXX" aria-describedby="hasil-voucher"
+                       class="min-w-0 flex-1 min-h-11 px-4 rounded-xl bg-[#0D1422] border border-white/[0.14] font-mono text-base text-[#F3F4F6] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#38BDF8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
+                <button id="tombol-kode" type="submit"
+                        class="group shrink-0 inline-flex items-center justify-center min-h-11 px-5 rounded-xl bg-[#162032] border border-white/[0.14] text-base font-semibold text-[#F3F4F6] hover:bg-[#1C293E] disabled:opacity-60 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                    <span class="group-[.htmx-request]:hidden">Pakai kode</span>
+                    <span class="hidden group-[.htmx-request]:inline">Memeriksa kode&hellip;</span>
+                </button>
+            </div>
+        </form>
+        {% else %}
+        <a href="{% url 'cpns:masuk' %}?next={% url 'cpns:premium' %}" class="inline-flex items-center min-h-11 text-base font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Masuk untuk menukar kode</a>
+        {% endif %}
+        <div id="hasil-voucher" role="status" aria-live="polite"></div>
+    </section>
+
+    <p class="text-sm text-[#94A3B8]">Pembayaran diproses manual oleh admin. Dengan membeli, kamu menyetujui <a href="{% url 'cpns:syarat' %}" class="underline underline-offset-2 hover:text-[#CBD5E1]">Syarat Layanan</a>.</p>
+</div>
+{% endblock %}

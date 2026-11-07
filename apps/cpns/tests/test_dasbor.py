@@ -248,7 +248,8 @@ class DasborTest(TestCase):
         resp = self._dasbor()
         self.assertContains(resp, 'id="premium"', html=False)
         self.assertContains(resp, 'id="simulasi"', html=False)
-        self.assertContains(resp, "Info pembelian Premium segera tersedia.")
+        self.assertContains(resp, f'href="{reverse("cpns:premium")}"')
+        self.assertNotContains(resp, "segera tersedia")
 
     def test_judul_halaman(self):
         self.assertContains(self._dasbor(), "<title>Dasbor | CPNS Hub</title>", html=False)
@@ -274,7 +275,7 @@ class NavigasiTest(TestCase):
         self.assertIn('href="/belajar/"', html)
         self.assertIn('href="/riwayat/"', html)
         self.assertIn('href="/dasbor/#simulasi"', html)
-        self.assertIn('href="/dasbor/#premium"', html)
+        self.assertIn('href="/premium/"', html)
 
     def test_nav_pakai_url_di_domain_utama(self):
         resp = self.client.get("/cpns/dasbor/")

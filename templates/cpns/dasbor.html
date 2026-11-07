@@ -11,7 +11,7 @@
                 {% if premium_sampai %}Premium sampai {{ premium_sampai|date:"d M Y" }}{% else %}{{ label_lencana }}{% endif %}
             </span>
             {% if label_lencana == "Akun Trial" %}
-                <a href="#premium" class="inline-flex items-center min-h-11 text-sm font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Lihat Premium</a>
+                <a href="{% url 'cpns:premium' %}" class="inline-flex items-center min-h-11 text-sm font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Lihat Premium</a>
             {% endif %}
         </div>
     </header>
@@ -139,7 +139,7 @@
     <section id="premium" class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-2 scroll-mt-20" aria-labelledby="judul-premium">
         <h2 id="judul-premium" class="font-display text-xl font-bold text-[#F3F4F6]">Premium</h2>
         <p class="text-sm sm:text-base text-[#CBD5E1]">Premium membuka pembahasan lengkap, simulasi tanpa batas kuota, SKB Guru, dan belajar per subtopik.</p>
-        <p class="text-sm sm:text-base text-[#CBD5E1]">Info pembelian Premium segera tersedia.</p>
+        <a href="{% url 'cpns:premium' %}" class="inline-flex items-center min-h-11 text-sm sm:text-base font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Lihat harga dan tukar kode voucher</a>
     </section>
 </div>
 {% endblock %}

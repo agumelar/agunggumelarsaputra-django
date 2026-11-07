@@ -8,6 +8,7 @@ from .belajar import (
 )
 from .cat import hasil_cat, kumpulkan_cat, mulai_cat, ruang_cat, simpan_cat
 from .dasbor import dasbor, laporkan_soal, riwayat
+from .premium import premium, tukar_voucher
 from .publik import beranda_publik, privasi, syarat
 
 __all__ = [
@@ -16,6 +17,8 @@ __all__ = [
     "beranda_publik",
     "syarat",
     "privasi",
+    "premium",
+    "tukar_voucher",
     "dasbor",
     "riwayat",
     "laporkan_soal",

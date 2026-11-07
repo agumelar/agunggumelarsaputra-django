@@ -14,7 +14,7 @@
 
 {% block content %}
 <div class="min-h-screen flex flex-col bg-[#090D16] text-[#F3F4F6] selection:bg-[#38BDF8] selection:text-[#082F49]">
-    {% url 'cpns:beranda' as url_beranda %}{% url 'cpns:dasbor' as url_dasbor %}{% url 'cpns:belajar_pilih' as url_belajar %}{% url 'cpns:riwayat' as url_riwayat %}{% url 'accounts:profile' as url_akun %}
+    {% url 'cpns:beranda' as url_beranda %}{% url 'cpns:dasbor' as url_dasbor %}{% url 'cpns:belajar_pilih' as url_belajar %}{% url 'cpns:riwayat' as url_riwayat %}{% url 'accounts:profile' as url_akun %}{% url 'cpns:premium' as url_premium %}
     <header x-data="{ menuOpen: false }"
             @keydown.escape.window="if (menuOpen) { menuOpen = false; $refs.tombolMenu.focus() }"
             class="sticky top-0 z-40 bg-[#090D16] border-b border-white/[0.08]">
@@ -26,7 +26,7 @@
                 <a href="{{ url_belajar }}" {% if request.path == url_belajar %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_belajar %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Belajar</a>
                 <a href="{{ url_dasbor }}#simulasi" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Simulasi</a>
                 <a href="{{ url_riwayat }}" {% if request.path == url_riwayat %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_riwayat %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Riwayat</a>
-                <a href="{{ url_dasbor }}#premium" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Premium</a>
+                <a href="{{ url_premium }}" {% if request.path == url_premium %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_premium %}text-[#38BDF8] underline underline-offset-8 decoration-2{% else %}text-[#CBD5E1]{% endif %}">Premium</a>
                 {% if request.user.is_authenticated %}
                 <a href="{{ url_akun }}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Akun</a>
                 <a href="{% url 'accounts:logout' %}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Keluar</a>
@@ -55,7 +55,7 @@
                 <a href="{{ url_belajar }}" @click="menuOpen = false" {% if request.path == url_belajar %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_belajar %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Belajar</a>
                 <a href="{{ url_dasbor }}#simulasi" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Simulasi</a>
                 <a href="{{ url_riwayat }}" @click="menuOpen = false" {% if request.path == url_riwayat %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_riwayat %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Riwayat</a>
-                <a href="{{ url_dasbor }}#premium" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Premium</a>
+                <a href="{{ url_premium }}" @click="menuOpen = false" {% if request.path == url_premium %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_premium %}text-[#38BDF8] border-l-2 border-l-[#38BDF8] pl-3{% else %}text-[#F3F4F6]{% endif %}">Premium</a>
                 {% if request.user.is_authenticated %}
                 <a href="{{ url_akun }}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Akun</a>
                 <a href="{% url 'accounts:logout' %}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Keluar</a>

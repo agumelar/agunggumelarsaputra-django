@@ -290,7 +290,7 @@ class CatViewsTest(TestCase):
         self.assertContains(resp, "Pembahasan")
         self.assertContains(resp, "Premium")
         self.assertContains(resp, "Pembahasan 3 soal ada di Premium")
-        self.assertContains(resp, f'href="{reverse("cpns:dasbor")}#premium"')
+        self.assertContains(resp, f'href="{reverse("cpns:premium")}"')
         self.assertContains(resp, "<title>Hasil Simulasi | CPNS Hub</title>", html=False)
         html = resp.content.decode()
         for rahasia in RAHASIA:
