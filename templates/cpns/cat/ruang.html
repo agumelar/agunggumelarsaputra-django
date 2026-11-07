@@ -27,9 +27,9 @@
                 <span class="inline-flex items-center gap-1"
                       :class="{
                           'text-[#34D399]': status === 'tersimpan',
-                          'text-[#CBD5E1]': status === 'menyimpan',
                           'text-[#FBBF24]': status === 'gagal',
-                          'text-[#F87171]': status === 'habis' || status === 'keluar'
+                          'text-[#F87171]': status === 'habis' || status === 'keluar' || status === 'ditolak',
+                          'text-[#CBD5E1]': status === 'menyimpan' || status === 'selesai'
                       }">
                     <svg x-show="status === 'tersimpan'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -107,7 +107,7 @@
         <div class="lg:col-span-4">
             <div x-show="openNav" x-cloak @click="tutupNav()" class="fixed inset-0 z-40 bg-black/70 lg:hidden" aria-hidden="true"></div>
 
-            <div id="daftar-soal" aria-labelledby="judul-daftar-soal"
+            <div id="daftar-soal" x-ref="panelNav" aria-labelledby="judul-daftar-soal"
                  :role="openNav ? 'dialog' : null" :aria-modal="openNav ? 'true' : null"
                  :class="openNav ? 'fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto rounded-t-3xl' : 'hidden'"
                  class="lg:block lg:sticky lg:top-44 lg:inset-auto lg:z-auto lg:max-h-none lg:overflow-visible lg:rounded-2xl p-5 sm:p-6 bg-[#111827] border border-white/[0.08] space-y-5">
@@ -173,7 +173,7 @@
     <!-- Dialog konfirmasi kumpulkan -->
     <div x-show="openKonfirmasi" x-cloak @click.self="tutupKonfirmasi()"
          class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/70">
-        <div role="dialog" aria-modal="true" aria-labelledby="judul-kumpulkan" aria-describedby="isi-kumpulkan"
+        <div x-ref="dialogKonfirmasi" role="dialog" aria-modal="true" aria-labelledby="judul-kumpulkan" aria-describedby="isi-kumpulkan"
              class="max-w-md w-full p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-5">
             <h2 id="judul-kumpulkan" class="font-display text-lg font-bold text-[#F3F4F6]">Kumpulkan jawaban sekarang?</h2>
             <p id="isi-kumpulkan" class="text-sm text-[#CBD5E1]">Setelah dikumpulkan, jawaban tidak bisa diubah lagi.</p>
@@ -205,9 +205,12 @@ function ruangCat() {
         tersimpan: 'Tersimpan',
         menyimpan: 'Menyimpan…',
         gagal: 'Gagal, mencoba lagi',
-        habis: 'Waktu habis',
+        habis: 'Waktu habis, mengumpulkan…',
+        selesai: 'Ujian sudah dikumpulkan.',
+        ditolak: 'Jawaban tidak tersimpan. Coba pilih lagi.',
         keluar: 'Sesi masuk berakhir. Masuk lagi untuk melanjutkan.',
     };
+    const STATUS_AKHIR = ['habis', 'selesai'];
     const BATAS_FETCH_MS = 8000;
     const BATAS_KUMPUL_MS = 3000;
 
@@ -270,7 +273,15 @@ function ruangCat() {
 
         detik() {
             this.sisa = Math.max(0, Math.ceil((this.tenggat - Date.now()) / 1000));
-            if (this.sisa === 0) this.kumpulkanSekarang();
+            if (this.sisa === 0 && !this.mengumpulkan) {
+                this.umumkan('habis');
+                this.kumpulkanSekarang();
+            }
+        },
+
+        umumkan(status) {
+            this.status = status;
+            this.pengumuman = TEKS_STATUS[status];
         },
 
         formatWaktu(detik) {
@@ -328,7 +339,7 @@ function ruangCat() {
             return this.proses;
         },
 
-        // Hasil: 'ok', 'buang' (data ditolak server), 'habis', 'keluar', atau 'gagal'.
+        // Hasil: 'ok', 'buang' (data ditolak server), 'habis', 'selesai', 'keluar', atau 'gagal'.
         // Hanya JSON dengan ok === true yang dihitung tersimpan.
         async kirimSatu(item) {
             const henti = new AbortController();
@@ -343,7 +354,11 @@ function ruangCat() {
                     body: JSON.stringify(item),
                 });
                 if (resp.status === 401) return 'keluar';
-                if (resp.status === 409) return 'habis';
+                if (resp.status === 409) {
+                    const isi409 = (resp.headers.get('Content-Type') || '').includes('application/json')
+                        ? await resp.json().catch(() => null) : null;
+                    return isi409 && isi409.alasan === 'sudah_selesai' ? 'selesai' : 'habis';
+                }
                 if (resp.redirected || resp.type === 'opaqueredirect') return 'gagal';
                 const jenis = resp.headers.get('Content-Type') || '';
                 const isi = jenis.includes('application/json') ? await resp.json() : null;
@@ -357,17 +372,23 @@ function ruangCat() {
         },
 
         async kirimSemua() {
-            if (this.status !== 'keluar') this.status = 'menyimpan';
+            if (!STATUS_AKHIR.includes(this.status) && this.status !== 'keluar') this.status = 'menyimpan';
             let hasil = 'ok';
+            let ditolak = false;
             do {
                 this.ulang = false;
                 for (const nomor of Object.keys(this.antrean)) {
                     const item = { ...this.antrean[nomor] };
                     hasil = await this.kirimSatu(item);
+                    if (hasil === 'selesai') {
+                        this.sudahSelesai();
+                        return;
+                    }
                     if (hasil === 'habis') {
                         this.waktuHabis();
                         return;
                     }
+                    if (hasil === 'buang') ditolak = true;
                     if (hasil === 'gagal' || hasil === 'keluar') break;
                     const kini = this.antrean[nomor];
                     if (kini && kini.jawaban === item.jawaban && kini.ragu === item.ragu) {
@@ -376,16 +397,29 @@ function ruangCat() {
                     }
                 }
             } while (this.ulang && hasil !== 'gagal' && hasil !== 'keluar');
-            this.status = hasil === 'gagal' || hasil === 'keluar' ? hasil : 'tersimpan';
-            this.pengumuman = this.status === 'tersimpan' ? '' : TEKS_STATUS[this.status];
+            if (STATUS_AKHIR.includes(this.status)) return;
+            if (hasil === 'gagal' || hasil === 'keluar') this.umumkan(hasil);
+            else if (ditolak) this.umumkan('ditolak');
+            else {
+                this.status = 'tersimpan';
+                this.pengumuman = '';
+            }
         },
 
         waktuHabis() {
-            this.status = 'habis';
-            this.pengumuman = TEKS_STATUS.habis;
+            this.umumkan('habis');
             this.antrean = {};
             this.tulisAntrean();
             this.kumpulkanSekarang(false);
+        },
+
+        // Server bilang ujian sudah dikumpulkan (tab lain, atau waktu habis di server).
+        sudahSelesai() {
+            this.umumkan('selesai');
+            this.antrean = {};
+            this.tulisAntrean();
+            this.mengumpulkan = true;
+            setTimeout(() => { window.location.href = data.url_hasil; }, 1200);
         },
 
         async kumpulkanSekarang(kirimDulu = true) {
@@ -433,7 +467,36 @@ function ruangCat() {
             if (this.pemicu) this.pemicu.focus();
         },
 
+        // Tab dan Shift+Tab berputar di dalam dialog yang sedang terbuka.
+        jebakFokus(e) {
+            const wadah = this.openKonfirmasi ? this.$refs.dialogKonfirmasi : (this.openNav ? this.$refs.panelNav : null);
+            if (!wadah) return;
+            const bisaFokus = [...wadah.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            )].filter(el => !el.disabled && el.offsetParent !== null);
+            if (!bisaFokus.length) {
+                e.preventDefault();
+                return;
+            }
+            const awal = bisaFokus[0];
+            const akhir = bisaFokus[bisaFokus.length - 1];
+            if (!wadah.contains(document.activeElement)) {
+                e.preventDefault();
+                awal.focus();
+            } else if (e.shiftKey && document.activeElement === awal) {
+                e.preventDefault();
+                akhir.focus();
+            } else if (!e.shiftKey && document.activeElement === akhir) {
+                e.preventDefault();
+                awal.focus();
+            }
+        },
+
         tombolKeyboard(e) {
+            if (e.key === 'Tab' && (this.openKonfirmasi || this.openNav)) {
+                this.jebakFokus(e);
+                return;
+            }
             if (e.key === 'Escape') {
                 if (this.openKonfirmasi) this.tutupKonfirmasi();
                 if (this.openNav) this.tutupNav();

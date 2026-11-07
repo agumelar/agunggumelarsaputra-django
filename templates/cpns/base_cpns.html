@@ -90,4 +90,45 @@
         </div>
     </footer>
 </div>
+
+<script>
+// Umpan balik untuk permintaan HTMX yang gagal (4xx/5xx dan jaringan putus).
+// Permintaan dengan isError=false (mis. 400 di #hasil-voucher) tidak memicu responseError.
+(function () {
+    var CADANGAN = 'Permintaan gagal. Muat ulang halaman lalu coba lagi.';
+    var JARINGAN = 'Tidak ada koneksi. Periksa jaringan lalu coba lagi.';
+
+    function teksAman(xhr) {
+        var t = ((xhr && xhr.responseText) || '').trim();
+        // Halaman galat HTML (500, CSRF) tidak ditampilkan mentah.
+        return t && t.length <= 200 && t.indexOf('<') === -1 ? t : CADANGAN;
+    }
+
+    function tampilkan(elt, teks) {
+        if (!elt || !elt.closest) return;
+        var acuan = elt.closest('form') || elt;
+        var alert = acuan.nextElementSibling;
+        if (!alert || !alert.hasAttribute('data-htmx-alert')) {
+            alert = document.createElement('p');
+            alert.setAttribute('role', 'alert');
+            alert.setAttribute('data-htmx-alert', '');
+            alert.className = 'mt-3 p-3 rounded-xl bg-[#111827] border border-[#F87171] text-sm text-[#F87171]';
+            acuan.insertAdjacentElement('afterend', alert);
+        }
+        alert.textContent = teks;
+    }
+
+    document.addEventListener('htmx:responseError', function (e) {
+        tampilkan(e.detail.elt, teksAman(e.detail.xhr));
+    });
+    document.addEventListener('htmx:sendError', function (e) {
+        tampilkan(e.detail.elt, JARINGAN);
+    });
+    document.addEventListener('htmx:beforeRequest', function (e) {
+        var acuan = e.detail.elt && e.detail.elt.closest && (e.detail.elt.closest('form') || e.detail.elt);
+        var alert = acuan && acuan.nextElementSibling;
+        if (alert && alert.hasAttribute('data-htmx-alert')) alert.remove();
+    });
+})();
+</script>
 {% endblock %}

@@ -102,6 +102,7 @@ def ruang_cat(request, sesi_id):
         "sesi_id": sesi.pk,
         "sisa_detik": sesi.sisa_detik(timezone.now()),
         "url_simpan": reverse("cpns:cat_simpan", args=[sesi.pk]),
+        "url_hasil": reverse("cpns:cat_hasil", args=[sesi.pk]),
         "soal": soal,
     }
     return render(

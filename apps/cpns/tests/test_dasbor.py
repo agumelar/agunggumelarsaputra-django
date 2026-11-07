@@ -364,7 +364,7 @@ class LaporkanSoalTest(TestCase):
         resp = self._laporkan()
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Terima kasih, laporan terkirim.")
-        self.assertContains(resp, 'role="status"', html=False)
+        self.assertNotContains(resp, 'role="status"', html=False)
         laporan = LaporanSoal.objects.get()
         self.assertEqual(laporan.soal, self.soal)
         self.assertEqual(laporan.user, self.user)
@@ -453,6 +453,29 @@ class LaporkanSoalTest(TestCase):
         resp = self._laporkan(hx=False, HTTP_REFERER="https://jahat.example/")
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(resp["Location"], reverse("cpns:dasbor"))
+
+    def test_laporkan_wadah_status_ada_sejak_awal(self):
+        sesi_belajar(self.user, [self.soal], ["A"])
+        sesi = Sesi.objects.get(user=self.user)
+        html = self.client.get(reverse("cpns:belajar_soal", args=[sesi.pk, 1])).content.decode()
+        pola = rf'<div id="laporan-status-{self.soal.pk}" role="status"[^>]*></div>'
+        self.assertRegex(html, pola)
+        self.assertIn(f'hx-target="#laporan-status-{self.soal.pk}"', html)
+        self.assertIn('hx-swap="innerHTML"', html)
+        # Handler global untuk 4xx dan galat jaringan HTMX ada di kerangka cpns.
+        self.assertIn("htmx:responseError", html)
+        self.assertIn("htmx:sendError", html)
+        self.assertIn("Permintaan gagal. Muat ulang halaman lalu coba lagi.", html)
+
+    def test_laporkan_4xx_berteks_indonesia(self):
+        # Teks inilah yang ditampilkan handler htmx:responseError.
+        resp = self._laporkan()
+        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.content.decode(), "Soal ini belum bisa kamu laporkan.")
+        sesi_belajar(self.user, [self.soal], ["A"])
+        resp = self._laporkan(data={"alasan": "asal"})
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.content.decode(), "Pilih alasan laporan.")
 
 
 class SlotLaporkanTest(TestCase):

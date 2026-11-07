@@ -398,3 +398,17 @@ class BelajarViewsTest(TestCase):
         self.assertContains(resp, 'id="area-jawab"')
         self.assertContains(resp, "autofocus")
         self.assertContains(resp, "diisi Task 12", count=0)
+
+    def test_endpoint_htmx_400_berteks(self):
+        sesi = buat_sesi_belajar(self.user, [soal_rahasia()])
+        resp = self._jawab(sesi, 1, "Z")
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.content.decode(), "Jawaban tidak valid.")
+
+    def test_endpoint_htmx_409_berteks(self):
+        sesi = buat_sesi_belajar(self.user, [soal_rahasia()])
+        sesi.status = "selesai"
+        sesi.save(update_fields=["status"])
+        resp = self._jawab(sesi, 1, "A")
+        self.assertEqual(resp.status_code, 409)
+        self.assertEqual(resp.content.decode(), "Sesi belajar ini sudah selesai.")

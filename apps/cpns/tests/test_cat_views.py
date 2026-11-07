@@ -369,3 +369,45 @@ def _json_script(html, element_id):
     awal = html.index(">", awal) + 1
     akhir = html.index("</script>", awal)
     return html[awal:akhir]
+
+
+class RuangCatTeksStatusTest(TestCase):
+    _sesi_berjalan = CatViewsTest._sesi_berjalan
+    _simpan = CatViewsTest._simpan
+
+    def setUp(self):
+        self.skema = SkemaUjian.objects.get(kode="SKD-CAT")
+        self.user = buat_user("peserta")
+        self.client.force_login(self.user)
+
+    def _html(self):
+        sesi = self._sesi_berjalan()
+        resp = self.client.get(reverse("cpns:cat_ruang", args=[sesi.pk]))
+        return sesi, resp.content.decode()
+
+    def test_ruang_teks_status_baru_ada(self):
+        _, html = self._html()
+        self.assertIn("Waktu habis, mengumpulkan…", html)
+        self.assertIn("Ujian sudah dikumpulkan.", html)
+        self.assertIn("Jawaban tidak tersimpan. Coba pilih lagi.", html)
+
+    def test_ruang_memuat_url_hasil_untuk_pengalihan(self):
+        sesi, html = self._html()
+        payload = json.loads(_json_script(html, "data-ruang"))
+        self.assertEqual(payload["url_hasil"], reverse("cpns:cat_hasil", args=[sesi.pk]))
+
+    def test_ruang_dialog_punya_acuan_jebakan_fokus(self):
+        _, html = self._html()
+        self.assertIn('x-ref="dialogKonfirmasi"', html)
+        self.assertIn('x-ref="panelNav"', html)
+        self.assertIn("jebakFokus", html)
+
+    def test_simpan_sudah_selesai_dan_waktu_habis_dibedakan(self):
+        sesi = self._sesi_berjalan()
+        sesi.status = "selesai"
+        sesi.save(update_fields=["status"])
+        resp = self._simpan(sesi, {"nomor": 1, "jawaban": "A", "ragu": False})
+        self.assertEqual((resp.status_code, resp.json()["alasan"]), (409, "sudah_selesai"))
+        sesi2 = self._sesi_berjalan(menit=-5)
+        resp = self._simpan(sesi2, {"nomor": 1, "jawaban": "A", "ragu": False})
+        self.assertEqual((resp.status_code, resp.json()["alasan"]), (409, "waktu_habis"))
