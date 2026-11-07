@@ -9,14 +9,14 @@
         <!-- Breadcrumb & Top Actions -->
         <div class="flex items-center justify-between text-xs">
             <nav class="flex items-center gap-2 text-slate-400">
-                <a href="{% url 'cpns:package_list' %}" class="hover:text-slate-200">Katalog Paket</a>
+                <a href="{% url 'cpns:package_list' %}" class="inline-flex items-center min-h-11 hover:text-slate-200">Katalog Paket</a>
                 <span>/</span>
                 <span class="text-slate-200">{{ package.kode }}</span>
                 <span>/</span>
                 <span class="text-slate-400">Hasil Evaluasi</span>
             </nav>
 
-            <a href="{% url 'cpns:cbt_exam' package.slug %}?mode={{ attempt.mode }}" class="font-semibold text-indigo-400 hover:text-indigo-300">
+            <a href="{% url 'cpns:cbt_exam' package.slug %}?mode={{ attempt.mode }}" class="inline-flex items-center min-h-11 font-semibold text-indigo-400 hover:text-indigo-300">
                 &larr; Ulangi Pengerjaan
             </a>
         </div>
@@ -128,28 +128,28 @@
                 <div class="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-medium">
                     <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=all"
                             hx-target="#reviewItemsContainer"
-                            class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'all' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                            class="inline-flex items-center min-h-11 px-3 rounded-xl transition hover:text-white {% if filter_type == 'all' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
                         Semua Butir
                     </button>
                     <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=salah"
                             hx-target="#reviewItemsContainer"
-                            class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'salah' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                            class="inline-flex items-center min-h-11 px-3 rounded-xl transition hover:text-white {% if filter_type == 'salah' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
                         Hanya Salah
                     </button>
                     {% if package.tipe_ujian == 'SKD' %}
                         <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=TWK"
                                 hx-target="#reviewItemsContainer"
-                                class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'TWK' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                                class="inline-flex items-center min-h-11 px-3 rounded-xl transition hover:text-white {% if filter_type == 'TWK' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
                             TWK
                         </button>
                         <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=TIU"
                                 hx-target="#reviewItemsContainer"
-                                class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'TIU' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                                class="inline-flex items-center min-h-11 px-3 rounded-xl transition hover:text-white {% if filter_type == 'TIU' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
                             TIU
                         </button>
                         <button hx-get="{% url 'cpns:cbt_result' package.slug attempt.id %}?filter=TKP"
                                 hx-target="#reviewItemsContainer"
-                                class="px-3 py-1.5 rounded-xl transition hover:text-white {% if filter_type == 'TKP' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
+                                class="inline-flex items-center min-h-11 px-3 rounded-xl transition hover:text-white {% if filter_type == 'TKP' %}bg-indigo-600 text-white shadow-sm{% else %}text-slate-400{% endif %}">
                             TKP
                         </button>
                     {% endif %}

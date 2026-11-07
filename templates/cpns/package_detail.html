@@ -8,9 +8,9 @@
         
         <!-- Breadcrumb -->
         <nav class="flex items-center gap-2 text-xs text-slate-400">
-            <a href="{% url 'cpns:landing' %}" class="hover:text-slate-200">Beranda</a>
+            <a href="{% url 'cpns:landing' %}" class="inline-flex items-center min-h-11 hover:text-slate-200">Beranda</a>
             <span>/</span>
-            <a href="{% url 'cpns:package_list' %}" class="hover:text-slate-200">Katalog Paket</a>
+            <a href="{% url 'cpns:package_list' %}" class="inline-flex items-center min-h-11 hover:text-slate-200">Katalog Paket</a>
             <span>/</span>
             <span class="text-slate-200 truncate">{{ package.kode }}</span>
         </nav>
@@ -113,7 +113,7 @@
                                         {% endif %}
                                     </td>
                                     <td class="p-3.5 text-right font-sans">
-                                        <a href="{% url 'cpns:cbt_result' package.slug att.id %}" class="text-indigo-400 hover:text-indigo-300 font-medium">
+                                        <a href="{% url 'cpns:cbt_result' package.slug att.id %}" class="inline-flex items-center min-h-11 text-indigo-400 hover:text-indigo-300 font-medium">
                                             Lihat Review &rarr;
                                         </a>
                                     </td>

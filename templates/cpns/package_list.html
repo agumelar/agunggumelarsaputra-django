@@ -55,10 +55,10 @@
                             <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
                                 <span class="text-xs text-slate-500 font-mono">{{ pkg.total_questions_count }} Soal</span>
                                 <div class="flex gap-2">
-                                    <a href="{% url 'cpns:cbt_exam' pkg.slug %}?mode=DRILLING_BEBAS" class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                                    <a href="{% url 'cpns:cbt_exam' pkg.slug %}?mode=DRILLING_BEBAS" class="inline-flex items-center min-h-11 text-xs font-semibold px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
                                         Drilling
                                     </a>
-                                    <a href="{% url 'cpns:package_detail' pkg.slug %}" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition">
+                                    <a href="{% url 'cpns:package_detail' pkg.slug %}" class="inline-flex items-center min-h-11 text-xs font-semibold px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition">
                                         Mulai CAT
                                     </a>
                                 </div>
@@ -100,10 +100,10 @@
                         <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
                             <span class="text-xs text-slate-500 font-mono">{{ pkg.total_questions_count }} Soal</span>
                             <div class="flex gap-2">
-                                <a href="{% url 'cpns:cbt_exam' pkg.slug %}?mode=DRILLING_BEBAS" class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                                <a href="{% url 'cpns:cbt_exam' pkg.slug %}?mode=DRILLING_BEBAS" class="inline-flex items-center min-h-11 text-xs font-semibold px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
                                     Drilling
                                 </a>
-                                <a href="{% url 'cpns:package_detail' pkg.slug %}" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition">
+                                <a href="{% url 'cpns:package_detail' pkg.slug %}" class="inline-flex items-center min-h-11 text-xs font-semibold px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition">
                                     Mulai CAT
                                 </a>
                             </div>
