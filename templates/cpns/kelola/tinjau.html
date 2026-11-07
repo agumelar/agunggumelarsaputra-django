@@ -5,12 +5,13 @@
 {% block kelola_content %}
 <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-5 flex flex-col gap-5 flex-1"
      x-data="{
+        terkirim: false,
         abaikan(e) {
             var t = e.target && e.target.tagName;
             return e.ctrlKey || e.metaKey || e.altKey || t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT';
         },
         pintasan(e) {
-            if (this.abaikan(e)) return;
+            if (e.repeat || this.terkirim || this.abaikan(e)) return;
             var k = e.key;
             if (k === 's' || k === 'S') { e.preventDefault(); this.$refs.setujui && this.$refs.setujui.click(); }
             else if (k === 'e' || k === 'E') { if (this.$refs.edit) { e.preventDefault(); this.$refs.edit.click(); } }
@@ -123,6 +124,7 @@
     </div>
 
     <form method="post" action="{% url 'cpns:kelola_aksi' soal.id %}"
+          @submit="setTimeout(() => { terkirim = true }, 0)"
           class="sticky bottom-0 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#090D16] border-t border-white/[0.08] flex flex-wrap items-center gap-3">
         {% csrf_token %}
         <input type="hidden" name="status_awal" value="{{ soal.status }}">
@@ -131,7 +133,7 @@
         <input type="hidden" name="subtopik" value="{{ filt.subtopik }}">
         <input type="hidden" name="batch" value="{{ filt.batch }}">
 
-        <button type="submit" name="aksi" value="setujui" x-ref="setujui"
+        <button type="submit" name="aksi" value="setujui" x-ref="setujui" :disabled="terkirim"
                 class="inline-flex items-center gap-3 min-h-11 px-5 rounded-lg bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
             Setujui dan tayangkan <kbd class="font-mono text-sm">S</kbd>
         </button>
@@ -139,7 +141,7 @@
            class="inline-flex items-center gap-3 min-h-11 px-4 rounded-lg bg-[#111827] border border-white/[0.14] font-semibold hover:bg-[#162032] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
             Edit <kbd class="font-mono text-sm">E</kbd>
         </a>
-        <button type="submit" name="aksi" value="tolak" x-ref="tolak"
+        <button type="submit" name="aksi" value="tolak" x-ref="tolak" :disabled="terkirim"
                 class="inline-flex items-center gap-3 min-h-11 px-4 rounded-lg bg-[#111827] border border-[#F87171] text-[#FCA5A5] font-semibold hover:bg-[#162032] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F87171]">
             Tolak <kbd class="font-mono text-sm">T</kbd>
         </button>
@@ -147,7 +149,7 @@
                placeholder="Alasan tolak, misalnya: kunci salah, dua opsi bisa benar"
                @keydown.enter.prevent="$refs.tolak.click()"
                class="flex-1 min-w-[14rem] min-h-11 px-4 rounded-lg bg-[#111827] border border-white/[0.14] text-sm text-[#F3F4F6] placeholder:text-[#94A3B8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
-        <button type="submit" name="aksi" value="lewati" x-ref="lewati"
+        <button type="submit" name="aksi" value="lewati" x-ref="lewati" :disabled="terkirim"
                 class="inline-flex items-center gap-2 min-h-11 px-4 rounded-lg font-semibold text-[#F3F4F6] hover:bg-[#162032] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
             Lewati <span aria-hidden="true">&rarr;</span>
         </button>

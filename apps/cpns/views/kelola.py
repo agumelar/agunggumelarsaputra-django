@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
+from apps.cpns.forms import SoalForm
 from apps.cpns.models import LaporanSoal, Soal
 from apps.cpns.validasi import HURUF, validasi_soal
 
@@ -16,7 +17,6 @@ from ._bantu import wajib_superuser
 STATUS_BAWAAN = "draf"
 PESAN_KONFLIK = "Soal ini sudah diubah di tab lain. Muat ulang untuk melihat keadaan terbaru."
 PESAN_ALASAN = "Tulis alasan penolakan."
-PESAN_UBAH_BELUM = "Edit soal belum tersedia."
 
 
 def konteks_kelola(request, aktif):
@@ -87,10 +87,31 @@ def kelola_tinjau_soal(request, soal_id):
 
 @wajib_superuser
 def kelola_ubah(request, soal_id):
-    # Pengganti sementara. Task 6 menggantinya dengan formulir edit.
     soal = get_object_or_404(Soal, pk=soal_id)
-    messages.info(request, PESAN_UBAH_BELUM)
-    return redirect(_url_soal(soal.id, _filter_dari(request.GET)))
+    filt = _filter_dari(request.GET)
+    if request.method == "POST":
+        form = SoalForm(request.POST, instance=soal, user=request.user)
+        if form.is_valid():
+            with transaction.atomic():
+                form.save()
+            messages.success(request, "Perubahan disimpan.")
+            return redirect(_url_soal(soal.id, filt))
+    else:
+        form = SoalForm(instance=soal, user=request.user)
+    subtes_form = form["subtes"].value()
+    return render(
+        request,
+        "cpns/kelola/ubah_soal.html",
+        {
+            **konteks_kelola(request, "tinjau"),
+            "soal": soal,
+            "form": form,
+            "filt": filt,
+            "query_filter": _query_filter(filt),
+            "url_kembali": _url_soal(soal.id, filt),
+            "subtes_awal": subtes_form if subtes_form in Soal.SUBTES else soal.subtes,
+        },
+    )
 
 
 def _pemeriksaan(soal):
@@ -218,10 +239,14 @@ def kelola_aksi(request, soal_id):
         if soal.status != status_awal:
             messages.error(request, PESAN_KONFLIK)
             return redirect(kembali)
+        if aksi == "setujui" and soal.status == "tayang":
+            messages.error(request, "Soal ini sudah tayang.")
+            return redirect(kembali)
         soal.ditinjau_oleh = request.user
         soal.ditinjau_pada = timezone.now()
         if aksi == "setujui":
             soal.status = "tayang"
+            soal.catatan_tinjau = ""
             try:
                 soal.full_clean()
             except ValidationError as galat:

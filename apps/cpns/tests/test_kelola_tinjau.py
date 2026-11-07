@@ -179,6 +179,27 @@ class AksiTest(KelolaTinjauDasar):
         self.assertIn(PESAN_KONFLIK, pesan(r))
         self.assertIn(f"/{soal.id}/", r["Location"])
 
+    def test_setujui_soal_sudah_tayang_ditolak(self):
+        soal = buat_draf()
+        self.aksi(soal, aksi="setujui")
+        soal.refresh_from_db()
+        peninjau, waktu = soal.ditinjau_oleh, soal.ditinjau_pada
+        lain = get_user_model().objects.create_superuser(username="lain", password="x")
+        self.client.force_login(lain)
+        r = self.aksi(soal, aksi="setujui", status_awal="tayang")
+        self.assertIn("Soal ini sudah tayang.", pesan(r))
+        soal.refresh_from_db()
+        self.assertEqual(soal.ditinjau_oleh, peninjau)
+        self.assertEqual(soal.ditinjau_pada, waktu)
+
+    def test_setujui_menghapus_catatan_tinjau(self):
+        soal = buat_draf()
+        Soal.objects.filter(pk=soal.pk).update(catatan_tinjau="kunci salah")
+        self.aksi(soal, aksi="setujui")
+        soal.refresh_from_db()
+        self.assertEqual(soal.status, "tayang")
+        self.assertEqual(soal.catatan_tinjau, "")
+
     def test_aksi_harus_post(self):
         soal = buat_draf()
         r = self.client.get(reverse("cpns:kelola_aksi", args=[soal.id]))
@@ -241,10 +262,27 @@ class HalamanSoalTest(KelolaTinjauDasar):
         self.assertIn('aria-label="Alasan tolak"', html)
         self.assertIn("@keydown.window", html)
 
-    def test_edit_mengarah_ke_rute_ubah_sementara(self):
+    def test_edit_mengarah_ke_rute_ubah(self):
         soal = buat_draf()
         halaman = self.client.get(reverse("cpns:kelola_tinjau_soal", args=[soal.id]))
         self.assertContains(halaman, reverse("cpns:kelola_ubah", args=[soal.id]))
         r = self.client.get(reverse("cpns:kelola_ubah", args=[soal.id]))
-        self.assertIn("Edit soal belum tersedia.", pesan(r))
-        self.assertIn(f"/{soal.id}/", r["Location"])
+        self.assertEqual(r.status_code, 200)
+
+    def test_markup_pintasan_abaikan_pengulangan_dan_kunci_kirim_ganda(self):
+        soal = buat_draf()
+        html = self.client.get(reverse("cpns:kelola_tinjau_soal", args=[soal.id])).content.decode()
+        self.assertIn("e.repeat", html)
+        self.assertIn("terkirim", html)
+        self.assertIn(":disabled", html)
+
+    def test_flash_pesan_tidak_hanya_warna(self):
+        soal = buat_draf()
+        self.aksi(soal, aksi="tolak", alasan=" ")
+        r = self.client.get(reverse("cpns:kelola_tinjau_soal", args=[soal.id]))
+        self.assertContains(r, 'role="alert"')
+        self.assertContains(r, "Gagal:")
+        self.aksi(soal, aksi="setujui")
+        r = self.client.get(reverse("cpns:kelola_tinjau_soal", args=[soal.id]))
+        self.assertContains(r, "Berhasil:")
+        self.assertContains(r, "Soal ditayangkan.")
