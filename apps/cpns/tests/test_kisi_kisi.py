@@ -35,6 +35,7 @@ class KisiKisiTest(SimpleTestCase):
             "| SKD | XYZ | A | 60 |": "XYZ",
             "| SKD | TWK | A | abc |": "abc",
             "| SKD | TWK | A | 0 |": "0",
+            "| SKD | TWK | A | ² |": "²",
             "| SKD | PEDAGOGIK | A | 60 |": "PEDAGOGIK",
         }
         for baris in kasus:
@@ -42,6 +43,25 @@ class KisiKisiTest(SimpleTestCase):
             with self.assertRaises(ValueError) as konteks:
                 baca_kisi_kisi(berkas)
             self.assertIn("baris 3", str(konteks.exception), baris)
+            self.assertIn(kasus[baris], str(konteks.exception), baris)
 
     def test_file_hilang_list_kosong(self):
         self.assertEqual(baca_kisi_kisi(Path(tempfile.gettempdir()) / "tidak-ada-kisi.md"), [])
+
+    def test_duplikat_ditolak(self):
+        baris = "| SKD | TWK | Pancasila | 60 |\n"
+        berkas = _tulis(KEPALA + baris + baris)
+        with self.assertRaises(ValueError) as konteks:
+            baca_kisi_kisi(berkas)
+        self.assertIn("baris 4", str(konteks.exception))
+        self.assertIn("Pancasila", str(konteks.exception))
+
+    def test_hanya_tabel_pertama_dibaca(self):
+        isi = (
+            KEPALA + "| SKD | TWK | Pancasila | 60 |\n\n"
+            "Catatan bebas.\n| bukan data |\n\n"
+            + KEPALA + "| SKD | XYZ | Lain | 1 |\n"
+        )
+        self.assertEqual(
+            baca_kisi_kisi(_tulis(isi)), [Subtopik("SKD", "TWK", "Pancasila", 60)]
+        )

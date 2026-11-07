@@ -30,7 +30,7 @@ def _ke_subtopik(sel, nomor):
         )
     if not nama:
         raise ValueError(f"Kisi-kisi baris {nomor}: nama subtopik kosong.")
-    if not target.isdigit() or int(target) < 1:
+    if not (target.isascii() and target.isdigit()) or int(target) < 1:
         raise ValueError(
             f"Kisi-kisi baris {nomor}: target {target} harus angka positif."
         )
@@ -42,9 +42,12 @@ def baca_kisi_kisi(path: Path | None = None) -> list[Subtopik]:
     if not path.exists():
         return []
     hasil = []
+    ada = set()
     kepala_terlihat = False
     for nomor, baris in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         if not baris.strip().startswith("|"):
+            if kepala_terlihat:
+                break
             continue
         sel = _sel(baris)
         if not kepala_terlihat:
@@ -52,5 +55,12 @@ def baca_kisi_kisi(path: Path | None = None) -> list[Subtopik]:
             continue
         if all(set(s) <= set("-: ") for s in sel):
             continue
-        hasil.append(_ke_subtopik(sel, nomor))
+        subtopik = _ke_subtopik(sel, nomor)
+        kunci = (subtopik.jenis_ujian, subtopik.subtes, subtopik.nama)
+        if kunci in ada:
+            raise ValueError(
+                f"Kisi-kisi baris {nomor}: subtopik {subtopik.nama} untuk {subtopik.subtes} sudah ada."
+            )
+        ada.add(kunci)
+        hasil.append(subtopik)
     return hasil
