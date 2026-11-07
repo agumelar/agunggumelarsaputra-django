@@ -19,14 +19,6 @@ def _bagian_skd():
     return skema, baris
 
 
-def _harga():
-    pengaturan = PengaturanCPNS.ambil()
-    return [
-        {"durasi": d, "teks": pengaturan.teks_harga.get(str(d), "")}
-        for d in pengaturan.durasi_tersedia()
-    ]
-
-
 @require_GET
 def beranda_publik(request):
     if request.user.is_authenticated:
@@ -35,7 +27,8 @@ def beranda_publik(request):
     return render(request, "cpns/publik/beranda.html", {
         "skema": skema,
         "bagian_skd": bagian,
-        "harga": _harga(),
+        "harga": [{"durasi": d, "teks": t} for d, t in PengaturanCPNS.ambil().daftar_harga()],
+        "total_soal": sum(b["jumlah"] for b in bagian),
     })
 
 

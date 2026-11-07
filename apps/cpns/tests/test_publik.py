@@ -47,6 +47,22 @@ class BerandaPublikTest(TestCase):
         p.save()
         self.assertContains(self.ambil(), 'Harga Premium: hubungi admin.')
 
+    def test_harga_bukan_dict_tidak_500(self):
+        p = PengaturanCPNS.ambil()
+        p.teks_harga = ['30']
+        p.save()
+        r = self.ambil()
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, 'Harga Premium: hubungi admin.')
+
+    def test_durasi_dan_jumlah_soal_dari_database(self):
+        SkemaUjian.objects.filter(kode='SKD-CAT').update(durasi_menit=90)
+        r = self.ambil()
+        self.assertContains(r, '90 menit')
+        self.assertNotContains(r, '100 menit')
+        SkemaUjian.objects.filter(kode='SKD-CAT').delete()
+        self.assertNotContains(self.ambil(), 'menit')
+
     def test_harga_terisi_tampil(self):
         p = PengaturanCPNS.ambil()
         p.teks_harga = {'30': 'Rp 49.000'}

@@ -27,8 +27,24 @@ class PengaturanCPNS(models.Model):
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
 
+    def daftar_harga(self):
+        if not isinstance(self.teks_harga, dict):
+            return []
+        hasil = []
+        for kunci, teks in self.teks_harga.items():
+            if not str(kunci).isdecimal():
+                continue
+            try:
+                durasi = int(kunci)
+            except ValueError:
+                continue
+            if durasi < 1 or not isinstance(teks, str) or not teks.strip():
+                continue
+            hasil.append((durasi, teks.strip()))
+        return sorted(hasil)
+
     def durasi_tersedia(self):
-        return sorted(int(k) for k in self.teks_harga if str(k).isdigit())
+        return [d for d, _ in self.daftar_harga()]
 
     def tautan_wa(self, durasi, email):
         nomor = "".join(c for c in self.nomor_wa if c.isdigit())

@@ -43,6 +43,25 @@ class PengaturanCPNSTests(TestCase):
         self.assertEqual(p.durasi_tersedia(), [30, 90])
 
 
+class DaftarHargaTests(TestCase):
+    def _daftar(self, nilai):
+        p = PengaturanCPNS.ambil()
+        p.teks_harga = nilai
+        return p.daftar_harga()
+
+    def test_bukan_dict_kosong(self):
+        self.assertEqual(self._daftar(['30']), [])
+
+    def test_kunci_tidak_sah_dilewati(self):
+        self.assertEqual(self._daftar({'abc': 'x', '\u00b2': 'y', '30': 'Rp1'}), [(30, 'Rp1')])
+
+    def test_teks_kosong_dilewati(self):
+        self.assertEqual(self._daftar({'30': '  '}), [])
+
+    def test_nol_dilewati_dan_urut(self):
+        self.assertEqual(self._daftar({'90': 'c', '0': 'z', '30': 'a'}), [(30, 'a'), (90, 'c')])
+
+
 class VoucherTests(TestCase):
     def test_status_voucher(self):
         v = Voucher.objects.create(kode="AAAA-BBBB", durasi_hari=30)
