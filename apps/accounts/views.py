@@ -332,7 +332,13 @@ def google_oauth_callback_view(request):
             if is_teacher_email and not user.is_guru:
                 user.role = User.ROLE_GURU
                 user.is_staff = True
-                user.save(update_fields=['role', 'is_staff'])
+                user.set_unusable_password()
+                user.save(update_fields=['role', 'is_staff', 'password'])
+            elif user.role == User.ROLE_PESERTA:
+                akses = AksesPeserta.objects.filter(user=user).first()
+                if akses is not None and not akses.via_google:
+                    user.set_unusable_password()
+                    user.save(update_fields=['password'])
 
             # Update avatar Google jika belum punya avatar lokal
             if google_pic and not user.avatar:

@@ -62,6 +62,13 @@ class DaftarTest(TestCase):
         self.assertEqual(User.objects.count(), 1)
         self.assertNotIn("_auth_user_id", self.client.session)
 
+    @override_settings(GURU_EMAILS=["guru@contoh.id"])
+    def test_daftar_email_guru_ditolak(self):
+        r = self.daftar(email="Guru@contoh.id")
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "Email ini sudah terdaftar. Silakan masuk.")
+        self.assertFalse(User.objects.filter(email__iexact="guru@contoh.id").exists())
+
     def test_daftar_tanpa_setuju_ditolak(self):
         data = data_daftar()
         del data["setuju"]
@@ -203,3 +210,32 @@ class CallbackGoogleTest(TestCase):
         self.assertEqual(user.role, "siswa")
         self.assertEqual(user.xp, 50)
         self.assertFalse(AksesPeserta.objects.filter(user=user).exists())
+
+    @override_settings(GURU_EMAILS=["guru@contoh.id"])
+    def test_callback_promosi_guru_hapus_sandi(self):
+        user = User.objects.create_user(
+            username="g", email="guru@contoh.id", password=SANDI, role="peserta"
+        )
+        self.panggil("guru@contoh.id", HOST_CPNS)
+        user.refresh_from_db()
+        self.assertEqual(user.role, "guru")
+        self.assertFalse(user.has_usable_password())
+
+    def test_callback_google_pertama_akun_daftar_hapus_sandi(self):
+        user = User.objects.create_user(
+            username="d", email="d@contoh.id", password=SANDI, role="peserta"
+        )
+        AksesPeserta.objects.create(user=user, via_google=False)
+        self.panggil("d@contoh.id", HOST_CPNS)
+        user.refresh_from_db()
+        self.assertFalse(user.has_usable_password())
+        self.assertTrue(AksesPeserta.objects.get(user=user).via_google)
+
+    def test_callback_siswa_lama_sandi_tetap(self):
+        user = User.objects.create_user(
+            username="s", email="s@contoh.id", password=SANDI, role="siswa"
+        )
+        self.panggil("s@contoh.id", HOST_CPNS)
+        self.panggil("s@contoh.id")
+        user.refresh_from_db()
+        self.assertTrue(user.has_usable_password())

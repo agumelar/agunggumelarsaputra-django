@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
+from apps.accounts.views import _is_teacher_email
 from apps.cpns.models import AksesPeserta, PengaturanCPNS
 
 User = get_user_model()
@@ -100,7 +101,7 @@ def daftar(request):
         except ValidationError:
             galat["email"] = PESAN_EMAIL_TIDAK_VALID
         else:
-            if User.objects.filter(email__iexact=email).exists():
+            if _is_teacher_email(email) or User.objects.filter(email__iexact=email).exists():
                 galat["email"] = PESAN_EMAIL_ADA
         if kata_sandi != ulang:
             galat["ulang_kata_sandi"] = PESAN_SANDI_BEDA
