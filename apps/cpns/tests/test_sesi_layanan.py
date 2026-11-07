@@ -60,6 +60,15 @@ class SesiLayananTest(TestCase):
         with self.assertRaises(SesiSudahSelesai):
             simpan_jawaban(self.sesi, 1, "A", False)
 
+    def test_simpan_ditolak_pada_objek_basi_yang_sudah_dikumpulkan(self):
+        basi = type(self.sesi).objects.get(pk=self.sesi.pk)
+        simpan_jawaban(self.sesi, 1, "A", False)
+        kumpulkan(self.sesi)
+        self.assertEqual(basi.status, "berjalan")
+        with self.assertRaises(SesiSudahSelesai):
+            simpan_jawaban(basi, 1, "B", False)
+        self.assertEqual(self.sesi.butir.get(nomor=1).jawaban, "A")
+
     def test_kosongkan_jawaban(self):
         simpan_jawaban(self.sesi, 1, "A", False)
         hasil = simpan_jawaban(self.sesi, 1, "", False)

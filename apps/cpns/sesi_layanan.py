@@ -28,23 +28,27 @@ def _lewat_toleransi(sesi, now):
 
 def simpan_jawaban(sesi, nomor, jawaban_tampil, ragu, now=None) -> SesiSoal:
     now = now or timezone.now()
-    if sesi.status == "selesai":
-        raise SesiSudahSelesai(f"Sesi {sesi.pk} sudah selesai")
-    if _lewat_toleransi(sesi, now):
-        raise WaktuHabis(f"Waktu sesi {sesi.pk} sudah habis")
-    if jawaban_tampil not in ("", "A", "B", "C", "D", "E"):
-        raise ValueError(f"Jawaban tidak valid: {jawaban_tampil!r}")
-    try:
-        butir = sesi.butir.get(nomor=nomor)
-    except SesiSoal.DoesNotExist:
-        raise ValueError(f"Nomor {nomor} tidak ada di sesi ini") from None
-    butir.jawaban = (
-        "" if jawaban_tampil == "" else opsi_tampil_ke_asli(butir.urutan_opsi, jawaban_tampil)
-    )
-    butir.ragu = bool(ragu)
-    butir.dijawab_pada = now
-    butir.save(update_fields=["jawaban", "ragu", "dijawab_pada"])
-    return butir
+    with transaction.atomic():
+        terkunci = Sesi.objects.select_for_update().get(pk=sesi.pk)
+        if terkunci.status == "selesai":
+            raise SesiSudahSelesai(f"Sesi {terkunci.pk} sudah selesai")
+        if _lewat_toleransi(terkunci, now):
+            raise WaktuHabis(f"Waktu sesi {terkunci.pk} sudah habis")
+        if jawaban_tampil not in ("", "A", "B", "C", "D", "E"):
+            raise ValueError(f"Jawaban tidak valid: {jawaban_tampil!r}")
+        try:
+            butir = terkunci.butir.get(nomor=nomor)
+        except SesiSoal.DoesNotExist:
+            raise ValueError(f"Nomor {nomor} tidak ada di sesi ini") from None
+        butir.jawaban = (
+            ""
+            if jawaban_tampil == ""
+            else opsi_tampil_ke_asli(butir.urutan_opsi, jawaban_tampil)
+        )
+        butir.ragu = bool(ragu)
+        butir.dijawab_pada = now
+        butir.save(update_fields=["jawaban", "ragu", "dijawab_pada"])
+        return butir
 
 
 def kumpulkan(sesi, now=None) -> Sesi:
