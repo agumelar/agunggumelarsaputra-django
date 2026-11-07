@@ -1,9 +1,6 @@
-import importlib
-import os
-from unittest import mock
-
 from django.test import SimpleTestCase, override_settings
 from apps.accounts.views import _is_teacher_email
+from config.settings.base import GURU_EMAILS_BAWAAN, parse_guru_emails
 
 
 @override_settings(GURU_EMAILS=["agung@smkn1rongga.sch.id"])
@@ -26,29 +23,15 @@ class IsTeacherEmailKasusTepiTest(SimpleTestCase):
 
 
 class ParsingGuruEmailsTest(SimpleTestCase):
-    def _muat(self, nilai):
-        # settings/base.py membaca env saat diimpor, jadi dimuat ulang di bawah env palsu.
-        from config.settings import base
-
-        def pulihkan():
-            importlib.reload(base)
-
-        self.addCleanup(pulihkan)
-        env = {"GURU_EMAILS": nilai} if nilai is not None else {}
-        with mock.patch.dict(os.environ, env):
-            if nilai is None:
-                os.environ.pop("GURU_EMAILS", None)
-            importlib.reload(base)
-        return base.GURU_EMAILS
-
     def test_parsing_guru_emails(self):
-        self.assertEqual(self._muat("a@x.id, B@x.id,"), ["a@x.id", "B@x.id"])
+        self.assertEqual(parse_guru_emails("a@x.id, B@x.id,"), ["a@x.id", "b@x.id"])
 
     def test_parsing_guru_emails_kosong_jadi_daftar_kosong(self):
-        self.assertEqual(self._muat(" , ,"), [])
+        self.assertEqual(parse_guru_emails(""), [])
+        self.assertEqual(parse_guru_emails(" , ,"), [])
 
-    def test_parsing_guru_emails_bawaan_bila_env_tidak_ada(self):
+    def test_parsing_guru_emails_nilai_bawaan(self):
         self.assertEqual(
-            self._muat(None),
+            parse_guru_emails(GURU_EMAILS_BAWAAN),
             ["agung@smkn1rongga.sch.id", "agunggumelar@smkn1rongga.sch.id"],
         )
