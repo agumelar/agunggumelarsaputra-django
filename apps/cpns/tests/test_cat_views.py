@@ -182,6 +182,14 @@ class CatViewsTest(TestCase):
         self.assertEqual(butir.jawaban, "C")
         self.assertTrue(butir.ragu)
 
+    def test_simpan_anonim_401_json(self):
+        sesi = self._sesi_berjalan()
+        self.client.logout()
+        resp = self._simpan(sesi, {"nomor": 1, "jawaban": "A", "ragu": False})
+        self.assertEqual(resp.status_code, 401)
+        self.assertEqual(resp.json(), {"ok": False, "alasan": "belum_masuk"})
+        self.assertEqual(sesi.butir.get(nomor=1).jawaban, "")
+
     def test_simpan_jawaban_F_400(self):
         sesi = self._sesi_berjalan()
         resp = self._simpan(sesi, {"nomor": 1, "jawaban": "F", "ragu": False})
@@ -251,6 +259,7 @@ class CatViewsTest(TestCase):
         self.assertContains(resp, "Pembahasan")
         self.assertContains(resp, "Premium")
         self.assertContains(resp, "Pembahasan 3 soal ada di Premium")
+        self.assertContains(resp, f'href="{reverse("cpns:dasbor")}#premium"')
         self.assertContains(resp, "<title>Hasil Simulasi | CPNS Hub</title>", html=False)
         html = resp.content.decode()
         for rahasia in RAHASIA:

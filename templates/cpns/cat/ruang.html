@@ -29,7 +29,7 @@
                           'text-[#34D399]': status === 'tersimpan',
                           'text-[#CBD5E1]': status === 'menyimpan',
                           'text-[#FBBF24]': status === 'gagal',
-                          'text-[#F87171]': status === 'habis'
+                          'text-[#F87171]': status === 'habis' || status === 'keluar'
                       }">
                     <svg x-show="status === 'tersimpan'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -206,7 +206,10 @@ function ruangCat() {
         menyimpan: 'Menyimpan…',
         gagal: 'Gagal, mencoba lagi',
         habis: 'Waktu habis',
+        keluar: 'Sesi masuk berakhir. Masuk lagi untuk melanjutkan.',
     };
+    const BATAS_FETCH_MS = 8000;
+    const BATAS_KUMPUL_MS = 3000;
 
     function bacaAntrean() {
         try {
@@ -309,6 +312,9 @@ function ruangCat() {
         },
 
         csrf() {
+            // Cookie lebih dulu: token di form basi kalau peserta masuk ulang di tab lain.
+            const cocok = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/);
+            if (cocok) return decodeURIComponent(cocok[1]);
             return this.$refs.formKumpulkan.querySelector('[name=csrfmiddlewaretoken]').value;
         },
 
@@ -322,42 +328,56 @@ function ruangCat() {
             return this.proses;
         },
 
+        // Hasil: 'ok', 'buang' (data ditolak server), 'habis', 'keluar', atau 'gagal'.
+        // Hanya JSON dengan ok === true yang dihitung tersimpan.
+        async kirimSatu(item) {
+            const henti = new AbortController();
+            const jeda = setTimeout(() => henti.abort(), BATAS_FETCH_MS);
+            try {
+                const resp = await fetch(data.url_simpan, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    redirect: 'manual',
+                    signal: henti.signal,
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': this.csrf() },
+                    body: JSON.stringify(item),
+                });
+                if (resp.status === 401) return 'keluar';
+                if (resp.status === 409) return 'habis';
+                if (resp.redirected || resp.type === 'opaqueredirect') return 'gagal';
+                const jenis = resp.headers.get('Content-Type') || '';
+                const isi = jenis.includes('application/json') ? await resp.json() : null;
+                if (resp.status === 400 && isi && isi.alasan === 'data_tidak_valid') return 'buang';
+                return resp.ok && isi && isi.ok === true ? 'ok' : 'gagal';
+            } catch (e) {
+                return 'gagal';
+            } finally {
+                clearTimeout(jeda);
+            }
+        },
+
         async kirimSemua() {
-            this.status = 'menyimpan';
-            let gagal = false;
+            if (this.status !== 'keluar') this.status = 'menyimpan';
+            let hasil = 'ok';
             do {
                 this.ulang = false;
                 for (const nomor of Object.keys(this.antrean)) {
                     const item = { ...this.antrean[nomor] };
-                    let resp;
-                    try {
-                        resp = await fetch(data.url_simpan, {
-                            method: 'POST',
-                            credentials: 'same-origin',
-                            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': this.csrf() },
-                            body: JSON.stringify(item),
-                        });
-                    } catch (e) {
-                        gagal = true;
-                        break;
-                    }
-                    if (resp.status === 409) {
+                    hasil = await this.kirimSatu(item);
+                    if (hasil === 'habis') {
                         this.waktuHabis();
                         return;
                     }
-                    if (!resp.ok && resp.status !== 400) {
-                        gagal = true;
-                        break;
-                    }
+                    if (hasil === 'gagal' || hasil === 'keluar') break;
                     const kini = this.antrean[nomor];
                     if (kini && kini.jawaban === item.jawaban && kini.ragu === item.ragu) {
                         delete this.antrean[nomor];
                         this.tulisAntrean();
                     }
                 }
-            } while (this.ulang && !gagal);
-            this.status = gagal ? 'gagal' : 'tersimpan';
-            this.pengumuman = gagal ? TEKS_STATUS.gagal : '';
+            } while (this.ulang && hasil !== 'gagal' && hasil !== 'keluar');
+            this.status = hasil === 'gagal' || hasil === 'keluar' ? hasil : 'tersimpan';
+            this.pengumuman = this.status === 'tersimpan' ? '' : TEKS_STATUS[this.status];
         },
 
         waktuHabis() {
@@ -372,9 +392,15 @@ function ruangCat() {
             if (this.mengumpulkan) return;
             this.mengumpulkan = true;
             if (kirimDulu) {
-                try { await this.kirim(); } catch (e) { /* tetap kumpulkan */ }
+                // Koneksi macet tidak boleh menahan pengumpulan: tunggu paling lama 3 detik.
+                await Promise.race([
+                    this.kirim().catch(() => {}),
+                    new Promise(selesai => setTimeout(selesai, BATAS_KUMPUL_MS)),
+                ]);
             }
-            this.$refs.formKumpulkan.submit();
+            const form = this.$refs.formKumpulkan;
+            form.querySelector('[name=csrfmiddlewaretoken]').value = this.csrf();
+            form.submit();
         },
 
         sebelumnya() { if (this.idx > 0) this.idx--; },

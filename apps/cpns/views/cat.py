@@ -128,9 +128,11 @@ def _gagal(status, alasan):
     return JsonResponse({"ok": False, "alasan": alasan}, status=status)
 
 
-@login_required
 @require_POST
 def simpan_cat(request, sesi_id):
+    # Endpoint JSON: jangan redirect ke login, supaya klien tahu jawabannya belum tersimpan.
+    if not request.user.is_authenticated:
+        return _gagal(401, "belum_masuk")
     sesi = _sesi_milik(request, sesi_id)
     data = _baca_simpan(request.body)
     if data is None:
