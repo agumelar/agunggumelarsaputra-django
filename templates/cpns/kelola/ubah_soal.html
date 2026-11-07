@@ -105,13 +105,13 @@
                 <input type="checkbox" name="perlu_cek" {% if form.perlu_cek.value %}checked{% endif %} class="w-5 h-5 accent-[#38BDF8]">
                 Perlu cek fakta
             </label>
-            {% if soal.status == 'ditolak' %}
+            {% if form.status_awal == 'ditolak' %}
             <label class="inline-flex items-center gap-3 min-h-11 text-sm">
                 <input type="checkbox" name="kembalikan_draf" {% if form.kembalikan_draf.value %}checked{% endif %} class="w-5 h-5 accent-[#38BDF8]">
                 Kembalikan ke draf
             </label>
             {% endif %}
-            {% if soal.status == 'tayang' %}
+            {% if form.status_awal == 'tayang' %}
             <p class="text-sm text-[#FBBF24]">Soal ini sudah tayang. Perubahan langsung terlihat peserta, hasil lama tidak berubah.</p>
             {% endif %}
         </section>

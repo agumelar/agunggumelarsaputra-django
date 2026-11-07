@@ -71,14 +71,14 @@ class SoalForm(forms.ModelForm):
         else:
             self.instance.bobot = None
 
-        if self.status_awal == "ditolak" and data.get("kembalikan_draf"):
-            self.instance.status = "draf"
-        if self.instance.status == "tayang":
+        if self.status_awal == "tayang":
             self.instance.ditinjau_oleh = self.user
         return data
 
     def save(self, commit=True):
         soal = super().save(commit=False)
+        if self.status_awal == "ditolak" and self.cleaned_data.get("kembalikan_draf"):
+            soal.status = "draf"
         if soal.status == "tayang":
             soal.ditinjau_oleh = self.user
             soal.ditinjau_pada = timezone.now()

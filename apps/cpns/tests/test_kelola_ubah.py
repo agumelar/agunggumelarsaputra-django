@@ -158,6 +158,34 @@ class UbahTest(UbahDasar):
         soal.refresh_from_db()
         self.assertEqual(soal.status, "draf")
 
+    def test_ditolak_edit_tidak_valid_kotak_centang_tetap(self):
+        soal = buat_soal("TIU", status="ditolak")
+        r = self.client.post(
+            self.url(soal),
+            data_valid(soal, opsi_b=soal.opsi_a, kembalikan_draf="on"),
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, 'name="kembalikan_draf"')
+        self.assertRegex(r.content.decode(), r'name="kembalikan_draf"[^>]*checked')
+        soal.refresh_from_db()
+        self.assertEqual(soal.status, "ditolak")
+
+    def test_tayang_edit_tidak_valid_tidak_mengubah_apa_pun(self):
+        lama = get_user_model().objects.create_user(username="lama", password="x")
+        soal = buat_soal("TIU", status="tayang")
+        Soal.objects.filter(pk=soal.pk).update(ditinjau_oleh=lama)
+        soal.refresh_from_db()
+        waktu, teks = soal.ditinjau_pada, soal.teks
+        r = self.client.post(
+            self.url(soal), data_valid(soal, teks="Berubah", opsi_b=soal.opsi_a)
+        )
+        self.assertEqual(r.status_code, 200)
+        soal.refresh_from_db()
+        self.assertEqual(soal.status, "tayang")
+        self.assertEqual(soal.ditinjau_oleh, lama)
+        self.assertEqual(soal.ditinjau_pada, waktu)
+        self.assertEqual(soal.teks, teks)
+
     def test_akses_non_superuser_403(self):
         soal = buat_soal("TIU", status="draf")
         self.client.logout()

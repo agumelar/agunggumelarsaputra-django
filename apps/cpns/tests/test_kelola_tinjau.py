@@ -275,6 +275,8 @@ class HalamanSoalTest(KelolaTinjauDasar):
         self.assertIn("e.repeat", html)
         self.assertIn("terkirim", html)
         self.assertIn(":disabled", html)
+        self.assertIn("@pageshow.window", html)
+        self.assertIn("$event.persisted", html)
 
     def test_flash_pesan_tidak_hanya_warna(self):
         soal = buat_draf()
