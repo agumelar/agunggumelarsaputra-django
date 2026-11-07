@@ -54,18 +54,32 @@ class PesertaDiSitusSekolahTest(TestCase):
             response = self.client.get(path)
             self.assertNotEqual(response.get('Location'), _tujuan(), path)
 
-    def test_peserta_tidak_ada_di_leaderboard(self):
+    def test_cpns_url_berakhir_garis_miring(self):
+        self.assertTrue(settings.CPNS_URL.endswith('/'))
+        response = self.client.get('/')
+        self.assertEqual(response['Location'], settings.CPNS_URL + 'dasbor/')
+        self.assertNotIn('comdasbor', response['Location'])
+
+    def _siswa_dan_peserta(self):
+        siswa = User.objects.create_user(
+            username='siswa_lb', email='lb@example.com', password='Password123!',
+            role=User.ROLE_SISWA, first_name='SiswaTampil', xp=50,
+        )
         self.peserta.first_name = 'PesertaRahasia'
+        self.peserta.xp = 500
         self.peserta.save()
+        return siswa
+
+    def test_peserta_tidak_ada_di_leaderboard(self):
+        siswa = self._siswa_dan_peserta()
         data = get_leaderboard_data()
-        ids = [row['user'].id if isinstance(row, dict) and 'user' in row else None
-               for row in data['ranked_list']]
-        self.assertNotIn(self.peserta.id, ids)
-        self.assertNotIn('PesertaRahasia', str(data))
+        pks = [u.pk for u in data['ranked_list']]
+        self.assertIn(siswa.pk, pks)
+        self.assertNotIn(self.peserta.pk, pks)
+        self.assertNotIn(self.peserta.pk, [u.pk for u in data['top3']])
 
     def test_peserta_tidak_ada_di_panel_guru(self):
-        self.peserta.first_name = 'PesertaRahasia'
-        self.peserta.save()
+        self._siswa_dan_peserta()
         guru = User.objects.create_user(
             username='guru_iso', email='guru@example.com',
             password='Password123!', role=User.ROLE_GURU,
@@ -73,5 +87,6 @@ class PesertaDiSitusSekolahTest(TestCase):
         self.client.force_login(guru)
         response = self.client.get(reverse('admin_panel:dashboard'))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'SiswaTampil')
         self.assertNotContains(response, 'PesertaRahasia')
         self.assertNotContains(response, 'peserta_iso')
