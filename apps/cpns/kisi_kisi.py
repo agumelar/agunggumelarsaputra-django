@@ -46,7 +46,7 @@ def baca_kisi_kisi(path: Path | None = None) -> list[Subtopik]:
     kepala_terlihat = False
     for nomor, baris in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         if not baris.strip().startswith("|"):
-            if kepala_terlihat:
+            if kepala_terlihat and baris.strip():
                 break
             continue
         sel = _sel(baris)

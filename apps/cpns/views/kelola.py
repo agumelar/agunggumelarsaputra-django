@@ -280,7 +280,11 @@ def kelola_aksi(request, soal_id):
 
 @wajib_superuser
 def kelola_cakupan(request):
-    hasil = hitung_cakupan()
+    try:
+        hasil = hitung_cakupan()
+    except ValueError as e:
+        messages.error(request, f"Kisi-kisi tidak bisa dibaca: {e}")
+        hasil = hitung_cakupan(kisi=[])
     kelompok = {}
     for b in hasil["baris"]:
         query = urlencode({"status": "tayang", "subtes": b["subtes"], "subtopik": b["subtopik"]})

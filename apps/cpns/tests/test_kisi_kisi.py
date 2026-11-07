@@ -65,3 +65,19 @@ class KisiKisiTest(SimpleTestCase):
         self.assertEqual(
             baca_kisi_kisi(_tulis(isi)), [Subtopik("SKD", "TWK", "Pancasila", 60)]
         )
+
+    def test_baris_kosong_di_tengah_tabel_tidak_memotong(self):
+        isi = (
+            KEPALA + "| SKD | TWK | Pancasila | 60 |\n\n"
+            "| SKD | TIU | Deret | 40 |\n   \n"
+            "| SKB_GURU | PEDAGOGIK | Asesmen | 20 |\n\nCatatan setelah tabel.\n"
+            "| SKD | XYZ | Lain | 1 |\n"
+        )
+        self.assertEqual(
+            baca_kisi_kisi(_tulis(isi)),
+            [
+                Subtopik("SKD", "TWK", "Pancasila", 60),
+                Subtopik("SKD", "TIU", "Deret", 40),
+                Subtopik("SKB_GURU", "PEDAGOGIK", "Asesmen", 20),
+            ],
+        )

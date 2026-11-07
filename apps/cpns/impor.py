@@ -24,7 +24,7 @@ FIELD_DIKENAL = {
 
 
 class ImporGagal(Exception):
-    """Impor berhenti karena kesalahan di luar isi baris (nama batch, database)."""
+    """Impor berhenti karena kesalahan di luar isi baris (nama batch, kisi-kisi, database)."""
 
 
 CHAR_FIELD = ("jenis_ujian", "subtes", "subtopik", "tingkat", "kunci", "sumber")
@@ -116,7 +116,10 @@ def impor_batch(data: list, batch: str, coba: bool = False) -> HasilImpor:
     if len(batch) > batas:
         raise ImporGagal(f"Nama batch terlalu panjang (maksimal {batas} karakter).")
     hasil = HasilImpor()
-    kisi = {(s.subtes, s.nama) for s in baca_kisi_kisi()}
+    try:
+        kisi = {(s.subtes, s.nama) for s in baca_kisi_kisi()}
+    except ValueError as e:
+        raise ImporGagal(f"Kisi-kisi tidak bisa dibaca: {e}") from e
     sidik_file = {}
     siap = []
     for nomor, baris in enumerate(data, 1):

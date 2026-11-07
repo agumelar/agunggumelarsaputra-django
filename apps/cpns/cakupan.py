@@ -4,14 +4,19 @@ from apps.cpns.kisi_kisi import baca_kisi_kisi
 from apps.cpns.models import Soal, SkemaUjian
 
 
-def hitung_cakupan():
-    """Cakupan bank soal per subtopik (kisi-kisi + data) dan kecukupan tiap skema."""
+def hitung_cakupan(kisi=None):
+    """Cakupan bank soal per subtopik (kisi-kisi + data) dan kecukupan tiap skema.
+
+    kisi None berarti dibaca dari dokumen kisi-kisi; daftar kosong berarti tanpa target.
+    """
+    if kisi is None:
+        kisi = baca_kisi_kisi()
     jumlah = {}
     for r in Soal.objects.values("jenis_ujian", "subtes", "subtopik", "status").annotate(n=Count("id")):
         kunci = (r["jenis_ujian"], r["subtes"], r["subtopik"])
         jumlah.setdefault(kunci, {})[r["status"]] = r["n"]
 
-    target = {(s.jenis_ujian, s.subtes, s.nama): s.target for s in baca_kisi_kisi()}
+    target = {(s.jenis_ujian, s.subtes, s.nama): s.target for s in kisi}
     baris = []
     for kunci in sorted(set(target) | set(jumlah)):
         jenis, subtes, subtopik = kunci

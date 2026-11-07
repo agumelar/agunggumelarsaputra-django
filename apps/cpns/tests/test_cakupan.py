@@ -103,6 +103,23 @@ class HalamanCakupanTest(TestCase):
         self.assertContains(r, "tanpa soal berulang")
         self.assertContains(r, "subtopik=Deret")
 
+    def test_kisi_kisi_rusak_tetap_tampil_dengan_pesan(self):
+        from unittest import mock
+
+        self.client.force_login(self.admin)
+        buat_soal("TIU", subtopik="Deret")
+        rusak = mock.patch(
+            "apps.cpns.cakupan.baca_kisi_kisi",
+            side_effect=ValueError("Kisi-kisi baris 9: target abc harus angka positif."),
+        )
+        with rusak:
+            r = self.client.get(reverse("cpns:kelola_cakupan"))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(
+            r, "Kisi-kisi tidak bisa dibaca: Kisi-kisi baris 9: target abc harus angka positif."
+        )
+        self.assertContains(r, "subtopik=Deret")
+
     def test_tinjau_menaut_ke_cakupan(self):
         self.client.force_login(self.admin)
         r = self.client.get(reverse("cpns:kelola_tinjau"))

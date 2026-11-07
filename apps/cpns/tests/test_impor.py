@@ -11,10 +11,20 @@ from django.core.management.base import CommandError
 from django.test import TestCase
 
 from apps.cpns.impor import ImporGagal, impor_batch
+from apps.cpns.kisi_kisi import Subtopik
 from apps.cpns.models import Soal
 from apps.cpns.tests.pabrik import buat_soal
 
 CONTOH = Path(__file__).parent / "data" / "batch_contoh.json"
+
+# Kisi-kisi tetap untuk tes impor. Dokumen asli hanya dijaga test_kisi_kisi.
+KISI_UJI = [
+    Subtopik("SKD", "TWK", "Pancasila", 10),
+    Subtopik("SKD", "TIU", "Deret Angka", 10),
+    Subtopik("SKD", "TIU", "Hitungan", 10),
+    Subtopik("SKD", "TKP", "Pelayanan Publik", 10),
+    Subtopik("SKB_GURU", "MATERI_RPL", "Basis Data", 10),
+]
 
 
 def contoh():
@@ -41,6 +51,11 @@ def jalankan(isi, nama="uji.json", *args):
 
 
 class ImporTest(TestCase):
+    def setUp(self):
+        tambalan = mock.patch("apps.cpns.impor.baca_kisi_kisi", return_value=KISI_UJI)
+        tambalan.start()
+        self.addCleanup(tambalan.stop)
+
     def test_impor_contoh_masuk_sebagai_draf(self):
         hasil = impor_batch(contoh(), "batch-contoh")
         self.assertEqual(hasil.masuk, [1, 2, 3, 4, 5])
@@ -196,3 +211,19 @@ class ImporTest(TestCase):
         self.assertIn("Soal TKP memakai bobot, kosongkan kunci.", impor_batch([tkp], "b").gagal[0][1])
         hasil = impor_batch([tiu(bobot={"A": 1, "B": 2, "C": 3, "D": 4, "E": 5})], "b")
         self.assertIn("Soal selain TKP memakai kunci, hapus bobot.", hasil.gagal[0][1])
+
+    def test_kisi_kisi_rusak_jadi_pesan_jelas(self):
+        rusak = mock.patch(
+            "apps.cpns.impor.baca_kisi_kisi",
+            side_effect=ValueError("Kisi-kisi baris 7: harus ada 4 kolom."),
+        )
+        with rusak:
+            with self.assertRaisesMessage(
+                ImporGagal, "Kisi-kisi tidak bisa dibaca: Kisi-kisi baris 7: harus ada 4 kolom."
+            ):
+                impor_batch([tiu()], "b")
+            with self.assertRaisesMessage(
+                CommandError, "Kisi-kisi tidak bisa dibaca: Kisi-kisi baris 7: harus ada 4 kolom."
+            ):
+                jalankan([tiu()], "k.json")
+        self.assertEqual(Soal.objects.count(), 0)
