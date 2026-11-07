@@ -8,6 +8,13 @@ from .belajar import (
 )
 from .cat import hasil_cat, kumpulkan_cat, mulai_cat, ruang_cat, simpan_cat
 from .dasbor import dasbor, laporkan_soal, riwayat
+from .kelola import (
+    kelola_aksi,
+    kelola_beranda,
+    kelola_tinjau,
+    kelola_tinjau_soal,
+    kelola_ubah,
+)
 from .premium import premium, tukar_voucher
 from .publik import beranda_publik, privasi, syarat
 
@@ -32,4 +39,9 @@ __all__ = [
     "soal_belajar",
     "jawab_belajar",
     "ringkasan_belajar",
+    "kelola_beranda",
+    "kelola_tinjau",
+    "kelola_tinjau_soal",
+    "kelola_aksi",
+    "kelola_ubah",
 ]

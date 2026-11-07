@@ -25,4 +25,9 @@ urlpatterns = [
     path('belajar/<int:sesi_id>/<int:nomor>/', views.soal_belajar, name='belajar_soal'),
     path('belajar/<int:sesi_id>/<int:nomor>/jawab/', views.jawab_belajar, name='belajar_jawab'),
     path('belajar/<int:sesi_id>/ringkasan/', views.ringkasan_belajar, name='belajar_ringkasan'),
+    path('kelola/', views.kelola_beranda, name='kelola'),
+    path('kelola/tinjau/', views.kelola_tinjau, name='kelola_tinjau'),
+    path('kelola/tinjau/<int:soal_id>/', views.kelola_tinjau_soal, name='kelola_tinjau_soal'),
+    path('kelola/tinjau/<int:soal_id>/aksi/', views.kelola_aksi, name='kelola_aksi'),
+    path('kelola/soal/<int:soal_id>/ubah/', views.kelola_ubah, name='kelola_ubah'),
 ]
