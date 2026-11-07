@@ -183,6 +183,18 @@ class DasborTest(TestCase):
         self.assertContains(resp, "Lanjut ke soal 2")
         self.assertContains(resp, reverse("cpns:belajar_soal", args=[sesi.pk, 2]))
 
+    def test_dasbor_paket_trial_pakai_sesi_terbaru(self):
+        paket, soal = buat_paket_trial(3)
+        lama = sesi_belajar(self.user, soal, ["A", "B", "C"], paket=paket, status="selesai")
+        baru = sesi_belajar(self.user, soal, ["A", "", ""], paket=paket)
+        Sesi.objects.filter(pk=lama.pk).update(dimulai_pada=timezone.now() - timedelta(days=2))
+        resp = self._dasbor()
+        self.assertContains(resp, "1/3")
+        self.assertNotContains(resp, "3/3")
+        self.assertContains(resp, "Lanjut ke soal 2")
+        self.assertContains(resp, reverse("cpns:belajar_soal", args=[baru.pk, 2]))
+        self.assertNotContains(resp, "Mulai belajar")
+
     def test_dasbor_paket_trial_selesai_mulai_lagi(self):
         paket, soal = buat_paket_trial(2)
         sesi_belajar(self.user, soal, ["A", "B"], paket=paket, status="selesai")

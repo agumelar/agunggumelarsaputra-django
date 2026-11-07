@@ -82,9 +82,12 @@ def _kartu_paket_trial(user):
         jumlah_isi=Count("isi")
     )
     for paket in paket_trial.order_by("nama"):
-        terakhir = _dengan_progres(
-            Sesi.objects.filter(user=user, mode="belajar", paket=paket)
-        ).first()
+        # GROUP BY dari annotate membuang Meta.ordering, jadi urutan harus eksplisit.
+        terakhir = (
+            _dengan_progres(Sesi.objects.filter(user=user, mode="belajar", paket=paket))
+            .order_by("-dimulai_pada", "-pk")
+            .first()
+        )
         lanjut = (
             terakhir.nomor_belum
             if terakhir and terakhir.status == "berjalan" and terakhir.nomor_belum
