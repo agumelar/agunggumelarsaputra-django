@@ -42,6 +42,11 @@ def _bobot_valid(bobot):
 def validasi_soal(data, untuk_tayang=False):
     pesan = []
 
+    if not _teks(data.get("teks")):
+        pesan.append("Isi teks soal.")
+    if not _teks(data.get("subtopik")):
+        pesan.append("Isi subtopik.")
+
     opsi = {}
     for h in HURUF:
         isi = _teks(data.get("opsi_" + h.lower()))

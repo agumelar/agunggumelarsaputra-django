@@ -336,3 +336,13 @@ class TautanEditFilterTest(KelolaTinjauDasar):
         r = self.client.get(reverse("cpns:kelola_tinjau_soal", args=[soal.id]))
         ubah = reverse("cpns:kelola_ubah", args=[soal.id])
         self.assertContains(r, f'href="{ubah}" x-ref="edit"')
+
+
+class PemeriksaanIsiTest(KelolaTinjauDasar):
+    def test_teks_kosong_tampil_di_butir_sendiri(self):
+        soal = buat_draf()
+        Soal.objects.filter(pk=soal.pk).update(teks="")
+        r = self.client.get(reverse("cpns:kelola_tinjau_soal", args=[soal.id]))
+        self.assertContains(r, '<span class="sr-only">Gagal: </span>Teks soal dan subtopik terisi</span>')
+        self.assertContains(r, "Isi teks soal.")
+        self.assertContains(r, '<span class="sr-only">Lolos: </span>Jenis ujian dan subtes cocok</span>')

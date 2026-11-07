@@ -227,3 +227,8 @@ class ImporTest(TestCase):
             ):
                 jalankan([tiu()], "k.json")
         self.assertEqual(Soal.objects.count(), 0)
+
+    def test_teks_kosong_ditolak(self):
+        hasil = impor_batch([tiu(teks="   ")], "b")
+        self.assertIn("Isi teks soal.", hasil.gagal[0][1])
+        self.assertEqual(Soal.objects.count(), 0)

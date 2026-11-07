@@ -123,10 +123,11 @@ def _pemeriksaan(soal):
     data["ditinjau_oleh"] = soal.ditinjau_oleh_id
     pesan = validasi_soal(data, untuk_tayang=False)
 
+    isi = [p for p in pesan if p in ("Isi teks soal.", "Isi subtopik.")]
     opsi = [p for p in pesan if p.startswith(("Isi opsi", "Ada opsi"))]
     kunci = [p for p in pesan if p.startswith(("Pilih kunci", "Isi bobot"))]
     bahas = [p for p in pesan if p.startswith("Isi pembahasan")]
-    sisa = [p for p in pesan if p not in opsi + kunci + bahas]
+    sisa = [p for p in pesan if p not in isi + opsi + kunci + bahas]
 
     mirip = list(
         Soal.objects.filter(sidik_teks=soal.sidik_teks)
@@ -134,6 +135,7 @@ def _pemeriksaan(soal):
         .values_list("id", flat=True)[:5]
     )
     hasil = [
+        {"label": "Teks soal dan subtopik terisi", "masalah": isi},
         {"label": "5 opsi terisi dan berbeda", "masalah": opsi},
         {
             "label": "Bobot TKP valid" if soal.subtes == "TKP" else "Kunci valid",

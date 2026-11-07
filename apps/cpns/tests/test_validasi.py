@@ -9,6 +9,7 @@ def data_dasar():
     return {
         "jenis_ujian": "SKD",
         "subtes": "TIU",
+        "subtopik": "Hitungan",
         "teks": "Berapa hasil 2 + 3?",
         "opsi_a": "1",
         "opsi_b": "2",
@@ -54,6 +55,18 @@ class ValidasiSoalTest(SimpleTestCase):
         d = data_dasar()
         d["pembahasan_cepat"] = ""
         self.assertTrue(any("pembahasan" in m for m in validasi_soal(d)))
+
+    def test_teks_dan_subtopik_wajib(self):
+        for nilai in ("", "   ", None):
+            d = data_dasar()
+            d["teks"] = nilai
+            d["subtopik"] = nilai
+            pesan = validasi_soal(d)
+            self.assertIn("Isi teks soal.", pesan, repr(nilai))
+            self.assertIn("Isi subtopik.", pesan, repr(nilai))
+        d = data_dasar()
+        del d["subtopik"]
+        self.assertEqual(validasi_soal(d), ["Isi subtopik."])
 
     def test_tayang_wajib_ditinjau(self):
         d = data_dasar()
