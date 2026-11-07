@@ -75,6 +75,18 @@ class VoucherTests(TestCase):
         v.dibatalkan = True
         self.assertEqual(v.status, "dibatalkan")
 
+    def test_status_tetap_dipakai_setelah_pemakai_dihapus(self):
+        user = get_user_model().objects.create_user(
+            username="u2", email="u2@x.com", password="x"
+        )
+        v = Voucher.objects.create(
+            kode="CCCC-DDDD", durasi_hari=30, dipakai_oleh=user, dipakai_pada=timezone.now()
+        )
+        user.delete()
+        v.refresh_from_db()
+        self.assertIsNone(v.dipakai_oleh)
+        self.assertEqual(v.status, "dipakai")
+
     def test_kode_voucher_unik(self):
         Voucher.objects.create(kode="AAAA-BBBB", durasi_hari=30)
         with self.assertRaises(IntegrityError), transaction.atomic():

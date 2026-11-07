@@ -67,7 +67,7 @@ def pakai_voucher(user, kode, now=None):
     with transaction.atomic():
         voucher = (
             Voucher.objects.select_for_update()
-            .filter(kode=kode, dibatalkan=False, dipakai_oleh__isnull=True)
+            .filter(kode=kode, dibatalkan=False, dipakai_pada__isnull=True)
             .first()
         )
         if voucher is not None:

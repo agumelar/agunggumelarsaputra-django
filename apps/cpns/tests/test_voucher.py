@@ -89,6 +89,19 @@ class VoucherTest(TestCase):
         self.assertEqual(ctx.exception.alasan, "tidak_valid")
         self.assertIsNone(akses_untuk(lain).premium_sampai)
 
+    def test_voucher_tidak_bisa_dipakai_ulang_setelah_pemakai_dihapus(self):
+        v = buat_voucher(1, 30)[0]
+        pakai_voucher(self.user, v.kode, now=self.now)
+        self.user.delete()
+        v.refresh_from_db()
+        self.assertIsNone(v.dipakai_oleh)
+        self.assertEqual(v.status, "dipakai")
+        lain = buat_user("peserta2")
+        with self.assertRaises(VoucherDitolak) as ctx:
+            pakai_voucher(lain, v.kode, now=self.now)
+        self.assertEqual(ctx.exception.alasan, "tidak_valid")
+        self.assertIsNone(akses_untuk(lain).premium_sampai)
+
     def test_voucher_dibatalkan_ditolak(self):
         v = buat_voucher(1, 30)[0]
         v.dibatalkan = True
