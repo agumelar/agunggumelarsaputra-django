@@ -52,3 +52,11 @@ def buat_sesi_cat(user, skema, soal_list, jawaban_list):
             jawaban=jawaban,
         )
     return sesi
+
+
+def isi_bank_skd(twk=30, tiu=35, tkp=45):
+    return {
+        "TWK": [buat_soal("TWK") for _ in range(twk)],
+        "TIU": [buat_soal("TIU") for _ in range(tiu)],
+        "TKP": [buat_soal("TKP") for _ in range(tkp)],
+    }
