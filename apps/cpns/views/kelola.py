@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
+from apps.cpns.cakupan import hitung_cakupan
 from apps.cpns.forms import SoalForm
 from apps.cpns.models import LaporanSoal, Soal
 from apps.cpns.validasi import HURUF, validasi_soal
@@ -261,3 +262,22 @@ def kelola_aksi(request, soal_id):
     messages.success(request, "Soal ditayangkan." if aksi == "setujui" else "Soal ditolak.")
     tujuan = _berikutnya(ids, soal_id, putar=False)
     return redirect(_url_soal(tujuan, filt) if tujuan else _url_antrean(filt))
+
+
+@wajib_superuser
+def kelola_cakupan(request):
+    hasil = hitung_cakupan()
+    kelompok = {}
+    for b in hasil["baris"]:
+        query = urlencode({"status": "tayang", "subtes": b["subtes"], "subtopik": b["subtopik"]})
+        b["url"] = f"{reverse('cpns:kelola_tinjau')}?{query}"
+        kelompok.setdefault(b["subtes"], []).append(b)
+    return render(
+        request,
+        "cpns/kelola/cakupan.html",
+        {
+            **konteks_kelola(request, "cakupan"),
+            "skema": hasil["skema"],
+            "kelompok": list(kelompok.items()),
+        },
+    )

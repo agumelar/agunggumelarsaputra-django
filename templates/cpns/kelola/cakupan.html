@@ -1,0 +1,61 @@
+{% extends 'cpns/kelola/base_kelola.html' %}
+
+{% block title %}Cakupan Bank Soal{% endblock %}
+
+{% block kelola_content %}
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-5 flex flex-col gap-6 flex-1">
+    <h1 class="font-display text-2xl font-bold">Cakupan Bank Soal</h1>
+
+    <section aria-labelledby="judul-skema" class="flex flex-col gap-3">
+        <h2 id="judul-skema" class="font-display text-lg font-semibold">Kecukupan per skema</h2>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {% for s in skema %}
+            <div class="rounded-2xl border border-white/[0.08] bg-[#111827] p-4">
+                <p class="font-mono text-xs text-[#94A3B8]">{{ s.kode }}{% if not s.aktif %} <span class="ml-2 text-[#FBBF24]">(nonaktif)</span>{% endif %}</p>
+                <p class="mt-1 font-semibold">{{ s.nama }}</p>
+                <p class="mt-2 text-sm text-[#CBD5E1]">Cukup untuk <span class="font-mono text-lg font-bold text-[#38BDF8]">{{ s.cukup_untuk }}</span> simulasi tanpa soal berulang</p>
+            </div>
+            {% empty %}
+            <p class="text-sm text-[#CBD5E1]">Belum ada skema ujian.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% for subtes, baris in kelompok %}
+    <section aria-labelledby="subtes-{{ subtes }}" class="flex flex-col gap-2">
+        <h2 id="subtes-{{ subtes }}" class="font-display text-lg font-semibold">{{ subtes }}</h2>
+        <div class="overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#111827]" tabindex="0" role="region" aria-labelledby="subtes-{{ subtes }}">
+            <table class="w-full min-w-[30rem] text-sm text-left">
+                <caption class="sr-only">Cakupan subtopik {{ subtes }}</caption>
+                <thead class="text-xs text-[#94A3B8] border-b border-white/[0.08]">
+                    <tr>
+                        <th scope="col" class="px-4 py-3 font-semibold">Subtopik</th>
+                        <th scope="col" class="px-4 py-3 font-semibold text-right">Target</th>
+                        <th scope="col" class="px-4 py-3 font-semibold text-right">Tayang</th>
+                        <th scope="col" class="px-4 py-3 font-semibold text-right">Draf</th>
+                        <th scope="col" class="px-4 py-3 font-semibold">Kurang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in baris %}
+                    <tr class="border-b border-white/[0.06] last:border-0">
+                        <th scope="row" class="px-4 py-1 font-medium">
+                            <a href="{{ b.url }}" class="inline-flex items-center min-h-11 text-[#7DD3FC] underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">{{ b.subtopik }}</a>
+                        </th>
+                        <td class="px-4 py-1 text-right font-mono">{% if b.target is None %}<span class="text-[#94A3B8]">Tanpa target</span>{% else %}{{ b.target }}{% endif %}</td>
+                        <td class="px-4 py-1 text-right font-mono">{{ b.tayang }}</td>
+                        <td class="px-4 py-1 text-right font-mono">{{ b.draf }}</td>
+                        <td class="px-4 py-1 font-semibold">
+                            {% if b.kurang %}<span class="text-[#FBBF24]">Kurang {{ b.kurang }}</span>{% else %}<span class="text-[#34D399]">Cukup</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% empty %}
+    <p class="text-sm text-[#CBD5E1]">Belum ada soal maupun kisi-kisi.</p>
+    {% endfor %}
+</div>
+{% endblock %}

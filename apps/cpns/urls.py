@@ -29,5 +29,6 @@ urlpatterns = [
     path('kelola/tinjau/', views.kelola_tinjau, name='kelola_tinjau'),
     path('kelola/tinjau/<int:soal_id>/', views.kelola_tinjau_soal, name='kelola_tinjau_soal'),
     path('kelola/tinjau/<int:soal_id>/aksi/', views.kelola_aksi, name='kelola_aksi'),
+    path('kelola/cakupan/', views.kelola_cakupan, name='kelola_cakupan'),
     path('kelola/soal/<int:soal_id>/ubah/', views.kelola_ubah, name='kelola_ubah'),
 ]

@@ -11,6 +11,7 @@ from .dasbor import dasbor, laporkan_soal, riwayat
 from .kelola import (
     kelola_aksi,
     kelola_beranda,
+    kelola_cakupan,
     kelola_tinjau,
     kelola_tinjau_soal,
     kelola_ubah,
@@ -40,6 +41,7 @@ __all__ = [
     "jawab_belajar",
     "ringkasan_belajar",
     "kelola_beranda",
+    "kelola_cakupan",
     "kelola_tinjau",
     "kelola_tinjau_soal",
     "kelola_aksi",
