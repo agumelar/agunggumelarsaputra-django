@@ -27,7 +27,12 @@
                 <a href="{{ url_dasbor }}#simulasi" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Simulasi</a>
                 <a href="{{ url_riwayat }}" {% if request.path == url_riwayat %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_riwayat %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Riwayat</a>
                 <a href="{{ url_dasbor }}#premium" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Premium</a>
+                {% if request.user.is_authenticated %}
                 <a href="{{ url_akun }}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Akun</a>
+                <a href="{% url 'accounts:logout' %}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Keluar</a>
+                {% else %}
+                <a href="{% url 'cpns:masuk' %}" class="inline-flex items-center min-h-11 px-4 rounded-lg bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] font-semibold transition-colors">Masuk</a>
+                {% endif %}
             </nav>
 
             <button type="button" x-ref="tombolMenu" @click="menuOpen = !menuOpen"
@@ -51,7 +56,12 @@
                 <a href="{{ url_dasbor }}#simulasi" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Simulasi</a>
                 <a href="{{ url_riwayat }}" @click="menuOpen = false" {% if request.path == url_riwayat %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_riwayat %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Riwayat</a>
                 <a href="{{ url_dasbor }}#premium" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Premium</a>
+                {% if request.user.is_authenticated %}
                 <a href="{{ url_akun }}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Akun</a>
+                <a href="{% url 'accounts:logout' %}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Keluar</a>
+                {% else %}
+                <a href="{% url 'cpns:masuk' %}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#38BDF8] font-semibold">Masuk</a>
+                {% endif %}
             </div>
         </nav>
     </header>

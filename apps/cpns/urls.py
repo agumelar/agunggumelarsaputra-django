@@ -6,6 +6,8 @@ app_name = 'cpns'
 
 urlpatterns = [
     path('', views.beranda, name='beranda'),
+    path('masuk/', views.masuk, name='masuk'),
+    path('daftar/', views.daftar, name='daftar'),
     path('dasbor/', views.dasbor, name='dasbor'),
     path('riwayat/', views.riwayat, name='riwayat'),
     path('soal/<int:soal_id>/laporkan/', views.laporkan_soal, name='laporkan'),

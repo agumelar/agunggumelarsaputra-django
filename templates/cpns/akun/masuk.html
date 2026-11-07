@@ -1,0 +1,59 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Masuk{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-md mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <header class="space-y-3">
+        <h1 class="font-display text-3xl sm:text-4xl font-bold text-[#F3F4F6]">Masuk ke CPNS Hub</h1>
+        <p class="text-base text-[#94A3B8]">Belum punya akun? <a href="{% url 'cpns:daftar' %}" class="inline-flex items-center min-h-11 font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Daftar gratis</a></p>
+    </header>
+
+    <div class="space-y-3">
+        <a href="{% url 'accounts:google_login' %}"
+           class="flex items-center justify-center gap-3 w-full min-h-11 px-5 py-3 rounded-xl bg-[#F3F4F6] hover:bg-white text-[#090D16] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+            <span class="font-display font-bold" aria-hidden="true">G</span>
+            <span>Masuk dengan Google</span>
+        </a>
+        <p class="text-base text-[#94A3B8]">Simulasi CAT gratis hanya tersedia untuk akun Google.</p>
+    </div>
+
+    <div class="flex items-center gap-4 text-sm text-[#94A3B8]" role="separator">
+        <span class="flex-1 h-px bg-white/[0.14]"></span>
+        <span>atau pakai email</span>
+        <span class="flex-1 h-px bg-white/[0.14]"></span>
+    </div>
+
+    <form method="post" action="{% url 'cpns:masuk' %}" class="space-y-5" novalidate>
+        {% csrf_token %}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+        {% if galat %}
+            <p role="alert" class="p-4 rounded-xl border border-[#F87171] bg-[#111827] text-sm text-[#F87171]">{{ galat }}</p>
+        {% endif %}
+
+        <div class="space-y-2">
+            <label for="identitas" class="block text-base font-semibold text-[#F3F4F6]">Email</label>
+            <input id="identitas" name="identitas" type="text" value="{{ identitas }}" required autocomplete="username" autocapitalize="none" placeholder="email@contoh.com"
+                   class="w-full min-h-11 px-4 py-3 rounded-xl bg-[#111827] border border-white/[0.14] text-base text-[#F3F4F6] placeholder:text-[#94A3B8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
+        </div>
+        <div class="space-y-2">
+            <label for="kata_sandi" class="block text-base font-semibold text-[#F3F4F6]">Kata sandi</label>
+            <input id="kata_sandi" name="kata_sandi" type="password" required autocomplete="current-password" placeholder="Minimal 8 karakter"
+                   class="w-full min-h-11 px-4 py-3 rounded-xl bg-[#111827] border border-white/[0.14] text-base text-[#F3F4F6] placeholder:text-[#94A3B8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
+        </div>
+        <button type="submit"
+                class="w-full inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+            Masuk
+        </button>
+    </form>
+
+    <p class="text-base text-[#94A3B8]">
+        {% if tautan_wa %}
+            <a href="{{ tautan_wa }}" rel="noopener" class="underline underline-offset-4 hover:text-[#F3F4F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Lupa kata sandi? Hubungi admin lewat WhatsApp untuk mengatur ulang.</a>
+        {% else %}
+            Lupa kata sandi? Hubungi admin lewat WhatsApp untuk mengatur ulang.
+        {% endif %}
+    </p>
+</div>
+{% endblock %}

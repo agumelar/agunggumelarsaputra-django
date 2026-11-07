@@ -436,7 +436,7 @@ class LaporkanSoalTest(TestCase):
         self.client.logout()
         resp = self._laporkan()
         self.assertEqual(resp.status_code, 302)
-        self.assertIn(reverse("accounts:login"), resp["Location"])
+        self.assertIn(reverse("cpns:masuk"), resp["Location"])
 
     def test_laporkan_non_htmx_kembali_ke_perujuk(self):
         sesi = sesi_belajar(self.user, [self.soal], ["A"])

@@ -20,6 +20,7 @@ from django.core.files.base import ContentFile
 
 from .forms import StudentRegistrationForm, UserLoginForm, UserProfileForm, ClaimTokenForm
 from apps.admin_panel.models import EnrollmentToken, UserEnrollment
+from apps.cpns.models import AksesPeserta
 from apps.gamification.models import XPHistory
 
 
@@ -281,6 +282,7 @@ def google_oauth_callback_view(request):
         is_teacher_email = _is_teacher_email(email)
 
         google_pic = google_user.get('picture')
+        is_cpns_host = getattr(request, 'is_cpns_subdomain', False)
 
         if not user:
             # Generate username unik dari email
@@ -291,8 +293,13 @@ def google_oauth_callback_view(request):
                 username = f"{base_username}{counter}"
                 counter += 1
 
-            assigned_role = User.ROLE_GURU if is_teacher_email else User.ROLE_SISWA
-            initial_xp = 0 if assigned_role == User.ROLE_GURU else 50
+            if is_teacher_email:
+                assigned_role = User.ROLE_GURU
+            elif is_cpns_host:
+                assigned_role = User.ROLE_PESERTA
+            else:
+                assigned_role = User.ROLE_SISWA
+            initial_xp = 50 if assigned_role == User.ROLE_SISWA else 0
 
             user = User.objects.create_user(
                 username=username,
@@ -316,7 +323,10 @@ def google_oauth_callback_view(request):
                     description='Bonus Akun Baru (Google OAuth)'
                 )
 
-            messages.success(request, f"Selamat datang di RPL Learning Hub, {user.display_name}! Akun Google Anda telah terhubung.")
+            if is_cpns_host:
+                messages.success(request, "Akun dibuat. Selamat berlatih.")
+            else:
+                messages.success(request, f"Selamat datang di RPL Learning Hub, {user.display_name}! Akun Google Anda telah terhubung.")
         else:
             # Update role jika guru
             if is_teacher_email and not user.is_guru:
@@ -343,6 +353,9 @@ def google_oauth_callback_view(request):
 
         # 4. Login User
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        if is_cpns_host:
+            AksesPeserta.objects.update_or_create(user=user, defaults={'via_google': True})
+            return redirect('cpns:dasbor')
         return redirect('admin_panel:dashboard' if user.is_guru else 'core:home')
 
     except Exception as err:

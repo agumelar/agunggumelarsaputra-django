@@ -1,7 +1,6 @@
 from urllib.parse import quote
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Min, Q
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import redirect, render
@@ -14,7 +13,7 @@ from apps.cpns.akses import akses_untuk, boleh_mulai_cat, is_premium
 from apps.cpns.models import LaporanSoal, PaketBelajar, Sesi, SesiSoal, SkemaUjian
 from apps.cpns.sesi_layanan import selesaikan_jika_kedaluwarsa
 
-from ._bantu import LABEL_JENIS
+from ._bantu import LABEL_JENIS, wajib_masuk
 
 JUMLAH_SKOR_DASBOR = 5
 CATATAN_MAKS = 1000
@@ -116,7 +115,7 @@ def _skor_terakhir(user):
     return daftar
 
 
-@login_required
+@wajib_masuk
 @require_GET
 def dasbor(request):
     user = request.user
@@ -165,7 +164,7 @@ def _ringkasan_skor(sesi):
     return f"{sesi.jumlah_dijawab}/{sesi.jumlah_butir} dijawab"
 
 
-@login_required
+@wajib_masuk
 @require_GET
 def riwayat(request):
     daftar = []
@@ -208,7 +207,7 @@ def _balas_laporan(request, pesan):
     return redirect("cpns:dasbor")
 
 
-@login_required
+@wajib_masuk
 @require_POST
 def laporkan_soal(request, soal_id):
     if not _soal_sudah_terbuka(request.user, soal_id):

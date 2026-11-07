@@ -1,0 +1,79 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Daftar{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-md mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <header class="space-y-3">
+        <h1 class="font-display text-3xl sm:text-4xl font-bold text-[#F3F4F6]">Daftar gratis</h1>
+        <p class="text-base text-[#94A3B8]">Sudah punya akun? <a href="{% url 'cpns:masuk' %}" class="inline-flex items-center min-h-11 font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Masuk</a></p>
+    </header>
+
+    <a href="{% url 'accounts:google_login' %}"
+       class="flex items-center justify-center gap-3 w-full min-h-11 px-5 py-3 rounded-xl bg-[#F3F4F6] hover:bg-white text-[#090D16] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+        <span class="font-display font-bold" aria-hidden="true">G</span>
+        <span>Daftar dengan Google</span>
+    </a>
+
+    <div class="flex items-center gap-4 text-sm text-[#94A3B8]" role="separator">
+        <span class="flex-1 h-px bg-white/[0.14]"></span>
+        <span>atau pakai email</span>
+        <span class="flex-1 h-px bg-white/[0.14]"></span>
+    </div>
+
+    <form method="post" action="{% url 'cpns:daftar' %}" class="space-y-5" novalidate>
+        {% csrf_token %}
+
+        <div class="space-y-2">
+            <label for="nama" class="block text-base font-semibold text-[#F3F4F6]">Nama</label>
+            <input id="nama" name="nama" type="text" value="{{ isian.nama }}" required autocomplete="name"
+                   {% if galat.nama %}aria-invalid="true" aria-describedby="galat-nama"{% endif %}
+                   class="w-full min-h-11 px-4 py-3 rounded-xl bg-[#111827] border {% if galat.nama %}border-[#F87171]{% else %}border-white/[0.14]{% endif %} text-base text-[#F3F4F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
+            {% if galat.nama %}<p id="galat-nama" class="text-sm text-[#F87171]">{{ galat.nama }}</p>{% endif %}
+        </div>
+
+        <div class="space-y-2">
+            <label for="email" class="block text-base font-semibold text-[#F3F4F6]">Email</label>
+            <input id="email" name="email" type="email" value="{{ isian.email }}" required autocomplete="email" placeholder="email@contoh.com"
+                   {% if galat.email %}aria-invalid="true" aria-describedby="galat-email"{% endif %}
+                   class="w-full min-h-11 px-4 py-3 rounded-xl bg-[#111827] border {% if galat.email %}border-[#F87171]{% else %}border-white/[0.14]{% endif %} text-base text-[#F3F4F6] placeholder:text-[#94A3B8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
+            {% if galat.email %}
+                <p id="galat-email" class="text-sm text-[#F87171]">{{ galat.email }}
+                    {% if galat.email == "Email ini sudah terdaftar. Silakan masuk." %}<a href="{% url 'cpns:masuk' %}" class="font-semibold underline underline-offset-4">Masuk</a>{% endif %}
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="space-y-2">
+            <label for="kata_sandi" class="block text-base font-semibold text-[#F3F4F6]">Kata sandi</label>
+            <input id="kata_sandi" name="kata_sandi" type="password" required autocomplete="new-password" placeholder="Minimal 8 karakter"
+                   {% if galat.kata_sandi %}aria-invalid="true" aria-describedby="galat-sandi"{% endif %}
+                   class="w-full min-h-11 px-4 py-3 rounded-xl bg-[#111827] border {% if galat.kata_sandi %}border-[#F87171]{% else %}border-white/[0.14]{% endif %} text-base text-[#F3F4F6] placeholder:text-[#94A3B8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
+            {% if galat.kata_sandi %}<p id="galat-sandi" class="text-sm text-[#F87171]">{{ galat.kata_sandi }}</p>{% endif %}
+        </div>
+
+        <div class="space-y-2">
+            <label for="ulang_kata_sandi" class="block text-base font-semibold text-[#F3F4F6]">Ulangi kata sandi</label>
+            <input id="ulang_kata_sandi" name="ulang_kata_sandi" type="password" required autocomplete="new-password"
+                   {% if galat.ulang_kata_sandi %}aria-invalid="true" aria-describedby="galat-ulang"{% endif %}
+                   class="w-full min-h-11 px-4 py-3 rounded-xl bg-[#111827] border {% if galat.ulang_kata_sandi %}border-[#F87171]{% else %}border-white/[0.14]{% endif %} text-base text-[#F3F4F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
+            {% if galat.ulang_kata_sandi %}<p id="galat-ulang" class="text-sm text-[#F87171]">{{ galat.ulang_kata_sandi }}</p>{% endif %}
+        </div>
+
+        <div class="space-y-2">
+            <div class="flex items-start gap-3">
+                <input id="setuju" name="setuju" type="checkbox" required
+                       {% if galat.setuju %}aria-invalid="true" aria-describedby="galat-setuju"{% endif %}
+                       class="mt-1 w-5 h-5 shrink-0 rounded border-white/[0.14] bg-[#111827] accent-[#38BDF8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                <label for="setuju" class="text-base text-[#CBD5E1]">Saya setuju dengan <a href="/syarat-layanan/" class="font-semibold text-[#38BDF8] underline underline-offset-4">Syarat Layanan</a> dan <a href="/kebijakan-privasi/" class="font-semibold text-[#38BDF8] underline underline-offset-4">Kebijakan Privasi</a></label>
+            </div>
+            {% if galat.setuju %}<p id="galat-setuju" class="text-sm text-[#F87171]">{{ galat.setuju }}</p>{% endif %}
+        </div>
+
+        <button type="submit"
+                class="w-full inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+            Buat akun
+        </button>
+    </form>
+</div>
+{% endblock %}

@@ -176,7 +176,7 @@ class CatViewsTest(TestCase):
         self.client.logout()
         resp = self.client.get(reverse("cpns:cat_ruang", args=[sesi.pk]))
         self.assertEqual(resp.status_code, 302)
-        self.assertIn("/accounts/login/", resp["Location"])
+        self.assertIn(reverse("cpns:masuk"), resp["Location"])
 
     def test_ruang_setelah_waktu_habis_redirect_hasil(self):
         sesi = self._sesi_berjalan()
