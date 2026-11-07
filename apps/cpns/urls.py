@@ -30,5 +30,7 @@ urlpatterns = [
     path('kelola/tinjau/<int:soal_id>/', views.kelola_tinjau_soal, name='kelola_tinjau_soal'),
     path('kelola/tinjau/<int:soal_id>/aksi/', views.kelola_aksi, name='kelola_aksi'),
     path('kelola/cakupan/', views.kelola_cakupan, name='kelola_cakupan'),
+    path('kelola/laporan/', views.kelola_laporan, name='kelola_laporan'),
+    path('kelola/laporan/<int:laporan_id>/selesai/', views.kelola_laporan_selesai, name='kelola_laporan_selesai'),
     path('kelola/soal/<int:soal_id>/ubah/', views.kelola_ubah, name='kelola_ubah'),
 ]

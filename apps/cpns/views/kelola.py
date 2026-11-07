@@ -281,3 +281,49 @@ def kelola_cakupan(request):
             "kelompok": list(kelompok.items()),
         },
     )
+
+
+STATUS_LAPORAN_BAWAAN = "baru"
+
+
+def _status_laporan(data):
+    status = data.get("status") or STATUS_LAPORAN_BAWAAN
+    return status if status in ("baru", "selesai", "semua") else STATUS_LAPORAN_BAWAAN
+
+
+@wajib_superuser
+def kelola_laporan(request):
+    status = _status_laporan(request.GET)
+    qs = LaporanSoal.objects.select_related("soal", "user").order_by("-dibuat_pada", "-id")
+    if status != "semua":
+        qs = qs.filter(status=status)
+    kelompok = {}
+    for lap in qs:
+        k = kelompok.setdefault(lap.soal_id, {"soal": lap.soal, "laporan": []})
+        k["laporan"].append(lap)
+    daftar = [{**k, "jumlah": len(k["laporan"])} for k in kelompok.values()]
+    return render(
+        request,
+        "cpns/kelola/laporan.html",
+        {
+            **konteks_kelola(request, "laporan"),
+            "status": status,
+            "pilihan_status": [("baru", "Baru"), ("selesai", "Selesai"), ("semua", "Semua")],
+            "kelompok": daftar,
+        },
+    )
+
+
+@wajib_superuser
+@require_POST
+def kelola_laporan_selesai(request, laporan_id):
+    laporan = get_object_or_404(LaporanSoal, pk=laporan_id)
+    if laporan.status != "selesai":
+        laporan.status = "selesai"
+        laporan.save(update_fields=["status"])
+        messages.success(request, "Laporan ditandai selesai.")
+    status = _status_laporan(request.POST)
+    url = reverse("cpns:kelola_laporan")
+    if status != STATUS_LAPORAN_BAWAAN:
+        url = f"{url}?{urlencode({'status': status})}"
+    return redirect(url)
