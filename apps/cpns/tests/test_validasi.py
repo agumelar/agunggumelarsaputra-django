@@ -84,6 +84,26 @@ class ValidasiSoalTest(SimpleTestCase):
             "Subtes PEDAGOGIK tidak cocok dengan jenis ujian SKD.", validasi_soal(d)
         )
 
+    def test_jenis_kosong_atau_tidak_dikenal_ditolak(self):
+        d = data_dasar()
+        d["jenis_ujian"] = ""
+        self.assertIn("Jenis ujian (kosong) tidak dikenal.", validasi_soal(d))
+        del d["jenis_ujian"]
+        self.assertIn("Jenis ujian (kosong) tidak dikenal.", validasi_soal(d))
+        d["jenis_ujian"] = "XYZ"
+        self.assertIn("Jenis ujian XYZ tidak dikenal.", validasi_soal(d))
+
+    def test_nilai_bukan_teks_dianggap_kosong(self):
+        d = data_dasar()
+        d["opsi_a"] = True
+        self.assertIn("Isi opsi A.", validasi_soal(d))
+        d = data_dasar()
+        d["pembahasan_konsep"] = []
+        self.assertIn("Isi pembahasan konsep.", validasi_soal(d))
+        d = data_dasar()
+        d.update(opsi_a=85, opsi_b=90.5, opsi_c=95, opsi_d=100, opsi_e=105)
+        self.assertEqual(validasi_soal(d), [])
+
     def test_admin_dan_penilaian_pakai_konstanta_validasi(self):
         self.assertIs(admin_cpns.SUBTES_PER_JENIS, validasi.SUBTES_PER_JENIS)
         self.assertIs(penilaian.POIN_MAKS_BOBOT, validasi.POIN_MAKS_BOBOT)

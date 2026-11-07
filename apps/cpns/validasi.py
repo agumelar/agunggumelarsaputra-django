@@ -17,7 +17,11 @@ SUBTES_PER_JENIS = {
 
 
 def _teks(nilai):
-    return "" if nilai is None else str(nilai).strip()
+    if isinstance(nilai, str):
+        return nilai.strip()
+    if isinstance(nilai, (int, float)) and not isinstance(nilai, bool):
+        return str(nilai).strip()
+    return ""
 
 
 def sidik_teks(teks):
@@ -50,6 +54,8 @@ def validasi_soal(data, untuk_tayang=False):
 
     jenis = data.get("jenis_ujian")
     subtes = data.get("subtes")
+    if jenis not in JENIS:
+        pesan.append(f"Jenis ujian {jenis or '(kosong)'} tidak dikenal.")
     boleh = SUBTES_PER_JENIS.get(jenis)
     if boleh is not None and subtes and subtes not in boleh:
         pesan.append(f"Subtes {subtes} tidak cocok dengan jenis ujian {jenis}.")
