@@ -1,7 +1,9 @@
 import json
 from datetime import timedelta
+from unittest import mock
 
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -80,6 +82,35 @@ class CatViewsTest(TestCase):
         sesi = Sesi.objects.get(user=self.user)
         self.assertRedirects(
             resp, reverse("cpns:cat_ruang", args=[sesi.pk]), fetch_redirect_response=False
+        )
+
+    def test_mulai_bentrok_integrity_ke_sesi_berjalan(self):
+        berjalan = self._sesi_berjalan()
+        with mock.patch("apps.cpns.views.cat.boleh_mulai_cat", return_value=(True, "")), \
+                mock.patch("apps.cpns.views.cat.rakit_sesi_cat", side_effect=IntegrityError("bentrok")):
+            resp = self.client.post(reverse("cpns:cat_mulai", args=["skd-cat"]))
+        self.assertRedirects(
+            resp, reverse("cpns:cat_ruang", args=[berjalan.pk]), fetch_redirect_response=False
+        )
+
+    def test_mulai_bentrok_integrity_tanpa_sesi_ke_dasbor(self):
+        with mock.patch("apps.cpns.views.cat.rakit_sesi_cat", side_effect=IntegrityError("bentrok")):
+            resp = self.client.post(reverse("cpns:cat_mulai", args=["skd-cat"]), follow=True)
+        self.assertRedirects(resp, reverse("cpns:dasbor"))
+        self.assertContains(resp, "Simulasi gagal dimulai. Coba lagi.")
+
+    def test_mulai_tutup_sesi_kedaluwarsa_dulu(self):
+        premium = buat_user("premium", premium=True)
+        self.client.force_login(premium)
+        isi_bank_skd()
+        lama = self._sesi_berjalan(user=premium, menit=-10)
+        resp = self.client.post(reverse("cpns:cat_mulai", args=["skd-cat"]))
+        lama.refresh_from_db()
+        self.assertEqual(lama.status, "selesai")
+        baru = Sesi.objects.get(user=premium, status="berjalan")
+        self.assertNotEqual(baru.pk, lama.pk)
+        self.assertRedirects(
+            resp, reverse("cpns:cat_ruang", args=[baru.pk]), fetch_redirect_response=False
         )
 
     def test_mulai_get_ditolak(self):
@@ -311,6 +342,13 @@ class DasborSimulasiTest(TestCase):
         self.assertContains(resp, "Mulai simulasi SKD")
         self.assertNotContains(resp, "Mulai simulasi SKB Guru")
         self.assertContains(resp, reverse("cpns:cat_mulai", args=["skd-cat"]))
+
+    def test_dasbor_tombol_mulai_nonaktif_setelah_kirim(self):
+        html = self.client.get(reverse("cpns:dasbor")).content.decode()
+        form = html[html.index(reverse("cpns:cat_mulai", args=["skd-cat"])):]
+        form = form[: form.index("</form>")]
+        self.assertIn('@submit="terkirim = true"', form)
+        self.assertIn(':disabled="terkirim"', form)
 
     def test_dasbor_superuser_lihat_skema_nonaktif(self):
         admin = get_user_model().objects.create_superuser(username="adm", email="adm@contoh.id", password="x")

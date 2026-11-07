@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_POST
@@ -51,7 +51,9 @@ def _subtopik_per_subtes():
 @login_required
 @require_GET
 def pilih_belajar(request):
-    paket_list = PaketBelajar.objects.filter(aktif=True).annotate(jumlah_soal=Count("isi"))
+    paket_list = PaketBelajar.objects.filter(aktif=True).annotate(
+        jumlah_soal=Count("isi", filter=Q(isi__soal__status="tayang"))
+    )
     paket_list = paket_list.order_by("-untuk_trial", "nama")
     paket = [
         {
@@ -76,10 +78,11 @@ def _mulai_paket(request, paket_id):
     paket = get_object_or_404(PaketBelajar, pk=paket_id, aktif=True)
     if not boleh_belajar_paket(request.user, paket):
         return HttpResponseForbidden("Paket ini khusus Premium.")
-    if not paket.isi.exists():
+    try:
+        sesi = rakit_sesi_belajar(request.user, paket=paket)
+    except BankSoalKurang:
         messages.error(request, "Belum ada soal untuk pilihan ini.")
         return redirect("cpns:belajar_pilih")
-    sesi = rakit_sesi_belajar(request.user, paket=paket)
     return redirect("cpns:belajar_soal", sesi_id=sesi.pk, nomor=1)
 
 
@@ -121,7 +124,10 @@ def mulai_belajar(request):
 
 
 def _bobot(soal, huruf_asli):
-    return int((soal.bobot or {}).get(huruf_asli, 0))
+    try:
+        return int((soal.bobot or {}).get(huruf_asli, 0))
+    except (AttributeError, TypeError, ValueError):
+        return None
 
 
 def _kalimat_hasil(butir):
@@ -129,7 +135,10 @@ def _kalimat_hasil(butir):
     urutan = butir.urutan_opsi
     dipilih = ke_posisi_tampil(urutan, butir.jawaban)
     if soal.bobot:
-        terbaik = next(h for h in urutan if _bobot(soal, h) == POIN_MAKS_BOBOT)
+        terbaik = next((h for h in urutan if _bobot(soal, h) == POIN_MAKS_BOBOT), None)
+        if terbaik is None or (dipilih and _bobot(soal, butir.jawaban) is None):
+            # Bobot rusak (soal belum lolos validasi): jangan tebak pilihan terbaik.
+            return f"Kamu memilih {dipilih}." if dipilih else "Soal ini tidak dijawab."
         kunci = f"Pilihan terbaik {ke_posisi_tampil(urutan, terbaik)} (bobot {POIN_MAKS_BOBOT})."
         if not dipilih:
             return f"Soal ini tidak dijawab. {kunci}"

@@ -52,10 +52,10 @@
                     {% endif %}
                     <p class="text-sm text-[#CBD5E1]">Soal diacak dari bank soal dan jawaban tersimpan otomatis.</p>
                     {% if k.boleh %}
-                        <form method="post" action="{% url 'cpns:cat_mulai' k.skema.kode|lower %}">
+                        <form method="post" action="{% url 'cpns:cat_mulai' k.skema.kode|lower %}" x-data="{ terkirim: false }" @submit="terkirim = true">
                             {% csrf_token %}
-                            <button type="submit"
-                                    class="w-full inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+                            <button type="submit" :disabled="terkirim"
+                                    class="w-full inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
                                 Mulai simulasi {{ k.label }}
                             </button>
                         </form>

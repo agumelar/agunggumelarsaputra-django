@@ -278,6 +278,70 @@ class BelajarViewsTest(TestCase):
         resp = self.client.get(reverse("cpns:belajar_pilih"))
         self.assertContains(resp, "Belum ada paket belajar.")
 
+    # soal belum tayang di paket
+
+    def _paket_campur(self):
+        soal = [
+            soal_rahasia(),
+            buat_soal("TIU", status="draf"),
+            soal_rahasia(),
+            buat_soal("TIU", status="ditolak"),
+            soal_rahasia(),
+        ]
+        return buat_paket(soal, trial=True, nama="Paket gratis SKD"), soal
+
+    def test_pilih_hitung_hanya_soal_tayang(self):
+        self._paket_campur()
+        resp = self.client.get(reverse("cpns:belajar_pilih"))
+        self.assertContains(resp, "3 soal")
+        self.assertNotContains(resp, "5 soal")
+
+    def test_mulai_paket_lewati_soal_belum_tayang(self):
+        paket, soal = self._paket_campur()
+        resp = self.client.post(reverse("cpns:belajar_mulai"), {"paket_id": paket.pk})
+        sesi = Sesi.objects.get(user=self.user)
+        self.assertRedirects(
+            resp, reverse("cpns:belajar_soal", args=[sesi.pk, 1]), fetch_redirect_response=False
+        )
+        self.assertEqual(
+            list(sesi.butir.values_list("soal_id", flat=True)),
+            [soal[0].id, soal[2].id, soal[4].id],
+        )
+
+    def test_mulai_paket_hanya_draf_pesan_belum_ada_soal(self):
+        paket = buat_paket(
+            [buat_soal("TIU", status="draf"), buat_soal("TIU", status="ditolak")], trial=True
+        )
+        resp = self.client.post(
+            reverse("cpns:belajar_mulai"), {"paket_id": paket.pk}, follow=True
+        )
+        self.assertRedirects(resp, reverse("cpns:belajar_pilih"))
+        self.assertContains(resp, "Belum ada soal untuk pilihan ini.")
+        self.assertFalse(Sesi.objects.filter(user=self.user).exists())
+
+    def test_umpan_balik_bobot_rusak_tetap_200(self):
+        soal = buat_soal(
+            "TKP", status="draf", bobot={"A": "tinggi", "B": 1, "C": 2, "D": 3, "E": 4}
+        )
+        sesi = buat_sesi_belajar(self.user, [soal])
+        resp = self._jawab(sesi, 1, "B")
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, "Kamu memilih B")
+        self.assertNotContains(resp, "Pilihan terbaik")
+        resp = self.client.get(reverse("cpns:belajar_soal", args=[sesi.pk, 1]))
+        self.assertEqual(resp.status_code, 200)
+        self.assertNotContains(resp, "Pilihan terbaik")
+
+    def test_umpan_balik_bobot_rusak_jawaban_tidak_terbaca_tetap_200(self):
+        soal = buat_soal(
+            "TKP", status="draf", bobot={"A": "tinggi", "B": 1, "C": 2, "D": 3, "E": 5}
+        )
+        sesi = buat_sesi_belajar(self.user, [soal])
+        resp = self._jawab(sesi, 1, "A")
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, "Kamu memilih A")
+        self.assertNotContains(resp, "Pilihan terbaik")
+
     # ringkasan
 
     def test_ringkasan_persen_per_subtopik(self):

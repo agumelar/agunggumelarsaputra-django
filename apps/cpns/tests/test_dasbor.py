@@ -203,6 +203,27 @@ class DasborTest(TestCase):
         self.assertContains(resp, "Mulai belajar")
         self.assertNotContains(resp, "Lanjut ke soal")
 
+    def test_dasbor_paket_trial_hitung_hanya_soal_tayang(self):
+        paket, _ = buat_paket_trial(3)
+        PaketSoal.objects.create(paket=paket, soal=buat_soal("TIU", status="draf"), urutan=4)
+        PaketSoal.objects.create(paket=paket, soal=buat_soal("TIU", status="ditolak"), urutan=5)
+        resp = self._dasbor()
+        self.assertContains(resp, "0/3")
+        self.assertNotContains(resp, "0/5")
+
+    def test_dasbor_pesan_tampil_sekali(self):
+        # Bank soal kosong: pesan galat hanya ada di flash, tidak di kartu skema.
+        resp = self.client.post(reverse("cpns:cat_mulai", args=["skd-cat"]), follow=True)
+        self.assertContains(resp, "Bank soal untuk bagian TWK belum cukup", count=1)
+        self.assertNotContains(resp, "Pemberitahuan Sistem")
+
+    def test_situs_utama_tetap_pakai_toast(self):
+        self.client.post(reverse("cpns:cat_mulai", args=["skd-cat"]))
+        resp = self.client.get(reverse("core:home"))
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, "Pemberitahuan Sistem", count=1)
+        self.assertContains(resp, "Bank soal untuk bagian TWK belum cukup", count=1)
+
     def test_dasbor_skor_terakhir(self):
         lama = sesi_cat_selesai(self.user, total=250, hari_lalu=3)
         baru = sesi_cat_selesai(self.user, total=300, lulus=False)

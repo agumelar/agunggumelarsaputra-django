@@ -79,7 +79,7 @@ def _kartu_skema(user, premium):
 def _kartu_paket_trial(user):
     kartu = []
     paket_trial = PaketBelajar.objects.filter(untuk_trial=True, aktif=True).annotate(
-        jumlah_isi=Count("isi")
+        jumlah_isi=Count("isi", filter=Q(isi__soal__status="tayang"))
     )
     for paket in paket_trial.order_by("nama"):
         # GROUP BY dari annotate membuang Meta.ordering, jadi urutan harus eksplisit.

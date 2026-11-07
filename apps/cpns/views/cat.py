@@ -2,6 +2,7 @@ import json
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -31,6 +32,10 @@ def _sesi_milik(request, sesi_id):
     )
 
 
+def _cat_berjalan(user):
+    return Sesi.objects.filter(user=user, mode="cat", status="berjalan").first()
+
+
 def _label_jenis(sesi):
     return LABEL_JENIS.get(sesi.skema.jenis_ujian, sesi.skema.jenis_ujian)
 
@@ -47,6 +52,9 @@ def _gabung(bagian):
 @require_POST
 def mulai_cat(request, kode):
     skema = get_object_or_404(SkemaUjian, kode__iexact=kode)
+    berjalan = _cat_berjalan(request.user)
+    if berjalan is not None:
+        selesaikan_jika_kedaluwarsa(berjalan)
     boleh, alasan = boleh_mulai_cat(request.user, skema)
     if not boleh:
         messages.error(request, alasan)
@@ -59,6 +67,13 @@ def mulai_cat(request, kode):
             f"Bank soal untuk bagian {e.subtes} belum cukup ({e.tersedia} dari {e.dibutuhkan}).",
         )
         return redirect("cpns:dasbor")
+    except IntegrityError:
+        # Dua POST bersamaan: yang kalah diarahkan ke sesi yang sudah dibuat yang menang.
+        berjalan = _cat_berjalan(request.user)
+        if berjalan is None:
+            messages.error(request, "Simulasi gagal dimulai. Coba lagi.")
+            return redirect("cpns:dasbor")
+        return redirect("cpns:cat_ruang", sesi_id=berjalan.pk)
     return redirect("cpns:cat_ruang", sesi_id=sesi.pk)
 
 

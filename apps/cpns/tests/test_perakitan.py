@@ -128,6 +128,38 @@ class PerakitanBelajarTests(TestCase):
         )
         self.assertEqual(sesi.paket, paket)
 
+    def test_paket_hanya_soal_tayang(self):
+        soal = [
+            buat_soal("TIU"),
+            buat_soal("TIU", status="draf"),
+            buat_soal("TIU"),
+            buat_soal("TIU", status="ditolak"),
+            buat_soal("TIU"),
+        ]
+        paket = PaketBelajar.objects.create(nama="Paket campur", jenis_ujian="SKD")
+        for urutan, s in enumerate(soal, start=1):
+            PaketSoal.objects.create(paket=paket, soal=s, urutan=urutan)
+        sesi = rakit_sesi_belajar(self.user, paket=paket, rng=self.rng)
+        self.assertEqual(
+            list(sesi.butir.values_list("soal_id", flat=True)),
+            [soal[0].id, soal[2].id, soal[4].id],
+        )
+        self.assertEqual(list(sesi.butir.values_list("nomor", flat=True)), [1, 2, 3])
+
+    def test_paket_tanpa_soal_tayang_melempar(self):
+        paket = PaketBelajar.objects.create(nama="Paket draf", jenis_ujian="SKD")
+        for urutan in (1, 2):
+            PaketSoal.objects.create(
+                paket=paket, soal=buat_soal("TWK", status="draf"), urutan=urutan
+            )
+        with self.assertRaises(BankSoalKurang) as ctx:
+            rakit_sesi_belajar(self.user, paket=paket, rng=self.rng)
+        self.assertEqual(
+            (ctx.exception.subtes, ctx.exception.tersedia, ctx.exception.dibutuhkan),
+            ("TWK", 0, 2),
+        )
+        self.assertFalse(Sesi.objects.filter(user=self.user).exists())
+
     def test_harus_satu_sumber(self):
         with self.assertRaises(ValueError):
             rakit_sesi_belajar(self.user, rng=self.rng)

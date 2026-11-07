@@ -75,7 +75,11 @@ def rakit_sesi_belajar(
         raise ValueError("Isi tepat salah satu: paket atau subtes.")
     rng = rng or random.Random()
     if paket is not None:
-        soal_list = [p.soal for p in paket.isi.select_related("soal")]
+        isi = paket.isi.select_related("soal")
+        soal_list = [p.soal for p in isi.filter(soal__status="tayang")]
+        if not soal_list:
+            pertama = isi.first()
+            raise BankSoalKurang(pertama.soal.subtes if pertama else "paket", 0, isi.count())
         filter_subtopik = None
     else:
         qs = Soal.objects.filter(status="tayang", subtes=subtes)

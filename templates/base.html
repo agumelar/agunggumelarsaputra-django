@@ -78,7 +78,7 @@
     x-data="{ mobileMenuOpen: false }"
 >
     <!-- Toast Notification System -->
-    {% include 'components/toast.html' %}
+    {% block toast %}{% include 'components/toast.html' %}{% endblock toast %}
 
     <!-- Top Navigation Bar -->
     {% block navbar %}
