@@ -1,0 +1,46 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Dasbor{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <h1 class="font-display text-2xl sm:text-3xl font-bold text-[#F3F4F6]">Dasbor</h1>
+
+    {% if sesi_berjalan %}
+        <section class="p-5 rounded-2xl bg-[#111827] border border-[#38BDF8]/40 space-y-3">
+            <h2 class="text-base font-semibold text-[#F3F4F6]">Ada simulasi yang belum selesai</h2>
+            <p class="text-sm text-[#CBD5E1]">Waktu tetap berjalan. Lanjutkan sebelum habis.</p>
+            <a href="{% url 'cpns:cat_ruang' sesi_berjalan.pk %}"
+               class="inline-flex items-center justify-center min-h-11 px-5 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                Lanjutkan ujian
+            </a>
+        </section>
+    {% endif %}
+
+    <section id="simulasi" class="space-y-3" aria-labelledby="judul-simulasi">
+        <h2 id="judul-simulasi" class="text-lg font-semibold text-[#F3F4F6]">Simulasi CAT</h2>
+        {% for skema in daftar_skema %}
+            <div class="p-5 rounded-2xl bg-[#111827] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <p class="font-semibold text-[#F3F4F6]">{{ skema.nama }}{% if not skema.aktif %} <span class="text-xs font-normal text-[#FBBF24]">(nonaktif)</span>{% endif %}</p>
+                    <p class="text-sm text-[#94A3B8] font-mono">{{ skema.total_soal }} soal &middot; {{ skema.durasi_menit }} menit</p>
+                </div>
+                <form method="post" action="{% url 'cpns:cat_mulai' skema.kode|lower %}">
+                    {% csrf_token %}
+                    <button type="submit"
+                            class="w-full sm:w-auto inline-flex items-center justify-center min-h-11 px-5 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                        Mulai {{ skema.nama }}
+                    </button>
+                </form>
+            </div>
+        {% empty %}
+            <p class="text-sm text-[#94A3B8]">Belum ada simulasi yang dibuka.</p>
+        {% endfor %}
+    </section>
+
+    <section id="premium" class="p-5 rounded-2xl bg-[#111827] border border-white/[0.08]" aria-labelledby="judul-premium">
+        <h2 id="judul-premium" class="text-lg font-semibold text-[#F3F4F6]">Premium</h2>
+        <p class="mt-2 text-sm text-[#CBD5E1]">Info Premium segera hadir di halaman ini.</p>
+    </section>
+</div>
+{% endblock %}

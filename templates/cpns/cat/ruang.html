@@ -1,0 +1,436 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Ruang Ujian {{ label_jenis }}{% endblock %}
+
+{% block cpns_content %}
+{{ data_ruang|json_script:"data-ruang" }}
+<div x-data="ruangCat()" @keydown.window="tombolKeyboard($event)">
+
+    <!-- Status bar: menempel di bawah header agar sisa waktu selalu terlihat -->
+    <div class="sticky top-16 z-30 bg-[#111827] border-b border-white/[0.08]">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3">
+            <div class="flex items-center justify-between gap-3">
+                <div class="min-w-0">
+                    <p class="font-semibold text-sm sm:text-base text-[#F3F4F6] truncate">Simulasi {{ label_jenis }}</p>
+                    <p class="text-xs text-[#94A3B8]">Sisa waktu</p>
+                </div>
+                <div role="timer" aria-label="Sisa waktu"
+                     class="font-mono font-bold text-2xl sm:text-3xl tabular-nums tracking-wide"
+                     :class="sisa < 300 ? 'text-[#F87171]' : 'text-[#F3F4F6]'"
+                     x-text="formatWaktu(sisa)">--:--</div>
+                <button type="button" @click="bukaKonfirmasi($event)"
+                        class="shrink-0 inline-flex items-center justify-center min-h-11 px-4 sm:px-5 rounded-xl bg-[#B91C1C] hover:bg-[#DC2626] text-white text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                    Selesai
+                </button>
+            </div>
+            <p class="mt-2 flex flex-wrap items-center gap-x-2 text-xs sm:text-sm">
+                <span class="inline-flex items-center gap-1"
+                      :class="{
+                          'text-[#34D399]': status === 'tersimpan',
+                          'text-[#CBD5E1]': status === 'menyimpan',
+                          'text-[#FBBF24]': status === 'gagal',
+                          'text-[#F87171]': status === 'habis'
+                      }">
+                    <svg x-show="status === 'tersimpan'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span x-text="teksStatus">Tersimpan</span>
+                </span>
+                <span class="text-[#94A3B8]" aria-hidden="true">&middot;</span>
+                <span class="text-[#34D399]"><span x-text="jumlahTerjawab">0</span> dari {{ data_ruang.soal|length }} terjawab</span>
+            </p>
+            <p class="sr-only" role="status" x-text="pengumuman"></p>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Soal -->
+        <div class="lg:col-span-8">
+            <template x-if="soalAktif">
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between gap-3">
+                        <p class="font-mono font-bold text-sm sm:text-base text-[#F3F4F6] whitespace-nowrap">
+                            Soal <span x-text="soalAktif.nomor"></span> / {{ data_ruang.soal|length }}
+                            <span class="mx-2 text-[#94A3B8]" aria-hidden="true">&middot;</span>
+                            <span x-text="soalAktif.subtes"></span>
+                            <span x-show="soalAktif.subtopik" class="hidden sm:inline font-sans font-normal text-sm text-[#94A3B8] ml-2" x-text="soalAktif.subtopik"></span>
+                        </p>
+                        <button type="button" @click="bukaNav($event)"
+                                aria-controls="daftar-soal" :aria-expanded="openNav.toString()"
+                                class="lg:hidden shrink-0 inline-flex items-center min-h-11 px-4 rounded-xl bg-[#162032] border border-white/[0.14] text-sm font-semibold text-[#F3F4F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                            Daftar soal
+                        </button>
+                    </div>
+
+                    <p class="text-[#F3F4F6] leading-relaxed whitespace-pre-line" :class="ukuranTeks" x-text="soalAktif.teks"></p>
+
+                    <!-- Opsi: tombol asli agar bisa dicapai dengan Tab dan dibaca pembaca layar -->
+                    <div class="space-y-3" role="group" :aria-label="'Pilihan jawaban soal nomor ' + soalAktif.nomor">
+                        <template x-for="opsi in soalAktif.opsi" :key="opsi.key">
+                            <button type="button" @click="pilih(opsi.key)"
+                                    :aria-pressed="(soalAktif.jawaban === opsi.key).toString()"
+                                    class="w-full text-left p-4 rounded-2xl border flex items-start gap-4 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]"
+                                    :class="soalAktif.jawaban === opsi.key
+                                        ? 'bg-[#0F2A3D] border-[#38BDF8] ring-1 ring-[#38BDF8] text-[#F3F4F6] font-semibold'
+                                        : 'bg-[#0D1422] border-white/[0.08] hover:border-white/[0.2] text-[#CBD5E1]'">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-sm shrink-0"
+                                      :class="soalAktif.jawaban === opsi.key ? 'bg-[#38BDF8] text-[#082F49]' : 'bg-[#1C293E] text-[#CBD5E1]'"
+                                      x-text="opsi.key"></span>
+                                <span class="flex-1 pt-0.5 leading-relaxed" :class="ukuranTeks" x-text="opsi.text"></span>
+                            </button>
+                        </template>
+                    </div>
+
+                    <!-- Navigasi: di HP menempel di bawah layar, tombol Sebelumnya hanya panah -->
+                    <div class="sticky bottom-0 z-20 -mx-4 px-4 py-3 bg-[#090D16] border-t border-white/[0.08] sm:mx-0 sm:px-0 lg:static lg:bg-transparent grid grid-cols-[auto_1fr_1fr] items-center gap-3">
+                        <button type="button" @click="sebelumnya()" :disabled="idx === 0" aria-label="Soal sebelumnya"
+                                class="inline-flex items-center justify-center gap-1.5 min-h-11 min-w-11 px-4 rounded-xl bg-[#162032] border border-white/[0.14] text-sm font-semibold text-[#F3F4F6] disabled:opacity-40 disabled:pointer-events-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                            <span aria-hidden="true">&larr;</span>
+                            <span class="hidden sm:inline">Sebelumnya</span>
+                        </button>
+                        <button type="button" @click="toggleRagu()" :aria-pressed="soalAktif.ragu.toString()"
+                                class="inline-flex items-center justify-center min-h-11 px-3 rounded-xl border border-[#FBBF24]/60 text-sm font-semibold text-[#FBBF24] whitespace-nowrap transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]"
+                                :class="soalAktif.ragu ? 'bg-[#FBBF24]/15' : 'bg-transparent hover:bg-[#FBBF24]/10'"
+                                x-text="soalAktif.ragu ? 'Ragu-ragu' : 'Tandai ragu'">Tandai ragu</button>
+                        <button type="button" @click="soalTerakhir ? bukaKonfirmasi($event) : berikutnya()"
+                                class="inline-flex items-center justify-center gap-1.5 min-h-11 px-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-sm font-semibold text-[#082F49] whitespace-nowrap transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+                            <span x-text="soalTerakhir ? 'Kumpulkan' : 'Selanjutnya'">Selanjutnya</span>
+                            <span x-show="!soalTerakhir" aria-hidden="true">&rarr;</span>
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Daftar soal: sidebar di desktop, panel bawah di HP -->
+        <div class="lg:col-span-4">
+            <div x-show="openNav" x-cloak @click="tutupNav()" class="fixed inset-0 z-40 bg-black/70 lg:hidden" aria-hidden="true"></div>
+
+            <div id="daftar-soal" aria-labelledby="judul-daftar-soal"
+                 :role="openNav ? 'dialog' : null" :aria-modal="openNav ? 'true' : null"
+                 :class="openNav ? 'fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto rounded-t-3xl' : 'hidden'"
+                 class="lg:block lg:sticky lg:top-44 lg:inset-auto lg:z-auto lg:max-h-none lg:overflow-visible lg:rounded-2xl p-5 sm:p-6 bg-[#111827] border border-white/[0.08] space-y-5">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <h2 id="judul-daftar-soal" class="font-display text-xl font-bold text-[#F3F4F6]">Daftar soal</h2>
+                        <p class="mt-1 font-mono text-xs text-[#94A3B8]">
+                            <span x-text="jumlahTerjawab"></span> terjawab &middot;
+                            <span x-text="jumlahRagu"></span> ragu &middot;
+                            <span x-text="soal.length - jumlahTerjawab"></span> kosong
+                        </p>
+                    </div>
+                    <button type="button" x-ref="tutupNav" @click="tutupNav()"
+                            class="lg:hidden inline-flex items-center min-h-11 px-4 rounded-xl bg-[#162032] border border-white/[0.14] text-sm font-semibold text-[#F3F4F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                        Tutup
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-between gap-3">
+                    <span class="text-sm text-[#CBD5E1]">Ukuran huruf soal</span>
+                    <div class="flex items-center gap-1 p-1 rounded-xl bg-[#0D1422] border border-white/[0.08]" role="group" aria-label="Ukuran huruf soal">
+                        <template x-for="u in ukuranPilihan" :key="u.nilai">
+                            <button type="button" @click="fontSize = u.nilai" :aria-pressed="(fontSize === u.nilai).toString()" :aria-label="u.label"
+                                    class="min-h-11 min-w-11 rounded-lg font-mono text-sm font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]"
+                                    :class="fontSize === u.nilai ? 'bg-[#38BDF8] text-[#082F49]' : 'text-[#CBD5E1] hover:text-[#F3F4F6]'"
+                                    x-text="u.teks"></button>
+                        </template>
+                    </div>
+                </div>
+
+                <ul class="flex flex-wrap gap-x-4 gap-y-2 text-xs text-[#CBD5E1]" aria-label="Arti warna nomor">
+                    <li class="inline-flex items-center gap-2"><span class="w-4 h-4 rounded border border-[#34D399]/60 bg-[#34D399]/15" aria-hidden="true"></span>Terjawab</li>
+                    <li class="inline-flex items-center gap-2"><span class="w-4 h-4 rounded border border-dashed border-[#FBBF24] bg-[#FBBF24]/15" aria-hidden="true"></span>Ragu (garis putus)</li>
+                    <li class="inline-flex items-center gap-2"><span class="w-4 h-4 rounded border border-white/[0.2]" aria-hidden="true"></span>Kosong</li>
+                </ul>
+
+                <div class="grid grid-cols-5 gap-2 max-h-[45dvh] lg:max-h-80 overflow-y-auto p-1">
+                    <template x-for="(s, i) in soal" :key="s.nomor">
+                        <button type="button" @click="keSoal(i)"
+                                :aria-label="'Soal ' + s.nomor + (s.ragu ? ', ragu-ragu' : (s.jawaban ? ', terjawab' : ', kosong'))"
+                                :aria-current="idx === i ? 'true' : null"
+                                class="min-h-11 rounded-xl font-mono text-sm font-bold flex items-center justify-center transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]"
+                                :class="idx === i
+                                    ? 'border-2 border-[#38BDF8] bg-[#13283A] text-[#F3F4F6]'
+                                    : (s.ragu
+                                        ? 'border border-dashed border-[#FBBF24] bg-[#FBBF24]/15 text-[#FBBF24]'
+                                        : (s.jawaban
+                                            ? 'border border-[#34D399]/50 bg-[#34D399]/15 text-[#34D399]'
+                                            : 'border border-white/[0.14] text-[#94A3B8] hover:border-white/[0.3]'))"
+                                x-text="s.nomor"></button>
+                    </template>
+                </div>
+
+                <div class="hidden lg:block pt-3 border-t border-white/[0.08] text-xs text-[#94A3B8] space-y-1">
+                    <p class="font-semibold text-[#CBD5E1]">Tombol pintas keyboard</p>
+                    <p><kbd class="px-1 rounded bg-[#1C293E] text-[#CBD5E1]">A</kbd> sampai <kbd class="px-1 rounded bg-[#1C293E] text-[#CBD5E1]">E</kbd> atau <kbd class="px-1 rounded bg-[#1C293E] text-[#CBD5E1]">1</kbd> sampai <kbd class="px-1 rounded bg-[#1C293E] text-[#CBD5E1]">5</kbd>: pilih jawaban</p>
+                    <p><kbd class="px-1 rounded bg-[#1C293E] text-[#CBD5E1]">&larr;</kbd> / <kbd class="px-1 rounded bg-[#1C293E] text-[#CBD5E1]">&rarr;</kbd>: soal sebelumnya / berikutnya</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dialog konfirmasi kumpulkan -->
+    <div x-show="openKonfirmasi" x-cloak @click.self="tutupKonfirmasi()"
+         class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/70">
+        <div role="dialog" aria-modal="true" aria-labelledby="judul-kumpulkan" aria-describedby="isi-kumpulkan"
+             class="max-w-md w-full p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-5">
+            <h2 id="judul-kumpulkan" class="font-display text-lg font-bold text-[#F3F4F6]">Kumpulkan jawaban sekarang?</h2>
+            <p id="isi-kumpulkan" class="text-sm text-[#CBD5E1]">Setelah dikumpulkan, jawaban tidak bisa diubah lagi.</p>
+            <dl class="p-4 rounded-xl bg-[#0D1422] border border-white/[0.08] space-y-2 text-sm font-mono">
+                <div class="flex justify-between"><dt class="text-[#94A3B8]">Terjawab</dt><dd class="font-bold text-[#34D399]" x-text="jumlahTerjawab"></dd></div>
+                <div class="flex justify-between"><dt class="text-[#94A3B8]">Ditandai ragu</dt><dd class="font-bold text-[#FBBF24]" x-text="jumlahRagu"></dd></div>
+                <div class="flex justify-between"><dt class="text-[#94A3B8]">Belum dijawab</dt><dd class="font-bold text-[#F87171]" x-text="soal.length - jumlahTerjawab"></dd></div>
+            </dl>
+            <form x-ref="formKumpulkan" method="post" action="{% url 'cpns:cat_kumpulkan' sesi.pk %}" @submit.prevent="kumpulkanSekarang()"
+                  class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {% csrf_token %}
+                <button type="button" x-ref="batalKumpulkan" @click="tutupKonfirmasi()"
+                        class="min-h-11 px-4 rounded-xl bg-[#162032] border border-white/[0.14] text-sm font-semibold text-[#F3F4F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                    Lanjut mengerjakan
+                </button>
+                <button type="submit" :disabled="mengumpulkan"
+                        class="min-h-11 px-4 rounded-xl bg-[#B91C1C] hover:bg-[#DC2626] disabled:opacity-60 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]"
+                        x-text="mengumpulkan ? 'Mengumpulkan…' : 'Kumpulkan'">Kumpulkan</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function ruangCat() {
+    const data = JSON.parse(document.getElementById('data-ruang').textContent);
+    const KUNCI_ANTREAN = 'cpns-antrean-' + data.sesi_id;
+    const TEKS_STATUS = {
+        tersimpan: 'Tersimpan',
+        menyimpan: 'Menyimpan…',
+        gagal: 'Gagal, mencoba lagi',
+        habis: 'Waktu habis',
+    };
+
+    function bacaAntrean() {
+        try {
+            const isi = JSON.parse(localStorage.getItem(KUNCI_ANTREAN) || '{}');
+            return isi && typeof isi === 'object' && !Array.isArray(isi) ? isi : {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    return {
+        soal: data.soal,
+        idx: 0,
+        fontSize: 'base',
+        ukuranPilihan: [
+            { nilai: 'sm', teks: 'A-', label: 'Huruf kecil' },
+            { nilai: 'base', teks: 'A', label: 'Huruf normal' },
+            { nilai: 'lg', teks: 'A+', label: 'Huruf besar' },
+        ],
+        openNav: false,
+        openKonfirmasi: false,
+        pemicu: null,
+        status: 'tersimpan',
+        pengumuman: '',
+        sisa: data.sisa_detik,
+        tenggat: Date.now() + data.sisa_detik * 1000,
+        antrean: {},
+        proses: null,
+        ulang: false,
+        mengumpulkan: false,
+
+        init() {
+            this.antrean = bacaAntrean();
+            for (const nomor of Object.keys(this.antrean)) {
+                const s = this.soal.find(x => x.nomor === Number(nomor));
+                if (s) {
+                    s.jawaban = this.antrean[nomor].jawaban;
+                    s.ragu = this.antrean[nomor].ragu;
+                } else {
+                    delete this.antrean[nomor];
+                }
+            }
+            this.detik();
+            setInterval(() => this.detik(), 500);
+            setInterval(() => this.kirim(), 10000);
+            window.addEventListener('online', () => this.kirim());
+            this.kirim();
+        },
+
+        get soalAktif() { return this.soal[this.idx] || null; },
+        get soalTerakhir() { return this.idx === this.soal.length - 1; },
+        get jumlahTerjawab() { return this.soal.filter(s => s.jawaban).length; },
+        get jumlahRagu() { return this.soal.filter(s => s.ragu).length; },
+        get teksStatus() { return TEKS_STATUS[this.status]; },
+        get ukuranTeks() {
+            return { sm: 'text-sm', base: 'text-base sm:text-lg', lg: 'text-lg sm:text-xl' }[this.fontSize];
+        },
+
+        detik() {
+            this.sisa = Math.max(0, Math.ceil((this.tenggat - Date.now()) / 1000));
+            if (this.sisa === 0) this.kumpulkanSekarang();
+        },
+
+        formatWaktu(detik) {
+            const m = Math.floor(detik / 60);
+            const s = detik % 60;
+            return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        },
+
+        pilih(huruf) {
+            const s = this.soalAktif;
+            if (!s || this.mengumpulkan) return;
+            s.jawaban = huruf;
+            this.antrekan(s);
+        },
+
+        toggleRagu() {
+            const s = this.soalAktif;
+            if (!s || this.mengumpulkan) return;
+            s.ragu = !s.ragu;
+            this.antrekan(s);
+        },
+
+        antrekan(s) {
+            this.antrean[s.nomor] = { nomor: s.nomor, jawaban: s.jawaban, ragu: s.ragu };
+            this.tulisAntrean();
+            this.kirim();
+        },
+
+        tulisAntrean() {
+            try {
+                if (Object.keys(this.antrean).length) {
+                    localStorage.setItem(KUNCI_ANTREAN, JSON.stringify(this.antrean));
+                } else {
+                    localStorage.removeItem(KUNCI_ANTREAN);
+                }
+            } catch (e) {
+                // Penyimpanan lokal bisa diblokir; antrean tetap hidup di memori.
+            }
+        },
+
+        csrf() {
+            return this.$refs.formKumpulkan.querySelector('[name=csrfmiddlewaretoken]').value;
+        },
+
+        kirim() {
+            if (this.proses) {
+                this.ulang = true;
+                return this.proses;
+            }
+            if (!Object.keys(this.antrean).length) return Promise.resolve();
+            this.proses = this.kirimSemua().finally(() => { this.proses = null; });
+            return this.proses;
+        },
+
+        async kirimSemua() {
+            this.status = 'menyimpan';
+            let gagal = false;
+            do {
+                this.ulang = false;
+                for (const nomor of Object.keys(this.antrean)) {
+                    const item = { ...this.antrean[nomor] };
+                    let resp;
+                    try {
+                        resp = await fetch(data.url_simpan, {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': this.csrf() },
+                            body: JSON.stringify(item),
+                        });
+                    } catch (e) {
+                        gagal = true;
+                        break;
+                    }
+                    if (resp.status === 409) {
+                        this.waktuHabis();
+                        return;
+                    }
+                    if (!resp.ok && resp.status !== 400) {
+                        gagal = true;
+                        break;
+                    }
+                    const kini = this.antrean[nomor];
+                    if (kini && kini.jawaban === item.jawaban && kini.ragu === item.ragu) {
+                        delete this.antrean[nomor];
+                        this.tulisAntrean();
+                    }
+                }
+            } while (this.ulang && !gagal);
+            this.status = gagal ? 'gagal' : 'tersimpan';
+            this.pengumuman = gagal ? TEKS_STATUS.gagal : '';
+        },
+
+        waktuHabis() {
+            this.status = 'habis';
+            this.pengumuman = TEKS_STATUS.habis;
+            this.antrean = {};
+            this.tulisAntrean();
+            this.kumpulkanSekarang(false);
+        },
+
+        async kumpulkanSekarang(kirimDulu = true) {
+            if (this.mengumpulkan) return;
+            this.mengumpulkan = true;
+            if (kirimDulu) {
+                try { await this.kirim(); } catch (e) { /* tetap kumpulkan */ }
+            }
+            this.$refs.formKumpulkan.submit();
+        },
+
+        sebelumnya() { if (this.idx > 0) this.idx--; },
+        berikutnya() { if (this.idx < this.soal.length - 1) this.idx++; },
+
+        keSoal(i) {
+            this.idx = i;
+            if (this.openNav) this.tutupNav();
+        },
+
+        bukaNav(e) {
+            this.pemicu = e.currentTarget;
+            this.openNav = true;
+            this.$nextTick(() => this.$refs.tutupNav.focus());
+        },
+
+        tutupNav() {
+            this.openNav = false;
+            if (this.pemicu) this.pemicu.focus();
+        },
+
+        bukaKonfirmasi(e) {
+            this.pemicu = e.currentTarget;
+            this.openKonfirmasi = true;
+            this.$nextTick(() => this.$refs.batalKumpulkan.focus());
+        },
+
+        tutupKonfirmasi() {
+            this.openKonfirmasi = false;
+            if (this.pemicu) this.pemicu.focus();
+        },
+
+        tombolKeyboard(e) {
+            if (e.key === 'Escape') {
+                if (this.openKonfirmasi) this.tutupKonfirmasi();
+                if (this.openNav) this.tutupNav();
+                return;
+            }
+            // Pintasan tidak boleh membajak Ctrl+C, Cmd+A, dan sejenisnya
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            if (this.openKonfirmasi || this.openNav) return;
+            if (['input', 'textarea', 'select'].includes(e.target.tagName.toLowerCase())) return;
+
+            const angka = { '1': 'A', '2': 'B', '3': 'C', '4': 'D', '5': 'E' };
+            const huruf = e.key.length === 1 ? e.key.toUpperCase() : '';
+            if ('ABCDE'.includes(huruf) && huruf) {
+                this.pilih(huruf);
+            } else if (angka[e.key]) {
+                this.pilih(angka[e.key]);
+            } else if (e.key === 'ArrowLeft') {
+                this.sebelumnya();
+            } else if (e.key === 'ArrowRight') {
+                this.berikutnya();
+            }
+        },
+    };
+}
+</script>
+{% endblock %}

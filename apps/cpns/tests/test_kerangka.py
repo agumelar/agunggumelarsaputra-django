@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
 from django.test import TestCase
 
@@ -7,7 +8,9 @@ HOST_UTAMA = 'localhost'
 
 class KerangkaTampilanTests(TestCase):
     def test_judul_tab_cpns(self):
-        resp = self.client.get('/', HTTP_HOST=HOST_CPNS)
+        user = get_user_model().objects.create_user(username='kerangka', email='kerangka@contoh.id', password='x')
+        self.client.force_login(user)
+        resp = self.client.get('/dasbor/', HTTP_HOST=HOST_CPNS)
         self.assertEqual(resp.status_code, 200)
         self.assertIn(' | CPNS Hub</title>', resp.content.decode())
 
