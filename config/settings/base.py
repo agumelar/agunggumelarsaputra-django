@@ -131,5 +131,13 @@ PASSWORD_HASHERS = [
 ]
 
 # Google OAuth 2.0 Credentials
+# Email yang otomatis berperan guru saat login Google (dipisah koma).
+GURU_EMAILS = [
+    e.strip() for e in os.getenv(
+        'GURU_EMAILS',
+        'agung@smkn1rongga.sch.id,agunggumelar@smkn1rongga.sch.id',
+    ).split(',') if e.strip()
+]
+
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', '')

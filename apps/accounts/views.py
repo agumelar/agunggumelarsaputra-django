@@ -22,6 +22,12 @@ from .forms import StudentRegistrationForm, UserLoginForm, UserProfileForm, Clai
 from apps.admin_panel.models import EnrollmentToken, UserEnrollment
 from apps.gamification.models import XPHistory
 
+
+def _is_teacher_email(email):
+    """True hanya untuk email yang terdaftar di settings.GURU_EMAILS."""
+    daftar = {e.strip().lower() for e in settings.GURU_EMAILS}
+    return (email or '').strip().lower() in daftar
+
 User = get_user_model()
 
 
@@ -272,7 +278,7 @@ def google_oauth_callback_view(request):
         user = User.objects.filter(email__iexact=email).first()
 
         # Deteksi otomatis apakah akun guru / admin
-        is_teacher_email = email in ['agung@smkn1rongga.sch.id', 'agunggumelar@smkn1rongga.sch.id'] or 'agung' in email
+        is_teacher_email = _is_teacher_email(email)
 
         google_pic = google_user.get('picture')
 
