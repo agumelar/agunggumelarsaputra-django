@@ -8,15 +8,14 @@ class SubdomainRoutingTest(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_beranda_anonim_ke_login_dengan_next(self):
+    def test_beranda_anonim_melihat_beranda_publik(self):
         response = self.client.get('/', HTTP_HOST=CPNS_HOST)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], '/accounts/login/?next=/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Daftar dan coba gratis')
 
-    def test_beranda_dev_host_anonim_ke_login(self):
+    def test_beranda_dev_host_anonim_melihat_beranda_publik(self):
         response = self.client.get('/', HTTP_HOST='cpns.localhost:8000')
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response['Location'].startswith('/accounts/login/?next='))
+        self.assertEqual(response.status_code, 200)
 
     def test_beranda_login_ke_dasbor(self):
         user = get_user_model().objects.create_user(username='rute', email='rute@contoh.id', password='x')
@@ -34,8 +33,8 @@ class SubdomainRoutingTest(TestCase):
     def test_fallback_cpns_path_on_main_domain(self):
         """Path /cpns/ on main domain should also resolve."""
         response = self.client.get('/cpns/')
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], '/accounts/login/?next=/cpns/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Daftar dan coba gratis')
 
     def test_fallback_main_domain_login_ke_dasbor_berprefiks(self):
         user = get_user_model().objects.create_user(username='rute3', email='rute3@contoh.id', password='x')

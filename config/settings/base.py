@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
     'apps.cpns.middleware.CpnsSubdomainMiddleware',
+    'apps.cpns.middleware.PesertaHanyaCpnsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -119,6 +120,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_REDIRECT_URL = 'core:home'
+CPNS_URL_BAWAAN = 'https://cpns.agunggumelarsaputra.com/'
+
+
+def normalisasi_cpns_url(raw):
+    # Env kosong (CPNS_URL=) jatuh ke bawaan, bukan jadi '/'.
+    return (raw or CPNS_URL_BAWAAN).rstrip('/') + '/'
+
+
+CPNS_URL = normalisasi_cpns_url(os.getenv('CPNS_URL'))
 
 # Password hashers (supports legacy bcrypt from Neon and modern PBKDF2)
 PASSWORD_HASHERS = [
@@ -132,12 +142,14 @@ PASSWORD_HASHERS = [
 
 # Google OAuth 2.0 Credentials
 # Email yang otomatis berperan guru saat login Google (dipisah koma).
-GURU_EMAILS = [
-    e.strip() for e in os.getenv(
-        'GURU_EMAILS',
-        'agung@smkn1rongga.sch.id,agunggumelar@smkn1rongga.sch.id',
-    ).split(',') if e.strip()
-]
+GURU_EMAILS_BAWAAN = 'agung@smkn1rongga.sch.id,agunggumelar@smkn1rongga.sch.id'
+
+
+def parse_guru_emails(raw):
+    return [e.strip().lower() for e in raw.split(',') if e.strip()]
+
+
+GURU_EMAILS = parse_guru_emails(os.getenv('GURU_EMAILS', GURU_EMAILS_BAWAAN))
 
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', '')

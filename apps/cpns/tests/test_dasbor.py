@@ -248,7 +248,8 @@ class DasborTest(TestCase):
         resp = self._dasbor()
         self.assertContains(resp, 'id="premium"', html=False)
         self.assertContains(resp, 'id="simulasi"', html=False)
-        self.assertContains(resp, "Info pembelian Premium segera tersedia.")
+        self.assertContains(resp, f'href="{reverse("cpns:premium")}"')
+        self.assertNotContains(resp, "segera tersedia")
 
     def test_judul_halaman(self):
         self.assertContains(self._dasbor(), "<title>Dasbor | CPNS Hub</title>", html=False)
@@ -274,7 +275,7 @@ class NavigasiTest(TestCase):
         self.assertIn('href="/belajar/"', html)
         self.assertIn('href="/riwayat/"', html)
         self.assertIn('href="/dasbor/#simulasi"', html)
-        self.assertIn('href="/dasbor/#premium"', html)
+        self.assertIn('href="/premium/"', html)
 
     def test_nav_pakai_url_di_domain_utama(self):
         resp = self.client.get("/cpns/dasbor/")
@@ -363,7 +364,7 @@ class LaporkanSoalTest(TestCase):
         resp = self._laporkan()
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Terima kasih, laporan terkirim.")
-        self.assertContains(resp, 'role="status"', html=False)
+        self.assertNotContains(resp, 'role="status"', html=False)
         laporan = LaporanSoal.objects.get()
         self.assertEqual(laporan.soal, self.soal)
         self.assertEqual(laporan.user, self.user)
@@ -436,7 +437,7 @@ class LaporkanSoalTest(TestCase):
         self.client.logout()
         resp = self._laporkan()
         self.assertEqual(resp.status_code, 302)
-        self.assertIn(reverse("accounts:login"), resp["Location"])
+        self.assertIn(reverse("cpns:masuk"), resp["Location"])
 
     def test_laporkan_non_htmx_kembali_ke_perujuk(self):
         sesi = sesi_belajar(self.user, [self.soal], ["A"])
@@ -452,6 +453,29 @@ class LaporkanSoalTest(TestCase):
         resp = self._laporkan(hx=False, HTTP_REFERER="https://jahat.example/")
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(resp["Location"], reverse("cpns:dasbor"))
+
+    def test_laporkan_wadah_status_ada_sejak_awal(self):
+        sesi_belajar(self.user, [self.soal], ["A"])
+        sesi = Sesi.objects.get(user=self.user)
+        html = self.client.get(reverse("cpns:belajar_soal", args=[sesi.pk, 1])).content.decode()
+        pola = rf'<div id="laporan-status-{self.soal.pk}" role="status"[^>]*></div>'
+        self.assertRegex(html, pola)
+        self.assertIn(f'hx-target="#laporan-status-{self.soal.pk}"', html)
+        self.assertIn('hx-swap="innerHTML"', html)
+        # Handler global untuk 4xx dan galat jaringan HTMX ada di kerangka cpns.
+        self.assertIn("htmx:responseError", html)
+        self.assertIn("htmx:sendError", html)
+        self.assertIn("Permintaan gagal. Muat ulang halaman lalu coba lagi.", html)
+
+    def test_laporkan_4xx_berteks_indonesia(self):
+        # Teks inilah yang ditampilkan handler htmx:responseError.
+        resp = self._laporkan()
+        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.content.decode(), "Soal ini belum bisa kamu laporkan.")
+        sesi_belajar(self.user, [self.soal], ["A"])
+        resp = self._laporkan(data={"alasan": "asal"})
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.content.decode(), "Pilih alasan laporan.")
 
 
 class SlotLaporkanTest(TestCase):
@@ -501,3 +525,69 @@ class JawabBelajarPadaCatTest(TestCase):
         self.assertEqual(resp.status_code, 404)
         self.assertNotContains(resp, "Kunci jawaban", status_code=404)
         self.assertEqual(SesiSoal.objects.get(sesi=sesi).jawaban, "")
+
+
+class KelemahanDasborTest(TestCase):
+    def _soal_lemah(self, user):
+        soal = [buat_soal("TIU", subtopik="Silogisme", kunci="A") for _ in range(5)]
+        sesi_belajar(user, soal, ["A", "A", "B", "B", "B"])
+
+    def test_dasbor_premium_tampil_kelemahan(self):
+        user = buat_user("prem", premium=True)
+        self.client.force_login(user)
+        self._soal_lemah(user)
+        resp = self.client.get(reverse("cpns:dasbor"))
+        self.assertContains(resp, "Subtopik yang perlu dilatih")
+        self.assertContains(resp, "TIU")
+        self.assertContains(resp, "Silogisme")
+        self.assertContains(resp, "40%")
+        self.assertContains(resp, "(2/5)")
+        self.assertContains(resp, "Latih subtopik ini")
+        html = resp.content.decode()
+        self.assertIn(f'action="{reverse("cpns:belajar_mulai")}"', html)
+        self.assertIn('name="subtes" value="TIU"', html)
+        self.assertIn('name="subtopik" value="Silogisme"', html)
+        self.assertIn('name="jumlah" value="10"', html)
+
+    def test_dasbor_tombol_latih_membuka_sesi(self):
+        user = buat_user("prem2", premium=True)
+        self.client.force_login(user)
+        self._soal_lemah(user)
+        for _ in range(5):
+            buat_soal("TIU", subtopik="Silogisme")
+        resp = self.client.post(
+            reverse("cpns:belajar_mulai"), {"subtes": "TIU", "subtopik": "Silogisme", "jumlah": "10"}
+        )
+        self.assertEqual(resp.status_code, 302)
+
+    def test_dasbor_trial_kartu_terkunci(self):
+        user = buat_user("trial")
+        self.client.force_login(user)
+        self._soal_lemah(user)
+        resp = self.client.get(reverse("cpns:dasbor"))
+        self.assertContains(resp, "Ringkasan subtopik yang masih lemah khusus Premium.")
+        self.assertContains(resp, "Khusus Premium")
+        self.assertNotContains(resp, "Latih subtopik ini")
+        self.assertNotContains(resp, "Silogisme")
+
+    def test_dasbor_premium_belum_cukup_data(self):
+        user = buat_user("prem3", premium=True)
+        self.client.force_login(user)
+        resp = self.client.get(reverse("cpns:dasbor"))
+        self.assertContains(
+            resp, "Belum cukup data. Jawab minimal 3 soal per subtopik di Mode Belajar."
+        )
+        self.assertNotContains(resp, "Latih subtopik ini")
+
+
+class RiwayatKedaluwarsaTest(TestCase):
+    def test_riwayat_cat_kedaluwarsa_tampil_selesai(self):
+        user = buat_user("telat")
+        self.client.force_login(user)
+        sesi = sesi_cat_berjalan(user, menit=-5)
+        resp = self.client.get(reverse("cpns:riwayat"))
+        self.assertNotContains(resp, "Berjalan")
+        self.assertContains(resp, "Selesai")
+        self.assertContains(resp, reverse("cpns:cat_hasil", args=[sesi.pk]))
+        sesi.refresh_from_db()
+        self.assertEqual(sesi.status, "selesai")

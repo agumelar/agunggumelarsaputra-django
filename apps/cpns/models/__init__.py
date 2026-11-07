@@ -1,5 +1,6 @@
 from .legacy import CpnsAttempt, CpnsPackage, CpnsQuestion
 from .akses import AksesPeserta, LaporanSoal
+from .premium import PengaturanCPNS, PercobaanVoucher, Voucher
 from .sesi import Sesi, SesiSoal
 from .skema import PaketBelajar, PaketSoal, SkemaBagian, SkemaUjian
 from .soal import Soal
@@ -17,4 +18,7 @@ __all__ = [
     "SesiSoal",
     "AksesPeserta",
     "LaporanSoal",
+    "PengaturanCPNS",
+    "Voucher",
+    "PercobaanVoucher",
 ]

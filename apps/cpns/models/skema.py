@@ -17,12 +17,13 @@ class SkemaUjian(models.Model):
     jenis_ujian = models.CharField(max_length=20, choices=_pilihan(validasi.JENIS))
     durasi_menit = models.PositiveIntegerField()
     aktif = models.BooleanField(default=True)
+    urutan = models.PositiveSmallIntegerField(default=0)
     keterangan = models.TextField(blank=True)
 
     class Meta:
         verbose_name = "skema ujian"
         verbose_name_plural = "skema ujian"
-        ordering = ["kode"]
+        ordering = ["urutan", "kode"]
 
     def __str__(self):
         return self.kode

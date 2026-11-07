@@ -13,9 +13,9 @@
         {% endif %}
     </div>
     <div class="relative mt-2 h-[10px] rounded-full bg-[#1C293E]" role="img" aria-label="{{ subtes }}: {{ skor }} dari {{ maks }}{% if ambang %}, ambang {{ ambang }}{% endif %}">
-        <div class="h-full rounded-full {% if lulus %}bg-[#34D399]{% else %}bg-[#F87171]{% endif %}" style="width: {% widthratio skor maks 100 %}%"></div>
+        <div class="h-full rounded-full {% if lulus %}bg-[#34D399]{% else %}bg-[#F87171]{% endif %}" style="width: {{ skor|persen_dari:maks }}%"></div>
         {% if ambang %}
-            <div class="absolute top-[-3px] bottom-[-3px] w-[2px] bg-white" style="left: {% widthratio ambang maks 100 %}%"></div>
+            <div class="absolute top-[-3px] bottom-[-3px] w-[2px] bg-white" style="left: {{ ambang|persen_dari:maks }}%"></div>
         {% endif %}
     </div>
 </div>

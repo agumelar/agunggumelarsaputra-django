@@ -5,7 +5,13 @@ from . import views
 app_name = 'cpns'
 
 urlpatterns = [
-    path('', views.beranda, name='beranda'),
+    path('', views.beranda_publik, name='beranda'),
+    path('syarat-layanan/', views.syarat, name='syarat'),
+    path('kebijakan-privasi/', views.privasi, name='privasi'),
+    path('masuk/', views.masuk, name='masuk'),
+    path('daftar/', views.daftar, name='daftar'),
+    path('premium/', views.premium, name='premium'),
+    path('premium/voucher/', views.tukar_voucher, name='tukar_voucher'),
     path('dasbor/', views.dasbor, name='dasbor'),
     path('riwayat/', views.riwayat, name='riwayat'),
     path('soal/<int:soal_id>/laporkan/', views.laporkan_soal, name='laporkan'),

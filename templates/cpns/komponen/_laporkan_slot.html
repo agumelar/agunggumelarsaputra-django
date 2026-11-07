@@ -3,7 +3,8 @@
         Ada yang salah di soal ini? Laporkan
     </summary>
     <form method="post" action="{% url 'cpns:laporkan' soal.pk %}"
-          hx-post="{% url 'cpns:laporkan' soal.pk %}" hx-target="this" hx-swap="outerHTML"
+          hx-post="{% url 'cpns:laporkan' soal.pk %}" hx-target="#laporan-status-{{ soal.pk }}" hx-swap="innerHTML"
+          hx-on::after-request="if (event.detail.successful) { this.hidden = true; document.getElementById('laporan-status-{{ soal.pk }}').focus() }"
           class="px-5 pb-5 pt-2 space-y-4">
         {% csrf_token %}
         <fieldset class="space-y-1">
@@ -23,4 +24,5 @@
             Kirim laporan
         </button>
     </form>
+    <div id="laporan-status-{{ soal.pk }}" role="status" tabindex="-1" class="rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]"></div>
 </details>

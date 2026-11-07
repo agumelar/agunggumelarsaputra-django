@@ -1,7 +1,4 @@
-from urllib.parse import quote
-
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Min, Q
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import redirect, render
@@ -10,24 +7,18 @@ from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_GET, require_POST
 
+from apps.cpns.analitik import kelemahan_subtopik
 from apps.cpns.akses import akses_untuk, boleh_mulai_cat, is_premium
 from apps.cpns.models import LaporanSoal, PaketBelajar, Sesi, SesiSoal, SkemaUjian
 from apps.cpns.sesi_layanan import selesaikan_jika_kedaluwarsa
 
-from ._bantu import LABEL_JENIS
+from ._bantu import LABEL_JENIS, wajib_masuk
 
 JUMLAH_SKOR_DASBOR = 5
 CATATAN_MAKS = 1000
 ALASAN_SAH = {kode for kode, _ in LaporanSoal.ALASAN_CHOICES}
 PESAN_TERKIRIM = "Terima kasih, laporan terkirim."
 PESAN_SUDAH_ADA = "Laporan untuk soal ini sudah kami terima."
-
-
-def beranda(request):
-    if not request.user.is_authenticated:
-        tujuan = quote(request.get_full_path(), safe="/")
-        return redirect(f"{reverse('accounts:login')}?next={tujuan}")
-    return redirect(reverse("cpns:dasbor"))
 
 
 def _dengan_progres(qs):
@@ -116,7 +107,7 @@ def _skor_terakhir(user):
     return daftar
 
 
-@login_required
+@wajib_masuk
 @require_GET
 def dasbor(request):
     user = request.user
@@ -132,6 +123,8 @@ def dasbor(request):
         "kartu_skema": _kartu_skema(user, premium),
         "kartu_paket": _kartu_paket_trial(user),
         "skor_terakhir": _skor_terakhir(user),
+        "premium": premium,
+        "kelemahan": kelemahan_subtopik(user) if premium else [],
     }
     return render(request, "cpns/dasbor.html", konteks)
 
@@ -165,7 +158,7 @@ def _ringkasan_skor(sesi):
     return f"{sesi.jumlah_dijawab}/{sesi.jumlah_butir} dijawab"
 
 
-@login_required
+@wajib_masuk
 @require_GET
 def riwayat(request):
     daftar = []
@@ -173,6 +166,8 @@ def riwayat(request):
         Sesi.objects.select_related("skema", "paket").filter(user=request.user)
     ).order_by("-dimulai_pada", "-pk")
     for sesi in sesi_qs:
+        if sesi.mode == "cat" and selesaikan_jika_kedaluwarsa(sesi):
+            sesi.refresh_from_db()
         url, label_tautan = _tautan_riwayat(sesi)
         daftar.append(
             {
@@ -208,7 +203,7 @@ def _balas_laporan(request, pesan):
     return redirect("cpns:dasbor")
 
 
-@login_required
+@wajib_masuk
 @require_POST
 def laporkan_soal(request, soal_id):
     if not _soal_sudah_terbuka(request.user, soal_id):

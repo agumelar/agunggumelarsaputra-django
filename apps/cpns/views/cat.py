@@ -1,7 +1,6 @@
 import json
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -21,7 +20,7 @@ from apps.cpns.sesi_layanan import (
     simpan_jawaban,
 )
 
-from ._bantu import HURUF, LABEL_JENIS, ke_posisi_tampil, opsi_ulasan, teks_opsi
+from ._bantu import HURUF, LABEL_JENIS, wajib_masuk, ke_posisi_tampil, opsi_ulasan, teks_opsi
 
 JAWABAN_SAH = ("",) + tuple(HURUF)
 
@@ -48,7 +47,7 @@ def _gabung(bagian):
     return f"{', '.join(bagian[:-1])}, dan {bagian[-1]}"
 
 
-@login_required
+@wajib_masuk
 @require_POST
 def mulai_cat(request, kode):
     skema = get_object_or_404(SkemaUjian, kode__iexact=kode)
@@ -77,7 +76,7 @@ def mulai_cat(request, kode):
     return redirect("cpns:cat_ruang", sesi_id=sesi.pk)
 
 
-@login_required
+@wajib_masuk
 @require_GET
 def ruang_cat(request, sesi_id):
     sesi = _sesi_milik(request, sesi_id)
@@ -103,6 +102,7 @@ def ruang_cat(request, sesi_id):
         "sesi_id": sesi.pk,
         "sisa_detik": sesi.sisa_detik(timezone.now()),
         "url_simpan": reverse("cpns:cat_simpan", args=[sesi.pk]),
+        "url_hasil": reverse("cpns:cat_hasil", args=[sesi.pk]),
         "soal": soal,
     }
     return render(
@@ -153,7 +153,7 @@ def simpan_cat(request, sesi_id):
     return JsonResponse({"ok": True, "tersimpan_pada": butir.dijawab_pada.isoformat()})
 
 
-@login_required
+@wajib_masuk
 @require_POST
 def kumpulkan_cat(request, sesi_id):
     sesi = _sesi_milik(request, sesi_id)
@@ -210,7 +210,7 @@ def _ulasan(sesi):
     return ulasan
 
 
-@login_required
+@wajib_masuk
 @require_GET
 def hasil_cat(request, sesi_id):
     sesi = _sesi_milik(request, sesi_id)

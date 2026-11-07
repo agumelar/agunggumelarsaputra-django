@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Count, Q
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
@@ -13,7 +12,7 @@ from apps.cpns.perakitan import BankSoalKurang, rakit_sesi_belajar
 from apps.cpns.sesi_layanan import SesiSudahSelesai, kumpulkan, simpan_jawaban
 from apps.cpns.validasi import SUBTES
 
-from ._bantu import HURUF, LABEL_JENIS, ke_posisi_tampil, opsi_ulasan, teks_opsi
+from ._bantu import HURUF, LABEL_JENIS, wajib_masuk, ke_posisi_tampil, opsi_ulasan, teks_opsi
 
 PILIHAN_JUMLAH = (10, 20, 30)
 
@@ -48,7 +47,7 @@ def _subtopik_per_subtes():
     return [{"subtes": s, "subtopik": daftar} for s, daftar in kelompok.items() if daftar]
 
 
-@login_required
+@wajib_masuk
 @require_GET
 def pilih_belajar(request):
     paket_list = PaketBelajar.objects.filter(aktif=True).annotate(
@@ -110,7 +109,7 @@ def _mulai_subtopik(request):
     return redirect("cpns:belajar_soal", sesi_id=sesi.pk, nomor=1)
 
 
-@login_required
+@wajib_masuk
 @require_POST
 def mulai_belajar(request):
     paket_id = request.POST.get("paket_id", "")
@@ -182,7 +181,7 @@ def _konteks_umpan_balik(sesi, butir):
     return konteks
 
 
-@login_required
+@wajib_masuk
 @require_GET
 def soal_belajar(request, sesi_id, nomor):
     sesi = _sesi_milik(request, sesi_id)
@@ -194,7 +193,7 @@ def soal_belajar(request, sesi_id, nomor):
     return render(request, "cpns/belajar/soal.html", konteks)
 
 
-@login_required
+@wajib_masuk
 @require_POST
 def jawab_belajar(request, sesi_id, nomor):
     sesi = _sesi_milik(request, sesi_id)
@@ -248,7 +247,7 @@ def _paket_bisa_diulang(user, sesi):
     return sesi.paket if boleh_belajar_paket(user, sesi.paket) else None
 
 
-@login_required
+@wajib_masuk
 @require_GET
 def ringkasan_belajar(request, sesi_id):
     sesi = kumpulkan(_sesi_milik(request, sesi_id))

@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Beranda</a>
+  &rsaquo; <a href="{{ kembali }}">Voucher</a>
+  &rsaquo; {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+{% if daftar_kode %}
+  <p>{{ jumlah }} kode dibuat, masing-masing berlaku {{ durasi_hari }} hari. Salin lalu kirim lewat WhatsApp.</p>
+  <label for="daftar-kode">Daftar kode</label>
+  <p>
+    <textarea id="daftar-kode" readonly rows="{{ jumlah|add:1 }}" cols="30" style="font-family: monospace;">{{ daftar_kode }}</textarea>
+  </p>
+  <p>
+    <a href="{% url 'admin:cpns_voucher_buat_banyak' %}">Buat lagi</a>
+    |
+    <a href="{{ kembali }}">Kembali ke daftar voucher</a>
+  </p>
+{% else %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.as_p }}
+    <input type="submit" value="Buat kode">
+    <a href="{{ kembali }}">Batal</a>
+  </form>
+{% endif %}
+{% endblock %}

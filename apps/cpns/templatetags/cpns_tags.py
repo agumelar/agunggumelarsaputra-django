@@ -10,3 +10,12 @@ def kurang(ambang, skor):
         return max(int(ambang) - int(skor), 0)
     except (TypeError, ValueError):
         return 0
+
+
+@register.filter
+def persen_dari(nilai, maks):
+    """Persen nilai terhadap maks, dibatasi 0..100 untuk lebar bar."""
+    try:
+        return max(0, min(100, round(int(nilai) * 100 / int(maks))))
+    except (TypeError, ValueError, ZeroDivisionError):
+        return 0

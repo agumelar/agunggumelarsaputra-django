@@ -1,0 +1,49 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Syarat Layanan{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <header class="space-y-3">
+        <h1 class="font-display text-3xl sm:text-4xl font-bold text-[#F3F4F6]">Syarat Layanan</h1>
+        <p class="text-base font-semibold text-[#FBBF24]">Draf, menunggu tinjauan pengelola.</p>
+    </header>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Tentang layanan</h2>
+        <p class="text-base text-[#CBD5E1]">CPNS Hub adalah tempat latihan mandiri soal SKD dan SKB Guru. Layanan ini tidak berafiliasi dengan BKN dan tidak menjamin hasil seleksi.</p>
+    </section>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Akun</h2>
+        <p class="text-base text-[#CBD5E1]">Kamu mendaftar dengan nama dan email, atau lewat akun Google. Jaga kerahasiaan akunmu. Satu akun dipakai oleh satu orang.</p>
+    </section>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Premium dan voucher</h2>
+        <ul class="list-disc pl-5 space-y-1 text-base text-[#CBD5E1]">
+            <li>Premium berlaku untuk jangka waktu tertentu.</li>
+            <li>Masa Premium dimulai atau diperpanjang saat kamu menukar voucher.</li>
+            <li>Setiap voucher hanya bisa dipakai satu kali.</li>
+            <li>Pembayaran dilakukan manual lewat WhatsApp ke admin. Kami tidak menyimpan data kartu atau rekening.</li>
+        </ul>
+    </section>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Pengembalian dana</h2>
+        <p class="text-base text-[#CBD5E1]">[KEBIJAKAN PENGEMBALIAN DANA]</p>
+    </section>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Penghapusan akun</h2>
+        <p class="text-base text-[#CBD5E1]">Untuk menghapus akun, minta lewat kontak WhatsApp admin.</p>
+    </section>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Pengelola</h2>
+        <p class="text-base text-[#CBD5E1]">[NAMA DAN KONTAK PENGELOLA]</p>
+    </section>
+
+    <p class="text-base text-[#CBD5E1]">Data yang kami simpan dijelaskan di <a href="{% url 'cpns:privasi' %}" class="font-semibold text-[#38BDF8] underline underline-offset-4">Kebijakan Privasi</a>.</p>
+</div>
+{% endblock %}

@@ -14,7 +14,7 @@
 
 {% block content %}
 <div class="min-h-screen flex flex-col bg-[#090D16] text-[#F3F4F6] selection:bg-[#38BDF8] selection:text-[#082F49]">
-    {% url 'cpns:beranda' as url_beranda %}{% url 'cpns:dasbor' as url_dasbor %}{% url 'cpns:belajar_pilih' as url_belajar %}{% url 'cpns:riwayat' as url_riwayat %}{% url 'accounts:profile' as url_akun %}
+    {% url 'cpns:beranda' as url_beranda %}{% url 'cpns:dasbor' as url_dasbor %}{% url 'cpns:belajar_pilih' as url_belajar %}{% url 'cpns:riwayat' as url_riwayat %}{% url 'accounts:profile' as url_akun %}{% url 'cpns:premium' as url_premium %}
     <header x-data="{ menuOpen: false }"
             @keydown.escape.window="if (menuOpen) { menuOpen = false; $refs.tombolMenu.focus() }"
             class="sticky top-0 z-40 bg-[#090D16] border-b border-white/[0.08]">
@@ -26,8 +26,15 @@
                 <a href="{{ url_belajar }}" {% if request.path == url_belajar %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_belajar %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Belajar</a>
                 <a href="{{ url_dasbor }}#simulasi" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Simulasi</a>
                 <a href="{{ url_riwayat }}" {% if request.path == url_riwayat %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_riwayat %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Riwayat</a>
-                <a href="{{ url_dasbor }}#premium" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Premium</a>
+                <a href="{{ url_premium }}" {% if request.path == url_premium %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_premium %}text-[#38BDF8] underline underline-offset-8 decoration-2{% else %}text-[#CBD5E1]{% endif %}">Premium</a>
+                {% if request.user.is_authenticated %}
+                {% if not request.user.is_peserta %}
                 <a href="{{ url_akun }}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Akun</a>
+                {% endif %}
+                <a href="{% url 'accounts:logout' %}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Keluar</a>
+                {% else %}
+                <a href="{% url 'cpns:masuk' %}" class="inline-flex items-center min-h-11 px-4 rounded-lg bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] font-semibold transition-colors">Masuk</a>
+                {% endif %}
             </nav>
 
             <button type="button" x-ref="tombolMenu" @click="menuOpen = !menuOpen"
@@ -50,8 +57,15 @@
                 <a href="{{ url_belajar }}" @click="menuOpen = false" {% if request.path == url_belajar %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_belajar %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Belajar</a>
                 <a href="{{ url_dasbor }}#simulasi" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Simulasi</a>
                 <a href="{{ url_riwayat }}" @click="menuOpen = false" {% if request.path == url_riwayat %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_riwayat %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Riwayat</a>
-                <a href="{{ url_dasbor }}#premium" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Premium</a>
+                <a href="{{ url_premium }}" @click="menuOpen = false" {% if request.path == url_premium %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_premium %}text-[#38BDF8] border-l-2 border-l-[#38BDF8] pl-3{% else %}text-[#F3F4F6]{% endif %}">Premium</a>
+                {% if request.user.is_authenticated %}
+                {% if not request.user.is_peserta %}
                 <a href="{{ url_akun }}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Akun</a>
+                {% endif %}
+                <a href="{% url 'accounts:logout' %}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Keluar</a>
+                {% else %}
+                <a href="{% url 'cpns:masuk' %}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#38BDF8] font-semibold">Masuk</a>
+                {% endif %}
             </div>
         </nav>
     </header>
@@ -74,10 +88,51 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <p>Latihan mandiri. Tidak berafiliasi dengan BKN.</p>
             <div class="flex flex-wrap gap-x-6">
-                <a href="/syarat-layanan/" class="inline-flex items-center min-h-11 hover:text-[#F3F4F6] transition-colors">Syarat Layanan</a>
-                <a href="/kebijakan-privasi/" class="inline-flex items-center min-h-11 hover:text-[#F3F4F6] transition-colors">Kebijakan Privasi</a>
+                <a href="{% url 'cpns:syarat' %}" class="inline-flex items-center min-h-11 hover:text-[#F3F4F6] transition-colors">Syarat Layanan</a>
+                <a href="{% url 'cpns:privasi' %}" class="inline-flex items-center min-h-11 hover:text-[#F3F4F6] transition-colors">Kebijakan Privasi</a>
             </div>
         </div>
     </footer>
 </div>
+
+<script>
+// Umpan balik untuk permintaan HTMX yang gagal (4xx/5xx dan jaringan putus).
+// Permintaan dengan isError=false (mis. 400 di #hasil-voucher) tidak memicu responseError.
+(function () {
+    var CADANGAN = 'Permintaan gagal. Muat ulang halaman lalu coba lagi.';
+    var JARINGAN = 'Tidak ada koneksi. Periksa jaringan lalu coba lagi.';
+
+    function teksAman(xhr) {
+        var t = ((xhr && xhr.responseText) || '').trim();
+        // Halaman galat HTML (500, CSRF) tidak ditampilkan mentah.
+        return t && t.length <= 200 && t.indexOf('<') === -1 ? t : CADANGAN;
+    }
+
+    function tampilkan(elt, teks) {
+        if (!elt || !elt.closest) return;
+        var acuan = elt.closest('form') || elt;
+        var alert = acuan.nextElementSibling;
+        if (!alert || !alert.hasAttribute('data-htmx-alert')) {
+            alert = document.createElement('p');
+            alert.setAttribute('role', 'alert');
+            alert.setAttribute('data-htmx-alert', '');
+            alert.className = 'mt-3 p-3 rounded-xl bg-[#111827] border border-[#F87171] text-sm text-[#F87171]';
+            acuan.insertAdjacentElement('afterend', alert);
+        }
+        alert.textContent = teks;
+    }
+
+    document.addEventListener('htmx:responseError', function (e) {
+        tampilkan(e.detail.elt, teksAman(e.detail.xhr));
+    });
+    document.addEventListener('htmx:sendError', function (e) {
+        tampilkan(e.detail.elt, JARINGAN);
+    });
+    document.addEventListener('htmx:beforeRequest', function (e) {
+        var acuan = e.detail.elt && e.detail.elt.closest && (e.detail.elt.closest('form') || e.detail.elt);
+        var alert = acuan && acuan.nextElementSibling;
+        if (alert && alert.hasAttribute('data-htmx-alert')) alert.remove();
+    });
+})();
+</script>
 {% endblock %}

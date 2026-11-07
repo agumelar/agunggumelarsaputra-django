@@ -1,3 +1,4 @@
+from .akun import daftar, masuk
 from .belajar import (
     jawab_belajar,
     mulai_belajar,
@@ -6,10 +7,18 @@ from .belajar import (
     soal_belajar,
 )
 from .cat import hasil_cat, kumpulkan_cat, mulai_cat, ruang_cat, simpan_cat
-from .dasbor import beranda, dasbor, laporkan_soal, riwayat
+from .dasbor import dasbor, laporkan_soal, riwayat
+from .premium import premium, tukar_voucher
+from .publik import beranda_publik, privasi, syarat
 
 __all__ = [
-    "beranda",
+    "masuk",
+    "daftar",
+    "beranda_publik",
+    "syarat",
+    "privasi",
+    "premium",
+    "tukar_voucher",
     "dasbor",
     "riwayat",
     "laporkan_soal",

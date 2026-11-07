@@ -20,6 +20,7 @@ from django.core.files.base import ContentFile
 
 from .forms import StudentRegistrationForm, UserLoginForm, UserProfileForm, ClaimTokenForm
 from apps.admin_panel.models import EnrollmentToken, UserEnrollment
+from apps.cpns.models import AksesPeserta
 from apps.gamification.models import XPHistory
 
 
@@ -179,10 +180,25 @@ def login_view(request):
     return render(request, 'accounts/login.html', {'form': form})
 
 
+def _masuk_google_cpns(request):
+    """
+    Login Google dianggap jalur CPNS bila datang dari host cpns, atau dari halaman
+    /cpns/... di domain utama (flag sesi yang diisi google_oauth_login_view).
+    Flag selalu dibuang agar tidak terbawa ke login sekolah berikutnya.
+    """
+    dari_halaman_cpns = request.session.pop('google_oauth_cpns', False)
+    return getattr(request, 'is_cpns_subdomain', False) or dari_halaman_cpns
+
+
 def google_oauth_login_view(request):
     """
     Inisialisasi Google OAuth 2.0: Mengarahkan pengguna ke Google Consent Screen.
     """
+    if request.GET.get('asal') == 'cpns':
+        request.session['google_oauth_cpns'] = True
+    else:
+        request.session.pop('google_oauth_cpns', None)
+
     client_id = getattr(settings, 'GOOGLE_CLIENT_ID', '')
     client_secret = getattr(settings, 'GOOGLE_CLIENT_SECRET', '')
 
@@ -214,12 +230,15 @@ def google_oauth_callback_view(request):
     """
     Callback Google OAuth 2.0: Menerima authorization code, mengambil data profil, dan login/registrasi otomatis.
     """
+    is_cpns = _masuk_google_cpns(request)
+    halaman_masuk = 'cpns:masuk' if is_cpns else 'accounts:login'
+
     client_id = getattr(settings, 'GOOGLE_CLIENT_ID', '')
     client_secret = getattr(settings, 'GOOGLE_CLIENT_SECRET', '')
 
     if not client_id or not client_secret:
         messages.error(request, "Google OAuth belum dikonfigurasi di server.")
-        return redirect('accounts:login')
+        return redirect(halaman_masuk)
 
     code = request.GET.get('code')
     state = request.GET.get('state')
@@ -227,7 +246,7 @@ def google_oauth_callback_view(request):
 
     if not code or not state or not stored_state or state != stored_state:
         messages.error(request, "Verifikasi sesi OAuth gagal atau kadaluarsa. Silakan ulangi proses masuk.")
-        return redirect('accounts:login')
+        return redirect(halaman_masuk)
 
     # Hapus state dari session setelah diverifikasi
     request.session.pop('google_oauth_state', None)
@@ -254,7 +273,7 @@ def google_oauth_callback_view(request):
         access_token = token_json.get('access_token')
         if not access_token:
             messages.error(request, "Gagal mendapatkan token akses dari Google.")
-            return redirect('accounts:login')
+            return redirect(halaman_masuk)
 
         # 2. Get User Info from Google OpenID Endpoint
         userinfo_req = urllib.request.Request(
@@ -267,7 +286,7 @@ def google_oauth_callback_view(request):
         email = google_user.get('email', '').strip().lower()
         if not email:
             messages.error(request, "Gagal mendapatkan alamat email dari akun Google.")
-            return redirect('accounts:login')
+            return redirect(halaman_masuk)
 
         google_name = google_user.get('name', 'Siswa RPL')
         name_parts = google_name.split(' ', 1)
@@ -291,8 +310,13 @@ def google_oauth_callback_view(request):
                 username = f"{base_username}{counter}"
                 counter += 1
 
-            assigned_role = User.ROLE_GURU if is_teacher_email else User.ROLE_SISWA
-            initial_xp = 0 if assigned_role == User.ROLE_GURU else 50
+            if is_teacher_email:
+                assigned_role = User.ROLE_GURU
+            elif is_cpns:
+                assigned_role = User.ROLE_PESERTA
+            else:
+                assigned_role = User.ROLE_SISWA
+            initial_xp = 50 if assigned_role == User.ROLE_SISWA else 0
 
             user = User.objects.create_user(
                 username=username,
@@ -316,13 +340,23 @@ def google_oauth_callback_view(request):
                     description='Bonus Akun Baru (Google OAuth)'
                 )
 
-            messages.success(request, f"Selamat datang di RPL Learning Hub, {user.display_name}! Akun Google Anda telah terhubung.")
+            if is_cpns:
+                messages.success(request, "Akun dibuat. Selamat berlatih.")
+            else:
+                messages.success(request, f"Selamat datang di RPL Learning Hub, {user.display_name}! Akun Google Anda telah terhubung.")
         else:
             # Update role jika guru
             if is_teacher_email and not user.is_guru:
                 user.role = User.ROLE_GURU
                 user.is_staff = True
-                user.save(update_fields=['role', 'is_staff'])
+                user.set_unusable_password()
+                user.save(update_fields=['role', 'is_staff', 'password'])
+            elif user.role == User.ROLE_PESERTA:
+                akses = AksesPeserta.objects.filter(user=user).first()
+                if akses is not None and not akses.via_google:
+                    user.set_unusable_password()
+                    user.save(update_fields=['password'])
+                    messages.info(request, "Akun ini sekarang masuk lewat Google.")
 
             # Update avatar Google jika belum punya avatar lokal
             if google_pic and not user.avatar:
@@ -343,11 +377,14 @@ def google_oauth_callback_view(request):
 
         # 4. Login User
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        if is_cpns:
+            AksesPeserta.objects.update_or_create(user=user, defaults={'via_google': True})
+            return redirect('cpns:dasbor')
         return redirect('admin_panel:dashboard' if user.is_guru else 'core:home')
 
     except Exception as err:
         messages.error(request, f"Gagal masuk dengan Google: {str(err)}")
-        return redirect('accounts:login')
+        return redirect(halaman_masuk)
 
 
 def logout_view(request):

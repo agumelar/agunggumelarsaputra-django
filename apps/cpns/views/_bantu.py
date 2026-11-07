@@ -1,4 +1,8 @@
+from django.contrib.auth.decorators import login_required
+
 from apps.cpns.penilaian import adalah_benar
+
+wajib_masuk = login_required(login_url="cpns:masuk")
 
 HURUF = "ABCDE"
 LABEL_JENIS = {"SKD": "SKD", "SKB_GURU": "SKB Guru"}
