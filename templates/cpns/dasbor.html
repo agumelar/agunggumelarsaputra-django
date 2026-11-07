@@ -100,6 +100,36 @@
         <a href="{% url 'cpns:belajar_pilih' %}" class="inline-flex items-center min-h-11 text-sm font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Lihat semua pilihan belajar</a>
     </section>
 
+    <section class="space-y-4" aria-labelledby="judul-lemah">
+        <h2 id="judul-lemah" class="font-display text-xl sm:text-2xl font-bold text-[#F3F4F6]">Subtopik yang perlu dilatih</h2>
+        {% if not premium %}
+            <a href="{% url 'cpns:premium' %}" class="block p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.14] space-y-2 hover:bg-[#162032] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                <span class="inline-flex px-2 py-0.5 rounded-md bg-[#FBBF24]/10 text-sm font-semibold text-[#FBBF24]">Khusus Premium</span>
+                <span class="block text-sm sm:text-base text-[#CBD5E1]">Ringkasan subtopik yang masih lemah khusus Premium.</span>
+                <span class="block text-sm font-semibold text-[#38BDF8] underline underline-offset-4">Lihat Premium</span>
+            </a>
+        {% elif kelemahan %}
+            <ul class="rounded-2xl bg-[#111827] border border-white/[0.08] divide-y divide-white/[0.08]">
+                {% for k in kelemahan %}
+                    <li class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-5 py-3">
+                        <p class="text-sm sm:text-base text-[#F3F4F6]">{{ k.subtes }} <span aria-hidden="true">&middot;</span> {{ k.subtopik }} <span class="font-mono font-semibold">{{ k.persen }}% ({{ k.benar }}/{{ k.dijawab }})</span></p>
+                        <form method="post" action="{% url 'cpns:belajar_mulai' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="subtes" value="{{ k.subtes }}">
+                            <input type="hidden" name="subtopik" value="{{ k.subtopik }}">
+                            <input type="hidden" name="jumlah" value="10">
+                            <button type="submit" class="inline-flex items-center min-h-11 px-4 rounded-xl border border-white/[0.14] text-sm font-semibold text-[#38BDF8] hover:bg-[#162032] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                                Latih subtopik ini<span class="sr-only">: {{ k.subtes }} {{ k.subtopik }}</span>
+                            </button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="p-5 rounded-2xl border-2 border-dashed border-white/[0.14] text-sm sm:text-base text-[#CBD5E1]">Belum cukup data. Jawab minimal 3 soal per subtopik di Mode Belajar.</p>
+        {% endif %}
+    </section>
+
     <section class="space-y-4" aria-labelledby="judul-skor">
         <h2 id="judul-skor" class="font-display text-xl sm:text-2xl font-bold text-[#F3F4F6]">Skor simulasi</h2>
         {% if skor_terakhir %}

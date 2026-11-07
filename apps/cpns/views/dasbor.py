@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_GET, require_POST
 
+from apps.cpns.analitik import kelemahan_subtopik
 from apps.cpns.akses import akses_untuk, boleh_mulai_cat, is_premium
 from apps.cpns.models import LaporanSoal, PaketBelajar, Sesi, SesiSoal, SkemaUjian
 from apps.cpns.sesi_layanan import selesaikan_jika_kedaluwarsa
@@ -122,6 +123,8 @@ def dasbor(request):
         "kartu_skema": _kartu_skema(user, premium),
         "kartu_paket": _kartu_paket_trial(user),
         "skor_terakhir": _skor_terakhir(user),
+        "premium": premium,
+        "kelemahan": kelemahan_subtopik(user) if premium else [],
     }
     return render(request, "cpns/dasbor.html", konteks)
 
@@ -163,6 +166,8 @@ def riwayat(request):
         Sesi.objects.select_related("skema", "paket").filter(user=request.user)
     ).order_by("-dimulai_pada", "-pk")
     for sesi in sesi_qs:
+        if sesi.mode == "cat" and selesaikan_jika_kedaluwarsa(sesi):
+            sesi.refresh_from_db()
         url, label_tautan = _tautan_riwayat(sesi)
         daftar.append(
             {

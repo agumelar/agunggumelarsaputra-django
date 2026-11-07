@@ -502,3 +502,69 @@ class JawabBelajarPadaCatTest(TestCase):
         self.assertEqual(resp.status_code, 404)
         self.assertNotContains(resp, "Kunci jawaban", status_code=404)
         self.assertEqual(SesiSoal.objects.get(sesi=sesi).jawaban, "")
+
+
+class KelemahanDasborTest(TestCase):
+    def _soal_lemah(self, user):
+        soal = [buat_soal("TIU", subtopik="Silogisme", kunci="A") for _ in range(5)]
+        sesi_belajar(user, soal, ["A", "A", "B", "B", "B"])
+
+    def test_dasbor_premium_tampil_kelemahan(self):
+        user = buat_user("prem", premium=True)
+        self.client.force_login(user)
+        self._soal_lemah(user)
+        resp = self.client.get(reverse("cpns:dasbor"))
+        self.assertContains(resp, "Subtopik yang perlu dilatih")
+        self.assertContains(resp, "TIU")
+        self.assertContains(resp, "Silogisme")
+        self.assertContains(resp, "40%")
+        self.assertContains(resp, "(2/5)")
+        self.assertContains(resp, "Latih subtopik ini")
+        html = resp.content.decode()
+        self.assertIn(f'action="{reverse("cpns:belajar_mulai")}"', html)
+        self.assertIn('name="subtes" value="TIU"', html)
+        self.assertIn('name="subtopik" value="Silogisme"', html)
+        self.assertIn('name="jumlah" value="10"', html)
+
+    def test_dasbor_tombol_latih_membuka_sesi(self):
+        user = buat_user("prem2", premium=True)
+        self.client.force_login(user)
+        self._soal_lemah(user)
+        for _ in range(5):
+            buat_soal("TIU", subtopik="Silogisme")
+        resp = self.client.post(
+            reverse("cpns:belajar_mulai"), {"subtes": "TIU", "subtopik": "Silogisme", "jumlah": "10"}
+        )
+        self.assertEqual(resp.status_code, 302)
+
+    def test_dasbor_trial_kartu_terkunci(self):
+        user = buat_user("trial")
+        self.client.force_login(user)
+        self._soal_lemah(user)
+        resp = self.client.get(reverse("cpns:dasbor"))
+        self.assertContains(resp, "Ringkasan subtopik yang masih lemah khusus Premium.")
+        self.assertContains(resp, "Khusus Premium")
+        self.assertNotContains(resp, "Latih subtopik ini")
+        self.assertNotContains(resp, "Silogisme")
+
+    def test_dasbor_premium_belum_cukup_data(self):
+        user = buat_user("prem3", premium=True)
+        self.client.force_login(user)
+        resp = self.client.get(reverse("cpns:dasbor"))
+        self.assertContains(
+            resp, "Belum cukup data. Jawab minimal 3 soal per subtopik di Mode Belajar."
+        )
+        self.assertNotContains(resp, "Latih subtopik ini")
+
+
+class RiwayatKedaluwarsaTest(TestCase):
+    def test_riwayat_cat_kedaluwarsa_tampil_selesai(self):
+        user = buat_user("telat")
+        self.client.force_login(user)
+        sesi = sesi_cat_berjalan(user, menit=-5)
+        resp = self.client.get(reverse("cpns:riwayat"))
+        self.assertNotContains(resp, "Berjalan")
+        self.assertContains(resp, "Selesai")
+        self.assertContains(resp, reverse("cpns:cat_hasil", args=[sesi.pk]))
+        sesi.refresh_from_db()
+        self.assertEqual(sesi.status, "selesai")
