@@ -34,7 +34,10 @@ class PengaturanCPNS(models.Model):
         nomor = "".join(c for c in self.nomor_wa if c.isdigit())
         if not nomor:
             return None
-        pesan = self.pesan_wa.format(durasi=durasi, email=email)
+        try:
+            pesan = self.pesan_wa.format(durasi=durasi, email=email)
+        except (KeyError, IndexError, ValueError):
+            pesan = PESAN_WA_BAWAAN.format(durasi=durasi, email=email)
         return f"https://wa.me/{nomor}?text={quote(pesan, safe='')}"
 
 
