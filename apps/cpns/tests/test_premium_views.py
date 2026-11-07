@@ -68,6 +68,24 @@ class PremiumHalamanTests(TestCase):
         r = self.client.get(self.url)
         self.assertEqual(r.status_code, 200)
         self.assertNotContains(r, "[HARGA]")
+        self.assertContains(r, "Harga Premium: hubungi admin.")
+
+    def test_premium_tanpa_harga_dan_tanpa_kontak(self):
+        atur(nomor="", harga={})
+        r = self.client.get(self.url)
+        self.assertEqual(r.status_code, 200)
+        self.assertNotIn("hubungi admin", r.content.decode().lower())
+        self.assertContains(r, "Harga dan kontak admin belum diatur. Coba lagi nanti.")
+        self.assertContains(r, "Kontak admin belum diatur.")
+
+    def test_handler_400_ada_di_elemen_target(self):
+        atur()
+        self.client.force_login(buat_user("budi"))
+        html = self.client.get(self.url).content.decode()
+        awal = html.index('id="hasil-voucher"')
+        tag = html[html.rindex("<", 0, awal):html.index(">", awal)]
+        self.assertIn("hx-on::before-swap", tag)
+        self.assertIn("status === 400", tag)
 
     def test_premium_menampilkan_tanggal_berakhir(self):
         atur()
@@ -126,6 +144,7 @@ class TukarVoucherTests(TestCase):
         for kode in ("", "   ", "A" * 21):
             r = self.kirim(kode, **HX)
             self.assertEqual(r.status_code, 400)
+            self.assertContains(r, "Masukkan kode voucher, paling banyak 20 karakter.", status_code=400)
         self.assertEqual(PercobaanVoucher.objects.count(), 0)
 
     def test_tukar_kosong_tanpa_htmx(self):

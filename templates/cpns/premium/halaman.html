@@ -27,7 +27,8 @@
         </ul>
     </section>
     {% else %}
-    <p class="text-base text-[#CBD5E1]">Harga Premium: hubungi admin.</p>
+    {% if ada_kontak %}<p class="text-base text-[#CBD5E1]">Harga Premium: hubungi admin.</p>
+    {% else %}<p class="text-base text-[#CBD5E1]">Harga dan kontak admin belum diatur. Coba lagi nanti.</p>{% endif %}
     {% endif %}
 
     <ul class="list-disc pl-5 space-y-1 text-base text-[#CBD5E1]">
@@ -39,11 +40,13 @@
 
     <section aria-labelledby="judul-cara" class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-4">
         <h2 id="judul-cara" class="font-display text-xl font-semibold text-[#F3F4F6]">Cara membeli</h2>
+        {% if ada_kontak %}
         <ol class="list-decimal pl-5 space-y-2 text-base text-[#CBD5E1]">
             <li>Hubungi admin lewat WhatsApp, sebutkan email akunmu dan durasi yang dipilih.</li>
             <li>Bayar sesuai petunjuk admin.</li>
             <li>Admin mengirim kode voucher. Masukkan kodenya di bawah.</li>
         </ol>
+        {% endif %}
         {% if harga %}
             {% for h in harga %}{% if h.wa %}
             <a href="{{ h.wa }}" target="_blank" rel="noopener"
@@ -66,7 +69,6 @@
         <form method="post" action="{% url 'cpns:tukar_voucher' %}"
               hx-post="{% url 'cpns:tukar_voucher' %}" hx-target="#hasil-voucher" hx-swap="innerHTML"
               hx-disabled-elt="#tombol-kode" hx-indicator="#tombol-kode"
-              hx-on::before-swap="if (event.detail.xhr.status === 400) { event.detail.shouldSwap = true; event.detail.isError = false }"
               class="space-y-3">
             {% csrf_token %}
             <label for="kode-voucher" class="block text-sm font-semibold text-[#F3F4F6]">Kode voucher</label>
@@ -84,7 +86,8 @@
         {% else %}
         <a href="{% url 'cpns:masuk' %}?next={% url 'cpns:premium' %}" class="inline-flex items-center min-h-11 text-base font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Masuk untuk menukar kode</a>
         {% endif %}
-        <div id="hasil-voucher" role="status" aria-live="polite"></div>
+        <div id="hasil-voucher" role="status" aria-live="polite"
+             hx-on::before-swap="if (event.detail.xhr.status === 400) { event.detail.shouldSwap = true; event.detail.isError = false }"></div>
     </section>
 
     <p class="text-sm text-[#94A3B8]">Pembayaran diproses manual oleh admin. Dengan membeli, kamu menyetujui <a href="{% url 'cpns:syarat' %}" class="underline underline-offset-2 hover:text-[#CBD5E1]">Syarat Layanan</a>.</p>
