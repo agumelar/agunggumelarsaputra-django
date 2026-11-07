@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from apps.gamification.services import get_leaderboard_data
+from config.settings.base import CPNS_URL_BAWAAN, normalisasi_cpns_url
 
 User = get_user_model()
 CPNS_HOST = 'cpns.agunggumelarsaputra.com'
@@ -28,8 +29,11 @@ class PesertaDiSitusSekolahTest(TestCase):
             self.assertEqual(response['Location'], _tujuan(), path)
 
     def test_peserta_boleh_cpns_prefix_dan_logout(self):
-        response = self.client.get('/cpns/')
-        self.assertNotEqual(response.get('Location'), _tujuan())
+        response = self.client.get('/cpns/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.request['PATH_INFO'], reverse('cpns:dasbor'))
+        response = self.client.get(reverse('cpns:dasbor'))
+        self.assertEqual(response.status_code, 200)
 
         response = self.client.get(reverse('accounts:logout'))
         self.assertEqual(response.status_code, 302)
@@ -90,3 +94,90 @@ class PesertaDiSitusSekolahTest(TestCase):
         self.assertContains(response, 'SiswaTampil')
         self.assertNotContains(response, 'PesertaRahasia')
         self.assertNotContains(response, 'peserta_iso')
+
+
+class PesertaDiHostCpnsTest(TestCase):
+    """Di host cpns rute situs sekolah ikut terpasang; peserta tidak boleh membukanya."""
+
+    def setUp(self):
+        self.peserta = User.objects.create_user(
+            username='peserta_host', email='host@example.com',
+            password='Password123!', role=User.ROLE_PESERTA,
+        )
+        self.client.force_login(self.peserta)
+
+    def get(self, path):
+        return self.client.get(path, HTTP_HOST=CPNS_HOST)
+
+    def test_rute_sekolah_dialihkan_ke_dasbor_cpns(self):
+        for path in ('/literasi/', '/pembelajaran/', '/gamification/leaderboard/', '/accounts/profile/'):
+            response = self.get(path)
+            self.assertEqual(response.status_code, 302, path)
+            self.assertEqual(response['Location'], '/dasbor/', path)
+
+    def test_rute_cpns_tidak_dialihkan(self):
+        for path in ('/dasbor/', '/premium/'):
+            response = self.get(path)
+            self.assertEqual(response.status_code, 200, path)
+
+    def test_logout_di_host_cpns(self):
+        response = self.get('/accounts/logout/')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], '/')
+        self.assertNotIn('_auth_user_id', self.client.session)
+        response = self.get('/')
+        self.assertEqual(response.status_code, 200)
+
+    @override_settings(GOOGLE_CLIENT_ID='cid', GOOGLE_CLIENT_SECRET='rahasia')
+    def test_oauth_di_host_cpns_tidak_dialihkan(self):
+        response = self.get('/accounts/oauth/google/')
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].startswith('https://accounts.google.com/'))
+
+    def test_path_tidak_dikenal_tetap_404(self):
+        self.assertEqual(self.get('/tidak-ada-halaman/').status_code, 404)
+
+    def test_siswa_di_host_cpns_tidak_terpengaruh(self):
+        siswa = User.objects.create_user(
+            username='siswa_host', email='siswa_host@example.com',
+            password='Password123!', role=User.ROLE_SISWA,
+        )
+        self.client.force_login(siswa)
+        for path in ('/literasi/', '/pembelajaran/', '/accounts/profile/'):
+            response = self.get(path)
+            self.assertNotEqual(response.get('Location'), '/dasbor/', path)
+
+    def test_nav_tanpa_akun_untuk_peserta(self):
+        response = self.get('/dasbor/')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, '>Akun</a>')
+        self.assertNotContains(response, '/accounts/profile/')
+        self.assertContains(response, '>Keluar</a>', count=2)
+
+    def test_nav_akun_tampil_untuk_siswa_dan_superuser(self):
+        siswa = User.objects.create_user(
+            username='siswa_nav', email='siswa_nav@example.com',
+            password='Password123!', role=User.ROLE_SISWA,
+        )
+        admin = User.objects.create_superuser(
+            username='admin_nav', email='admin_nav@example.com', password='Password123!',
+        )
+        for user in (siswa, admin):
+            self.client.force_login(user)
+            response = self.get('/premium/')
+            self.assertEqual(response.status_code, 200, user.username)
+            self.assertContains(response, '>Akun</a>', count=2)
+
+
+class NormalisasiCpnsUrlTest(TestCase):
+    def test_env_kosong_pakai_bawaan(self):
+        self.assertEqual(normalisasi_cpns_url(''), CPNS_URL_BAWAAN)
+        self.assertEqual(normalisasi_cpns_url(None), CPNS_URL_BAWAAN)
+        self.assertNotEqual(normalisasi_cpns_url(''), '/')
+
+    def test_selalu_satu_garis_miring_di_akhir(self):
+        self.assertEqual(normalisasi_cpns_url('http://cpns.localhost:8000'), 'http://cpns.localhost:8000/')
+        self.assertEqual(normalisasi_cpns_url('http://cpns.localhost:8000//'), 'http://cpns.localhost:8000/')
+
+    def test_bawaan_berakhir_garis_miring(self):
+        self.assertTrue(CPNS_URL_BAWAAN.endswith('/'))

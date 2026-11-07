@@ -120,7 +120,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_REDIRECT_URL = 'core:home'
-CPNS_URL = os.getenv('CPNS_URL', 'https://cpns.agunggumelarsaputra.com/').rstrip('/') + '/'
+CPNS_URL_BAWAAN = 'https://cpns.agunggumelarsaputra.com/'
+
+
+def normalisasi_cpns_url(raw):
+    # Env kosong (CPNS_URL=) jatuh ke bawaan, bukan jadi '/'.
+    return (raw or CPNS_URL_BAWAAN).rstrip('/') + '/'
+
+
+CPNS_URL = normalisasi_cpns_url(os.getenv('CPNS_URL'))
 
 # Password hashers (supports legacy bcrypt from Neon and modern PBKDF2)
 PASSWORD_HASHERS = [
