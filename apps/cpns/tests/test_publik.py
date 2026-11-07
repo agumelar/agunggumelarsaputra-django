@@ -44,12 +44,25 @@ class BerandaPublikTest(TestCase):
     def test_harga_kosong_teks_jujur(self):
         p = PengaturanCPNS.ambil()
         p.teks_harga = {}
+        p.nomor_wa = '+62 812-3456'
         p.save()
-        self.assertContains(self.ambil(), 'Harga Premium: hubungi admin.')
+        r = self.ambil()
+        self.assertContains(r, 'Harga Premium: hubungi admin.')
+        self.assertNotContains(r, 'Harga dan kontak admin belum diatur.')
+
+    def test_harga_dan_kontak_kosong_teks_jujur(self):
+        p = PengaturanCPNS.ambil()
+        p.teks_harga = {}
+        p.nomor_wa = ''
+        p.save()
+        r = self.ambil()
+        self.assertContains(r, 'Harga dan kontak admin belum diatur.')
+        self.assertNotContains(r, 'hubungi admin')
 
     def test_harga_bukan_dict_tidak_500(self):
         p = PengaturanCPNS.ambil()
         p.teks_harga = ['30']
+        p.nomor_wa = '+62 812-3456'
         p.save()
         r = self.ambil()
         self.assertEqual(r.status_code, 200)

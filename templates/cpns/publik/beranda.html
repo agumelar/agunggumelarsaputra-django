@@ -67,7 +67,10 @@
                 </ul>
                 {% endif %}
             </div>
-            {% if not harga %}<p class="text-base text-[#CBD5E1]">Harga Premium: hubungi admin.</p>{% endif %}
+            {% if not harga %}
+            {% if ada_kontak %}<p class="text-base text-[#CBD5E1]">Harga Premium: hubungi admin.</p>
+            {% else %}<p class="text-base text-[#CBD5E1]">Harga dan kontak admin belum diatur. Coba lagi nanti.</p>{% endif %}
+            {% endif %}
             <ul class="list-disc pl-5 space-y-1 text-base text-[#CBD5E1]">
                 <li>Semua paket belajar dan subtopik</li>
                 <li>Simulasi SKD dan SKB Guru tanpa batas</li>

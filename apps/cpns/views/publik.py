@@ -24,10 +24,12 @@ def beranda_publik(request):
     if request.user.is_authenticated:
         return redirect(reverse("cpns:dasbor"))
     skema, bagian = _bagian_skd()
+    pengaturan = PengaturanCPNS.ambil()
     return render(request, "cpns/publik/beranda.html", {
         "skema": skema,
         "bagian_skd": bagian,
-        "harga": [{"durasi": d, "teks": t} for d, t in PengaturanCPNS.ambil().daftar_harga()],
+        "harga": [{"durasi": d, "teks": t} for d, t in pengaturan.daftar_harga()],
+        "ada_kontak": bool(pengaturan.tautan_wa(1, "")),
         "total_soal": sum(b["jumlah"] for b in bagian),
     })
 
