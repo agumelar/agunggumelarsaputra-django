@@ -1,0 +1,99 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Belajar{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <header class="space-y-2">
+        <h1 class="font-display text-3xl sm:text-4xl font-bold text-[#F3F4F6] leading-tight">Belajar</h1>
+        <p class="text-base text-[#CBD5E1]">Jawab satu soal, lalu langsung baca kunci dan pembahasannya. Tanpa batas waktu.</p>
+    </header>
+
+    <section class="space-y-4" aria-labelledby="judul-paket">
+        <h2 id="judul-paket" class="font-display text-xl font-bold text-[#F3F4F6]">Paket belajar</h2>
+        {% if daftar_paket %}
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {% for item in daftar_paket %}
+                    <li class="p-5 rounded-2xl bg-[#111827] border {% if item.boleh %}border-white/[0.08]{% else %}border-[#FBBF24]/40{% endif %} flex flex-col gap-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <h3 class="font-semibold text-[#F3F4F6]">{{ item.paket.nama }}</h3>
+                                <p class="mt-1 font-mono text-xs text-[#94A3B8]">{{ item.label_jenis }}<span class="mx-2" aria-hidden="true">&middot;</span>{{ item.paket.jumlah_soal }} soal</p>
+                            </div>
+                            {% if not item.boleh %}
+                                <span class="shrink-0 px-2 py-0.5 rounded border border-[#FBBF24]/60 text-xs font-semibold text-[#FBBF24]">Premium</span>
+                            {% endif %}
+                        </div>
+                        {% if item.boleh %}
+                            <form method="post" action="{% url 'cpns:belajar_mulai' %}" class="mt-auto">
+                                {% csrf_token %}
+                                <input type="hidden" name="paket_id" value="{{ item.paket.pk }}">
+                                <button type="submit"
+                                        class="flex items-center justify-center w-full min-h-11 px-5 py-2.5 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+                                    Mulai belajar<span class="sr-only"> {{ item.paket.nama }}</span>
+                                </button>
+                            </form>
+                        {% else %}
+                            <p class="mt-auto text-sm text-[#CBD5E1]">Paket ini khusus Premium.</p>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="p-5 rounded-2xl bg-[#111827] border border-white/[0.08] text-[#CBD5E1]">Belum ada paket belajar.</p>
+        {% endif %}
+    </section>
+
+    <section class="space-y-4" aria-labelledby="judul-subtopik">
+        <h2 id="judul-subtopik" class="font-display text-xl font-bold text-[#F3F4F6]">Per subtopik</h2>
+        {% if boleh_subtopik %}
+            <form method="post" action="{% url 'cpns:belajar_mulai' %}"
+                  x-data="{ subtes: '{{ daftar_subtes.0 }}' }"
+                  class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-5">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="pilih-subtes" class="block text-sm font-semibold text-[#CBD5E1]">Subtes</label>
+                        <select id="pilih-subtes" name="subtes" x-model="subtes" @change="$refs.subtopik.value = ''"
+                                class="w-full min-h-11 rounded-xl bg-[#0D1422] border-white/[0.14] text-[#F3F4F6] focus:border-[#38BDF8] focus:ring-[#38BDF8]">
+                            {% for s in daftar_subtes %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="pilih-subtopik" class="block text-sm font-semibold text-[#CBD5E1]">Subtopik</label>
+                        <select id="pilih-subtopik" name="subtopik" x-ref="subtopik"
+                                class="w-full min-h-11 rounded-xl bg-[#0D1422] border-white/[0.14] text-[#F3F4F6] focus:border-[#38BDF8] focus:ring-[#38BDF8]">
+                            <option value="">Semua subtopik</option>
+                            {% for kelompok in subtopik_per_subtes %}
+                                <optgroup label="{{ kelompok.subtes }}" :disabled="subtes !== '{{ kelompok.subtes }}'">
+                                    {% for st in kelompok.subtopik %}<option value="{{ st }}">{{ st }}</option>{% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <fieldset>
+                    <legend class="text-sm font-semibold text-[#CBD5E1]">Jumlah soal</legend>
+                    <div class="mt-2 grid grid-cols-3 gap-2">
+                        {% for n in pilihan_jumlah %}
+                            <label class="flex items-center justify-center min-h-11 rounded-xl border border-white/[0.14] bg-[#0D1422] font-mono font-semibold text-[#CBD5E1] cursor-pointer transition-colors has-[:checked]:border-[#38BDF8] has-[:checked]:bg-[#38BDF8] has-[:checked]:text-[#082F49] has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[#38BDF8]">
+                                <input type="radio" name="jumlah" value="{{ n }}" class="sr-only" {% if forloop.first %}checked{% endif %}>
+                                {{ n }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+                <button type="submit"
+                        class="flex items-center justify-center w-full min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-sm sm:text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+                    Mulai belajar subtopik
+                </button>
+            </form>
+        {% else %}
+            <div class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-[#FBBF24]/40 space-y-3">
+                <span class="inline-block px-2 py-0.5 rounded border border-[#FBBF24]/60 text-xs font-semibold text-[#FBBF24]">Premium</span>
+                <p class="text-[#CBD5E1]">Belajar per subtopik khusus Premium.</p>
+            </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

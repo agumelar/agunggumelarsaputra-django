@@ -9,10 +9,12 @@ class User(AbstractUser):
     """
     ROLE_GURU = 'guru'
     ROLE_SISWA = 'siswa'
+    ROLE_PESERTA = 'peserta'
 
     ROLE_CHOICES = [
         (ROLE_GURU, 'Guru Pengampu RPL'),
         (ROLE_SISWA, 'Siswa RPL'),
+        (ROLE_PESERTA, 'Peserta CPNS'),
     ]
 
     KELAS_CHOICES = [
@@ -117,6 +119,10 @@ class User(AbstractUser):
     @property
     def is_siswa(self):
         return self.role == self.ROLE_SISWA
+
+    @property
+    def is_peserta(self):
+        return self.role == self.ROLE_PESERTA
 
     @property
     def is_profile_complete(self):

@@ -1,0 +1,145 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Dasbor{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+    <header class="space-y-3">
+        <h1 class="font-display text-3xl sm:text-4xl font-bold text-[#F3F4F6]">Halo, {{ nama_sapaan }}</h1>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span class="inline-flex items-center px-3 py-1 rounded-lg bg-[#FBBF24]/10 text-sm font-semibold text-[#FBBF24]">
+                {% if premium_sampai %}Premium sampai {{ premium_sampai|date:"d M Y" }}{% else %}{{ label_lencana }}{% endif %}
+            </span>
+            {% if label_lencana == "Akun Trial" %}
+                <a href="#premium" class="inline-flex items-center min-h-11 text-sm font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Lihat Premium</a>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if sesi_berjalan %}
+        <section class="p-5 sm:p-6 rounded-2xl bg-[#111827] border-2 border-[#38BDF8] space-y-4" aria-labelledby="judul-lanjutkan">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 id="judul-lanjutkan" class="text-lg font-semibold text-[#F3F4F6]">{{ sesi_berjalan.skema.nama }} belum selesai</h2>
+                <p class="font-mono text-sm text-[#CBD5E1]">Sisa waktu <span class="font-semibold text-[#F3F4F6]">{{ sisa_waktu }}</span></p>
+            </div>
+            <p class="text-sm text-[#CBD5E1]">Waktu tetap berjalan walau halaman ditutup. Jawaban yang sudah dipilih tetap tersimpan.</p>
+            <a href="{% url 'cpns:cat_ruang' sesi_berjalan.pk %}"
+               class="flex items-center justify-center w-full min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+                Lanjutkan ujian
+            </a>
+        </section>
+    {% endif %}
+
+    <section id="simulasi" class="space-y-4 scroll-mt-20" aria-labelledby="judul-simulasi">
+        <h2 id="judul-simulasi" class="font-display text-xl sm:text-2xl font-bold text-[#F3F4F6]">Simulasi CAT</h2>
+        {% for k in kartu_skema %}
+            <article class="p-5 sm:p-6 rounded-2xl bg-[#111827] border {% if k.boleh and not sesi_berjalan %}border-[#38BDF8]/60{% else %}border-white/[0.08]{% endif %} space-y-3" aria-labelledby="skema-{{ k.skema.pk }}">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 id="skema-{{ k.skema.pk }}" class="text-lg font-semibold text-[#F3F4F6]">{{ k.skema.nama }}</h3>
+                    {% if k.segera %}
+                        <span class="px-2 py-0.5 rounded-md bg-[#1C293E] text-sm font-semibold text-[#CBD5E1]">Segera tersedia</span>
+                    {% elif k.khusus_premium %}
+                        <span class="px-2 py-0.5 rounded-md bg-[#FBBF24]/10 text-sm font-semibold text-[#FBBF24]">Premium</span>
+                    {% else %}
+                        <span class="font-mono text-sm text-[#CBD5E1]">{{ k.skema.total_soal }} soal <span aria-hidden="true">&middot;</span> {{ k.skema.durasi_menit }} menit</span>
+                    {% endif %}
+                </div>
+                {% if k.segera %}
+                    <p class="text-sm text-[#CBD5E1]">Simulasi {{ k.label }} sedang disiapkan.</p>
+                {% else %}
+                    {% if k.khusus_premium %}
+                        <p class="font-mono text-sm text-[#94A3B8]">{{ k.skema.total_soal }} soal <span aria-hidden="true">&middot;</span> {{ k.skema.durasi_menit }} menit</p>
+                    {% endif %}
+                    <p class="text-sm text-[#CBD5E1]">Soal diacak dari bank soal dan jawaban tersimpan otomatis.</p>
+                    {% if k.boleh %}
+                        <form method="post" action="{% url 'cpns:cat_mulai' k.skema.kode|lower %}" x-data="{ terkirim: false }" @submit="terkirim = true">
+                            {% csrf_token %}
+                            <button type="submit" :disabled="terkirim"
+                                    class="w-full inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+                                Mulai simulasi {{ k.label }}
+                            </button>
+                        </form>
+                    {% else %}
+                        <p class="p-3 rounded-xl bg-[#162032] text-sm text-[#F3F4F6]">{{ k.alasan }}</p>
+                    {% endif %}
+                {% endif %}
+            </article>
+        {% empty %}
+            <p class="text-sm text-[#94A3B8]">Belum ada simulasi yang dibuka.</p>
+        {% endfor %}
+    </section>
+
+    <section class="space-y-4" aria-labelledby="judul-belajar">
+        <h2 id="judul-belajar" class="font-display text-xl sm:text-2xl font-bold text-[#F3F4F6]">Belajar</h2>
+        {% for k in kartu_paket %}
+            <article class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-4" aria-labelledby="paket-{{ k.paket.pk }}">
+                <div class="flex items-baseline justify-between gap-3">
+                    <h3 id="paket-{{ k.paket.pk }}" class="text-base sm:text-lg font-semibold text-[#F3F4F6]">{{ k.paket.nama }}</h3>
+                    <p class="font-mono font-semibold text-[#F3F4F6]"><span class="sr-only">Dijawab </span>{{ k.dijawab }}/{{ k.jumlah }}</p>
+                </div>
+                <div class="h-2 rounded-full bg-[#1C293E]" role="progressbar" aria-label="Progres {{ k.paket.nama }}" aria-valuemin="0" aria-valuemax="{{ k.jumlah }}" aria-valuenow="{{ k.dijawab }}">
+                    <div class="h-full rounded-full bg-[#38BDF8]" style="width: {% if k.jumlah %}{% widthratio k.dijawab k.jumlah 100 %}{% else %}0{% endif %}%"></div>
+                </div>
+                {% if k.lanjut_nomor %}
+                    <a href="{% url 'cpns:belajar_soal' k.sesi.pk k.lanjut_nomor %}"
+                       class="flex items-center justify-center w-full min-h-11 px-5 py-3 rounded-xl border border-white/[0.14] text-base font-semibold text-[#F3F4F6] hover:bg-[#162032] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                        Lanjut ke soal {{ k.lanjut_nomor }}
+                    </a>
+                {% else %}
+                    <form method="post" action="{% url 'cpns:belajar_mulai' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="paket_id" value="{{ k.paket.pk }}">
+                        <button type="submit"
+                                class="w-full inline-flex items-center justify-center min-h-11 px-5 py-3 rounded-xl border border-white/[0.14] text-base font-semibold text-[#F3F4F6] hover:bg-[#162032] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                            Mulai belajar
+                        </button>
+                    </form>
+                {% endif %}
+            </article>
+        {% endfor %}
+        <a href="{% url 'cpns:belajar_pilih' %}" class="inline-flex items-center min-h-11 text-sm font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Lihat semua pilihan belajar</a>
+    </section>
+
+    <section class="space-y-4" aria-labelledby="judul-skor">
+        <h2 id="judul-skor" class="font-display text-xl sm:text-2xl font-bold text-[#F3F4F6]">Skor simulasi</h2>
+        {% if skor_terakhir %}
+            {% with terbaru=skor_terakhir.0 %}
+                <article class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08]" aria-labelledby="skor-terbaru">
+                    <div class="flex flex-wrap items-baseline justify-between gap-2 pb-3 border-b border-white/[0.08]">
+                        <h3 id="skor-terbaru" class="text-base font-semibold text-[#F3F4F6]">Terakhir, {{ terbaru.selesai_pada|date:"d M Y" }}</h3>
+                        <p class="font-mono text-lg font-bold text-[#F3F4F6]">{{ terbaru.total }} / {{ terbaru.total_maks }}</p>
+                    </div>
+                    <div class="pt-3 space-y-3">
+                        {% for b in terbaru.skor_bagian %}
+                            {% include 'cpns/komponen/bar_skor.html' with subtes=b.subtes skor=b.skor maks=b.maks ambang=b.ambang lulus=b.lulus %}
+                        {% endfor %}
+                    </div>
+                </article>
+            {% endwith %}
+            <ul class="rounded-2xl bg-[#111827] border border-white/[0.08] divide-y divide-white/[0.08]">
+                {% for s in skor_terakhir %}
+                    <li>
+                        <a href="{% url 'cpns:cat_hasil' s.pk %}" class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 min-h-11 px-5 py-3 hover:bg-[#162032] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#38BDF8]">
+                            <span class="text-sm text-[#CBD5E1]">{{ s.selesai_pada|date:"d M Y" }}</span>
+                            <span class="font-mono text-sm font-semibold text-[#F3F4F6]">{{ s.total }} / {{ s.total_maks }}</span>
+                            <span class="text-sm font-semibold {% if s.lulus %}text-[#34D399]{% else %}text-[#F87171]{% endif %}">{% if s.lulus %}Lolos{% else %}Belum lolos{% endif %}</span>
+                            <span class="text-sm text-[#38BDF8] underline underline-offset-4">Lihat hasil</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="p-5 sm:p-6 rounded-2xl border-2 border-dashed border-white/[0.14]">
+                <h3 class="text-base sm:text-lg font-semibold text-[#F3F4F6]">Belum ada simulasi</h3>
+                <p class="mt-1 text-sm sm:text-base text-[#CBD5E1]">Setelah simulasi pertama, skor TWK, TIU, TKP dan jarak ke ambang batas muncul di sini.</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <section id="premium" class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-2 scroll-mt-20" aria-labelledby="judul-premium">
+        <h2 id="judul-premium" class="font-display text-xl font-bold text-[#F3F4F6]">Premium</h2>
+        <p class="text-sm sm:text-base text-[#CBD5E1]">Premium membuka pembahasan lengkap, simulasi tanpa batas kuota, SKB Guru, dan belajar per subtopik.</p>
+        <p class="text-sm sm:text-base text-[#CBD5E1]">Info pembelian Premium segera tersedia.</p>
+    </section>
+</div>
+{% endblock %}

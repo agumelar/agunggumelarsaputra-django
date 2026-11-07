@@ -1,0 +1,91 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Hasil Simulasi{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <header class="space-y-3">
+        <p class="font-mono text-xs sm:text-sm text-[#94A3B8]">
+            Simulasi {{ label_jenis }}
+            <span class="mx-2" aria-hidden="true">&middot;</span>{{ sesi.selesai_pada|date:"j M Y" }}
+            <span class="mx-2" aria-hidden="true">&middot;</span>{{ durasi }}
+        </p>
+        <h1 class="font-display text-3xl sm:text-4xl font-bold text-[#F3F4F6] leading-tight">
+            {% if sesi.lulus %}Lolos ambang batas{% else %}Belum lolos ambang batas{% endif %}
+        </h1>
+        {% if penjelasan %}<p class="text-base sm:text-lg text-[#CBD5E1]">{{ penjelasan }}</p>{% endif %}
+    </header>
+
+    <section class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08]" aria-labelledby="judul-skor">
+        <div class="flex items-baseline justify-between gap-3 pb-4 border-b border-white/[0.08]">
+            <h2 id="judul-skor" class="text-base font-semibold text-[#CBD5E1]">Total</h2>
+            <p class="font-mono text-2xl sm:text-3xl font-bold text-[#F3F4F6]">{{ sesi.total }} / {{ total_maks }}</p>
+        </div>
+        <div class="pt-3 space-y-3">
+            {% for b in sesi.skor_bagian %}
+                {% include 'cpns/komponen/bar_skor.html' with subtes=b.subtes skor=b.skor maks=b.maks ambang=b.ambang lulus=b.lulus %}
+            {% endfor %}
+        </div>
+        {% if ada_ambang %}
+            <p class="mt-4 text-xs text-[#94A3B8]">Garis putih tegak = ambang batas subtes.</p>
+        {% endif %}
+    </section>
+
+    {% if lihat_pembahasan %}
+        <section class="space-y-4" aria-labelledby="judul-pembahasan">
+            <h2 id="judul-pembahasan" class="font-display text-xl font-bold text-[#F3F4F6]">Pembahasan {{ jumlah_soal }} soal</h2>
+            {% for u in ulasan %}
+                <article class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-4" aria-labelledby="ulasan-{{ u.nomor }}">
+                    <div class="flex flex-wrap items-baseline justify-between gap-2">
+                        <h3 id="ulasan-{{ u.nomor }}" class="font-mono font-bold text-sm text-[#F3F4F6]">
+                            Soal {{ u.nomor }}<span class="mx-2 text-[#94A3B8]" aria-hidden="true">&middot;</span>{{ u.subtes }}
+                        </h3>
+                        <span class="text-sm font-semibold {% if u.status == 'Benar' %}text-[#34D399]{% elif u.status == 'Salah' %}text-[#F87171]{% else %}text-[#CBD5E1]{% endif %}">{{ u.status }}</span>
+                    </div>
+                    <p class="text-[#F3F4F6] leading-relaxed whitespace-pre-line">{{ u.teks }}</p>
+                    <ul class="space-y-2">
+                        {% for o in u.opsi %}
+                            <li class="p-3 rounded-xl border flex items-start gap-3 {% if o.kunci %}border-[#34D399]/60 bg-[#34D399]/10{% elif o.dipilih %}border-[#F87171]/60 bg-[#F87171]/10{% else %}border-white/[0.08] bg-[#0D1422]{% endif %}">
+                                <span class="w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs shrink-0 bg-[#1C293E] text-[#CBD5E1]">{{ o.huruf }}</span>
+                                <div class="flex-1 space-y-1">
+                                    <p class="text-sm text-[#CBD5E1] leading-relaxed">{{ o.teks }}</p>
+                                    {% if o.dipilih or o.kunci or u.pakai_bobot %}
+                                        <p class="flex flex-wrap gap-2 text-xs font-semibold">
+                                            {% if o.dipilih %}<span class="px-2 py-0.5 rounded bg-[#38BDF8] text-[#082F49]">Jawabanmu</span>{% endif %}
+                                            {% if o.kunci %}<span class="px-2 py-0.5 rounded bg-[#34D399] text-[#052E1C]">Kunci jawaban</span>{% endif %}
+                                            {% if u.pakai_bobot %}<span class="px-2 py-0.5 rounded border border-white/[0.14] text-[#CBD5E1] font-mono">Bobot {{ o.bobot }}</span>{% endif %}
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <dl class="space-y-3 pt-3 border-t border-white/[0.08] text-sm">
+                        {% if u.konsep %}<div><dt class="font-semibold text-[#38BDF8]">Konsep</dt><dd class="mt-1 text-[#CBD5E1] leading-relaxed whitespace-pre-line">{{ u.konsep }}</dd></div>{% endif %}
+                        {% if u.pengecoh %}<div><dt class="font-semibold text-[#38BDF8]">Kenapa opsi lain salah</dt><dd class="mt-1 text-[#CBD5E1] leading-relaxed whitespace-pre-line">{{ u.pengecoh }}</dd></div>{% endif %}
+                        {% if u.cepat %}<div><dt class="font-semibold text-[#38BDF8]">Cara cepat</dt><dd class="mt-1 text-[#CBD5E1] leading-relaxed whitespace-pre-line">{{ u.cepat }}</dd></div>{% endif %}
+                    </dl>
+                    {% include 'cpns/komponen/_laporkan_slot.html' with soal=u.soal %}
+                </article>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-[#FBBF24]/40 space-y-4" aria-labelledby="judul-premium">
+            <h2 id="judul-premium" class="text-lg sm:text-xl font-semibold text-[#F3F4F6]">Pembahasan {{ jumlah_soal }} soal ada di Premium</h2>
+            <p class="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">Akun gratis bisa melihat skor. Untuk melihat kunci, alasan setiap jawaban salah, dan cara cepatnya, buka Premium.</p>
+            <a href="{% url 'cpns:dasbor' %}#premium"
+               class="flex items-center justify-center w-full min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-sm sm:text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+                Buka pembahasan dengan Premium
+            </a>
+        </section>
+    {% endif %}
+
+    <a href="{% url 'cpns:dasbor' %}"
+       class="flex items-center justify-center w-full min-h-11 px-5 py-3 rounded-xl border border-white/[0.14] text-sm sm:text-base font-semibold text-[#F3F4F6] hover:bg-[#162032] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+        Kembali ke dasbor
+    </a>
+</div>
+<script>
+try { localStorage.removeItem('cpns-antrean-{{ sesi.pk }}'); } catch (e) {}
+</script>
+{% endblock %}

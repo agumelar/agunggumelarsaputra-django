@@ -1,0 +1,55 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Soal {{ butir.nomor }} dari {{ jumlah }}{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 pt-4 pb-8 space-y-6">
+    <div class="space-y-3">
+        <div class="flex items-center justify-between gap-3">
+            <a href="{% url 'cpns:belajar_pilih' %}"
+               class="inline-flex items-center gap-2 min-h-11 min-w-0 pr-2 rounded-lg font-semibold text-[#F3F4F6] hover:text-[#38BDF8] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m6-6l-6 6 6 6"/>
+                </svg>
+                <span class="truncate">{{ judul_sesi }}</span>
+            </a>
+            <p class="shrink-0 font-mono font-bold text-sm sm:text-base text-[#F3F4F6] tabular-nums">
+                <span class="sr-only">Soal </span>{{ butir.nomor }} / {{ jumlah }}
+            </p>
+        </div>
+        <div class="h-1.5 rounded-full bg-[#1C293E] overflow-hidden" aria-hidden="true">
+            <div class="h-full bg-[#38BDF8]" style="width: {{ persen_maju }}%"></div>
+        </div>
+    </div>
+
+    <p class="font-mono text-xs sm:text-sm text-[#94A3B8]">
+        {{ soal.subtes }}{% if soal.subtopik %}<span class="mx-2" aria-hidden="true">&middot;</span>{{ soal.subtopik }}{% endif %}
+    </p>
+
+    <h1 class="sr-only">Soal {{ butir.nomor }} dari {{ jumlah }}</h1>
+    <p class="text-lg sm:text-xl text-[#F3F4F6] leading-relaxed whitespace-pre-line">{{ soal.teks }}</p>
+
+    {% if sudah_dijawab %}
+        {% include 'cpns/belajar/_umpan_balik.html' %}
+    {% else %}
+        <div id="area-jawab">
+            <form method="post" action="{% url 'cpns:belajar_jawab' sesi.pk butir.nomor %}"
+                  hx-post="{% url 'cpns:belajar_jawab' sesi.pk butir.nomor %}"
+                  hx-target="#area-jawab" hx-swap="outerHTML">
+                {% csrf_token %}
+                <fieldset class="space-y-3">
+                    <legend class="sr-only">Pilih jawaban soal nomor {{ butir.nomor }}</legend>
+                    {% for o in opsi_tampil %}
+                        <button type="submit" name="jawaban" value="{{ o.huruf }}"
+                                class="w-full min-h-11 text-left p-4 rounded-2xl border border-white/[0.08] bg-[#111827] hover:border-[#38BDF8]/60 hover:bg-[#162032] text-[#CBD5E1] flex items-start gap-4 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                            <span class="w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-sm shrink-0 bg-[#1C293E] text-[#CBD5E1]">{{ o.huruf }}</span>
+                            <span class="flex-1 pt-1 leading-relaxed">{{ o.teks }}</span>
+                        </button>
+                    {% endfor %}
+                </fieldset>
+            </form>
+            <p class="mt-4 text-sm text-[#94A3B8]">Pilih satu jawaban. Pembahasan muncul setelah kamu menjawab.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

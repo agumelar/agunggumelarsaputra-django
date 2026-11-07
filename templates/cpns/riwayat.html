@@ -1,0 +1,35 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Riwayat{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <h1 class="font-display text-3xl sm:text-4xl font-bold text-[#F3F4F6]">Riwayat</h1>
+
+    {% if daftar_riwayat %}
+        <ul class="space-y-3">
+            {% for r in daftar_riwayat %}
+                <li class="p-5 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-3">
+                    <div class="flex flex-wrap items-baseline justify-between gap-2">
+                        <h2 class="text-base font-semibold text-[#F3F4F6]">{{ r.judul }}</h2>
+                        <span class="px-2 py-0.5 rounded-md text-sm font-semibold {% if r.status == 'Berjalan' %}bg-[#38BDF8]/10 text-[#38BDF8]{% else %}bg-[#1C293E] text-[#CBD5E1]{% endif %}">{{ r.status }}</span>
+                    </div>
+                    <dl class="flex flex-wrap gap-x-6 gap-y-1 text-sm">
+                        <div class="flex gap-2"><dt class="text-[#94A3B8]">Tanggal</dt><dd class="text-[#CBD5E1]">{{ r.sesi.dimulai_pada|date:"d M Y, H:i" }}</dd></div>
+                        <div class="flex gap-2"><dt class="text-[#94A3B8]">Hasil</dt><dd class="font-mono text-[#F3F4F6]">{{ r.skor }}</dd></div>
+                    </dl>
+                    <a href="{{ r.url }}"
+                       class="inline-flex items-center min-h-11 text-sm font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+                        {{ r.label_tautan }}<span class="sr-only">: {{ r.judul }}, {{ r.sesi.dimulai_pada|date:"d M Y" }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="p-5 sm:p-6 rounded-2xl border-2 border-dashed border-white/[0.14] space-y-3">
+            <p class="text-base font-semibold text-[#F3F4F6]">Belum ada riwayat latihan.</p>
+            <a href="{% url 'cpns:dasbor' %}" class="inline-flex items-center min-h-11 text-sm font-semibold text-[#38BDF8] underline underline-offset-4 hover:text-[#7DD3FC]">Kembali ke dasbor</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

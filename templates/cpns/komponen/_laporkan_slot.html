@@ -1,0 +1,26 @@
+<details class="group rounded-2xl bg-[#111827] border border-white/[0.08]">
+    <summary class="flex items-center min-h-11 px-5 py-2 cursor-pointer text-sm font-semibold text-[#CBD5E1] hover:text-[#F3F4F6] rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+        Ada yang salah di soal ini? Laporkan
+    </summary>
+    <form method="post" action="{% url 'cpns:laporkan' soal.pk %}"
+          hx-post="{% url 'cpns:laporkan' soal.pk %}" hx-target="this" hx-swap="outerHTML"
+          class="px-5 pb-5 pt-2 space-y-4">
+        {% csrf_token %}
+        <fieldset class="space-y-1">
+            <legend class="mb-2 text-sm font-semibold text-[#F3F4F6]">Alasan</legend>
+            <label class="flex items-center gap-3 min-h-11 text-sm text-[#CBD5E1] cursor-pointer"><input type="radio" name="alasan" value="kunci_salah" required class="w-4 h-4 accent-[#38BDF8]"> Kunci salah</label>
+            <label class="flex items-center gap-3 min-h-11 text-sm text-[#CBD5E1] cursor-pointer"><input type="radio" name="alasan" value="ambigu" class="w-4 h-4 accent-[#38BDF8]"> Soal ambigu</label>
+            <label class="flex items-center gap-3 min-h-11 text-sm text-[#CBD5E1] cursor-pointer"><input type="radio" name="alasan" value="typo" class="w-4 h-4 accent-[#38BDF8]"> Salah ketik</label>
+            <label class="flex items-center gap-3 min-h-11 text-sm text-[#CBD5E1] cursor-pointer"><input type="radio" name="alasan" value="lainnya" class="w-4 h-4 accent-[#38BDF8]"> Lainnya</label>
+        </fieldset>
+        <div class="space-y-2">
+            <label for="catatan-laporan-{{ soal.pk }}" class="block text-sm font-semibold text-[#F3F4F6]">Catatan <span class="font-normal text-[#94A3B8]">(boleh dikosongkan)</span></label>
+            <textarea id="catatan-laporan-{{ soal.pk }}" name="catatan" rows="3" maxlength="1000"
+                      class="w-full p-3 rounded-xl bg-[#0D1422] border border-white/[0.14] text-sm text-[#F3F4F6] focus:outline-none focus:border-[#38BDF8]"></textarea>
+        </div>
+        <button type="submit"
+                class="w-full sm:w-auto inline-flex items-center justify-center min-h-11 px-5 rounded-xl border border-white/[0.14] text-sm font-semibold text-[#F3F4F6] hover:bg-[#162032] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
+            Kirim laporan
+        </button>
+    </form>
+</details>

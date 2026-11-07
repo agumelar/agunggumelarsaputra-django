@@ -1,0 +1,52 @@
+<div id="area-jawab" class="space-y-6">
+    <ul class="space-y-3" aria-label="Pilihan jawaban">
+        {% for o in opsi %}
+            <li class="p-4 rounded-2xl border flex items-start gap-4 {% if o.kunci %}border-[#34D399] bg-[#34D399]/10{% elif o.dipilih %}border-[#F87171] bg-[#F87171]/10{% else %}border-white/[0.08] bg-[#111827]{% endif %}">
+                <span class="w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-sm shrink-0 {% if o.kunci %}bg-[#34D399] text-[#052E1C]{% elif o.dipilih %}bg-[#F87171] text-[#450A0A]{% else %}bg-[#1C293E] text-[#CBD5E1]{% endif %}">{{ o.huruf }}</span>
+                <div class="flex-1 pt-1 space-y-1">
+                    <p class="leading-relaxed {% if o.kunci or o.dipilih %}text-[#F3F4F6]{% else %}text-[#CBD5E1]{% endif %}">{{ o.teks }}</p>
+                    {% if o.dipilih or o.kunci or pakai_bobot %}
+                        <p class="flex flex-wrap gap-x-3 gap-y-1 text-sm font-semibold">
+                            {% if o.kunci %}<span class="text-[#34D399]">Kunci jawaban</span>{% endif %}
+                            {% if o.dipilih %}<span class="{% if o.kunci %}text-[#34D399]{% else %}text-[#F87171]{% endif %}">Jawabanmu</span>{% endif %}
+                            {% if pakai_bobot %}<span class="font-mono font-normal text-[#CBD5E1]">Bobot {{ o.bobot }}</span>{% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="p-4 rounded-2xl border {% if not dijawab %}border-white/[0.14] bg-[#111827]{% elif benar %}border-[#34D399]/60 bg-[#34D399]/10{% else %}border-[#F87171]/60 bg-[#F87171]/10{% endif %}"
+         {% if baru_dijawab %}tabindex="-1" autofocus{% endif %}>
+        <p class="font-semibold {% if not dijawab %}text-[#F3F4F6]{% elif benar %}text-[#34D399]{% else %}text-[#F87171]{% endif %}">
+            {% if not dijawab %}Tidak dijawab{% elif benar %}Benar{% else %}Kurang tepat{% endif %}
+        </p>
+        <p class="mt-1 text-[#F3F4F6]">{{ kalimat_hasil }}</p>
+    </div>
+
+    <section class="p-5 sm:p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-4" aria-labelledby="judul-pembahasan-{{ butir.nomor }}">
+        <h2 id="judul-pembahasan-{{ butir.nomor }}" class="font-display text-xl font-bold text-[#F3F4F6]">Pembahasan</h2>
+        <dl class="space-y-4">
+            {% if soal.pembahasan_konsep %}<div><dt class="font-semibold text-[#38BDF8]">Konsep</dt><dd class="mt-1 text-[#CBD5E1] leading-relaxed whitespace-pre-line">{{ soal.pembahasan_konsep }}</dd></div>{% endif %}
+            {% if soal.pembahasan_pengecoh %}<div><dt class="font-semibold text-[#38BDF8]">Kenapa opsi lain salah</dt><dd class="mt-1 text-[#CBD5E1] leading-relaxed whitespace-pre-line">{{ soal.pembahasan_pengecoh }}</dd></div>{% endif %}
+            {% if soal.pembahasan_cepat %}<div><dt class="font-semibold text-[#38BDF8]">Cara cepat</dt><dd class="mt-1 text-[#CBD5E1] leading-relaxed whitespace-pre-line">{{ soal.pembahasan_cepat }}</dd></div>{% endif %}
+        </dl>
+    </section>
+
+    {% include 'cpns/komponen/_laporkan_slot.html' with soal=soal %}
+
+    <div class="sticky bottom-0 z-20 -mx-4 px-4 py-3 bg-[#090D16] border-t border-white/[0.08] sm:mx-0 sm:px-0 sm:static sm:bg-transparent sm:border-0 sm:py-0">
+        {% if soal_terakhir %}
+            <a href="{% url 'cpns:belajar_ringkasan' sesi.pk %}"
+               class="flex items-center justify-center w-full min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+                Lihat ringkasan
+            </a>
+        {% else %}
+            <a href="{% url 'cpns:belajar_soal' sesi.pk butir.nomor|add:1 %}"
+               class="flex items-center justify-center w-full min-h-11 px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">
+                Soal berikutnya
+            </a>
+        {% endif %}
+    </div>
+</div>
