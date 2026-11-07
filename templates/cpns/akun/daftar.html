@@ -65,7 +65,7 @@
                 <input id="setuju" name="setuju" type="checkbox" required
                        {% if galat.setuju %}aria-invalid="true" aria-describedby="galat-setuju"{% endif %}
                        class="mt-1 w-5 h-5 shrink-0 rounded border-white/[0.14] bg-[#111827] accent-[#38BDF8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">
-                <label for="setuju" class="text-base text-[#CBD5E1]">Saya setuju dengan <a href="/syarat-layanan/" class="font-semibold text-[#38BDF8] underline underline-offset-4">Syarat Layanan</a> dan <a href="/kebijakan-privasi/" class="font-semibold text-[#38BDF8] underline underline-offset-4">Kebijakan Privasi</a></label>
+                <label for="setuju" class="text-base text-[#CBD5E1]">Saya setuju dengan <a href="{% url 'cpns:syarat' %}" class="font-semibold text-[#38BDF8] underline underline-offset-4">Syarat Layanan</a> dan <a href="{% url 'cpns:privasi' %}" class="font-semibold text-[#38BDF8] underline underline-offset-4">Kebijakan Privasi</a></label>
             </div>
             {% if galat.setuju %}<p id="galat-setuju" class="text-sm text-[#F87171]">{{ galat.setuju }}</p>{% endif %}
         </div>

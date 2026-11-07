@@ -1,0 +1,42 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Kebijakan Privasi{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <header class="space-y-3">
+        <h1 class="font-display text-3xl sm:text-4xl font-bold text-[#F3F4F6]">Kebijakan Privasi</h1>
+        <p class="text-base font-semibold text-[#FBBF24]">Draf, menunggu tinjauan pengelola.</p>
+    </header>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Data yang disimpan</h2>
+        <ul class="list-disc pl-5 space-y-1 text-base text-[#CBD5E1]">
+            <li>Nama dan email, untuk membuat dan mengenali akunmu.</li>
+            <li>Riwayat latihan, untuk menampilkan skor, progres, dan ringkasan subtopik yang masih lemah.</li>
+        </ul>
+    </section>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Pembayaran</h2>
+        <p class="text-base text-[#CBD5E1]">Pembayaran Premium dilakukan manual lewat WhatsApp. Kami tidak menyimpan data kartu atau rekening di layanan ini.</p>
+    </section>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Masa Premium</h2>
+        <p class="text-base text-[#CBD5E1]">Kami mencatat tanggal berakhirnya Premium. Masa Premium dimulai atau diperpanjang saat voucher ditukar.</p>
+    </section>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Penghapusan akun</h2>
+        <p class="text-base text-[#CBD5E1]">Untuk menghapus akun dan datanya, minta lewat kontak WhatsApp admin.</p>
+    </section>
+
+    <section class="space-y-2">
+        <h2 class="font-display text-xl font-semibold text-[#F3F4F6]">Pengelola data</h2>
+        <p class="text-base text-[#CBD5E1]">[NAMA DAN KONTAK PENGELOLA]</p>
+    </section>
+
+    <p class="text-base text-[#CBD5E1]">Aturan pemakaian layanan ada di <a href="{% url 'cpns:syarat' %}" class="font-semibold text-[#38BDF8] underline underline-offset-4">Syarat Layanan</a>.</p>
+</div>
+{% endblock %}

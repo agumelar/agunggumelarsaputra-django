@@ -7,12 +7,15 @@ from .belajar import (
     soal_belajar,
 )
 from .cat import hasil_cat, kumpulkan_cat, mulai_cat, ruang_cat, simpan_cat
-from .dasbor import beranda, dasbor, laporkan_soal, riwayat
+from .dasbor import dasbor, laporkan_soal, riwayat
+from .publik import beranda_publik, privasi, syarat
 
 __all__ = [
     "masuk",
     "daftar",
-    "beranda",
+    "beranda_publik",
+    "syarat",
+    "privasi",
     "dasbor",
     "riwayat",
     "laporkan_soal",

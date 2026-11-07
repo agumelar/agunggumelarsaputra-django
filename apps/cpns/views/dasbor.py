@@ -1,5 +1,3 @@
-from urllib.parse import quote
-
 from django.contrib import messages
 from django.db.models import Count, Min, Q
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
@@ -20,13 +18,6 @@ CATATAN_MAKS = 1000
 ALASAN_SAH = {kode for kode, _ in LaporanSoal.ALASAN_CHOICES}
 PESAN_TERKIRIM = "Terima kasih, laporan terkirim."
 PESAN_SUDAH_ADA = "Laporan untuk soal ini sudah kami terima."
-
-
-def beranda(request):
-    if not request.user.is_authenticated:
-        tujuan = quote(request.get_full_path(), safe="/")
-        return redirect(f"{reverse('accounts:login')}?next={tujuan}")
-    return redirect(reverse("cpns:dasbor"))
 
 
 def _dengan_progres(qs):

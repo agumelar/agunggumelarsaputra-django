@@ -1,0 +1,81 @@
+{% extends 'cpns/base_cpns.html' %}
+
+{% block title %}Latihan SKD dan SKB Guru{% endblock %}
+
+{% block cpns_content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-12">
+    <section class="space-y-5" aria-labelledby="judul-utama">
+        <h1 id="judul-utama" class="font-display text-4xl sm:text-5xl font-bold text-[#F3F4F6] leading-tight">Latihan SKD dan SKB Guru, dinilai dengan aturan CAT</h1>
+        <p class="text-lg text-[#CBD5E1]">Belajar per subtopik dengan pembahasan, lalu uji diri lewat simulasi SKD 110 soal dalam 100 menit.</p>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <a href="{% url 'cpns:daftar' %}" class="flex items-center justify-center min-h-11 px-6 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] text-base font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Daftar dan coba gratis</a>
+            <a href="{% url 'cpns:masuk' %}" class="flex items-center justify-center min-h-11 px-6 py-3 rounded-xl border border-white/[0.14] text-[#F3F4F6] text-base font-semibold hover:bg-[#162032] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Saya sudah punya akun</a>
+        </div>
+        <p class="text-sm text-[#94A3B8]">Latihan mandiri. Tidak berafiliasi dengan BKN.</p>
+    </section>
+
+    <section class="space-y-4" aria-labelledby="judul-cara">
+        <h2 id="judul-cara" class="font-display text-2xl font-bold text-[#F3F4F6]">Dua cara berlatih</h2>
+        <div class="grid gap-4 md:grid-cols-2">
+            <article class="p-5 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-3">
+                <h3 class="font-display text-lg font-semibold text-[#F3F4F6]">Mode Belajar</h3>
+                <p class="text-base text-[#CBD5E1]">Jawab satu soal, lalu langsung lihat kunci dan pembahasannya: konsep dasar, kenapa opsi lain salah, dan cara cepat mengerjakannya.</p>
+                <p class="font-mono text-xs text-[#94A3B8]">Tanpa timer &middot; Pilih subtopik &middot; Progres tersimpan</p>
+            </article>
+            <article class="p-5 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-3">
+                <h3 class="font-display text-lg font-semibold text-[#F3F4F6]">Mode Ujian CAT</h3>
+                <p class="text-base text-[#CBD5E1]">Soal diacak dari bank soal setiap kali mulai. Waktu berjalan di server dan jawaban tersimpan otomatis. Nilai per subtes keluar setelah dikumpulkan.</p>
+                <p class="font-mono text-xs text-[#94A3B8]">110 soal &middot; 100 menit &middot; Simpan otomatis</p>
+            </article>
+        </div>
+    </section>
+
+    {% if skema %}
+    <section class="space-y-4" aria-labelledby="judul-nilai">
+        <h2 id="judul-nilai" class="font-display text-2xl font-bold text-[#F3F4F6]">Cara nilai SKD</h2>
+        <ul class="rounded-2xl bg-[#111827] border border-white/[0.08] divide-y divide-white/[0.08]">
+            {% for b in bagian_skd %}
+            <li class="p-5 flex items-start justify-between gap-4">
+                <div class="space-y-1">
+                    <p class="text-base font-semibold text-[#F3F4F6]">{{ b.subtes }} &middot; {{ b.jumlah }} soal</p>
+                    <p class="text-sm text-[#94A3B8]">{% if b.subtes == 'TKP' %}Setiap opsi bernilai {{ b.aturan }}, kosong 0{% else %}Tiap soal: {{ b.aturan }}{% endif %}</p>
+                </div>
+                <p class="font-mono text-sm font-bold text-[#F3F4F6] shrink-0">Ambang {{ b.ambang }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        <p class="text-sm text-[#94A3B8]">Lolos jika ketiga subtes mencapai ambang batas. Ambang batas mengikuti ketentuan terbaru dan bisa berubah.</p>
+    </section>
+    {% endif %}
+
+    <section class="space-y-4" aria-labelledby="judul-paket">
+        <h2 id="judul-paket" class="font-display text-2xl font-bold text-[#F3F4F6]">Akun gratis dan Premium</h2>
+        <article class="p-5 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-3">
+            <h3 class="font-display text-lg font-semibold text-[#F3F4F6]">Gratis</h3>
+            <ul class="list-disc pl-5 space-y-1 text-base text-[#CBD5E1]">
+                <li>1 paket belajar, 30 soal campuran</li>
+                <li>1 simulasi SKD lengkap (akun Google)</li>
+                <li>Skor dan status ambang batas</li>
+            </ul>
+        </article>
+        <article class="p-5 rounded-2xl bg-[#111827] border border-[#38BDF8] space-y-3">
+            <div class="flex items-start justify-between gap-4">
+                <h3 class="font-display text-lg font-semibold text-[#F3F4F6]">Premium</h3>
+                {% if harga %}
+                <ul class="font-mono text-sm font-bold text-[#38BDF8] text-right space-y-1">
+                    {% for h in harga %}<li>{{ h.teks }} / {{ h.durasi }} hari</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% if not harga %}<p class="text-base text-[#CBD5E1]">Harga Premium: hubungi admin.</p>{% endif %}
+            <ul class="list-disc pl-5 space-y-1 text-base text-[#CBD5E1]">
+                <li>Semua paket belajar dan subtopik</li>
+                <li>Simulasi SKD dan SKB Guru tanpa batas</li>
+                <li>Pembahasan semua soal simulasi</li>
+                <li>Ringkasan subtopik yang masih lemah</li>
+            </ul>
+            <a href="{% url 'cpns:daftar' %}" class="flex items-center justify-center min-h-11 px-6 py-3 rounded-xl border border-white/[0.14] text-[#F3F4F6] text-base font-semibold hover:bg-[#162032] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38BDF8]">Daftar untuk lihat isi Premium</a>
+        </article>
+    </section>
+</div>
+{% endblock %}
