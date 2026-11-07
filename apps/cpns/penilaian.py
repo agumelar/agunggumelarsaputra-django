@@ -1,6 +1,5 @@
 from apps.cpns.models import SesiSoal, SkemaBagian, Soal
-
-POIN_MAKS_BOBOT = 5
+from apps.cpns.validasi import POIN_MAKS_BOBOT  # noqa: F401  (diekspor ulang)
 
 
 def poin_soal(soal: Soal, jawaban: str, bagian: SkemaBagian) -> int:

@@ -591,3 +591,23 @@ class RiwayatKedaluwarsaTest(TestCase):
         self.assertContains(resp, reverse("cpns:cat_hasil", args=[sesi.pk]))
         sesi.refresh_from_db()
         self.assertEqual(sesi.status, "selesai")
+
+
+class LaporkanBalapanTest(TestCase):
+    def test_integrity_error_dibalas_pesan_sudah_ada(self):
+        from unittest import mock
+
+        from django.db import IntegrityError
+
+        user = buat_user("balapan")
+        self.client.force_login(user)
+        soal = buat_soal("TIU")
+        sesi_belajar(user, [soal], ["A"])
+        with mock.patch.object(
+            LaporanSoal.objects, "create", side_effect=IntegrityError
+        ):
+            resp = self.client.post(
+                reverse("cpns:laporkan", args=[soal.pk]), {"alasan": "typo"}, **HX
+            )
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, "Laporan untuk soal ini sudah kami terima.")

@@ -1,5 +1,7 @@
 from django.test import SimpleTestCase
 
+from apps.cpns import admin as admin_cpns
+from apps.cpns import penilaian, validasi
 from apps.cpns.validasi import sidik_teks, validasi_soal
 
 
@@ -58,6 +60,33 @@ class ValidasiSoalTest(SimpleTestCase):
         self.assertTrue(any("ditinjau" in m for m in validasi_soal(d, untuk_tayang=True)))
         d["ditinjau_oleh"] = 1
         self.assertEqual(validasi_soal(d, untuk_tayang=True), [])
+
+    def test_opsi_angka_diterima(self):
+        d = data_dasar()
+        d.update(opsi_a=85, opsi_b=90, opsi_c=95, opsi_d=100, opsi_e=105, kunci="C")
+        self.assertEqual(validasi_soal(d), [])
+        d["opsi_b"] = 85
+        self.assertTrue(any("sama" in m for m in validasi_soal(d)))
+
+    def test_pesan_bobot_tanpa_kata_kunci(self):
+        d = data_dasar()
+        d["subtes"] = "TKP"
+        d["bobot"] = {"A": 1, "B": 1, "C": 1, "D": 1, "E": 1}
+        self.assertIn(
+            "Isi bobot TKP untuk opsi A sampai E dengan nilai 1, 2, 3, 4, 5 yang semuanya berbeda.",
+            validasi_soal(d),
+        )
+
+    def test_subtes_tidak_cocok_jenis(self):
+        d = data_dasar()
+        d["subtes"] = "PEDAGOGIK"
+        self.assertIn(
+            "Subtes PEDAGOGIK tidak cocok dengan jenis ujian SKD.", validasi_soal(d)
+        )
+
+    def test_admin_dan_penilaian_pakai_konstanta_validasi(self):
+        self.assertIs(admin_cpns.SUBTES_PER_JENIS, validasi.SUBTES_PER_JENIS)
+        self.assertIs(penilaian.POIN_MAKS_BOBOT, validasi.POIN_MAKS_BOBOT)
 
 
 class SidikTeksTest(SimpleTestCase):

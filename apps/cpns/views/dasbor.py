@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db import IntegrityError, transaction
 from django.db.models import Count, Min, Q
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import redirect, render
@@ -219,7 +220,11 @@ def laporkan_soal(request, soal_id):
     ).exists()
     if sudah_ada:
         return _balas_laporan(request, PESAN_SUDAH_ADA)
-    LaporanSoal.objects.create(
-        soal_id=soal_id, user=request.user, alasan=alasan, catatan=catatan
-    )
+    try:
+        with transaction.atomic():
+            LaporanSoal.objects.create(
+                soal_id=soal_id, user=request.user, alasan=alasan, catatan=catatan
+            )
+    except IntegrityError:
+        return _balas_laporan(request, PESAN_SUDAH_ADA)
     return _balas_laporan(request, PESAN_TERKIRIM)
