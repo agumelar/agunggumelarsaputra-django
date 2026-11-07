@@ -10,7 +10,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from apps.cpns.akses import boleh_lihat_pembahasan, boleh_mulai_cat
 from apps.cpns.models import Sesi, SkemaUjian
-from apps.cpns.penilaian import adalah_benar
+from apps.cpns.penilaian import butir_benar
 from apps.cpns.perakitan import BankSoalKurang, rakit_sesi_cat
 from apps.cpns.sesi_layanan import (
     SesiSudahSelesai,
@@ -185,7 +185,7 @@ def _status_butir(butir, pakai_bobot):
         return "Tidak dijawab"
     if pakai_bobot:
         return f"Poin {butir.poin or 0}"
-    return "Benar" if adalah_benar(butir.soal, butir.jawaban) else "Salah"
+    return "Benar" if butir_benar(butir) else "Salah"
 
 
 def _ulasan(sesi):

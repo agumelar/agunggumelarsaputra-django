@@ -66,6 +66,13 @@ def _nilai_belajar(butir_semua):
     return list(per_subtes.values())
 
 
+def butir_benar(butir) -> bool:
+    """Hasil beku saat dinilai; butir lama yang belum punya snapshot memakai kunci terkini."""
+    if butir.benar is not None:
+        return butir.benar
+    return adalah_benar(butir.soal, butir.jawaban)
+
+
 def nilai_sesi(sesi) -> None:
     butir_semua = list(sesi.butir.select_related("soal"))
     if sesi.mode == "cat":
@@ -75,7 +82,10 @@ def nilai_sesi(sesi) -> None:
     for butir in butir_semua:
         if butir.poin is None:
             butir.poin = 0
-    SesiSoal.objects.bulk_update(butir_semua, ["poin"])
+        # Butir belajar dibekukan saat dijawab; penilaian akhir tidak menimpanya.
+        if butir.benar is None or sesi.mode == "cat":
+            butir.benar = adalah_benar(butir.soal, butir.jawaban)
+    SesiSoal.objects.bulk_update(butir_semua, ["poin", "benar"])
     sesi.skor_bagian = skor_bagian
     sesi.total = sum(b["skor"] for b in skor_bagian)
     sesi.lulus = all(b["lulus"] for b in skor_bagian)
