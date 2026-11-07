@@ -72,6 +72,14 @@ Opsional:
 
 Field lain ditolak supaya salah ketik ketahuan.
 
+## Batas dan pembersihan
+
+- Spasi di tepi `jenis_ujian`, `subtes`, `subtopik`, `kunci`, `tingkat`, dan `sumber` dipangkas sebelum disimpan.
+- Panjang maksimal: `subtopik` 120 karakter, `kunci` 1 karakter, nama batch (nama file tanpa `.json`) 100 karakter.
+- Karakter NUL (`\u0000`) di teks mana pun ditolak.
+- `kunci` dan `bobot` tidak boleh ada bersamaan. Soal TKP hanya memakai `bobot`, soal lain hanya memakai `kunci`.
+- File boleh disimpan dengan BOM (misalnya dari Notepad).
+
 ## Aturan rujukan TWK
 
 Soal TWK yang `rujukan`-nya kosong wajib diberi `"perlu_cek": true`. Jangan mengarang rujukan. Kalau tidak yakin sumbernya, kosongkan `rujukan` dan beri `perlu_cek`.

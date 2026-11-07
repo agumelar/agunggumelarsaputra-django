@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from django.db import transaction
+from django.db import DatabaseError, transaction
 
 from .kisi_kisi import baca_kisi_kisi
 from .models import Soal
@@ -21,6 +21,14 @@ FIELD_DIKENAL = {
     "perlu_cek",
     "sumber",
 }
+
+
+class ImporGagal(Exception):
+    """Impor berhenti karena kesalahan di luar isi baris (nama batch, database)."""
+
+
+CHAR_FIELD = ("jenis_ujian", "subtes", "subtopik", "tingkat", "kunci", "sumber")
+STRIP_FIELD = CHAR_FIELD
 
 
 @dataclass
@@ -47,19 +55,34 @@ def _cek_baris(baris, kisi, sidik_file, nomor):
     pesan = _cek_tipe(baris)
     if pesan:
         return pesan, None
+    data = dict(baris)
+    for n in STRIP_FIELD:
+        if isinstance(data.get(n), str):
+            data[n] = data[n].strip()
     tak_dikenal = sorted(set(baris) - FIELD_DIKENAL)
     if tak_dikenal:
         pesan.append(f"Field tidak dikenal: {', '.join(tak_dikenal)}.")
-    if baris.get("tingkat", "sedang") not in TINGKAT:
-        pesan.append(f"Tingkat {baris['tingkat']} tidak dikenal.")
-    if baris.get("sumber", "draf_ai") not in SUMBER:
-        pesan.append(f"Sumber {baris['sumber']} tidak dikenal.")
+    for n, nilai in data.items():
+        if isinstance(nilai, str) and "\x00" in nilai:
+            pesan.append(f"Field {n} berisi karakter yang tidak diizinkan.")
+    for n in CHAR_FIELD:
+        batas = Soal._meta.get_field(n).max_length
+        if isinstance(data.get(n), str) and len(data[n]) > batas:
+            pesan.append(f"Field {n} terlalu panjang (maksimal {batas} karakter).")
+    if data.get("tingkat", "sedang") not in TINGKAT:
+        pesan.append(f"Tingkat {data['tingkat']} tidak dikenal.")
+    if data.get("sumber", "draf_ai") not in SUMBER:
+        pesan.append(f"Sumber {data['sumber']} tidak dikenal.")
 
-    data = dict(baris)
     for n in OPSI:
         if isinstance(data.get(n), (int, float)) and not isinstance(data.get(n), bool):
             data[n] = str(data[n])
     pesan += validasi_soal(data)
+    if data["subtes"] == "TKP":
+        if data.get("kunci"):
+            pesan.append("Soal TKP memakai bobot, kosongkan kunci.")
+    elif data.get("bobot"):
+        pesan.append("Soal selain TKP memakai kunci, hapus bobot.")
 
     if kisi and (data["subtes"], data["subtopik"].strip()) not in kisi:
         pesan.append(
@@ -89,6 +112,9 @@ def _buat(data, batch):
 
 
 def impor_batch(data: list, batch: str, coba: bool = False) -> HasilImpor:
+    batas = Soal._meta.get_field("batch").max_length
+    if len(batch) > batas:
+        raise ImporGagal(f"Nama batch terlalu panjang (maksimal {batas} karakter).")
     hasil = HasilImpor()
     kisi = {(s.subtes, s.nama) for s in baca_kisi_kisi()}
     sidik_file = {}
@@ -104,8 +130,11 @@ def impor_batch(data: list, batch: str, coba: bool = False) -> HasilImpor:
     if coba:
         hasil.masuk = [n for n, _ in siap]
         return hasil
-    with transaction.atomic():
-        for nomor, isi in siap:
-            _buat(isi, batch).save()
-            hasil.masuk.append(nomor)
+    try:
+        with transaction.atomic():
+            for nomor, isi in siap:
+                _buat(isi, batch).save()
+                hasil.masuk.append(nomor)
+    except DatabaseError as e:
+        raise ImporGagal(f"Database menolak data, tidak ada soal yang disimpan: {e}") from e
     return hasil

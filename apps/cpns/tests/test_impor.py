@@ -1,14 +1,16 @@
+import codecs
 import copy
 import json
 import tempfile
 from io import StringIO
+from unittest import mock
 from pathlib import Path
 
 from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test import TestCase
 
-from apps.cpns.impor import impor_batch
+from apps.cpns.impor import ImporGagal, impor_batch
 from apps.cpns.models import Soal
 from apps.cpns.tests.pabrik import buat_soal
 
@@ -145,3 +147,52 @@ class ImporTest(TestCase):
         for nama in ("import_cpns", "seed_cpns_starter", "scrape_cpns"):
             with self.assertRaisesMessage(CommandError, "Unknown command"):
                 call_command(nama)
+
+    def test_kunci_dan_teks_dinormalkan(self):
+        hasil = impor_batch([tiu(kunci=" A ", subtopik=" Deret Angka ", tingkat=" sulit ")], "b")
+        self.assertEqual(hasil.gagal, [])
+        s = Soal.objects.get()
+        self.assertEqual((s.kunci, s.subtopik, s.tingkat), ("A", "Deret Angka", "sulit"))
+
+    def test_subtopik_terlalu_panjang_ditolak(self):
+        with mock.patch("apps.cpns.impor.baca_kisi_kisi", return_value=[]):
+            hasil = impor_batch([tiu(subtopik="x" * 200)], "b")
+        self.assertIn("Field subtopik terlalu panjang (maksimal 120 karakter).", hasil.gagal[0][1])
+        self.assertEqual(Soal.objects.count(), 0)
+
+    def test_nul_ditolak(self):
+        hasil = impor_batch([tiu(teks="a\x00b"), tiu(opsi_a="x\x00", teks="Lain")], "b")
+        for _, pesan in hasil.gagal:
+            self.assertTrue(any("karakter yang tidak diizinkan" in m for m in pesan))
+        self.assertEqual(len(hasil.gagal), 2)
+
+    def test_nama_batch_terlalu_panjang(self):
+        with self.assertRaisesMessage(ImporGagal, "terlalu panjang"):
+            impor_batch([tiu()], "b" * 101)
+        with self.assertRaisesMessage(CommandError, "terlalu panjang"):
+            jalankan([tiu()], "b" * 101 + ".json")
+
+    def test_kesalahan_database_jadi_pesan_jelas(self):
+        from django.db import DatabaseError
+
+        with mock.patch.object(Soal, "save", side_effect=DatabaseError("boom")):
+            with self.assertRaisesMessage(ImporGagal, "tidak ada soal yang disimpan"):
+                impor_batch(contoh(), "b")
+            with self.assertRaisesMessage(CommandError, "tidak ada soal yang disimpan"):
+                jalankan(contoh(), "d.json")
+        self.assertEqual(Soal.objects.count(), 0)
+
+    def test_file_dengan_bom_diterima(self):
+        folder = Path(tempfile.mkdtemp())
+        berkas = folder / "bom.json"
+        berkas.write_bytes(codecs.BOM_UTF8 + CONTOH.read_bytes())
+        out = StringIO()
+        call_command("cpns_impor_soal", str(berkas), stdout=out)
+        self.assertIn("Masuk: 5 soal", out.getvalue())
+
+    def test_kunci_dan_bobot_tidak_boleh_bersamaan(self):
+        tkp = copy.deepcopy(contoh()[3])
+        tkp["kunci"] = "A"
+        self.assertIn("Soal TKP memakai bobot, kosongkan kunci.", impor_batch([tkp], "b").gagal[0][1])
+        hasil = impor_batch([tiu(bobot={"A": 1, "B": 2, "C": 3, "D": 4, "E": 5})], "b")
+        self.assertIn("Soal selain TKP memakai kunci, hapus bobot.", hasil.gagal[0][1])
