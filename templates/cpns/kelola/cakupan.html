@@ -46,7 +46,7 @@
                         <td class="px-4 py-1 text-right font-mono">{{ b.tayang }}</td>
                         <td class="px-4 py-1 text-right font-mono">{{ b.draf }}</td>
                         <td class="px-4 py-1 font-semibold">
-                            {% if b.kurang %}<span class="text-[#FBBF24]">Kurang {{ b.kurang }}</span>{% else %}<span class="text-[#34D399]">Cukup</span>{% endif %}
+                            {% if b.target is None %}<span class="text-[#94A3B8]">Tanpa target</span>{% elif b.kurang %}<span class="text-[#FBBF24]">Kurang {{ b.kurang }}</span>{% else %}<span class="text-[#34D399]">Cukup</span>{% endif %}
                         </td>
                     </tr>
                     {% endfor %}

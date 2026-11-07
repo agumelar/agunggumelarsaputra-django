@@ -2,6 +2,11 @@ from django.db.models import Count
 
 from apps.cpns.kisi_kisi import baca_kisi_kisi
 from apps.cpns.models import Soal, SkemaUjian
+from apps.cpns.validasi import JENIS, SUBTES
+
+
+def _indeks(urutan, nilai):
+    return urutan.index(nilai) if nilai in urutan else len(urutan)
 
 
 def hitung_cakupan(kisi=None):
@@ -17,8 +22,14 @@ def hitung_cakupan(kisi=None):
         jumlah.setdefault(kunci, {})[r["status"]] = r["n"]
 
     target = {(s.jenis_ujian, s.subtes, s.nama): s.target for s in kisi}
+    posisi = {kunci: i for i, kunci in enumerate(target)}
+
+    def urutan(kunci):
+        jenis, subtes, nama = kunci
+        return (_indeks(JENIS, jenis), _indeks(SUBTES, subtes), posisi.get(kunci, len(posisi)), nama)
+
     baris = []
-    for kunci in sorted(set(target) | set(jumlah)):
+    for kunci in sorted(set(target) | set(jumlah), key=urutan):
         jenis, subtes, subtopik = kunci
         tayang = jumlah.get(kunci, {}).get("tayang", 0)
         tgt = target.get(kunci)

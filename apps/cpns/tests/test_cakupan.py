@@ -1,3 +1,6 @@
+import re
+from unittest import mock
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -13,9 +16,25 @@ KISI = [
 ]
 
 
-def _kisi(testcase, daftar=KISI):
-    from unittest import mock
+KISI_ACAK = [
+    Subtopik("SKB_GURU", "MATERI_RPL", "Basis Data", 5),
+    Subtopik("SKB_GURU", "PEDAGOGIK", "Asesmen", 5),
+    Subtopik("SKD", "TKP", "Pelayanan Publik", 5),
+    Subtopik("SKD", "TIU", "Deret", 5),
+    Subtopik("SKD", "TIU", "Analogi", 5),
+    Subtopik("SKD", "TWK", "Pancasila", 3),
+]
+URUTAN_SUBTES = ["TWK", "TIU", "TKP", "PEDAGOGIK", "MATERI_RPL"]
 
+
+def _sel_kurang(html, subtopik):
+    """Teks sel kolom Kurang pada baris subtopik tertentu."""
+    baris = next(b for b in html.split("</tr>") if f">{subtopik}</a>" in b)
+    sel = re.findall(r"<td[^>]*>(.*?)</td>", baris, re.S)
+    return re.sub(r"<[^>]+>", "", sel[-1]).strip()
+
+
+def _kisi(testcase, daftar=KISI):
     pesan = mock.patch("apps.cpns.cakupan.baca_kisi_kisi", return_value=daftar)
     pesan.start()
     testcase.addCleanup(pesan.stop)
@@ -74,6 +93,17 @@ class HitungCakupanTest(TestCase):
         self.assertIsNone(liar["target"])
         self.assertEqual((liar["tayang"], liar["draf"], liar["kurang"]), (1, 1, 0))
 
+    def test_urutan_jenis_subtes_lalu_posisi_kisi(self):
+        buat_soal("TIU", subtopik="Aaa Liar")
+        buat_soal("TWK", subtopik="Zzz Liar")
+        baris = hitung_cakupan(kisi=KISI_ACAK)["baris"]
+        subtes = list(dict.fromkeys(b["subtes"] for b in baris))
+        self.assertEqual(subtes, URUTAN_SUBTES)
+        tiu = [b["subtopik"] for b in baris if b["subtes"] == "TIU"]
+        self.assertEqual(tiu, ["Deret", "Analogi", "Aaa Liar"])
+        twk = [b["subtopik"] for b in baris if b["subtes"] == "TWK"]
+        self.assertEqual(twk, ["Pancasila", "Zzz Liar"])
+
 
 class HalamanCakupanTest(TestCase):
     def setUp(self):
@@ -96,16 +126,24 @@ class HalamanCakupanTest(TestCase):
         buat_soal("TWK", subtopik="Pancasila")
         for _ in range(3):
             buat_soal("TWK", subtopik="Pancasila")
+        buat_soal("TIU", subtopik="Topik Liar")
         r = self.client.get(reverse("cpns:kelola_cakupan"))
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "Kurang 4")
-        self.assertContains(r, "Cukup")
+        html = r.content.decode()
+        self.assertEqual(_sel_kurang(html, "Deret"), "Kurang 4")
+        self.assertEqual(_sel_kurang(html, "Pancasila"), "Cukup")
+        self.assertEqual(_sel_kurang(html, "Topik Liar"), "Tanpa target")
         self.assertContains(r, "tanpa soal berulang")
         self.assertContains(r, "subtopik=Deret")
 
-    def test_kisi_kisi_rusak_tetap_tampil_dengan_pesan(self):
-        from unittest import mock
+    def test_halaman_urut_subtes(self):
+        self.client.force_login(self.admin)
+        with mock.patch("apps.cpns.cakupan.baca_kisi_kisi", return_value=KISI_ACAK):
+            html = self.client.get(reverse("cpns:kelola_cakupan")).content.decode()
+        posisi = [html.index(f'id="subtes-{s}"') for s in URUTAN_SUBTES]
+        self.assertEqual(posisi, sorted(posisi))
 
+    def test_kisi_kisi_rusak_tetap_tampil_dengan_pesan(self):
         self.client.force_login(self.admin)
         buat_soal("TIU", subtopik="Deret")
         rusak = mock.patch(
