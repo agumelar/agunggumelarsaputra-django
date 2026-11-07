@@ -65,6 +65,7 @@
                         {% if u.pengecoh %}<div><dt class="font-semibold text-[#38BDF8]">Kenapa opsi lain salah</dt><dd class="mt-1 text-[#CBD5E1] leading-relaxed whitespace-pre-line">{{ u.pengecoh }}</dd></div>{% endif %}
                         {% if u.cepat %}<div><dt class="font-semibold text-[#38BDF8]">Cara cepat</dt><dd class="mt-1 text-[#CBD5E1] leading-relaxed whitespace-pre-line">{{ u.cepat }}</dd></div>{% endif %}
                     </dl>
+                    {% include 'cpns/komponen/_laporkan_slot.html' with soal=u.soal %}
                 </article>
             {% endfor %}
         </section>

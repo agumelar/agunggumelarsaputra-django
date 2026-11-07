@@ -299,7 +299,7 @@ class CatViewsTest(TestCase):
         self.assertContains(resp, "Kurang 60 (ambang 65)")
 
 
-class DasborSementaraTest(TestCase):
+class DasborSimulasiTest(TestCase):
     def setUp(self):
         self.user = buat_user("dasbor")
         self.client.force_login(self.user)
@@ -308,15 +308,15 @@ class DasborSementaraTest(TestCase):
         resp = self.client.get(reverse("cpns:dasbor"))
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "<title>Dasbor | CPNS Hub</title>", html=False)
-        self.assertContains(resp, "Mulai Simulasi SKD CAT")
-        self.assertNotContains(resp, "Mulai Latihan SKB Guru")
+        self.assertContains(resp, "Mulai simulasi SKD")
+        self.assertNotContains(resp, "Mulai simulasi SKB Guru")
         self.assertContains(resp, reverse("cpns:cat_mulai", args=["skd-cat"]))
 
     def test_dasbor_superuser_lihat_skema_nonaktif(self):
         admin = get_user_model().objects.create_superuser(username="adm", email="adm@contoh.id", password="x")
         self.client.force_login(admin)
         resp = self.client.get(reverse("cpns:dasbor"))
-        self.assertContains(resp, "Mulai Latihan SKB Guru")
+        self.assertContains(resp, "Mulai simulasi SKB Guru")
 
     def test_dasbor_tautan_lanjutkan(self):
         skema = SkemaUjian.objects.get(kode="SKD-CAT")

@@ -181,6 +181,7 @@ def _ulasan(sesi):
         ulasan.append(
             {
                 "nomor": butir.nomor,
+                "soal": soal,
                 "subtes": soal.subtes,
                 "teks": soal.teks,
                 "status": _status_butir(butir, pakai_bobot),

@@ -7,24 +7,28 @@
 
 {% block navbar %}{% endblock %}
 {% block footer %}{% endblock %}
+{# Onboarding siswa SMK bukan bagian dari CPNS Hub. #}
+{% block onboarding_modal %}{% endblock %}
 
 {% block content %}
 <div class="min-h-screen flex flex-col bg-[#090D16] text-[#F3F4F6] selection:bg-[#38BDF8] selection:text-[#082F49]">
-    <header x-data="{ menuOpen: false }" @keydown.escape.window="menuOpen = false"
+    {% url 'cpns:beranda' as url_beranda %}{% url 'cpns:dasbor' as url_dasbor %}{% url 'cpns:belajar_pilih' as url_belajar %}{% url 'cpns:riwayat' as url_riwayat %}{% url 'accounts:profile' as url_akun %}
+    <header x-data="{ menuOpen: false }"
+            @keydown.escape.window="if (menuOpen) { menuOpen = false; $refs.tombolMenu.focus() }"
             class="sticky top-0 z-40 bg-[#090D16] border-b border-white/[0.08]">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
-            <a href="/" class="inline-flex items-center min-h-11 font-display font-bold text-lg text-[#F3F4F6] tracking-tight">CPNS Hub</a>
+            <a href="{{ url_beranda }}" class="inline-flex items-center min-h-11 font-display font-bold text-lg text-[#F3F4F6] tracking-tight">CPNS Hub</a>
 
             <nav class="hidden lg:flex items-center gap-1 text-sm font-medium" aria-label="Navigasi CPNS">
-                <a href="/" {% if request.path == '/' %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == '/' %}text-[#38BDF8]{% else %}text-[#CBD5E1]{% endif %}">Beranda</a>
-                <a href="/belajar/" {% if request.path == '/belajar/' %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == '/belajar/' %}text-[#38BDF8]{% else %}text-[#CBD5E1]{% endif %}">Belajar</a>
-                <a href="/dasbor/#simulasi" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Simulasi</a>
-                <a href="/riwayat/" {% if request.path == '/riwayat/' %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == '/riwayat/' %}text-[#38BDF8]{% else %}text-[#CBD5E1]{% endif %}">Riwayat</a>
-                <a href="/dasbor/#premium" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Premium</a>
-                <a href="{% url 'accounts:profile' %}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Akun</a>
+                <a href="{{ url_beranda }}" {% if request.path == url_beranda or request.path == url_dasbor %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_beranda or request.path == url_dasbor %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Beranda</a>
+                <a href="{{ url_belajar }}" {% if request.path == url_belajar %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_belajar %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Belajar</a>
+                <a href="{{ url_dasbor }}#simulasi" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Simulasi</a>
+                <a href="{{ url_riwayat }}" {% if request.path == url_riwayat %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if request.path == url_riwayat %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Riwayat</a>
+                <a href="{{ url_dasbor }}#premium" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Premium</a>
+                <a href="{{ url_akun }}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Akun</a>
             </nav>
 
-            <button type="button" @click="menuOpen = !menuOpen"
+            <button type="button" x-ref="tombolMenu" @click="menuOpen = !menuOpen"
                     :aria-expanded="menuOpen.toString()" aria-controls="cpns-mobile-menu"
                     class="lg:hidden shrink-0 inline-flex items-center gap-2 min-h-11 px-3 rounded-lg bg-[#162032] border border-white/[0.14] text-sm font-semibold text-[#F3F4F6]">
                 <svg x-show="!menuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -40,12 +44,12 @@
         <nav id="cpns-mobile-menu" x-show="menuOpen" x-cloak aria-label="Menu CPNS"
              class="lg:hidden border-t border-white/[0.08] bg-[#111827] px-4 pb-4 pt-2">
             <div class="flex flex-col text-sm font-medium">
-                <a href="/" {% if request.path == '/' %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == '/' %}text-[#38BDF8]{% else %}text-[#F3F4F6]{% endif %}">Beranda</a>
-                <a href="/belajar/" {% if request.path == '/belajar/' %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == '/belajar/' %}text-[#38BDF8]{% else %}text-[#F3F4F6]{% endif %}">Belajar</a>
-                <a href="/dasbor/#simulasi" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Simulasi</a>
-                <a href="/riwayat/" {% if request.path == '/riwayat/' %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == '/riwayat/' %}text-[#38BDF8]{% else %}text-[#F3F4F6]{% endif %}">Riwayat</a>
-                <a href="/dasbor/#premium" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Premium</a>
-                <a href="{% url 'accounts:profile' %}" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Akun</a>
+                <a href="{{ url_beranda }}" @click="menuOpen = false" {% if request.path == url_beranda or request.path == url_dasbor %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_beranda or request.path == url_dasbor %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Beranda</a>
+                <a href="{{ url_belajar }}" @click="menuOpen = false" {% if request.path == url_belajar %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_belajar %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Belajar</a>
+                <a href="{{ url_dasbor }}#simulasi" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Simulasi</a>
+                <a href="{{ url_riwayat }}" @click="menuOpen = false" {% if request.path == url_riwayat %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if request.path == url_riwayat %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Riwayat</a>
+                <a href="{{ url_dasbor }}#premium" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Premium</a>
+                <a href="{{ url_akun }}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Akun</a>
             </div>
         </nav>
     </header>

@@ -96,7 +96,7 @@
     {% endblock footer %}
 
     <!-- Mandatory Profile Onboarding Modal for Students -->
-    {% include 'components/mandatory_profile_modal.html' %}
+    {% block onboarding_modal %}{% include 'components/mandatory_profile_modal.html' %}{% endblock onboarding_modal %}
 
     {% block extra_scripts %}{% endblock %}
 </body>
