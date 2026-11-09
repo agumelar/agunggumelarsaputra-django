@@ -29,6 +29,12 @@ class LogoutPostTest(TestCase):
         self.assertTemplateUsed(r, 'cpns/base_cpns.html')
         self.assertContains(r, 'href="/dasbor/"')
 
+    def test_halaman_keluar_cpns_punya_jarak_tepi(self):
+        # Di layar sempit kotak konfirmasi tidak boleh menempel ke tepi.
+        self.client.force_login(self.user)
+        r = self.client.get('/accounts/logout/', HTTP_HOST=CPNS_HOST)
+        self.assertContains(r, 'class="max-w-md mx-auto py-10 px-4 space-y-6 text-center"')
+
     def test_get_tamu_diarahkan_ke_beranda(self):
         r = self.client.get(self.url)
         self.assertRedirects(r, reverse('core:home'), fetch_redirect_response=False)
