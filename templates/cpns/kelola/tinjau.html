@@ -63,7 +63,7 @@
     <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_26rem] flex-1 items-start">
         <section class="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 sm:p-6" aria-labelledby="teks-soal">
             <p class="font-mono text-xs text-[#94A3B8] flex flex-wrap gap-x-3 gap-y-1">
-                <span>Soal {{ nomor_di_batch }} dari {{ jumlah_di_batch }} di batch ini</span>
+                <span>Soal {{ nomor_di_batch }} dari {{ jumlah_di_batch }} {% if soal.batch %}di batch ini{% else %}tanpa batch{% endif %}</span>
                 <span>{{ soal.subtes }}</span>
                 <span>{{ soal.subtopik }}</span>
                 <span>{{ soal.get_tingkat_display }}</span>

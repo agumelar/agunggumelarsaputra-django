@@ -63,6 +63,23 @@ class SettingsProduksiTest(SimpleTestCase):
         self.assertNotEqual(hasil.returncode, 0)
         self.assertIn('DJANGO_SECRET_KEY wajib diisi di .env produksi.', hasil.stderr)
 
+    def test_secret_key_tidak_aman_ditolak(self):
+        pesan = 'DJANGO_SECRET_KEY tidak aman. Buat kunci acak baru minimal 50 karakter.'
+        kasus = {
+            'bawaan_django': 'django-insecure-' + 'x' * 60,
+            'placeholder': '[ISI]' + 'x' * 60,
+            'pendek': 'x' * 49,
+        }
+        for nama, nilai in kasus.items():
+            with self.subTest(kasus=nama):
+                hasil = muat(DJANGO_SECRET_KEY=nilai)
+                self.assertNotEqual(hasil.returncode, 0)
+                self.assertIn(pesan, hasil.stderr)
+
+    def test_secret_key_50_karakter_diterima(self):
+        hasil = muat(DJANGO_SECRET_KEY='x' * 50)
+        self.assertEqual(hasil.returncode, 0, hasil.stderr)
+
     def test_tanpa_password_db_gagal(self):
         hasil = muat(DB_PASSWORD='', DATABASE_URL='')
         self.assertNotEqual(hasil.returncode, 0)
@@ -136,6 +153,11 @@ class ComposeTanpaRahasiaTest(SimpleTestCase):
     def test_entrypoint_tanpa_sandi_bawaan(self):
         teks = (BASE_DIR / 'scripts' / 'entrypoint.sh').read_text(encoding='utf-8')
         self.assertNotRegex(teks, r"DB_PASSWORD',\s*'[^']")
+
+    def test_entrypoint_pesan_sandi_db_kosong(self):
+        teks = (BASE_DIR / 'scripts' / 'entrypoint.sh').read_text(encoding='utf-8')
+        self.assertIn('[-] DB_PASSWORD wajib diisi di .env.', teks)
+        self.assertNotIn("os.environ['DB_PASSWORD']", teks)
 
     def test_env_contoh_hanya_placeholder(self):
         teks = (BASE_DIR / '.env.example').read_text(encoding='utf-8')

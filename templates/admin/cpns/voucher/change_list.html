@@ -1,7 +1,9 @@
 {% extends "admin/change_list.html" %}
 {% block object-tools-items %}
+  {% if boleh_buat_banyak %}
   <li>
     <a href="{% url 'admin:cpns_voucher_buat_banyak' %}" class="addlink">Buat kode voucher</a>
   </li>
+  {% endif %}
   {{ block.super }}
 {% endblock %}

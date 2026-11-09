@@ -32,6 +32,14 @@ DOMAIN_BAWAAN = [
 SECRET_KEY = env_teks('DJANGO_SECRET_KEY')
 if not SECRET_KEY:
     raise ImproperlyConfigured('DJANGO_SECRET_KEY wajib diisi di .env produksi.')
+if (
+    SECRET_KEY.startswith('django-insecure-')
+    or '[ISI]' in SECRET_KEY
+    or len(SECRET_KEY) < 50
+):
+    raise ImproperlyConfigured(
+        'DJANGO_SECRET_KEY tidak aman. Buat kunci acak baru minimal 50 karakter.'
+    )
 
 # Allowed Hosts: daftar eksplisit, wildcard ditolak.
 hosts_env = env_teks('ALLOWED_HOSTS')
