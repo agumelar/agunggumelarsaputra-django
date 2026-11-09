@@ -1,8 +1,20 @@
 from django.urls import path
+from django.views.generic import RedirectView
 
 from . import views
 
 app_name = 'cpns'
+
+class _AlihTanpaParameter(RedirectView):
+    """RedirectView meneruskan slug dan id alamat lama ke reverse tujuan; di sini dibuang."""
+
+    def get_redirect_url(self, *args, **kwargs):
+        return super().get_redirect_url()
+
+
+def _alih(tujuan):
+    return _AlihTanpaParameter.as_view(pattern_name=tujuan, permanent=True, query_string=False)
+
 
 urlpatterns = [
     path('', views.beranda_publik, name='beranda'),
@@ -33,4 +45,10 @@ urlpatterns = [
     path('kelola/laporan/', views.kelola_laporan, name='kelola_laporan'),
     path('kelola/laporan/<int:laporan_id>/selesai/', views.kelola_laporan_selesai, name='kelola_laporan_selesai'),
     path('kelola/soal/<int:soal_id>/ubah/', views.kelola_ubah, name='kelola_ubah'),
+    # Alamat lama yang sudah dibagikan: dialihkan permanen ke halaman baru.
+    path('packages/', _alih('cpns:beranda')),
+    path('packages/<slug:slug>/', _alih('cpns:beranda')),
+    path('exam/<slug:slug>/', _alih('cpns:dasbor')),
+    path('exam/<slug:slug>/submit/', _alih('cpns:dasbor')),
+    path('result/<slug:slug>/<int:attempt_id>/', _alih('cpns:riwayat')),
 ]
