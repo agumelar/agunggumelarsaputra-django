@@ -221,7 +221,7 @@ Data awal:
   - `SECURE_HSTS_SECONDS`, dimulai dari 3600 lalu dinaikkan
   - `ALLOWED_HOSTS` berisi daftar domain eksplisit
   - `docker-compose.yml` tidak lagi memaksa `ALLOWED_HOSTS=*`
-- Login Google untuk cpns butuh alamat balik `https://cpns.agunggumelarsaputra.com/accounts/google/callback/` terdaftar di Google Cloud Console. **Ini dilakukan pemilik.**
+- Login Google untuk cpns butuh alamat balik `https://cpns.agunggumelarsaputra.com/accounts/oauth/google/callback/` terdaftar di Google Cloud Console. **Ini dilakukan pemilik.**
 - Data peserta yang disimpan hanya nama dan email. Tidak ada data pembayaran.
 
 ## 12. Pengujian
