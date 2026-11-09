@@ -15,6 +15,10 @@ TANDA_DRAF_TEMPLAT = "Draf, menunggu tinjauan pengelola."
 TANDA_DRAF_KISI = "Draf, menunggu persetujuan pemilik."
 TEMPLAT = ("syarat.html", "privasi.html")
 BARIS_AWAL_KISI = 10
+PANDUAN_GURU = (
+    "Pastikan akun ini milik Anda atau guru yang sah dan kata sandinya dibuat sendiri "
+    "oleh pemiliknya. Kalau tidak, nonaktifkan kata sandinya lewat admin."
+)
 
 
 def _teks_templat(nama):
@@ -31,17 +35,24 @@ class Command(BaseCommand):
 
     def handle(self, *args, **opsi):
         perlu = 0
-        for periksa in (
-            self.guru_sandi,
-            self.email_ganda,
-            self.pengaturan,
-            self.templat_hukum,
-            self.kisi,
-            self.cukup_soal,
-            self.soal_lama,
+        for judul, periksa in (
+            ("Akun guru", self.guru_sandi),
+            ("Email ganda", self.email_ganda),
+            ("Pengaturan CPNS", self.pengaturan),
+            ("Halaman syarat dan privasi", self.templat_hukum),
+            ("Kisi-kisi", self.kisi),
+            ("Soal tayang untuk SKD-CAT", self.cukup_soal),
+            ("Soal lama", self.soal_lama),
         ):
-            ok, judul, rincian = periksa()
-            self.stdout.write(f"[{'OK' if ok else 'PERLU TINDAKAN'}] {judul}")
+            try:
+                ok, teks, rincian = periksa()
+            except Exception as e:
+                ok, teks, rincian = False, None, []
+                self.stdout.write(
+                    f"[PERLU TINDAKAN] {judul}: gagal diperiksa ({type(e).__name__})."
+                )
+            if teks is not None:
+                self.stdout.write(f"[{'OK' if ok else 'PERLU TINDAKAN'}] {teks}")
             for baris in rincian:
                 self.stdout.write(f"    {baris}")
             perlu += 0 if ok else 1
@@ -65,7 +76,7 @@ class Command(BaseCommand):
         return (
             False,
             f"{len(kena)} akun guru masih punya kata sandi yang bisa dipakai.",
-            [f"username: {nama}" for nama in kena],
+            [f"username: {nama}" for nama in kena] + [PANDUAN_GURU],
         )
 
     def email_ganda(self):
