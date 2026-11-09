@@ -10,7 +10,7 @@ import psycopg2
 
 db_name = os.getenv('DB_NAME', 'ags_db')
 db_user = os.getenv('DB_USER', 'ags_user')
-db_password = os.getenv('DB_PASSWORD', 'ags_password_secure2026')
+db_password = os.environ['DB_PASSWORD']
 db_host = os.getenv('DB_HOST', 'db')
 db_port = os.getenv('DB_PORT', '5432')
 

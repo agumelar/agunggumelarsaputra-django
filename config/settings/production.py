@@ -4,36 +4,59 @@ Uses PostgreSQL, WhiteNoise static compression, and strict security settings.
 """
 
 import os
+
+from django.core.exceptions import ImproperlyConfigured
+
 from .base import *
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-# Allowed Hosts
-hosts_env = os.getenv('ALLOWED_HOSTS', '*')
-ALLOWED_HOSTS = [h.strip() for h in hosts_env.split(',') if h.strip()]
 
-# CSRF Trusted Origins
-csrf_env = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+def env_teks(nama):
+    # Nilai kosong dianggap tidak diisi.
+    return os.getenv(nama, '').strip()
+
+
+def env_bool(nama, bawaan):
+    nilai = env_teks(nama)
+    return bawaan if not nilai else nilai == 'True'
+
+
+DOMAIN_BAWAAN = [
+    'agunggumelarsaputra.com',
+    'www.agunggumelarsaputra.com',
+    'cpns.agunggumelarsaputra.com',
+]
+
+# Secret key wajib dari env. Tidak ada nilai bawaan.
+SECRET_KEY = env_teks('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    raise ImproperlyConfigured('DJANGO_SECRET_KEY wajib diisi di .env produksi.')
+
+# Allowed Hosts: daftar eksplisit, wildcard ditolak.
+hosts_env = env_teks('ALLOWED_HOSTS')
+ALLOWED_HOSTS = (
+    [h.strip() for h in hosts_env.split(',') if h.strip()]
+    if hosts_env else list(DOMAIN_BAWAAN)
+)
+if '*' in ALLOWED_HOSTS:
+    raise ImproperlyConfigured('ALLOWED_HOSTS tidak boleh berisi "*" di produksi.')
+
+# CSRF Trusted Origins: bawaan hanya https untuk domain sendiri.
+csrf_env = env_teks('CSRF_TRUSTED_ORIGINS')
 if csrf_env:
     CSRF_TRUSTED_ORIGINS = [c.strip() for c in csrf_env.split(',') if c.strip()]
 else:
-    CSRF_TRUSTED_ORIGINS = [
-        'http://localhost',
-        'http://127.0.0.1',
-        'http://145.241.157.243',
-        'http://145.241.157.243:8080',
-        'https://agunggumelarsaputra.com',
-        'https://www.agunggumelarsaputra.com',
-        'https://cpns.agunggumelarsaputra.com',
-        'http://cpns.agunggumelarsaputra.com',
-    ]
+    CSRF_TRUSTED_ORIGINS = ['https://' + d for d in DOMAIN_BAWAAN]
 
-# Database configuration for PostgreSQL
-DATABASE_URL = os.getenv('DATABASE_URL')
+# Database PostgreSQL. Kata sandi wajib, tanpa nilai bawaan.
+DATABASE_URL = env_teks('DATABASE_URL')
 
 if DATABASE_URL:
     import urllib.parse as urlparse
     url = urlparse.urlparse(DATABASE_URL)
+    if not url.password:
+        raise ImproperlyConfigured('DB_PASSWORD atau DATABASE_URL wajib diisi.')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -45,14 +68,17 @@ if DATABASE_URL:
         }
     }
 else:
+    DB_PASSWORD = env_teks('DB_PASSWORD')
+    if not DB_PASSWORD:
+        raise ImproperlyConfigured('DB_PASSWORD atau DATABASE_URL wajib diisi.')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME', 'ags_db'),
-            'USER': os.getenv('DB_USER', 'ags_user'),
-            'PASSWORD': os.getenv('DB_PASSWORD', 'ags_password_secure2026'),
-            'HOST': os.getenv('DB_HOST', 'db'),
-            'PORT': os.getenv('DB_PORT', '5432'),
+            'NAME': env_teks('DB_NAME') or 'ags_db',
+            'USER': env_teks('DB_USER') or 'ags_user',
+            'PASSWORD': DB_PASSWORD,
+            'HOST': env_teks('DB_HOST') or 'db',
+            'PORT': env_teks('DB_PORT') or '5432',
         }
     }
 
@@ -68,9 +94,13 @@ STORAGES = {
 
 # Production Security Headers
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False') == 'True'
-SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False') == 'True'
-CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'False') == 'True'
+# nginx di depan yang mengalihkan http ke https, jadi bawaan False.
+SECURE_SSL_REDIRECT = env_bool('SECURE_SSL_REDIRECT', False)
+SESSION_COOKIE_SECURE = env_bool('SESSION_COOKIE_SECURE', True)
+CSRF_COOKIE_SECURE = env_bool('CSRF_COOKIE_SECURE', True)
+SECURE_HSTS_SECONDS = int(env_teks('SECURE_HSTS_SECONDS') or 3600)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'SAMEORIGIN'
