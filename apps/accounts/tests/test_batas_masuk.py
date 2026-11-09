@@ -119,3 +119,98 @@ class BatasMasukTest(TestCase):
         PercobaanMasuk.objects.create(kunci="lama", waktu=lama)
         batas_masuk.catat_gagal("i:baru")
         self.assertFalse(PercobaanMasuk.objects.filter(kunci="lama").exists())
+
+
+class KunciPanjangTest(TestCase):
+    """Kolom kunci max_length=254. Postgres menolak nilai lebih panjang (DataError)."""
+
+    def test_identitas_300_karakter_kunci_dipotong(self):
+        kunci = batas_masuk.kunci_untuk(None, "a" * 300)
+        self.assertLessEqual(len(kunci), 254)
+        self.assertTrue(kunci.startswith("i:"))
+        batas_masuk.catat_gagal(kunci)
+        self.assertEqual(PercobaanMasuk.objects.get().kunci, kunci)
+
+    def test_lewat_view_masuk_cpns(self):
+        self.client.post(reverse("cpns:masuk"), {"identitas": "b" * 300, "kata_sandi": "x"})
+        baris = PercobaanMasuk.objects.get()
+        self.assertLessEqual(len(baris.kunci), 254)
+
+    def test_lewat_view_masuk_sekolah(self):
+        self.client.post(reverse("accounts:login"), {"identifier": "c" * 300, "password": "x"})
+        baris = PercobaanMasuk.objects.get()
+        self.assertLessEqual(len(baris.kunci), 254)
+
+
+class BatasMasukAdminTest(TestCase):
+    """Login /admin/ memakai hitungan yang sama dengan login CPNS dan sekolah."""
+
+    def setUp(self):
+        self.admin = User.objects.create_user(
+            username="kepala", email="kepala@x.id", password=SANDI, is_staff=True,
+            is_superuser=True,
+        )
+        self.url = reverse("admin:login")
+        self.kunci = f"u:{self.admin.pk}"
+
+    def masuk(self, username="kepala", sandi="salah-salah"):
+        return self.client.post(
+            self.url, {"username": username, "password": sandi, "next": "/admin/"}
+        )
+
+    def test_form_login_admin_terpasang(self):
+        from django.contrib import admin
+        from apps.accounts.forms_admin import FormMasukAdmin
+
+        self.assertIs(admin.site.login_form, FormMasukAdmin)
+
+    def test_gagal_dicatat_per_akun_tanpa_peduli_huruf(self):
+        for ketik in ["kepala", "KEPALA", "Kepala"]:
+            self.masuk(ketik)
+        self.assertEqual(PercobaanMasuk.objects.filter(kunci=self.kunci).count(), 3)
+
+    def test_lima_gagal_lalu_sandi_benar_ditolak(self):
+        for _ in range(5):
+            self.masuk()
+        r = self.masuk(sandi=SANDI)
+        self.assertContains(r, PESAN)
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_terkunci_tidak_memanggil_authenticate(self):
+        for _ in range(5):
+            self.masuk()
+        with patch("django.contrib.auth.forms.authenticate") as auth:
+            self.masuk(sandi=SANDI)
+        auth.assert_not_called()
+
+    def test_kunci_dibagi_dengan_login_sekolah(self):
+        for _ in range(5):
+            self.masuk()
+        r = self.client.post(
+            reverse("accounts:login"), {"identifier": "kepala", "password": SANDI}
+        )
+        self.assertContains(r, PESAN, status_code=429)
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_kunci_dari_login_cpns_berlaku_di_admin(self):
+        for _ in range(5):
+            self.client.post(
+                reverse("cpns:masuk"), {"identitas": "kepala@x.id", "kata_sandi": "salah"}
+            )
+        r = self.masuk(sandi=SANDI)
+        self.assertContains(r, PESAN)
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_berhasil_membersihkan(self):
+        self.masuk()
+        self.masuk()
+        r = self.masuk(sandi=SANDI)
+        self.assertEqual(r.status_code, 302)
+        self.assertIn("_auth_user_id", self.client.session)
+        self.assertEqual(PercobaanMasuk.objects.count(), 0)
+
+    def test_username_tak_dikenal_dihitung_per_ketikan(self):
+        for _ in range(5):
+            self.masuk("hantu")
+        self.assertTrue(batas_masuk.terkunci("i:hantu"))
+        self.assertContains(self.masuk("Hantu"), PESAN)

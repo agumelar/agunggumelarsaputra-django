@@ -14,10 +14,12 @@ BATAS_GAGAL = 5
 JEDA = timedelta(minutes=15)
 UMUR_BARIS = timedelta(days=1)
 PESAN_TERKUNCI = "Terlalu banyak percobaan masuk. Coba lagi dalam 15 menit."
+# Sama dengan max_length kolom PercobaanMasuk.kunci. Postgres menolak nilai yang lebih panjang.
+PANJANG_KUNCI = 254
 
 
 def kunci_identitas(identitas):
-    return identitas.strip().lower()[:254]
+    return identitas.strip().lower()
 
 
 def kunci_untuk(user, identitas):
@@ -26,7 +28,7 @@ def kunci_untuk(user, identitas):
     Awalan u: dan i: mencegah dua jenis kunci saling bertabrakan."""
     if user is not None:
         return f"u:{user.pk}"
-    return f"i:{kunci_identitas(identitas)}"
+    return f"i:{kunci_identitas(identitas)}"[:PANJANG_KUNCI]
 
 
 def terkunci(kunci, now=None):
