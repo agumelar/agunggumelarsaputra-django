@@ -9,6 +9,21 @@ from django.core.exceptions import ImproperlyConfigured
 
 from .base import *
 
+# Semua variabel env yang dibaca base.py dan file ini. Nilai yang masih berisi [ISI]
+# berarti baris dari .env.example tersalin tanpa diisi, jadi server tidak boleh jalan.
+VARIABEL_ENV = (
+    'DJANGO_SECRET_KEY', 'DEBUG', 'ALLOWED_HOSTS', 'CSRF_TRUSTED_ORIGINS',
+    'DATABASE_URL', 'DB_PASSWORD', 'DB_NAME', 'DB_USER', 'DB_HOST', 'DB_PORT',
+    'SECURE_SSL_REDIRECT', 'SESSION_COOKIE_SECURE', 'CSRF_COOKIE_SECURE',
+    'SECURE_HSTS_SECONDS', 'STATIC_ROOT', 'MEDIA_ROOT', 'CPNS_URL', 'GURU_EMAILS',
+    'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET',
+)
+for _nama in VARIABEL_ENV:
+    if '[ISI]' in os.getenv(_nama, ''):
+        raise ImproperlyConfigured(
+            f'{_nama} masih berisi [ISI]. Isi nilainya atau hapus barisnya.'
+        )
+
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 
@@ -32,11 +47,7 @@ DOMAIN_BAWAAN = [
 SECRET_KEY = env_teks('DJANGO_SECRET_KEY')
 if not SECRET_KEY:
     raise ImproperlyConfigured('DJANGO_SECRET_KEY wajib diisi di .env produksi.')
-if (
-    SECRET_KEY.startswith('django-insecure-')
-    or '[ISI]' in SECRET_KEY
-    or len(SECRET_KEY) < 50
-):
+if SECRET_KEY.startswith('django-insecure-') or len(SECRET_KEY) < 50:
     raise ImproperlyConfigured(
         'DJANGO_SECRET_KEY tidak aman. Buat kunci acak baru minimal 50 karakter.'
     )
@@ -106,7 +117,12 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = env_bool('SECURE_SSL_REDIRECT', False)
 SESSION_COOKIE_SECURE = env_bool('SESSION_COOKIE_SECURE', True)
 CSRF_COOKIE_SECURE = env_bool('CSRF_COOKIE_SECURE', True)
-SECURE_HSTS_SECONDS = int(env_teks('SECURE_HSTS_SECONDS') or 3600)
+try:
+    SECURE_HSTS_SECONDS = int(env_teks('SECURE_HSTS_SECONDS') or 3600)
+except ValueError:
+    raise ImproperlyConfigured(
+        'SECURE_HSTS_SECONDS harus bilangan bulat, contoh 3600.'
+    ) from None
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 SECURE_HSTS_PRELOAD = False
 SECURE_BROWSER_XSS_FILTER = True

@@ -15,6 +15,7 @@ yarn-error.log*
 .coverage
 htmlcov/
 *.sqlite3
+.env
 .env.local
 .env.*.tmp
 scratch/

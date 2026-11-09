@@ -23,6 +23,7 @@ VARIABEL = [
     'DB_HOST', 'ALLOWED_HOSTS', 'CSRF_TRUSTED_ORIGINS', 'SESSION_COOKIE_SECURE',
     'CSRF_COOKIE_SECURE', 'SECURE_HSTS_SECONDS', 'SECURE_SSL_REDIRECT', 'DEBUG',
     'CPNS_URL', 'GURU_EMAILS', 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET',
+    'DB_PORT', 'STATIC_ROOT', 'MEDIA_ROOT',
 ]
 
 KODE = (
@@ -67,7 +68,6 @@ class SettingsProduksiTest(SimpleTestCase):
         pesan = 'DJANGO_SECRET_KEY tidak aman. Buat kunci acak baru minimal 50 karakter.'
         kasus = {
             'bawaan_django': 'django-insecure-' + 'x' * 60,
-            'placeholder': '[ISI]' + 'x' * 60,
             'pendek': 'x' * 49,
         }
         for nama, nilai in kasus.items():
@@ -127,6 +127,42 @@ class SettingsProduksiTest(SimpleTestCase):
         hasil = muat(SECURE_HSTS_SECONDS='86400')
         self.assertEqual(json.loads(hasil.stdout)['hsts'], 86400)
 
+    def test_nilai_isi_ditolak_untuk_setiap_variabel(self):
+        for nama in VARIABEL:
+            with self.subTest(nama=nama):
+                hasil = muat(**{nama: '[ISI]'})
+                self.assertNotEqual(hasil.returncode, 0)
+                self.assertIn('ImproperlyConfigured', hasil.stderr)
+                self.assertIn(
+                    f'{nama} masih berisi [ISI]. Isi nilainya atau hapus barisnya.',
+                    hasil.stderr,
+                )
+
+    def test_isi_di_tengah_nilai_juga_ditolak(self):
+        hasil = muat(DJANGO_SECRET_KEY='[ISI]' + 'x' * 60)
+        self.assertNotEqual(hasil.returncode, 0)
+        self.assertIn('DJANGO_SECRET_KEY masih berisi [ISI].', hasil.stderr)
+
+    def test_env_contoh_apa_adanya_ditolak(self):
+        env = {}
+        for baris in (BASE_DIR / '.env.example').read_text(encoding='utf-8').splitlines():
+            if baris and not baris.startswith('#') and '=' in baris:
+                nama, nilai = baris.split('=', 1)
+                env[nama] = nilai
+        hasil = muat(**env)
+        self.assertNotEqual(hasil.returncode, 0)
+        self.assertIn('masih berisi [ISI]. Isi nilainya atau hapus barisnya.', hasil.stderr)
+
+    def test_hsts_bukan_bilangan_bulat_ditolak(self):
+        for nilai in ('abc', '3600.5', '1 jam'):
+            with self.subTest(nilai=nilai):
+                hasil = muat(SECURE_HSTS_SECONDS=nilai)
+                self.assertNotEqual(hasil.returncode, 0)
+                self.assertIn('ImproperlyConfigured', hasil.stderr)
+                self.assertIn(
+                    'SECURE_HSTS_SECONDS harus bilangan bulat, contoh 3600.', hasil.stderr
+                )
+
     def test_check_deploy_bersih(self):
         hasil = jalankan(
             ['manage.py', 'check', '--deploy', '--fail-level', 'ERROR'],
@@ -161,6 +197,64 @@ class ComposeTanpaRahasiaTest(SimpleTestCase):
 
     def test_env_contoh_hanya_placeholder(self):
         teks = (BASE_DIR / '.env.example').read_text(encoding='utf-8')
-        for nama in ('DJANGO_SECRET_KEY', 'DB_PASSWORD', 'POSTGRES_PASSWORD',
-                     'GOOGLE_CLIENT_SECRET'):
+        for nama in ('DJANGO_SECRET_KEY', 'DB_NAME', 'DB_USER', 'DB_PASSWORD',
+                     'POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD'):
             self.assertRegex(teks, rf'(?m)^{nama}=\[ISI\]$')
+
+    def test_env_contoh_variabel_opsional_hanya_komentar(self):
+        teks = (BASE_DIR / '.env.example').read_text(encoding='utf-8')
+        for nama in ('ALLOWED_HOSTS', 'CSRF_TRUSTED_ORIGINS', 'SECURE_HSTS_SECONDS',
+                     'CPNS_URL', 'GURU_EMAILS', 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET'):
+            with self.subTest(nama=nama):
+                self.assertNotRegex(teks, rf'(?m)^{nama}=')
+                # Rahasia tanpa contoh nilai; yang lain memberi contoh yang jelas.
+                pola = '$' if nama == 'GOOGLE_CLIENT_SECRET' else r'\S'
+                self.assertRegex(teks, rf'(?m)^# {nama}={pola}')
+        self.assertNotRegex(teks, r'(?m)^# \w+=.*\[ISI\]')
+
+    def test_dockerignore_mengecualikan_env(self):
+        baris = (BASE_DIR / '.dockerignore').read_text(encoding='utf-8').splitlines()
+        self.assertIn('.env', baris)
+        for wajib in ('requirements.txt', 'scripts', 'manage.py', 'config', 'apps',
+                      'templates', 'static', '.env.example', '*'):
+            self.assertNotIn(wajib, baris)
+
+
+KODE_UJI_PG = (
+    "import json, django\n"
+    "from django.conf import settings\n"
+    "db = settings.DATABASES['default']\n"
+    "print(json.dumps({'engine': db['ENGINE'], 'name': db['NAME'], 'user': db['USER'],"
+    " 'host': db['HOST'], 'port': db['PORT'], 'hasher': settings.PASSWORD_HASHERS,"
+    " 'hosts': settings.ALLOWED_HOSTS}))\n"
+)
+
+
+class SettingsUjiPostgresTest(SimpleTestCase):
+    def muat(self, database_url):
+        env = {k: v for k, v in os.environ.items() if k not in VARIABEL}
+        env.update({k: '' for k in VARIABEL})
+        env['DJANGO_SETTINGS_MODULE'] = 'config.settings.uji_postgres'
+        env['DATABASE_URL'] = database_url
+        return subprocess.run(
+            [sys.executable, '-c', KODE_UJI_PG], cwd=BASE_DIR, env=env,
+            capture_output=True, text=True, timeout=120,
+        )
+
+    def test_database_url_dipakai(self):
+        hasil = self.muat('postgres://postgres:' + SANDI_UJI + '@uji-pg:5432/uji')
+        self.assertEqual(hasil.returncode, 0, hasil.stderr)
+        data = json.loads(hasil.stdout)
+        self.assertEqual(data['engine'], 'django.db.backends.postgresql')
+        self.assertEqual(data['name'], 'uji')
+        self.assertEqual(data['user'], 'postgres')
+        self.assertEqual(data['host'], 'uji-pg')
+        self.assertEqual(data['port'], 5432)
+        self.assertEqual(data['hasher'], ['django.contrib.auth.hashers.MD5PasswordHasher'])
+        self.assertIn('testserver', data['hosts'])
+
+    def test_tanpa_database_url_gagal_jelas(self):
+        hasil = self.muat('')
+        self.assertNotEqual(hasil.returncode, 0)
+        self.assertIn('ImproperlyConfigured', hasil.stderr)
+        self.assertIn('DATABASE_URL wajib diisi untuk uji Postgres.', hasil.stderr)
