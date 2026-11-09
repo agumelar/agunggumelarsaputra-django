@@ -36,7 +36,7 @@ class Command(BaseCommand):
     def handle(self, *args, **opsi):
         perlu = 0
         for judul, periksa in (
-            ("Akun guru", self.guru_sandi),
+            ("Akun staf/guru", self.guru_sandi),
             ("Email ganda", self.email_ganda),
             ("Pengaturan CPNS", self.pengaturan),
             ("Halaman syarat dan privasi", self.templat_hukum),
@@ -60,22 +60,20 @@ class Command(BaseCommand):
 
     def guru_sandi(self):
         User = get_user_model()
-        daftar = [e.strip().lower() for e in settings.GURU_EMAILS if e.strip()]
-        kena = []
-        if daftar:
-            cocok = Q()
-            for email in daftar:
+        cocok = Q(is_superuser=True) | Q(is_staff=True)
+        for email in (e.strip() for e in settings.GURU_EMAILS):
+            if email:
                 cocok |= Q(email__iexact=email)
-            kena = [
-                u.get_username()
-                for u in User.objects.filter(cocok).order_by("pk")
-                if u.has_usable_password()
-            ]
+        kena = [
+            u.get_username()
+            for u in User.objects.filter(cocok).order_by("pk")
+            if u.has_usable_password()
+        ]
         if not kena:
-            return True, "Tidak ada akun guru yang punya kata sandi aktif.", []
+            return True, "Tidak ada akun staf/guru yang punya kata sandi aktif.", []
         return (
             False,
-            f"{len(kena)} akun guru masih punya kata sandi yang bisa dipakai.",
+            f"{len(kena)} akun staf/guru masih punya kata sandi yang bisa dipakai.",
             [f"username: {nama}" for nama in kena] + [PANDUAN_GURU],
         )
 

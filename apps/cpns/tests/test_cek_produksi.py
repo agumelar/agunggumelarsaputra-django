@@ -78,7 +78,7 @@ class GuruTests(TestCase):
     def test_guru_dengan_sandi_aktif(self):
         User.objects.create_user("bu_guru", "Guru@Contoh.id", "rahasia-uji")
         User.objects.create_user("murid", "murid@contoh.id", "rahasia-uji")
-        b = blok(jalankan(), "akun guru")
+        b = blok(jalankan(), "akun staf/guru")
         self.assertTrue(b.startswith("[PERLU TINDAKAN]"))
         self.assertIn("bu_guru", b)
         self.assertNotIn("murid", b)
@@ -89,7 +89,7 @@ class GuruTests(TestCase):
         u = User.objects.create_user("bu_guru", "guru@contoh.id")
         u.set_unusable_password()
         u.save()
-        self.assertTrue(blok(jalankan(), "akun guru").startswith("[OK]"))
+        self.assertTrue(blok(jalankan(), "akun staf/guru").startswith("[OK]"))
 
     @override_settings(GURU_EMAILS=["guru@contoh.id"])
     def test_tanpa_email_di_keluaran(self):
@@ -101,6 +101,31 @@ class GuruTests(TestCase):
         self.assertNotIn("dobel@x.id", teks)
         self.assertNotIn("@", teks)
 
+
+    @override_settings(GURU_EMAILS=[])
+    def test_superuser_dan_staf_dengan_sandi_aktif(self):
+        User.objects.create_superuser("kepala", "kepala@contoh.id", "rahasia-uji")
+        User.objects.create_user("operator", "op@contoh.id", "rahasia-uji", is_staff=True)
+        User.objects.create_user("murid", "murid@contoh.id", "rahasia-uji")
+        b = blok(jalankan(), "akun staf/guru")
+        self.assertTrue(b.startswith("[PERLU TINDAKAN] 2 akun staf/guru masih punya kata sandi"))
+        self.assertIn("username: kepala", b)
+        self.assertIn("username: operator", b)
+        self.assertNotIn("murid", b)
+        self.assertIn("nonaktifkan kata sandinya lewat admin.", b)
+
+    @override_settings(GURU_EMAILS=["guru@contoh.id"])
+    def test_staf_sekaligus_guru_dihitung_sekali(self):
+        User.objects.create_superuser("kepala", "Guru@contoh.id", "rahasia-uji")
+        b = blok(jalankan(), "akun staf/guru")
+        self.assertIn("1 akun staf/guru", b)
+        self.assertEqual(b.count("username: kepala"), 1)
+
+    @override_settings(GURU_EMAILS=[])
+    def test_superuser_tanpa_sandi_ok(self):
+        u = User.objects.create_superuser("kepala", "kepala@contoh.id", None)
+        self.assertFalse(u.has_usable_password())
+        self.assertTrue(blok(jalankan(), "akun staf/guru").startswith("[OK]"))
 
 class EmailGandaTests(TestCase):
     def test_ganda_beda_huruf(self):
