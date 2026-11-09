@@ -18,6 +18,7 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse, JsonResponse
 from django.core.files.base import ContentFile
 
+from . import batas_masuk
 from .forms import StudentRegistrationForm, UserLoginForm, UserProfileForm, ClaimTokenForm
 from apps.admin_panel.models import EnrollmentToken, UserEnrollment
 from apps.cpns.models import AksesPeserta
@@ -137,6 +138,10 @@ def login_view(request):
         identifier = form.cleaned_data['identifier'].strip()
         password = form.cleaned_data['password']
 
+        if batas_masuk.terkunci(identifier):
+            form.add_error(None, batas_masuk.PESAN_TERKUNCI)
+            return render(request, 'accounts/login.html', {'form': form}, status=429)
+
         matched_user = None
         if '@' in identifier:
             matched_user = User.objects.filter(email__iexact=identifier).first()
@@ -151,7 +156,8 @@ def login_view(request):
             user = authenticate(request, username=matched_user.username, password=password)
             if user is not None:
                 login(request, user)
-                
+                batas_masuk.bersihkan(identifier)
+
                 # Update Daily Streak & Last Active Date
                 today = timezone.now().date()
                 if user.last_active_date != today:
@@ -173,8 +179,10 @@ def login_view(request):
                     return redirect(next_url)
                 return redirect('admin_panel:dashboard' if user.is_guru else 'core:home')
             else:
+                batas_masuk.catat_gagal(identifier)
                 form.add_error(None, "Kombinasi kata sandi tidak cocok. Silakan periksa kembali kata sandi Anda.")
         else:
+            batas_masuk.catat_gagal(identifier)
             form.add_error(None, f"Akun dengan identifier '{identifier}' tidak ditemukan. Pastikan Anda telah mendaftar.")
 
     return render(request, 'accounts/login.html', {'form': form})

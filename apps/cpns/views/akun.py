@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
+from apps.accounts import batas_masuk
 from apps.accounts.views import _is_teacher_email
 from apps.cpns.models import AksesPeserta, PengaturanCPNS
 
@@ -55,22 +56,31 @@ def masuk(request):
 
     galat = ""
     identitas = ""
+    status = 200
     if request.method == "POST":
         identitas = request.POST.get("identitas", "").strip()
         kata_sandi = request.POST.get("kata_sandi", "")
-        cocok = _cari_user(identitas) if identitas else None
-        user = (
-            authenticate(request, username=cocok.username, password=kata_sandi)
-            if cocok
-            else None
-        )
-        if user is not None:
-            login(request, user)
-            return redirect(_tujuan_aman(request) or reverse("cpns:dasbor"))
-        if cocok is not None and not cocok.has_usable_password():
-            galat = PESAN_AKUN_GOOGLE
+        if identitas and batas_masuk.terkunci(identitas):
+            galat = batas_masuk.PESAN_TERKUNCI
+            status = 429
         else:
-            galat = PESAN_MASUK_GAGAL
+            cocok = _cari_user(identitas) if identitas else None
+            user = (
+                authenticate(request, username=cocok.username, password=kata_sandi)
+                if cocok
+                else None
+            )
+            if user is not None:
+                login(request, user)
+                batas_masuk.bersihkan(identitas)
+                return redirect(_tujuan_aman(request) or reverse("cpns:dasbor"))
+            if cocok is not None and not cocok.has_usable_password():
+                # Akun Google tidak punya kata sandi untuk ditebak, jadi tidak dihitung.
+                galat = PESAN_AKUN_GOOGLE
+            else:
+                galat = PESAN_MASUK_GAGAL
+                if identitas:
+                    batas_masuk.catat_gagal(identitas)
 
     nomor_wa = "".join(c for c in PengaturanCPNS.ambil().nomor_wa if c.isdigit())
     return render(
@@ -82,6 +92,7 @@ def masuk(request):
             "next": request.POST.get("next") or request.GET.get("next", ""),
             "tautan_wa": f"https://wa.me/{nomor_wa}" if nomor_wa else "",
         },
+        status=status,
     )
 
 
