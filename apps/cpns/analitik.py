@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from apps.cpns.models import SesiSoal
-from apps.cpns.penilaian import adalah_benar
+from apps.cpns.penilaian import butir_benar
 
 
 def kelemahan_subtopik(user, minimal_dijawab: int = 3, batas: int = 3) -> list[dict]:
@@ -16,7 +16,7 @@ def kelemahan_subtopik(user, minimal_dijawab: int = 3, batas: int = 3) -> list[d
     for b in butir:
         kunci = (b.soal.subtes, b.soal.subtopik)
         hitung[kunci][1] += 1
-        if adalah_benar(b.soal, b.jawaban):
+        if butir_benar(b):
             hitung[kunci][0] += 1
     hasil = [
         {

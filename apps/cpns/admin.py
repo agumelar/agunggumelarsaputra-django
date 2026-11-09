@@ -17,6 +17,7 @@ from .models import (
     Voucher,
 )
 from .voucher import buat_voucher
+from .validasi import POIN_MAKS_BOBOT, SUBTES_PER_JENIS
 
 
 @admin.register(CpnsPackage)
@@ -57,12 +58,6 @@ class CpnsAttemptAdmin(admin.ModelAdmin):
     def get_peserta(self, obj):
         return obj.user.display_name if obj.user else f"Guest ({obj.session_key[:8]})"
     get_peserta.short_description = 'Peserta'
-
-
-SUBTES_PER_JENIS = {
-    "SKD": ("TWK", "TIU", "TKP"),
-    "SKB_GURU": ("PEDAGOGIK", "MATERI_RPL"),
-}
 
 
 class FilterStatusVoucher(admin.SimpleListFilter):
@@ -230,7 +225,7 @@ class SkemaBagianInlineFormSet(forms.BaseInlineFormSet):
                     f"Subtes {cd['subtes']} tidak cocok dengan jenis ujian {jenis}. "
                     f"Pilih salah satu: {', '.join(boleh)}."
                 )
-            per_soal = 5 if cd.get("cara_nilai") == "bobot_opsi" else (cd.get("poin_benar") or 0)
+            per_soal = POIN_MAKS_BOBOT if cd.get("cara_nilai") == "bobot_opsi" else (cd.get("poin_benar") or 0)
             maks = (cd.get("jumlah_soal") or 0) * per_soal
             if (cd.get("ambang_batas") or 0) > maks:
                 raise ValidationError(

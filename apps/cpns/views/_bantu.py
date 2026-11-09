@@ -1,4 +1,9 @@
+from functools import wraps
+
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import PermissionDenied
+from django.urls import reverse
 
 from apps.cpns.penilaian import adalah_benar
 
@@ -31,3 +36,17 @@ def opsi_ulasan(butir):
         }
         for i, asli in enumerate(butir.urutan_opsi)
     ]
+
+
+def wajib_superuser(view):
+    """Hanya superuser. Tamu ke halaman masuk CPNS, user lain mendapat 403."""
+
+    @wraps(view)
+    def dibungkus(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect_to_login(request.get_full_path(), reverse("cpns:masuk"))
+        if not request.user.is_superuser:
+            raise PermissionDenied
+        return view(request, *args, **kwargs)
+
+    return dibungkus

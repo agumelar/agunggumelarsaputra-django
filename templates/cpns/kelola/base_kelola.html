@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Kelola CPNS Hub{% endblock %}
+{% block title_suffix %} | CPNS Hub Admin{% endblock %}
+{% block main_class %}flex-1 w-full{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block onboarding_modal %}{% endblock %}
+{% block toast %}{% endblock %}
+
+{% block content %}
+{% url 'cpns:kelola_tinjau' as url_tinjau %}{% url 'cpns:kelola_cakupan' as url_cakupan %}{% url 'cpns:kelola_laporan' as url_laporan %}{% url 'admin:cpns_voucher_changelist' as url_voucher %}{% url 'admin:index' as url_admin %}
+<div class="min-h-screen flex flex-col bg-[#090D16] text-[#F3F4F6] selection:bg-[#38BDF8] selection:text-[#082F49]">
+    <header x-data="{ menuOpen: false }"
+            @keydown.escape.window="if (menuOpen) { menuOpen = false; $refs.tombolMenu.focus() }"
+            class="sticky top-0 z-40 bg-[#090D16] border-b border-white/[0.08]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-6 min-w-0">
+                <a href="{{ url_tinjau }}" class="inline-flex items-center min-h-11 font-display font-bold text-lg text-[#F3F4F6] tracking-tight whitespace-nowrap">CPNS Hub <span class="mx-2 font-normal text-[#94A3B8]" aria-hidden="true">&middot;</span> Admin</a>
+                <nav class="hidden lg:flex items-center gap-1 text-sm font-medium" aria-label="Navigasi admin">
+                    <a href="{{ url_tinjau }}" {% if menu_aktif == 'tinjau' %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if menu_aktif == 'tinjau' %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Tinjau Soal</a>
+                    {% if url_cakupan %}<a href="{{ url_cakupan }}" {% if menu_aktif == 'cakupan' %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if menu_aktif == 'cakupan' %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Cakupan Bank Soal</a>{% else %}<span class="inline-flex items-center min-h-11 px-3 text-[#94A3B8]">Cakupan Bank Soal</span>{% endif %}
+                    {% if url_laporan %}<a href="{{ url_laporan }}" {% if menu_aktif == 'laporan' %}aria-current="page"{% endif %} class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] {% if menu_aktif == 'laporan' %}text-[#38BDF8] underline decoration-2 underline-offset-8{% else %}text-[#CBD5E1]{% endif %}">Laporan Soal ({{ jumlah_laporan_baru }})</a>{% else %}<span class="inline-flex items-center min-h-11 px-3 text-[#94A3B8]">Laporan Soal ({{ jumlah_laporan_baru }})</span>{% endif %}
+                    <a href="{{ url_voucher }}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Voucher</a>
+                    <a href="{{ url_admin }}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Pengaturan (Django Admin)</a>
+                </nav>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="hidden sm:inline text-sm font-semibold text-[#F3F4F6]">{{ request.user.first_name|default:request.user.username }}</span>
+                <button type="button" x-ref="tombolMenu" @click="menuOpen = !menuOpen"
+                        :aria-expanded="menuOpen.toString()" aria-controls="kelola-mobile-menu"
+                        class="lg:hidden shrink-0 inline-flex items-center gap-2 min-h-11 px-3 rounded-lg bg-[#162032] border border-white/[0.14] text-sm font-semibold text-[#F3F4F6]">
+                    <svg x-show="!menuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"/>
+                    </svg>
+                    <svg x-show="menuOpen" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-width="2" d="M6 6l12 12M18 6L6 18"/>
+                    </svg>
+                    <span>Menu</span>
+                </button>
+            </div>
+        </div>
+
+        <nav id="kelola-mobile-menu" x-show="menuOpen" x-cloak aria-label="Menu admin"
+             class="lg:hidden border-t border-white/[0.08] bg-[#111827] px-4 pb-4 pt-2">
+            <div class="flex flex-col text-sm font-medium">
+                <a href="{{ url_tinjau }}" @click="menuOpen = false" {% if menu_aktif == 'tinjau' %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if menu_aktif == 'tinjau' %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Tinjau Soal</a>
+                {% if url_cakupan %}<a href="{{ url_cakupan }}" @click="menuOpen = false" {% if menu_aktif == 'cakupan' %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if menu_aktif == 'cakupan' %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Cakupan Bank Soal</a>{% else %}<span class="flex items-center min-h-11 border-b border-white/[0.08] text-[#94A3B8]">Cakupan Bank Soal</span>{% endif %}
+                {% if url_laporan %}<a href="{{ url_laporan }}" @click="menuOpen = false" {% if menu_aktif == 'laporan' %}aria-current="page"{% endif %} class="flex items-center min-h-11 border-b border-white/[0.08] {% if menu_aktif == 'laporan' %}text-[#38BDF8] border-l-4 border-l-[#38BDF8] pl-3 font-semibold{% else %}text-[#F3F4F6]{% endif %}">Laporan Soal ({{ jumlah_laporan_baru }})</a>{% else %}<span class="flex items-center min-h-11 border-b border-white/[0.08] text-[#94A3B8]">Laporan Soal ({{ jumlah_laporan_baru }})</span>{% endif %}
+                <a href="{{ url_voucher }}" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Voucher</a>
+                <a href="{{ url_admin }}" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Pengaturan (Django Admin)</a>
+            </div>
+        </nav>
+    </header>
+
+    {% if messages %}
+        <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 pt-4">
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                <div role="alert" class="flex items-start gap-3 p-4 mb-3 rounded-xl border text-sm bg-[#111827] border-[#F87171] text-[#F87171]">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M6 6l12 12M18 6L6 18"/></svg>
+                    <span><span class="sr-only">Gagal: </span>{{ message }}</span>
+                </div>
+                {% elif message.tags == 'warning' %}
+                <div role="status" class="flex items-start gap-3 p-4 mb-3 rounded-xl border text-sm bg-[#111827] border-[#FBBF24] text-[#FBBF24]">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M10.3 4.3L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 4.3a2 2 0 00-3.4 0z"/></svg>
+                    <span><span class="sr-only">Peringatan: </span>{{ message }}</span>
+                </div>
+                {% elif message.tags == 'success' %}
+                <div role="status" class="flex items-start gap-3 p-4 mb-3 rounded-xl border text-sm bg-[#111827] border-[#34D399] text-[#34D399]">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span><span class="sr-only">Berhasil: </span>{{ message }}</span>
+                </div>
+                {% else %}
+                <div role="status" class="flex items-start gap-3 p-4 mb-3 rounded-xl border text-sm bg-[#111827] border-[#38BDF8] text-[#7DD3FC]">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span><span class="sr-only">Info: </span>{{ message }}</span>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block kelola_content %}{% endblock %}
+</div>
+{% endblock %}

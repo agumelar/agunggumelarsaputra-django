@@ -69,6 +69,12 @@ class Soal(models.Model):
         if pesan:
             raise ValidationError(pesan)
 
+    def hitung_sidik(self):
+        return sidik_teks(self.teks)
+
     def save(self, *args, **kwargs):
-        self.sidik_teks = sidik_teks(self.teks)
+        self.sidik_teks = self.hitung_sidik()
+        campur = kwargs.get("update_fields")
+        if campur is not None and "teks" in campur and "sidik_teks" not in campur:
+            kwargs["update_fields"] = [*campur, "sidik_teks"]
         super().save(*args, **kwargs)

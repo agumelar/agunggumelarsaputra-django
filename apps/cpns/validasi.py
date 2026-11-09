@@ -9,6 +9,20 @@ SUMBER = ("draf_ai", "tulisan_sendiri", "lama")
 
 HURUF = ("A", "B", "C", "D", "E")
 
+POIN_MAKS_BOBOT = 5
+SUBTES_PER_JENIS = {
+    "SKD": ("TWK", "TIU", "TKP"),
+    "SKB_GURU": ("PEDAGOGIK", "MATERI_RPL"),
+}
+
+
+def _teks(nilai):
+    if isinstance(nilai, str):
+        return nilai.strip()
+    if isinstance(nilai, (int, float)) and not isinstance(nilai, bool):
+        return str(nilai).strip()
+    return ""
+
 
 def sidik_teks(teks):
     bersih = re.sub(r"[^\w\s]|_", " ", (teks or "").lower())
@@ -28,9 +42,14 @@ def _bobot_valid(bobot):
 def validasi_soal(data, untuk_tayang=False):
     pesan = []
 
+    if not _teks(data.get("teks")):
+        pesan.append("Isi teks soal.")
+    if not _teks(data.get("subtopik")):
+        pesan.append("Isi subtopik.")
+
     opsi = {}
     for h in HURUF:
-        isi = (data.get("opsi_" + h.lower()) or "").strip()
+        isi = _teks(data.get("opsi_" + h.lower()))
         opsi[h] = isi
         if not isi:
             pesan.append(f"Isi opsi {h}.")
@@ -38,12 +57,20 @@ def validasi_soal(data, untuk_tayang=False):
     if len(set(terisi)) != len(terisi):
         pesan.append("Ada opsi yang isinya sama persis.")
 
-    if data.get("subtes") == "TKP":
+    jenis = data.get("jenis_ujian")
+    subtes = data.get("subtes")
+    if jenis not in JENIS:
+        pesan.append(f"Jenis ujian {jenis or '(kosong)'} tidak dikenal.")
+    boleh = SUBTES_PER_JENIS.get(jenis)
+    if boleh is not None and subtes and subtes not in boleh:
+        pesan.append(f"Subtes {subtes} tidak cocok dengan jenis ujian {jenis}.")
+
+    if subtes == "TKP":
         if not _bobot_valid(data.get("bobot")):
             pesan.append(
-                "Isi bobot TKP: kunci A sampai E, nilainya 1, 2, 3, 4, 5 dan tidak boleh ada yang sama."
+                "Isi bobot TKP untuk opsi A sampai E dengan nilai 1, 2, 3, 4, 5 yang semuanya berbeda."
             )
-    elif (data.get("kunci") or "") not in HURUF:
+    elif _teks(data.get("kunci")) not in HURUF:
         pesan.append("Pilih kunci jawaban (A sampai E).")
 
     for nama, label in (
@@ -51,7 +78,7 @@ def validasi_soal(data, untuk_tayang=False):
         ("pembahasan_pengecoh", "pengecoh"),
         ("pembahasan_cepat", "cepat"),
     ):
-        if not (data.get(nama) or "").strip():
+        if not _teks(data.get(nama)):
             pesan.append(f"Isi pembahasan {label}.")
 
     if untuk_tayang and not data.get("ditinjau_oleh"):

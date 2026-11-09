@@ -68,6 +68,7 @@ class SesiSoal(models.Model):
     ragu = models.BooleanField(default=False)
     dijawab_pada = models.DateTimeField(null=True, blank=True)
     poin = models.IntegerField(null=True, blank=True)
+    benar = models.BooleanField(null=True)
 
     class Meta:
         ordering = ["nomor"]

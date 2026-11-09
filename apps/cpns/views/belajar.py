@@ -7,7 +7,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from apps.cpns.akses import boleh_belajar_paket, boleh_belajar_subtopik
 from apps.cpns.models import PaketBelajar, Sesi, Soal
-from apps.cpns.penilaian import POIN_MAKS_BOBOT, adalah_benar
+from apps.cpns.penilaian import POIN_MAKS_BOBOT, adalah_benar, butir_benar
 from apps.cpns.perakitan import BankSoalKurang, rakit_sesi_belajar
 from apps.cpns.sesi_layanan import SesiSudahSelesai, kumpulkan, simpan_jawaban
 from apps.cpns.validasi import SUBTES
@@ -171,7 +171,7 @@ def _konteks_umpan_balik(sesi, butir):
     konteks = _konteks_soal(sesi, butir)
     konteks.update(
         {
-            "benar": adalah_benar(butir.soal, butir.jawaban),
+            "benar": butir_benar(butir),
             "dijawab": bool(butir.jawaban),
             "kalimat_hasil": _kalimat_hasil(butir),
             "opsi": opsi_ulasan(butir),
@@ -208,7 +208,9 @@ def jawab_belajar(request, sesi_id, nomor):
             if terkunci.status == "selesai":
                 raise SesiSudahSelesai(f"Sesi {sesi.pk} sudah selesai")
             if sesi.butir.filter(nomor=nomor, jawaban="").exists():
-                simpan_jawaban(sesi, nomor, jawaban, False)
+                butir = simpan_jawaban(sesi, nomor, jawaban, False)
+                butir.benar = adalah_benar(butir.soal, butir.jawaban)
+                butir.save(update_fields=["benar"])
     except SesiSudahSelesai:
         return HttpResponse("Sesi belajar ini sudah selesai.", status=409)
     if request.headers.get("HX-Request") != "true":
@@ -235,7 +237,7 @@ def _rekap_subtopik(butir_semua):
         baris["total"] += 1
         if butir.jawaban:
             baris["dijawab"] += 1
-            baris["benar"] += adalah_benar(soal, butir.jawaban)
+            baris["benar"] += butir_benar(butir)
     for baris in rekap.values():
         baris["persen"] = _persen(baris["benar"], baris["dijawab"]) if baris["dijawab"] else None
     return list(rekap.values())
@@ -259,7 +261,7 @@ def ringkasan_belajar(request, sesi_id):
         "judul_sesi": _judul_sesi(sesi),
         "jumlah": len(butir_semua),
         "jumlah_dijawab": len(dijawab),
-        "jumlah_benar": sum(adalah_benar(b.soal, b.jawaban) for b in dijawab),
+        "jumlah_benar": sum(butir_benar(b) for b in dijawab),
         "rekap": _rekap_subtopik(butir_semua),
         "belum_dijawab": [b for b in butir_semua if not b.jawaban],
         "ulangi_paket": _paket_bisa_diulang(request.user, sesi),

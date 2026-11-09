@@ -1,0 +1,127 @@
+{% extends 'cpns/kelola/base_kelola.html' %}
+
+{% block title %}Edit Soal{% endblock %}
+
+{% block kelola_content %}
+{% with kelas_input="w-full min-h-11 px-3 py-2 rounded-lg bg-[#0B1220] border border-white/[0.14] text-sm text-[#F3F4F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]" %}
+<div class="max-w-4xl mx-auto w-full px-4 sm:px-6 py-5 flex flex-col gap-5 flex-1"
+     x-data="{ subtes: '{{ subtes_awal }}' }">
+
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <h1 class="font-display text-xl font-bold">Edit soal nomor {{ soal.id }}</h1>
+        <a href="{{ url_kembali }}" class="inline-flex items-center min-h-11 px-4 rounded-lg bg-[#111827] border border-white/[0.14] font-semibold hover:bg-[#162032] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">Kembali ke tinjau</a>
+    </div>
+
+    <form method="post" action="{% url 'cpns:kelola_ubah' soal.id %}{% if query_filter %}?{{ query_filter }}{% endif %}"
+          class="flex flex-col gap-5" novalidate>
+        {% csrf_token %}
+
+        {% if form.errors %}
+        <div role="alert" class="rounded-xl border border-[#F87171] bg-[#111827] p-4 text-sm text-[#F87171]">
+            <p class="flex items-center gap-2 font-semibold">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M6 6l12 12M18 6L6 18"/></svg>
+                <span><span class="sr-only">Gagal: </span>Perubahan belum disimpan. Perbaiki bagian berikut.</span>
+            </p>
+            <ul class="mt-2 ml-7 list-disc text-[#FCA5A5]">
+                {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+                {% for field in form %}{% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}{% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <section class="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 sm:p-6 grid gap-4 sm:grid-cols-2" aria-label="Data soal">
+            <div class="flex flex-col gap-1">
+                <span class="text-xs text-[#94A3B8]">Jenis ujian (tidak bisa diubah)</span>
+                <p class="min-h-11 flex items-center px-3 rounded-lg border border-white/[0.08] font-mono text-sm">{{ soal.get_jenis_ujian_display }}</p>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="{{ form.subtes.id_for_label }}" class="text-xs text-[#94A3B8]">Subtes</label>
+                <select name="subtes" id="{{ form.subtes.id_for_label }}" x-model="subtes"{% if form.subtes_terkunci %} disabled aria-describedby="subtes-terkunci"{% endif %} class="{{ kelas_input }} disabled:opacity-70 disabled:cursor-not-allowed">
+                    {% for nilai, label in form.fields.subtes.choices %}<option value="{{ nilai }}" {% if form.subtes.value == nilai %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                </select>
+                {% if form.subtes_terkunci %}<p id="subtes-terkunci" class="text-xs text-[#FBBF24]">Subtes tidak bisa diubah karena soal ini sudah dipakai di sesi peserta. Tolak soal ini lalu buat soal baru bila subtesnya salah.</p>{% endif %}
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="{{ form.subtopik.id_for_label }}" class="text-xs text-[#94A3B8]">Subtopik</label>
+                <input type="text" name="subtopik" id="{{ form.subtopik.id_for_label }}" value="{{ form.subtopik.value|default_if_none:'' }}" maxlength="120" class="{{ kelas_input }}">
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="{{ form.tingkat.id_for_label }}" class="text-xs text-[#94A3B8]">Tingkat</label>
+                <select name="tingkat" id="{{ form.tingkat.id_for_label }}" class="{{ kelas_input }}">
+                    {% for nilai, label in form.fields.tingkat.choices %}<option value="{{ nilai }}" {% if form.tingkat.value == nilai %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                </select>
+            </div>
+        </section>
+
+        <section class="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 sm:p-6 flex flex-col gap-4" aria-label="Teks dan opsi">
+            <div class="flex flex-col gap-1">
+                <label for="{{ form.teks.id_for_label }}" class="text-xs text-[#94A3B8]">Teks soal</label>
+                <textarea name="teks" id="{{ form.teks.id_for_label }}" rows="5" class="{{ kelas_input }}">{{ form.teks.value|default_if_none:'' }}</textarea>
+            </div>
+            {% for field in form %}{% if field.name|slice:":5" == "opsi_" %}
+            <div class="flex flex-col gap-1">
+                <label for="{{ field.id_for_label }}" class="text-xs text-[#94A3B8]">{{ field.label }}</label>
+                <textarea name="{{ field.name }}" id="{{ field.id_for_label }}" rows="2" class="{{ kelas_input }} font-mono">{{ field.value|default_if_none:'' }}</textarea>
+            </div>
+            {% endif %}{% endfor %}
+
+            <div x-show="subtes !== 'TKP'" class="flex flex-col gap-1 sm:w-1/2">
+                <label for="{{ form.kunci.id_for_label }}" class="text-xs text-[#94A3B8]">Kunci jawaban</label>
+                <select name="kunci" id="{{ form.kunci.id_for_label }}" :disabled="subtes === 'TKP'" class="{{ kelas_input }}">
+                    {% for nilai, label in form.fields.kunci.choices %}<option value="{{ nilai }}" {% if form.kunci.value == nilai %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                </select>
+            </div>
+
+            <fieldset x-show="subtes === 'TKP'" x-cloak class="rounded-xl border border-white/[0.08] p-4">
+                <legend class="px-2 text-sm font-semibold">Bobot TKP (pakai 1, 2, 3, 4, 5 masing-masing sekali)</legend>
+                <div class="mt-2 grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    {% for field in form %}{% if field.name|slice:":6" == "bobot_" %}
+                    <div class="flex flex-col gap-1">
+                        <label for="{{ field.id_for_label }}" class="text-xs text-[#94A3B8]">{{ field.label }}</label>
+                        <input type="number" name="{{ field.name }}" id="{{ field.id_for_label }}" min="1" max="5" value="{{ field.value|default_if_none:'' }}" class="{{ kelas_input }} font-mono">
+                    </div>
+                    {% endif %}{% endfor %}
+                </div>
+            </fieldset>
+        </section>
+
+        <section class="rounded-2xl border border-white/[0.08] bg-[#111827] p-5 sm:p-6 flex flex-col gap-4" aria-label="Pembahasan">
+            <div class="flex flex-col gap-1">
+                <label for="{{ form.pembahasan_konsep.id_for_label }}" class="text-xs text-[#94A3B8]">Pembahasan: konsep</label>
+                <textarea name="pembahasan_konsep" id="{{ form.pembahasan_konsep.id_for_label }}" rows="3" class="{{ kelas_input }}">{{ form.pembahasan_konsep.value|default_if_none:'' }}</textarea>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="{{ form.pembahasan_pengecoh.id_for_label }}" class="text-xs text-[#94A3B8]">Pembahasan: kenapa opsi lain salah</label>
+                <textarea name="pembahasan_pengecoh" id="{{ form.pembahasan_pengecoh.id_for_label }}" rows="3" class="{{ kelas_input }}">{{ form.pembahasan_pengecoh.value|default_if_none:'' }}</textarea>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="{{ form.pembahasan_cepat.id_for_label }}" class="text-xs text-[#94A3B8]">Pembahasan: cara cepat</label>
+                <textarea name="pembahasan_cepat" id="{{ form.pembahasan_cepat.id_for_label }}" rows="3" class="{{ kelas_input }}">{{ form.pembahasan_cepat.value|default_if_none:'' }}</textarea>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="{{ form.rujukan.id_for_label }}" class="text-xs text-[#94A3B8]">Rujukan</label>
+                <textarea name="rujukan" id="{{ form.rujukan.id_for_label }}" rows="2" class="{{ kelas_input }}">{{ form.rujukan.value|default_if_none:'' }}</textarea>
+            </div>
+            <label class="inline-flex items-center gap-3 min-h-11 text-sm">
+                <input type="checkbox" name="perlu_cek" {% if form.perlu_cek.value %}checked{% endif %} class="w-5 h-5 accent-[#38BDF8]">
+                Perlu cek fakta
+            </label>
+            {% if form.status_awal == 'ditolak' %}
+            <label class="inline-flex items-center gap-3 min-h-11 text-sm">
+                <input type="checkbox" name="kembalikan_draf" {% if form.kembalikan_draf.value %}checked{% endif %} class="w-5 h-5 accent-[#38BDF8]">
+                Kembalikan ke draf
+            </label>
+            {% endif %}
+            {% if form.status_awal == 'tayang' %}
+            <p class="text-sm text-[#FBBF24]">Soal ini sudah tayang. Perubahan langsung terlihat peserta, hasil lama tidak berubah.</p>
+            {% endif %}
+        </section>
+
+        <div class="flex flex-wrap items-center gap-3">
+            <button type="submit" class="inline-flex items-center min-h-11 px-5 rounded-lg bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">Simpan perubahan</button>
+            <a href="{{ url_kembali }}" class="inline-flex items-center min-h-11 px-4 rounded-lg font-semibold hover:bg-[#162032] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">Batal</a>
+        </div>
+    </form>
+</div>
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'cpns/kelola/base_kelola.html' %}
+
+{% block title %}Laporan Soal{% endblock %}
+
+{% block kelola_content %}
+<div class="max-w-4xl mx-auto w-full px-4 sm:px-6 py-5 flex flex-col gap-5 flex-1">
+    <div class="flex flex-wrap items-end justify-between gap-3">
+        <h1 class="font-display text-2xl font-bold">Laporan Soal</h1>
+        <form method="get" action="{% url 'cpns:kelola_laporan' %}" class="flex items-end gap-2" aria-label="Filter laporan">
+            <label class="flex flex-col gap-1 text-xs text-[#94A3B8]">Status
+                <select name="status" class="min-h-11 px-3 rounded-lg bg-[#111827] border border-white/[0.14] text-sm text-[#F3F4F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">
+                    {% for nilai, label in pilihan_status %}<option value="{{ nilai }}" {% if status == nilai %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                </select>
+            </label>
+            <button type="submit" class="min-h-11 px-4 rounded-lg bg-[#162032] border border-white/[0.14] text-sm font-semibold text-[#F3F4F6] hover:bg-[#1E2A40] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">Terapkan</button>
+        </form>
+    </div>
+
+    {% for k in kelompok %}
+    <section class="rounded-2xl border border-white/[0.08] bg-[#111827] p-4 sm:p-5 flex flex-col gap-4" aria-labelledby="soal-{{ k.soal.id }}">
+        <div class="flex flex-col gap-2">
+            <p class="font-mono text-xs text-[#94A3B8] flex flex-wrap gap-x-3 gap-y-1">
+                <span>{{ k.jumlah }} laporan</span>
+                <span>{{ k.soal.subtes }}</span>
+                <span>Status soal: {{ k.soal.get_status_display }}</span>
+            </p>
+            <h2 id="soal-{{ k.soal.id }}" class="text-base font-semibold text-[#F3F4F6] break-words">{{ k.soal.teks|truncatechars:160 }}</h2>
+            <a href="{% url 'cpns:kelola_tinjau_soal' k.soal.id %}" class="self-start inline-flex items-center min-h-11 px-4 rounded-lg bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] font-semibold text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F3F4F6]">Tinjau soal ini</a>
+        </div>
+        <ul class="flex flex-col divide-y divide-white/[0.08]">
+            {% for lap in k.laporan %}
+            <li class="py-3 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div class="min-w-0 text-sm">
+                    <p class="font-semibold text-[#F3F4F6]">{{ lap.get_alasan_display }}
+                        <span class="ml-2 font-normal text-xs {% if lap.status == 'baru' %}text-[#FBBF24]{% else %}text-[#34D399]{% endif %}">{{ lap.get_status_display }}</span>
+                    </p>
+                    {% if lap.catatan %}<p class="mt-1 text-[#CBD5E1] break-words">{{ lap.catatan }}</p>{% endif %}
+                    <p class="mt-1 font-mono text-xs text-[#94A3B8]">{{ lap.user.first_name|default:lap.user.username }} <span aria-hidden="true">&middot;</span> {{ lap.dibuat_pada|date:"d M Y H:i" }}</p>
+                </div>
+                {% if lap.status == 'baru' %}
+                <form method="post" action="{% url 'cpns:kelola_laporan_selesai' lap.id %}" class="shrink-0">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="{{ status }}">
+                    <button type="submit" class="min-h-11 px-4 rounded-lg bg-[#162032] border border-white/[0.14] text-sm font-semibold text-[#F3F4F6] hover:bg-[#1E2A40] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#38BDF8]">Tandai selesai</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% empty %}
+    <section class="rounded-2xl border border-white/[0.08] bg-[#111827] p-8 text-center">
+        <p class="text-sm text-[#CBD5E1]">{% if status == 'selesai' %}Belum ada laporan selesai.{% elif status == 'semua' %}Belum ada laporan.{% else %}Belum ada laporan baru.{% endif %}</p>
+    </section>
+    {% endfor %}
+</div>
+{% endblock %}

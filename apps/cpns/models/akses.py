@@ -39,6 +39,13 @@ class LaporanSoal(models.Model):
 
     class Meta:
         ordering = ["-dibuat_pada"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["soal", "user"],
+                condition=models.Q(status="baru"),
+                name="satu_laporan_baru_per_user",
+            )
+        ]
 
     def __str__(self):
         return f"Laporan {self.alasan} soal {self.soal_id}"
