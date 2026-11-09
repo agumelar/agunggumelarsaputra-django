@@ -1,6 +1,6 @@
 # Kisi-kisi CPNS Hub
 
-Draf, menunggu persetujuan pemilik.
+Disetujui pemilik pada 2026-11-09.
 
 Tabel di bawah ini adalah daftar subtopik yang ingin dicakup bank soal. Setiap baris adalah satu subtopik, lengkap dengan jenis ujian dan subtesnya. Kolom Target adalah jumlah soal tayang yang kita inginkan untuk subtopik itu. Halaman Cakupan membandingkan target ini dengan jumlah soal tayang yang ada, supaya kelihatan subtopik mana yang masih kurang. Semua angka target adalah usulan dan boleh diubah pemilik. Hanya tabel yang dibaca program, jadi penjelasan ini bebas diedit.
 
