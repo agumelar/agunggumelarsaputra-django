@@ -398,11 +398,19 @@ def google_oauth_callback_view(request):
 
 def logout_view(request):
     """
-    Logout pengguna.
+    GET menampilkan konfirmasi; keluar hanya lewat POST (dilindungi CSRF).
     """
-    logout(request)
-    messages.info(request, "Anda telah berhasil keluar dari akun.")
-    return redirect('core:home')
+    if request.method == 'POST':
+        logout(request)
+        messages.info(request, "Anda telah berhasil keluar dari akun.")
+        return redirect('core:home')
+    if not request.user.is_authenticated:
+        return redirect('core:home')
+    di_cpns = getattr(request, 'is_cpns_subdomain', False)
+    return render(request, 'accounts/keluar.html', {
+        'base_template': 'cpns/base_cpns.html' if di_cpns else 'base.html',
+        'url_batal': reverse('cpns:dasbor') if di_cpns else reverse('core:home'),
+    })
 
 
 @login_required
