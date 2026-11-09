@@ -60,11 +60,12 @@ def masuk(request):
     if request.method == "POST":
         identitas = request.POST.get("identitas", "").strip()
         kata_sandi = request.POST.get("kata_sandi", "")
-        if identitas and batas_masuk.terkunci(identitas):
+        cocok = _cari_user(identitas) if identitas else None
+        kunci = batas_masuk.kunci_untuk(cocok, identitas)
+        if identitas and batas_masuk.terkunci(kunci):
             galat = batas_masuk.PESAN_TERKUNCI
             status = 429
         else:
-            cocok = _cari_user(identitas) if identitas else None
             user = (
                 authenticate(request, username=cocok.username, password=kata_sandi)
                 if cocok
@@ -72,7 +73,7 @@ def masuk(request):
             )
             if user is not None:
                 login(request, user)
-                batas_masuk.bersihkan(identitas)
+                batas_masuk.bersihkan(kunci)
                 return redirect(_tujuan_aman(request) or reverse("cpns:dasbor"))
             if cocok is not None and not cocok.has_usable_password():
                 # Akun Google tidak punya kata sandi untuk ditebak, jadi tidak dihitung.
@@ -80,7 +81,7 @@ def masuk(request):
             else:
                 galat = PESAN_MASUK_GAGAL
                 if identitas:
-                    batas_masuk.catat_gagal(identitas)
+                    batas_masuk.catat_gagal(kunci)
 
     nomor_wa = "".join(c for c in PengaturanCPNS.ambil().nomor_wa if c.isdigit())
     return render(

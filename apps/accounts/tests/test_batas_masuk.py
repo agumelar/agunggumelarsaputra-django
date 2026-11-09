@@ -20,6 +20,7 @@ class BatasMasukTest(TestCase):
             username="budi", email="budi@x.id", password=SANDI, role=User.ROLE_PESERTA
         )
         self.url = reverse("cpns:masuk")
+        self.kunci = f"u:{self.user.pk}"
 
     def masuk(self, identitas="budi@x.id", sandi="salah-salah"):
         return self.client.post(
@@ -32,16 +33,16 @@ class BatasMasukTest(TestCase):
 
     def test_lima_gagal_lalu_terkunci(self):
         self.gagal(4)
-        self.assertFalse(batas_masuk.terkunci("budi@x.id"))
+        self.assertFalse(batas_masuk.terkunci(self.kunci))
         self.gagal(1)
-        self.assertTrue(batas_masuk.terkunci("budi@x.id"))
+        self.assertTrue(batas_masuk.terkunci(self.kunci))
         self.assertContains(self.masuk(), PESAN, status_code=429)
 
     def test_variasi_huruf_dan_spasi_dihitung_sama(self):
         for ketikan in ["Budi@x.id", " budi@x.id", "BUDI@X.ID ", "budi@x.id", " Budi@X.id "]:
             self.masuk(ketikan)
-        self.assertEqual(PercobaanMasuk.objects.filter(kunci="budi@x.id").count(), 5)
-        self.assertTrue(batas_masuk.terkunci("  BUDI@x.id"))
+        self.assertEqual(PercobaanMasuk.objects.filter(kunci=self.kunci).count(), 5)
+        self.assertTrue(batas_masuk.terkunci(self.kunci))
 
     def test_benar_saat_terkunci_tetap_ditolak(self):
         self.gagal(5)
@@ -61,6 +62,37 @@ class BatasMasukTest(TestCase):
         self.gagal(3)
         self.masuk(sandi=SANDI)
         self.assertEqual(PercobaanMasuk.objects.count(), 0)
+
+    def test_email_dan_username_dihitung_satu_akun(self):
+        self.gagal(3, "budi@x.id")
+        self.gagal(2, "budi")
+        self.assertEqual(self.masuk("budi@x.id", SANDI).status_code, 429)
+        self.assertEqual(self.masuk("BUDI", SANDI).status_code, 429)
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_berhasil_dengan_username_membersihkan_hitungan_email(self):
+        self.gagal(3, "budi@x.id")
+        self.masuk("budi", SANDI)
+        self.assertEqual(PercobaanMasuk.objects.count(), 0)
+
+    def test_terkunci_tidak_memanggil_authenticate(self):
+        self.gagal(5)
+        with patch("apps.cpns.views.akun.authenticate") as auth:
+            self.masuk(sandi=SANDI)
+        auth.assert_not_called()
+
+    def test_identitas_tak_dikenal_tidak_bertabrakan_dengan_kunci_akun(self):
+        self.gagal(5, f"u:{self.user.pk}")
+        self.assertFalse(batas_masuk.terkunci(self.kunci))
+
+    def test_sekolah_campur_email_username_nisn(self):
+        self.user.nisn = "0012345678"
+        self.user.save()
+        url = reverse("accounts:login")
+        for ketik in ["budi@x.id", "budi", "0012345678", "BUDI@x.id", "Budi"]:
+            self.client.post(url, {"identifier": ketik, "password": "salah-salah"})
+        r = self.client.post(url, {"identifier": "0012345678", "password": SANDI})
+        self.assertContains(r, PESAN, status_code=429)
 
     def test_login_sekolah_juga_dibatasi(self):
         url = reverse("accounts:login")
@@ -85,5 +117,5 @@ class BatasMasukTest(TestCase):
     def test_baris_lebih_dari_sehari_dihapus(self):
         lama = timezone.now() - timedelta(days=2)
         PercobaanMasuk.objects.create(kunci="lama", waktu=lama)
-        batas_masuk.catat_gagal("baru")
+        batas_masuk.catat_gagal("i:baru")
         self.assertFalse(PercobaanMasuk.objects.filter(kunci="lama").exists())

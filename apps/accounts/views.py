@@ -138,10 +138,6 @@ def login_view(request):
         identifier = form.cleaned_data['identifier'].strip()
         password = form.cleaned_data['password']
 
-        if batas_masuk.terkunci(identifier):
-            form.add_error(None, batas_masuk.PESAN_TERKUNCI)
-            return render(request, 'accounts/login.html', {'form': form}, status=429)
-
         matched_user = None
         if '@' in identifier:
             matched_user = User.objects.filter(email__iexact=identifier).first()
@@ -152,11 +148,16 @@ def login_view(request):
             if not matched_user:
                 matched_user = User.objects.filter(nip__iexact=identifier).first()
 
+        kunci = batas_masuk.kunci_untuk(matched_user, identifier)
+        if batas_masuk.terkunci(kunci):
+            form.add_error(None, batas_masuk.PESAN_TERKUNCI)
+            return render(request, 'accounts/login.html', {'form': form}, status=429)
+
         if matched_user:
             user = authenticate(request, username=matched_user.username, password=password)
             if user is not None:
                 login(request, user)
-                batas_masuk.bersihkan(identifier)
+                batas_masuk.bersihkan(kunci)
 
                 # Update Daily Streak & Last Active Date
                 today = timezone.now().date()
@@ -179,10 +180,10 @@ def login_view(request):
                     return redirect(next_url)
                 return redirect('admin_panel:dashboard' if user.is_guru else 'core:home')
             else:
-                batas_masuk.catat_gagal(identifier)
+                batas_masuk.catat_gagal(kunci)
                 form.add_error(None, "Kombinasi kata sandi tidak cocok. Silakan periksa kembali kata sandi Anda.")
         else:
-            batas_masuk.catat_gagal(identifier)
+            batas_masuk.catat_gagal(kunci)
             form.add_error(None, f"Akun dengan identifier '{identifier}' tidak ditemukan. Pastikan Anda telah mendaftar.")
 
     return render(request, 'accounts/login.html', {'form': form})
