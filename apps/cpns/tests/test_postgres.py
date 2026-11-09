@@ -9,15 +9,13 @@ from unittest import skipUnless
 
 from django.contrib.auth import get_user_model
 from django.db import close_old_connections, connection
-from django.test import Client, TransactionTestCase
-from django.urls import reverse
+from django.test import Client, SimpleTestCase, TransactionTestCase
+from django.urls import resolve, reverse
 from django.utils import timezone
 
 from apps.cpns.models import AksesPeserta, PercobaanVoucher, Sesi, SkemaUjian, Voucher
 from apps.cpns.tests.pabrik import isi_bank_skd
 from apps.cpns.voucher import VoucherDitolak, pakai_voucher
-
-HOST_CPNS = "cpns.agunggumelarsaputra.com"
 
 
 def jalankan_bersamaan(kerja, jumlah=2):
@@ -40,7 +38,17 @@ def jalankan_bersamaan(kerja, jumlah=2):
         t.start()
     for t in threads:
         t.join(timeout=60)
+    for t in threads:
+        assert not t.is_alive(), "Thread tidak selesai dalam 60 detik."
     return hasil
+
+
+class AlamatTesKonkurensiTest(SimpleTestCase):
+    """Tidak di-skip: memastikan alamat yang dipakai tes Postgres benar-benar ada."""
+
+    def test_alamat_mulai_cat_terpecahkan(self):
+        url = reverse("cpns:cat_mulai", args=["SKD-CAT"])
+        self.assertEqual(resolve(url).view_name, "cpns:cat_mulai")
 
 
 @skipUnless(connection.vendor == "postgresql", "Butuh PostgreSQL untuk uji konkurensi.")
@@ -68,22 +76,35 @@ class KonkurensiPostgresTest(TransactionTestCase):
         self.assertGreaterEqual(akses.premium_sampai, sebelum + timedelta(days=30))
         self.assertLess(akses.premium_sampai, timezone.now() + timedelta(days=31))
         self.assertEqual(Voucher.objects.get(kode="AAAA-BBBB").dipakai_oleh, self.user)
+        # Pemenang dan yang kalah sama-sama dicatat atas nama user yang sama.
+        percobaan = PercobaanVoucher.objects.filter(user=self.user)
+        self.assertEqual(percobaan.filter(berhasil=True).count(), 1)
+        self.assertEqual(percobaan.filter(berhasil=False).count(), 1)
 
     def test_dua_thread_mulai_cat_satu_sesi_berjalan(self):
         AksesPeserta.objects.create(user=self.user, via_google=True)
         isi_bank_skd()
         skema = SkemaUjian.objects.get(kode="SKD-CAT")
 
-        def mulai(i):
-            klien = Client()
-            klien.force_login(self.user)
-            return klien.post(
-                reverse("cpns:cat_mulai", args=[skema.kode]), HTTP_HOST=HOST_CPNS
-            ).status_code
+        # Klien dan login disiapkan sebelum thread jalan supaya dua POST benar-benar berlomba.
+        klien = [Client(), Client()]
+        for k in klien:
+            k.force_login(self.user)
+        url = reverse("cpns:cat_mulai", args=[skema.kode])
 
-        hasil = jalankan_bersamaan(mulai)
+        hasil = jalankan_bersamaan(lambda i: klien[i].post(url))
 
         self.assertTrue(all(h[1] is None for h in hasil), hasil)
+        respons = [h[0] for h in hasil]
+        self.assertEqual([r.status_code for r in respons], [302, 302])
+        sesi = Sesi.objects.get(user=self.user, mode="cat", status="berjalan")
+        ruang = reverse("cpns:cat_ruang", args=[sesi.pk])
+        dasbor = reverse("cpns:dasbor")
+        lokasi = [r["Location"] for r in respons]
+        # Pemenang selalu ke ruang. Yang kalah ke ruang yang sama (bentrok di database)
+        # atau ke dasbor (terlambat sedikit dan ditolak "selesaikan dulu").
+        self.assertIn(ruang, lokasi)
+        self.assertTrue(all(l in (ruang, dasbor) for l in lokasi), lokasi)
         self.assertEqual(
             Sesi.objects.filter(user=self.user, mode="cat", status="berjalan").count(), 1
         )
