@@ -7,7 +7,7 @@ Tanda `<...>` berarti ganti dengan nilai Anda. Nilai rahasia tidak pernah dituli
 ## A. Tugas pemilik sebelum deploy
 
 1. **Syarat Layanan dan Kebijakan Privasi.** Baca kedua halaman. Isi `[KEBIJAKAN PENGEMBALIAN DANA]` dan `[NAMA DAN KONTAK PENGELOLA]`, lalu hapus kalimat "Draf, menunggu tinjauan pengelola.". Lokasinya `templates/cpns/publik/syarat.html` dan `templates/cpns/publik/privasi.html`.
-   - Teks yang Anda tulis tidak boleh memuat kata "resmi". Ada tes yang memeriksa kata itu di halaman publik, dan situs ini bukan layanan pemerintah.
+   - Teks yang Anda tulis tidak boleh memuat kata "resmi" atau "soal asli", dan tidak boleh memakai tanda pisah panjang (—). Ada tes yang memeriksa ketiganya di halaman publik, dan situs ini bukan layanan pemerintah.
 2. **Google Cloud Console.** Tambahkan alamat balik ini pada OAuth client yang sama dengan situs utama:
    `https://cpns.agunggumelarsaputra.com/accounts/oauth/google/callback/`
 3. **Admin produksi** (setelah deploy). Buka Django Admin, lalu isi Pengaturan CPNS: nomor WhatsApp, harga per durasi, dan pesan WA.
@@ -132,56 +132,41 @@ Suite tes dijalankan di kontainer Postgres sementara. Ini tidak menyentuh databa
 
 ### D.2 Pemeriksaan hanya baca
 
-Tidak ada perintah di langkah ini yang menulis ke database.
+Tidak ada perintah di langkah ini yang menulis ke database. Kontainer yang berjalan masih memakai kode lama.
 
-1. Periksa cabang dan commit di VPS, nama-nama kunci `.env` (tanpa nilainya, contoh `cut -d= -f1 .env`), konfigurasi nginx, dan status kontainer (`docker compose ps`).
-2. **Kata sandi akun superuser seed.** Seed lama membuat akun admin dengan kata sandi bawaan lama yang ada di riwayat git. Periksa apakah akun itu masih memakainya. Perintah ini meminta Anda mengetik kata sandi bawaan lama tersebut (tidak tampil di layar) dan hanya membandingkan, tanpa menyimpan apa pun:
+**D.2.1 Keadaan server.** Periksa:
+- cabang dan commit di VPS;
+- nama-nama kunci `.env`, tanpa nilainya (contoh `cut -d= -f1 .env`);
+- konfigurasi nginx;
+- status kontainer (`docker compose ps`).
 
-   ```
-   docker exec -it ags-django-app python manage.py shell -c "import getpass; from django.contrib.auth import get_user_model; from django.contrib.auth.hashers import check_password; u = get_user_model().objects.filter(email__iexact='agumelarsaputra@gmail.com').first(); print('Akun tidak ada' if u is None else ('MASIH KATA SANDI BAWAAN, segera ganti' if check_password(getpass.getpass('Kata sandi bawaan lama: '), u.password) else 'Bukan kata sandi bawaan'))"
-   ```
+**D.2.2 Kata sandi akun superuser seed.** Seed lama membuat akun admin dengan kata sandi bawaan lama yang ada di riwayat git. Periksa apakah akun itu masih memakainya. Perintah ini meminta Anda mengetik kata sandi bawaan lama tersebut. Ketikannya tidak tampil di layar, dan perintah ini hanya membandingkan tanpa menyimpan apa pun:
 
-   Kalau hasilnya "MASIH KATA SANDI BAWAAN", ganti setelah deploy dengan `docker exec -it ags-django-app python manage.py changepassword <username>`. Seed baru tidak lagi memasang kata sandi dan tidak mengubah akun yang sudah ada.
-3. **Daftar akun staf dan superuser** untuk ditinjau. Setiap akun yang tidak dikenal atau tidak dipakai sebaiknya dinonaktifkan lewat admin:
+```
+docker exec -it ags-django-app python manage.py shell -c "import getpass; from django.contrib.auth import get_user_model; from django.contrib.auth.hashers import check_password; u = get_user_model().objects.filter(email__iexact='agumelarsaputra@gmail.com').first(); print('Akun tidak ada' if u is None else ('MASIH KATA SANDI BAWAAN, segera ganti' if check_password(getpass.getpass('Kata sandi bawaan lama: '), u.password) else 'Bukan kata sandi bawaan'))"
+```
 
-   ```
-   docker exec -i ags-django-app python manage.py shell <<'EOF'
-   from django.contrib.auth import get_user_model
-   from django.db.models import Q
-   for u in get_user_model().objects.filter(Q(is_staff=True) | Q(is_superuser=True)).order_by("pk"):
-       print(u.username, "staf" if u.is_staff else "-", "superuser" if u.is_superuser else "-",
-             "sandi aktif" if u.has_usable_password() else "tanpa sandi", u.last_login)
-   EOF
-   ```
+Kalau hasilnya "MASIH KATA SANDI BAWAAN", **ganti sekarang juga**, sebelum lanjut:
 
-   Kalau akun `guru_agung` dari seed lama belum pernah diberi kata sandi, akun itu tetap tampil "sandi aktif" walaupun kata sandinya kosong dan tidak bisa dipakai masuk. Agar rapi, nonaktifkan kata sandinya lewat admin.
-4. **Soal lama dengan sidik sama tetapi isi berbeda.** Impor soal lama melewati soal yang teksnya sama (sidik sama). Kalau dua soal teksnya sama tetapi opsi, kunci, atau bobotnya beda, salah satunya akan hilang diam-diam. Periksa sebelum impor sungguhan:
+```
+docker exec -it ags-django-app python manage.py changepassword <username>
+```
 
-   ```
-   docker exec -i ags-django-app python manage.py shell <<'EOF'
-   from collections import defaultdict
-   from apps.cpns.impor_lama import _bentuk
-   from apps.cpns.models import CpnsQuestion, Soal
+Seed lama tidak pernah mengubah kata sandi akun yang sudah ada, jadi kata sandi baru ini aman dan tidak tertimpa saat deploy.
 
-   def isi(s):
-       return repr((s.opsi_a, s.opsi_b, s.opsi_c, s.opsi_d, s.opsi_e, s.kunci, s.bobot))
+**D.2.3 Daftar akun staf dan superuser** untuk ditinjau. Setiap akun yang tidak dikenal atau tidak dipakai sebaiknya dinonaktifkan lewat admin:
 
-   grup = defaultdict(list)
-   for s in Soal.objects.all():
-       grup[s.sidik_teks].append(("bank", s.pk, isi(s)))
-   for q in CpnsQuestion.objects.select_related("package"):
-       s = _bentuk(q)
-       grup[s.hitung_sidik()].append(("lama", q.pk, isi(s)))
-   n = 0
-   for anggota in grup.values():
-       if any(a[0] == "lama" for a in anggota) and len({a[2] for a in anggota}) > 1:
-           n += 1
-           print(", ".join(f"{a[0]} #{a[1]}" for a in anggota))
-   print(f"Grup sidik sama tetapi opsi/kunci/bobot beda: {n}")
-   EOF
-   ```
+```
+docker exec -i ags-django-app python manage.py shell <<'EOF'
+from django.contrib.auth import get_user_model
+from django.db.models import Q
+for u in get_user_model().objects.filter(Q(is_staff=True) | Q(is_superuser=True)).order_by("pk"):
+    print(u.username, "staf" if u.is_staff else "-", "superuser" if u.is_superuser else "-",
+          "sandi aktif" if u.has_usable_password() else "tanpa sandi", u.last_login)
+EOF
+```
 
-   Kalau angkanya bukan 0, buka soal-soal yang disebut (nomor `lama #` adalah id soal lama, `bank #` id di bank soal) dan putuskan mana yang benar sebelum langkah D.7.
+Kalau akun `guru_agung` dari seed lama belum pernah diberi kata sandi, akun itu tetap tampil "sandi aktif" walaupun kata sandinya kosong dan tidak bisa dipakai masuk. Agar rapi, nonaktifkan kata sandinya lewat admin.
 
 ### D.3 Backup database
 
@@ -197,11 +182,20 @@ Pastikan ukuran file tidak 0 sebelum lanjut. Cara memulihkannya ada di bagian E.
 
 ### D.5 Lengkapi `.env`
 
-Simpan salinan dulu, lalu ubah sesuai bagian B:
+Simpan salinan di luar folder repo dulu (supaya tidak ikut masuk image Docker atau ter-commit), lalu ubah sesuai bagian B:
 
 ```
-cp .env .env.bak-<tanggal>
+mkdir -p ~/backup
+cp .env ~/backup/env-<tanggal>
 ```
+
+Setelah selesai mengubah, pastikan tidak ada `[ISI]` yang tertinggal. Perintah ini harus tidak mencetak apa pun:
+
+```
+grep -n '\[ISI\]' .env
+```
+
+Kalau `DB_NAME`, `DB_USER`, atau `DB_PASSWORD` masih `[ISI]`, kontainer web akan gagal menunggu database 30 kali sebelum berhenti, tanpa pesan `[ISI]` yang jelas.
 
 **Kalau `POSTGRES_*` berubah.** Kalau `POSTGRES_DB`, `POSTGRES_USER`, atau `POSTGRES_PASSWORD` di `.env` berbeda dari yang dipakai kontainer `ags-postgres` sekarang, `docker compose up` di langkah D.6 akan membuat ulang kontainer database. Data tetap aman di volume `ags_pgdata`. Nilai `POSTGRES_*` hanya dipakai saat volume masih kosong, jadi kata sandi di dalam database tidak ikut berubah. Karena itu `DB_PASSWORD` dan `POSTGRES_PASSWORD` harus sama dengan kata sandi yang sudah ada. Urutannya: backup D.3 sudah ada, lalu D.6, lalu pastikan `docker compose ps` menunjukkan `ags-postgres` berjalan sebelum melihat log web.
 
@@ -227,12 +221,50 @@ cp .env .env.bak-<tanggal>
 
 ### D.7 Periksa data produksi
 
-- `docker exec ags-django-app python manage.py cpns_cek_produksi`
-- `docker exec ags-django-app python manage.py cpns_impor_soal_lama --coba`
+**D.7.1 Pemeriksaan umum dan percobaan impor** (hanya baca):
+
+```
+docker exec ags-django-app python manage.py cpns_cek_produksi
+docker exec ags-django-app python manage.py cpns_impor_soal_lama --coba
+```
 
 Butir "Akun staf/guru" menyebut setiap akun staf, superuser, atau guru yang masih punya kata sandi. Pastikan semuanya milik orang yang sah dan kata sandinya dibuat sendiri.
 
-Bandingkan angka "Dilewati karena sama" dengan jumlah soal lama, lalu periksa beberapa contoh. Normalisasi teks mengabaikan simbol, jadi "12 + 3" dan "12 - 3" dianggap sama. Hasil kueri di D.2 butir 4 harus sudah ditangani. Setelah setuju, jalankan tanpa `--coba`. Cukup **sekali saja**.
+Bandingkan angka "Dilewati karena sama" dengan jumlah soal lama, lalu periksa beberapa contoh. Normalisasi teks mengabaikan simbol, jadi "12 + 3" dan "12 - 3" dianggap sama.
+
+**D.7.2 Soal lama dengan sidik sama tetapi isi berbeda** (hanya baca; butuh kode baru, jadi dijalankan setelah D.6). Impor soal lama melewati soal yang teksnya sama (sidik sama). Kalau dua soal teksnya sama tetapi opsi, kunci, atau bobotnya beda, salah satunya akan hilang diam-diam:
+
+```
+docker exec -i ags-django-app python manage.py shell <<'EOF'
+from collections import defaultdict
+from apps.cpns.impor_lama import _bentuk
+from apps.cpns.models import CpnsQuestion, Soal
+
+def isi(s):
+    return repr((s.opsi_a, s.opsi_b, s.opsi_c, s.opsi_d, s.opsi_e, s.kunci, s.bobot))
+
+grup = defaultdict(list)
+for s in Soal.objects.all():
+    grup[s.sidik_teks].append(("bank", s.pk, isi(s)))
+for q in CpnsQuestion.objects.select_related("package"):
+    s = _bentuk(q)
+    grup[s.hitung_sidik()].append(("lama", q.pk, isi(s)))
+n = 0
+for anggota in grup.values():
+    if any(a[0] == "lama" for a in anggota) and len({a[2] for a in anggota}) > 1:
+        n += 1
+        print(", ".join(f"{a[0]} #{a[1]}" for a in anggota))
+print(f"Grup sidik sama tetapi opsi/kunci/bobot beda: {n}")
+EOF
+```
+
+Kalau angkanya bukan 0, buka soal-soal yang disebut (nomor `lama #` adalah id soal lama, `bank #` id di bank soal) dan putuskan mana yang benar sebelum impor sungguhan.
+
+**D.7.3 Impor sungguhan.** Setelah pemilik setuju dengan hasil D.7.1 dan D.7.2, jalankan **sekali saja**:
+
+```
+docker exec ags-django-app python manage.py cpns_impor_soal_lama
+```
 
 Soal lama masuk dengan status draf. Subtopiknya diambil apa adanya dari data lama, jadi sebelum menyetujui soal untuk tayang, samakan subtopiknya dengan kisi-kisi (`docs/cpns/kisi-kisi.md`) lewat halaman Edit soal.
 
@@ -246,18 +278,36 @@ Soal lama masuk dengan status draf. Subtopiknya diambil apa adanya dari data lam
 ## E. Cara mundur kalau ada masalah
 
 1. **Kode:** di VPS, `git reset --hard <commit sebelum deploy>`, lalu `docker compose up -d --build web`.
-2. **Database** (hanya kalau migrasi merusak data): hentikan kontainer web (`docker compose stop web`), pulihkan backup D.3, lalu jalankan web lagi dengan kode lama:
+2. **Database** (hanya kalau migrasi merusak data). Hentikan kontainer web (`docker compose stop web`). `pg_restore --clean` hanya menghapus objek yang ada di backup, jadi tabel baru buatan migrasi rilis ini tetap tertinggal dan membuat deploy ulang gagal. Karena itu buat ulang database kosong dulu, baru pulihkan backup D.3:
 
    ```
-   docker exec -i ags-postgres pg_restore -U <DB_USER> -d <DB_NAME> --clean --if-exists < ~/backup/ags_db-<tanggal>.dump
+   docker exec -i ags-postgres dropdb -U <DB_USER> <DB_NAME>
+   docker exec -i ags-postgres createdb -U <DB_USER> <DB_NAME>
+   docker exec -i ags-postgres pg_restore -U <DB_USER> -d <DB_NAME> < ~/backup/ags_db-<tanggal>.dump
    ```
 
-3. **`.env`:** kembalikan dari salinan D.5: `cp .env.bak-<tanggal> .env`.
+   Setelah itu jalankan web lagi dengan kode lama.
+
+3. **`.env`:** kembalikan dari salinan D.5: `cp ~/backup/env-<tanggal> .env`.
 
 ## F. Catatan keamanan yang belum selesai
 
 - **Kata sandi database lama ada di riwayat git.** Versi lama `docker-compose.yml` dan skrip pernah memuat kata sandi database secara langsung. File sekarang sudah bersih, tetapi riwayat git masih menyimpannya. Risikonya kecil karena port 5432 tidak dibuka ke luar (layanan `db` tidak punya `ports`), tetapi kata sandi itu tetap harus dianggap bocor. Tindak lanjut setelah rilis stabil: ganti kata sandi dengan `ALTER USER <DB_USER> WITH PASSWORD '<kata sandi baru>';` di dalam `ags-postgres`, lalu perbarui `DB_PASSWORD` dan `POSTGRES_PASSWORD` di `.env` dan jalankan ulang web.
-- **Kata sandi bawaan admin dari seed lama** juga ada di riwayat git. Langkah D.2 butir 2 memeriksanya.
+- **Kata sandi bawaan admin dari seed lama** juga ada di riwayat git. Langkah D.2.2 memeriksanya.
+- **Skrip migrasi Neon (`scripts/consolidate_and_import_neon.py`) masih memasang kata sandi bawaan lama yang sama.** Skrip ini tidak berjalan saat deploy, tetapi kalau dijalankan, skrip ini:
+  - mengembalikan kata sandi akun admin utama ke kata sandi bawaan lama;
+  - memberi kata sandi itu ke akun impor yang tidak punya hash;
+  - menjadikan guru impor superuser.
+
+  Jangan jalankan sebelum diperbaiki. Perbaikannya:
+  1. Hapus baris yang mengubah kata sandi admin.
+  2. Ganti kata sandi bawaan untuk akun impor dengan kata sandi tak terpakai (`set_unusable_password()`).
+  3. Batasi peran staf hanya untuk email di `GURU_EMAILS`.
+  4. Buat backup database dulu.
+  5. Jalankan dengan settings produksi.
+  6. Jalankan `cpns_cek_produksi` sesudahnya.
+
+  Pastikan juga skrip mana yang dijadwalkan. `AGENTS.md` menyebut `scripts/import_from_neon.py`.
 
 ## Catatan rilis
 
