@@ -18,3 +18,5 @@ class Command(BaseCommand):
         )
         for kode, jumlah in sorted(hasil.paket.items()):
             self.stdout.write(f"{kode}: {jumlah}")
+        if opsi["coba"]:
+            self.stdout.write("Percobaan saja, tidak ada yang disimpan.")

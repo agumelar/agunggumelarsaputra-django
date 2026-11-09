@@ -155,3 +155,19 @@ class ImporLamaTests(TestCase):
         call_command("cpns_impor_soal_lama", "--coba", stdout=out)
         self.assertIn("Disalin: 1 soal", out.getvalue())
         self.assertEqual(Soal.objects.count(), 0)
+        self.assertIn("Percobaan saja, tidak ada yang disimpan.", out.getvalue())
+
+    def test_command_tanpa_coba_tanpa_baris_percobaan(self):
+        lama(paket())
+        out = StringIO()
+        call_command("cpns_impor_soal_lama", stdout=out)
+        self.assertNotIn("Percobaan saja", out.getvalue())
+
+    def test_bobot_angka_unicode_tidak_membuat_crash(self):
+        lama(paket(), "TKP", bobot_tkp={"A": "²", "B": "4", "C": "3", "D": "2", "E": "1"})
+        hasil = salin_soal_lama()
+        s = Soal.objects.get()
+        self.assertEqual(hasil.masuk, 1)
+        self.assertEqual(s.bobot["A"], "²")
+        self.assertEqual(s.bobot["B"], 4)
+        self.assertTrue(s.perlu_cek)

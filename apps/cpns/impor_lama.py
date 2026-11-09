@@ -23,7 +23,7 @@ def _bobot(mentah):
         return mentah
     hasil = {}
     for k, v in mentah.items():
-        if isinstance(v, str) and v.strip().isdigit():
+        if isinstance(v, str) and v.strip().isdecimal():
             v = int(v.strip())
         hasil[str(k).strip().upper()] = v
     return hasil
