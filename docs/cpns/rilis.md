@@ -32,7 +32,14 @@ Server produksi menolak start kalau ada nilai yang masih berisi `[ISI]`. Pesanny
 
 **Sebaiknya diisi:** `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`. Tanpa keduanya tombol Masuk dengan Google tidak jalan.
 
-**Biarkan sebagai komentar** kecuali perlu nilai lain: `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, `SECURE_HSTS_SECONDS`, `CPNS_URL`, `GURU_EMAILS`. Nilai bawaannya sudah aman.
+**Biarkan sebagai komentar** kecuali perlu nilai lain: `SECURE_HSTS_SECONDS`, `CPNS_URL`, `GURU_EMAILS`. Nilai bawaannya sudah aman.
+
+**Domain tambahan sekolah.** Pemeriksaan nginx pada 2026-11-10 menunjukkan situs utama juga dilayani untuk `rpl.smkn1rongga.sch.id` dan `learninghub.smkn1rongga.sch.id`. Nilai bawaan aplikasi hanya memuat tiga domain agunggumelarsaputra.com. Karena itu isi `ALLOWED_HOSTS` dan `CSRF_TRUSTED_ORIGINS` di `.env` dengan kelima domain, supaya kedua domain sekolah tidak menjawab 400:
+
+```
+ALLOWED_HOSTS=agunggumelarsaputra.com,www.agunggumelarsaputra.com,cpns.agunggumelarsaputra.com,rpl.smkn1rongga.sch.id,learninghub.smkn1rongga.sch.id
+CSRF_TRUSTED_ORIGINS=https://agunggumelarsaputra.com,https://www.agunggumelarsaputra.com,https://cpns.agunggumelarsaputra.com,https://rpl.smkn1rongga.sch.id,https://learninghub.smkn1rongga.sch.id
+```
 
 **Periksa, lalu hapus atau betulkan kalau ada:**
 - `ALLOWED_HOSTS`: tidak boleh `*`, dan tidak boleh hanya berisi localhost. Kalau ragu, hapus saja supaya nilai bawaan yang aman dipakai.
