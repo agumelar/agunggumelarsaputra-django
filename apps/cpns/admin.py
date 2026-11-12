@@ -153,7 +153,15 @@ class VoucherAdmin(admin.ModelAdmin):
         }[obj.status]
 
     def has_add_permission(self, request):
+        # Form tambah satuan dan tombol Tambah bawaan tetap tersembunyi.
         return False
+
+    def boleh_buat_banyak(self, request):
+        return request.user.has_perm("cpns.add_voucher")
+
+    def changelist_view(self, request, extra_context=None):
+        konteks = dict(extra_context or {}, boleh_buat_banyak=self.boleh_buat_banyak(request))
+        return super().changelist_view(request, extra_context=konteks)
 
     @admin.action(description="Batalkan kode yang belum dipakai")
     def batalkan_belum_dipakai(self, request, queryset):
@@ -173,7 +181,7 @@ class VoucherAdmin(admin.ModelAdmin):
         return tambahan + super().get_urls()
 
     def buat_banyak_view(self, request):
-        if not self.has_change_permission(request):
+        if not self.boleh_buat_banyak(request):
             raise PermissionDenied
         konteks = dict(
             self.admin_site.each_context(request),

@@ -35,7 +35,7 @@ class PesertaDiSitusSekolahTest(TestCase):
         response = self.client.get(reverse('cpns:dasbor'))
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse('accounts:logout'))
+        response = self.client.post(reverse('accounts:logout'))
         self.assertEqual(response.status_code, 302)
         self.assertNotEqual(response['Location'], _tujuan())
         self.assertEqual(response['Location'], reverse('core:home'))
@@ -122,6 +122,9 @@ class PesertaDiHostCpnsTest(TestCase):
 
     def test_logout_di_host_cpns(self):
         response = self.get('/accounts/logout/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('_auth_user_id', self.client.session)
+        response = self.client.post('/accounts/logout/', HTTP_HOST=CPNS_HOST)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['Location'], '/')
         self.assertNotIn('_auth_user_id', self.client.session)
@@ -152,7 +155,7 @@ class PesertaDiHostCpnsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, '>Akun</a>')
         self.assertNotContains(response, '/accounts/profile/')
-        self.assertContains(response, '>Keluar</a>', count=2)
+        self.assertContains(response, '>Keluar</button>', count=2)
 
     def test_nav_akun_tampil_untuk_siswa_dan_superuser(self):
         siswa = User.objects.create_user(

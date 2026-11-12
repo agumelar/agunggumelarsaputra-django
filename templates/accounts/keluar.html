@@ -1,0 +1,6 @@
+{% extends base_template %}
+
+{% block title %}Keluar dari akun{% endblock %}
+
+{% block cpns_content %}{% include "accounts/_keluar_isi.html" %}{% endblock %}
+{% block content %}{% if base_template == 'base.html' %}{% include "accounts/_keluar_isi.html" %}{% else %}{{ block.super }}{% endif %}{% endblock %}

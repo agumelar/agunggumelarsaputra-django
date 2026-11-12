@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 from django.conf import settings
 from apps.admin_panel.models import EnrollmentToken
 from apps.pembelajaran.models import Modul
@@ -20,6 +21,8 @@ class Command(BaseCommand):
 
         # 1. Superuser / Guru Pengampu RPL
         self.stdout.write('[1/4] Menyiapkan Akun Guru Pengampu RPL (Superadmin)...')
+        # Akun baru dibuat tanpa kata sandi. Akun yang sudah ada tidak diubah sama sekali,
+        # karena seed ini jalan di setiap start container.
         teacher, created = User.objects.get_or_create(
             email='agumelarsaputra@gmail.com',
             defaults={
@@ -29,20 +32,16 @@ class Command(BaseCommand):
                 'role': User.ROLE_GURU,
                 'is_staff': True,
                 'is_superuser': True,
+                'password': make_password(None),
             }
         )
         if created:
-            teacher.set_password('RPL@Rongga2026')
-            teacher.save()
-            self.stdout.write(self.style.SUCCESS('  + Akun Guru Baru Dibuat: agumelarsaputra@gmail.com (Default password: RPL@Rongga2026)'))
+            self.stdout.write(self.style.SUCCESS(
+                '  + Akun admin dibuat tanpa kata sandi. '
+                'Atur dengan: python manage.py changepassword <username>'
+            ))
         else:
-            teacher.first_name = 'Agung Gumelar'
-            teacher.last_name = 'Saputra, S.Tr.T.'
-            teacher.role = User.ROLE_GURU
-            teacher.is_staff = True
-            teacher.is_superuser = True
-            teacher.save()
-            self.stdout.write(self.style.SUCCESS(f"  [OK] Akun Guru Sudah Tersedia: agumelarsaputra@gmail.com"))
+            self.stdout.write(self.style.SUCCESS("  [OK] Akun Guru Sudah Tersedia: agumelarsaputra@gmail.com"))
 
         # Pastikan akun legacy guru_agung juga ada jika diperlukan
         User.objects.get_or_create(
@@ -54,6 +53,7 @@ class Command(BaseCommand):
                 'role': User.ROLE_GURU,
                 'is_staff': True,
                 'is_superuser': True,
+                'password': make_password(None),
             }
         )
 

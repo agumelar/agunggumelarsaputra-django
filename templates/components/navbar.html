@@ -121,7 +121,7 @@
                             <div class="border-t border-outline-variant my-1"></div>
                             {% endif %}
                             <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-surface-high hover:text-foreground transition-colors">Profil Saya</a>
-                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-red-500 dark:text-red-400 hover:bg-red-500/10 transition-colors">Keluar</a>
+                            <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button type="submit" class="block w-full text-left px-4 py-2 text-xs text-red-500 dark:text-red-400 hover:bg-red-500/10 transition-colors">Keluar</button></form>
                         </div>
                     </div>
                 {% else %}
@@ -180,7 +180,7 @@
         {% if user.is_authenticated %}
             <div class="pt-2 border-t border-outline-variant mt-2">
                 <a href="{% url 'accounts:profile' %}" class="block px-3 py-2 rounded-lg text-sm text-primary">Profil ({{ user.display_name }})</a>
-                <a href="{% url 'accounts:logout' %}" class="block px-3 py-2 rounded-lg text-sm text-red-500 dark:text-red-400">Keluar</a>
+                <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button type="submit" class="block w-full text-left px-3 py-2 rounded-lg text-sm text-red-500 dark:text-red-400">Keluar</button></form>
             </div>
         {% else %}
             <div class="pt-2 border-t border-outline-variant mt-2">

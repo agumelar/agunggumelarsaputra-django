@@ -112,6 +112,14 @@ class AntreanTest(KelolaTinjauDasar):
         self.assertContains(r, reverse("admin:cpns_voucher_changelist"))
 
 
+class BarisMetaBatchTest(KelolaTinjauDasar):
+    def test_batch_kosong_tampil_tanpa_batch(self):
+        soal = buat_draf()
+        halaman = self.client.get(reverse("cpns:kelola_tinjau_soal", args=[soal.id]))
+        self.assertContains(halaman, "Soal 1 dari 1 tanpa batch")
+        self.assertNotContains(halaman, "di batch ini")
+
+
 class AksiTest(KelolaTinjauDasar):
     def test_setujui_menayangkan_dan_isi_peninjau(self):
         soal = buat_draf()

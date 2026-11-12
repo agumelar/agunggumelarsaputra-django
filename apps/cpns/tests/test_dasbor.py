@@ -291,7 +291,7 @@ class NavigasiTest(TestCase):
         html = self.client.get(reverse("cpns:dasbor")).content.decode()
         panel = html[html.index('id="cpns-mobile-menu"'):]
         panel = panel[: panel.index("</nav>")]
-        self.assertEqual(panel.count("<a "), panel.count('@click="menuOpen = false"'))
+        self.assertEqual(panel.count("<a ") + panel.count("<button"), panel.count('@click="menuOpen = false"'))
         self.assertIn('x-ref="tombolMenu"', html)
         self.assertIn("$refs.tombolMenu.focus()", html)
 

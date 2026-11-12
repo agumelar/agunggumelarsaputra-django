@@ -95,16 +95,16 @@ class BerandaHostCpnsTest(TestCase):
 
 
 class HalamanHukumTest(TestCase):
+    # Isi halaman diganti pemilik sebelum rilis, jadi tes hanya menegaskan kerangkanya.
+    # Placeholder dan tanda draf diperiksa oleh cpns_cek_produksi.
     def test_syarat_dan_privasi_200_dan_footer_tertaut(self):
-        for nama in ('cpns:syarat', 'cpns:privasi'):
+        for nama, judul in (('cpns:syarat', 'Syarat Layanan'), ('cpns:privasi', 'Kebijakan Privasi')):
             r = self.client.get(reverse(nama))
             self.assertEqual(r.status_code, 200, nama)
-            self.assertContains(r, 'Draf, menunggu tinjauan pengelola.')
-            self.assertContains(r, '[NAMA DAN KONTAK PENGELOLA]')
+            self.assertContains(r, f'<title>{judul}')
+            self.assertContains(r, judul)
             self.assertContains(r, f'href="{reverse("cpns:syarat")}"')
             self.assertContains(r, f'href="{reverse("cpns:privasi")}"')
-        r = self.client.get(reverse('cpns:syarat'))
-        self.assertContains(r, '[KEBIJAKAN PENGEMBALIAN DANA]')
 
     def test_tanpa_klaim_resmi_publik(self):
         for nama in ('cpns:beranda', 'cpns:syarat', 'cpns:privasi'):

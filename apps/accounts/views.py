@@ -18,6 +18,7 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse, JsonResponse
 from django.core.files.base import ContentFile
 
+from . import batas_masuk
 from .forms import StudentRegistrationForm, UserLoginForm, UserProfileForm, ClaimTokenForm
 from apps.admin_panel.models import EnrollmentToken, UserEnrollment
 from apps.cpns.models import AksesPeserta
@@ -147,11 +148,17 @@ def login_view(request):
             if not matched_user:
                 matched_user = User.objects.filter(nip__iexact=identifier).first()
 
+        kunci = batas_masuk.kunci_untuk(matched_user, identifier)
+        if batas_masuk.terkunci(kunci):
+            form.add_error(None, batas_masuk.PESAN_TERKUNCI)
+            return render(request, 'accounts/login.html', {'form': form}, status=429)
+
         if matched_user:
             user = authenticate(request, username=matched_user.username, password=password)
             if user is not None:
                 login(request, user)
-                
+                batas_masuk.bersihkan(kunci)
+
                 # Update Daily Streak & Last Active Date
                 today = timezone.now().date()
                 if user.last_active_date != today:
@@ -173,8 +180,10 @@ def login_view(request):
                     return redirect(next_url)
                 return redirect('admin_panel:dashboard' if user.is_guru else 'core:home')
             else:
+                batas_masuk.catat_gagal(kunci)
                 form.add_error(None, "Kombinasi kata sandi tidak cocok. Silakan periksa kembali kata sandi Anda.")
         else:
+            batas_masuk.catat_gagal(kunci)
             form.add_error(None, f"Akun dengan identifier '{identifier}' tidak ditemukan. Pastikan Anda telah mendaftar.")
 
     return render(request, 'accounts/login.html', {'form': form})
@@ -389,11 +398,19 @@ def google_oauth_callback_view(request):
 
 def logout_view(request):
     """
-    Logout pengguna.
+    GET menampilkan konfirmasi; keluar hanya lewat POST (dilindungi CSRF).
     """
-    logout(request)
-    messages.info(request, "Anda telah berhasil keluar dari akun.")
-    return redirect('core:home')
+    if request.method == 'POST':
+        logout(request)
+        messages.info(request, "Anda telah berhasil keluar dari akun.")
+        return redirect('core:home')
+    if not request.user.is_authenticated:
+        return redirect('core:home')
+    di_cpns = getattr(request, 'is_cpns_subdomain', False)
+    return render(request, 'accounts/keluar.html', {
+        'base_template': 'cpns/base_cpns.html' if di_cpns else 'base.html',
+        'url_batal': reverse('cpns:dasbor') if di_cpns else reverse('core:home'),
+    })
 
 
 @login_required

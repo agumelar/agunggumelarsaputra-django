@@ -31,7 +31,7 @@
                 {% if not request.user.is_peserta %}
                 <a href="{{ url_akun }}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Akun</a>
                 {% endif %}
-                <a href="{% url 'accounts:logout' %}" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Keluar</a>
+                <form method="post" action="{% url 'accounts:logout' %}" class="inline-flex">{% csrf_token %}<button type="submit" class="inline-flex items-center min-h-11 px-3 rounded-lg transition-colors hover:text-[#F3F4F6] text-[#CBD5E1]">Keluar</button></form>
                 {% else %}
                 <a href="{% url 'cpns:masuk' %}" class="inline-flex items-center min-h-11 px-4 rounded-lg bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#082F49] font-semibold transition-colors">Masuk</a>
                 {% endif %}
@@ -62,7 +62,7 @@
                 {% if not request.user.is_peserta %}
                 <a href="{{ url_akun }}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Akun</a>
                 {% endif %}
-                <a href="{% url 'accounts:logout' %}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#F3F4F6]">Keluar</a>
+                <form method="post" action="{% url 'accounts:logout' %}" class="flex border-b border-white/[0.08]">{% csrf_token %}<button type="submit" @click="menuOpen = false" class="flex items-center w-full min-h-11 text-left text-[#F3F4F6]">Keluar</button></form>
                 {% else %}
                 <a href="{% url 'cpns:masuk' %}" @click="menuOpen = false" class="flex items-center min-h-11 border-b border-white/[0.08] text-[#38BDF8] font-semibold">Masuk</a>
                 {% endif %}

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -179,3 +180,12 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.display_name} ({self.get_role_display()})"
+
+
+class PercobaanMasuk(models.Model):
+    """Satu percobaan login gagal, dihitung per identitas untuk batas percobaan."""
+    kunci = models.CharField(max_length=254, db_index=True)
+    waktu = models.DateTimeField(default=timezone.now, db_index=True)
+
+    def __str__(self):
+        return f"{self.kunci} @ {self.waktu:%Y-%m-%d %H:%M:%S}"

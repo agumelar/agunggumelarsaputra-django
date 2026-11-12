@@ -73,6 +73,44 @@ class VoucherAdminTests(AdminCpnsBase):
         r = self.client.get(reverse("admin:cpns_voucher_add"))
         self.assertEqual(r.status_code, 403)
 
+    def _staf(self, *kode_izin):
+        from django.contrib.auth.models import Permission
+
+        staf = User.objects.create_user(
+            username="staf" + str(len(kode_izin)), email=f"s{len(kode_izin)}@x.id", password="x", is_staff=True
+        )
+        staf.user_permissions.set(Permission.objects.filter(codename__in=kode_izin))
+        return staf
+
+    def test_buat_banyak_butuh_izin_tambah(self):
+        staf = self._staf("view_voucher", "change_voucher")
+        self.client.force_login(staf)
+        url = reverse("admin:cpns_voucher_buat_banyak")
+        self.assertEqual(self.client.get(url).status_code, 403)
+        r = self.client.post(url, {"jumlah": 2, "durasi_hari": "30", "catatan": ""})
+        self.assertEqual(r.status_code, 403)
+        self.assertEqual(Voucher.objects.count(), 0)
+
+    def test_buat_banyak_boleh_dengan_izin_tambah(self):
+        staf = self._staf("view_voucher", "change_voucher", "add_voucher")
+        self.client.force_login(staf)
+        r = self.client.post(
+            reverse("admin:cpns_voucher_buat_banyak"),
+            {"jumlah": 2, "durasi_hari": "30", "catatan": ""},
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Voucher.objects.count(), 2)
+
+    def test_tombol_buat_hanya_untuk_yang_berizin(self):
+        url_buat = reverse("admin:cpns_voucher_buat_banyak")
+        url_daftar = reverse("admin:cpns_voucher_changelist")
+        self.client.force_login(self._staf("view_voucher", "change_voucher"))
+        self.assertNotContains(self.client.get(url_daftar), url_buat)
+        self.client.force_login(self._staf("view_voucher", "change_voucher", "add_voucher"))
+        r = self.client.get(url_daftar)
+        self.assertContains(r, url_buat)
+        self.assertNotContains(r, reverse("admin:cpns_voucher_add"))
+
     def test_aksi_batalkan_hanya_yang_belum_dipakai(self):
         pakai = User.objects.create_user(username="p1", email="p1@x.id", password="x")
         baru = Voucher.objects.create(kode="AAAA-AAAA", durasi_hari=30)

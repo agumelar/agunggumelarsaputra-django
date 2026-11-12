@@ -13,8 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Load environment variables from .env
 load_dotenv(BASE_DIR / '.env')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-agshighcraft-fallback-key-2026')
+# Tanpa nilai bawaan di sini. development.py menyediakan kunci lokal,
+# production.py mewajibkan DJANGO_SECRET_KEY dan gagal kalau kosong.
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', '')
 
 # Application definition
 DJANGO_APPS = [
